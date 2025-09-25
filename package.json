@@ -1,9 +1,10 @@
 {
   "name": "vocawiki-frontend",
   "scripts": {
-    "lint": "eslint .",
+    "format": "prettier \"*.{ts,json,md}\" \"src/**/*.{ts,json,md}\" \"scripts/**/*.{ts,json,md}\" --write --log-level warn",
     "check": "bun run ./scripts/check-type.ts",
-    "format": "prettier \"*.{ts,json,md}\" \"src/**/*.{ts,json,md}\" \"scripts/**/*.{ts,json,md}\" --write --log-level warn"
+    "lint": "eslint .",
+    "build": "bun run ./scripts/build.ts"
   },
   "private": true,
   "type": "module",
