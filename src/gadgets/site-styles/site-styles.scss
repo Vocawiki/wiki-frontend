@@ -1,0 +1,1289 @@
+.select-none,
+.tab .TabLabel {
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.hidden,
+.tab .TabContentText,
+.sidebar-character,
+#ca-varlang-0,
+#ca-varlang-1,
+#ca-varlang-2 {
+	display: none;
+}
+
+/* from https://github.com/twbs/bootstrap/blob/cb021439c683d9805e2864c58095b92d405e9b11/scss/mixins/_visually-hidden.scss */
+.visually-hidden {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	-webkit-clip-path: inset(50%) !important;
+	clip-path: inset(50%) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+
+.tab .TabLabelText {
+	padding: 1px;
+	background: #fff;
+	cursor: pointer;
+	flex: none;
+}
+
+.tab .TabLabel {
+	z-index: 2;
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.tab .TabLabelText.selected {
+	padding: 1px;
+	background: white;
+}
+
+.tab .TabContent {
+	background: white;
+	padding: 20px 30px;
+	position: relative;
+	z-index: 1;
+	border: 1px solid #aaa;
+}
+
+.tab .TabContentText.selected {
+	display: block;
+}
+
+.tab .tabLabelTop .TabLabelText {
+	border-top: 3px solid transparent;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+}
+
+.tab .tabLabelTop .TabLabelText.selected {
+	border-top: 3px solid green;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+}
+
+.tab .tabLabelTop.reverse .TabLabelText {
+	border-bottom: 3px solid transparent;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+	border-top: 1px solid transparent;
+}
+
+.tab .tabLabelTop.reverse .TabLabelText.selected {
+	border-bottom: 3px solid green;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-top: 1px solid transparent;
+}
+
+.tab .tabLabelBottom .TabLabelText {
+	border-bottom: 3px solid transparent;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+}
+
+.tab .tabLabelBottom .TabLabelText.selected {
+	border-bottom: 3px solid green;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+}
+
+.tab .tabLabelBottom.reverse .TabLabelText {
+	border-top: 3px solid transparent;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+.tab .tabLabelBottom.reverse .TabLabelText.selected {
+	border-top: 3px solid green;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid transparent;
+}
+
+.tab .tabLabelLeft .TabLabelText {
+	border-left: 3px solid transparent;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+.tab .tabLabelLeft .TabLabelText.selected {
+	border-left: 3px solid green;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+}
+
+.tab .tabLabelLeft.reverse .TabLabelText {
+	border-right: 3px solid transparent;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+	border-left: 1px solid transparent;
+}
+
+.tab .tabLabelLeft.reverse .TabLabelText.selected {
+	border-right: 3px solid green;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	border-left: 1px solid transparent;
+}
+
+.tab .tabLabelRight .TabLabelText {
+	border-right: 3px solid transparent;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+.tab .tabLabelRight .TabLabelText.selected {
+	border-right: 3px solid green;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+}
+
+.tab .tabLabelRight.reverse .TabLabelText {
+	border-left: 3px solid transparent;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+	border-right: 1px solid transparent;
+}
+
+.tab .tabLabelRight.reverse .TabLabelText.selected {
+	border-left: 3px solid green;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	border-right: 1px solid transparent;
+}
+
+.tab .Tabs .TabDivider {
+	width: 100%;
+	order: 2;
+}
+
+.tab .Tabs.reverse .TabDivider {
+	height: 2px;
+}
+
+.tab .Tabs.tabLabelLeft .TabLabel,
+.tab .Tabs.tabLabelRight .TabContent {
+	order: 1;
+}
+
+.tab .Tabs.tabLabelLeft .TabContent,
+.tab .Tabs.tabLabelRight .TabLabel {
+	order: 3;
+}
+
+.tab .Tabs.tabLabelLeft,
+.tab .Tabs.tabLabelRight {
+	display: flex;
+	flex-wrap: nowrap;
+	width: auto;
+}
+
+.tab .Tabs.tabLabelLeft .TabDivider,
+.tab .Tabs.tabLabelRight .TabDivider {
+	height: 100%;
+	width: 0;
+}
+
+.tab .Tabs.tabLabelLeft.reverse .TabDivider,
+.tab .Tabs.tabLabelRight.reverse .TabDivider {
+	width: 1px;
+}
+
+.tab .Tabs.tabLabelLeft .TabLabel,
+.tab .Tabs.tabLabelRight .TabLabel {
+	flex-direction: column;
+}
+
+.tab .Tabs.tabLabelLeft:not(.AutoWidth) .TabContent,
+.tab .Tabs.tabLabelRight:not(.AutoWidth) .TabContent {
+	flex: 1;
+}
+
+.Tabs {
+	max-width: 100%;
+}
+
+.Tabs.AutoWidth {
+	display: table-cell;
+}
+
+.Tabs.FloatLeft {
+	float: left;
+	margin-right: 1em;
+}
+
+.Tabs.FloatRight {
+	float: right;
+	margin-left: 1em;
+}
+
+.Tabs .Tab {
+	border-bottom: 1px solid #aaa;
+}
+
+.Tabs .Tab:first-child {
+	border-top: 1px solid #aaa;
+}
+
+.Tabs .Tab .TabLabelText {
+	padding: 7px;
+}
+
+.Tabs .Tab .TabContentText {
+	padding: 3px;
+}
+
+.infotemplatebox > table td > .Tabs .TabLabel,
+.infotemplatebox > table td > .Tabs .TabContent {
+	margin: 0 -1px;
+}
+.annotation > span {
+	cursor: pointer;
+}
+
+.annotation .oo-ui-popupWidget {
+	z-index: 1000001;
+	white-space: normal;
+	color: #000;
+	font-weight: normal;
+}
+
+.annotation .oo-ui-popupWidget-popup {
+	width: -moz-fit-content !important;
+	width: fit-content !important;
+}
+
+.annotation .oo-ui-popupWidget-body {
+	width: -moz-fit-content;
+	width: fit-content;
+	min-width: 5.5em;
+	max-width: 11em !important;
+	overflow: auto;
+}
+.columns-list > ul:first-child,
+.columns-list > ol:first-child {
+	margin-top: 0;
+}
+span[lang] {
+	font-family: initial;
+	font-feature-settings: 'locl' on;
+	-webkit-font-feature-settings: 'locl' on;
+}
+
+[style*='font:' i] span[lang],
+[style*='font-family:' i] span[lang] {
+	font-family: inherit;
+}
+@font-face {
+	font-family: JapaneseItalic;
+	src: local(meiryo);
+}
+
+i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang='ja' i] {
+	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+[style*='italic' i] span[lang='ja' i] {
+	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+span[lang='ja' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) {
+	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+span[lang='ja' i] [style*='italic' i] {
+	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+[style*='font:' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang='ja' i] {
+	font-family: inherit;
+}
+
+[style*='font:' i] [style*='italic' i] span[lang='ja' i] {
+	font-family: inherit;
+}
+
+[style*='font-family:' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang='ja' i] {
+	font-family: inherit;
+}
+
+[style*='font-family:' i] [style*='italic' i] span[lang='ja' i] {
+	font-family: inherit;
+}
+
+[style*='font:' i] span[lang='ja' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) {
+	font-family: inherit;
+}
+
+[style*='font:' i] span[lang='ja' i] [style*='italic' i] {
+	font-family: inherit;
+}
+
+[style*='font-family:' i] span[lang='ja' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) {
+	font-family: inherit;
+}
+
+[style*='font-family:' i] span[lang='ja' i] [style*='italic' i] {
+	font-family: inherit;
+}
+.heimu,
+.heimu rt {
+	--heimu-color: #252525;
+	--heimu-text-color: #fff;
+	--heimu-link-color: #add8e6;
+	--heimu-visited-link-color: #c5cae9;
+	--heimu-new-link-color: #fcc;
+	--heimu-new-visited-link-color: #ef9a9a;
+	--heimu-extiw-visited-link-color: #d1c4e9;
+
+	background-color: var(--heimu-color);
+}
+
+.heimu,
+.heimu a,
+a .heimu,
+a.new .heimu,
+span.heimu a:visited,
+span.heimu a.new,
+span.heimu a.external,
+span.heimu a.external:visited,
+span.heimu a.extiw,
+span.heimu a.extiw:visited,
+span.heimu a.mw-disambig,
+span.heimu a.mw-redirect {
+	transition: color 0.13s linear;
+	color: var(--heimu-color);
+	text-shadow: none;
+}
+
+span.heimu:hover,
+span.heimu:active {
+	color: var(--heimu-text-color);
+}
+
+span.heimu:hover a,
+a:hover span.heimu {
+	color: var(--heimu-link-color);
+}
+
+span.heimu:hover a:visited,
+a:visited:hover span.heimu {
+	color: var(--heimu-visited-link-color);
+}
+
+span.heimu:hover a.new,
+a.new:hover span.heimu {
+	color: var(--heimu-new-link-color);
+}
+
+span.heimu a.new:hover:visited,
+a.new:hover:visited span.heimu {
+	color: var(--heimu-new-visited-link-color);
+}
+
+span.heimu:hover a.extiw:visited,
+a.extiw:visited:hover span.heimu {
+	color: var(--heimu-extiw-visited-link-color);
+}
+[color-mode='dark'] .heimu,
+[color-mode='dark'] .heimu rt {
+	--heimu-color: #5e6272;
+}
+s.just-kidding-text {
+	color: #666;
+	text-decoration-color: #000;
+}
+.infoBox {
+	margin: 0 auto;
+	width: 80%;
+	box-sizing: border-box;
+}
+
+.infoBoxTitle {
+	margin: 3px auto;
+	padding: 0;
+	text-align: center;
+	font-weight: 700;
+}
+
+.infoBoxIcon {
+	display: table-cell;
+	padding: 2px 0 2px 0.5em;
+	vertical-align: middle;
+}
+
+.infoBoxText {
+	display: table-cell;
+	padding: 0.25em 0.5em 0.25em 1.3em;
+	width: 100%;
+	vertical-align: middle;
+}
+
+.infoBoxContent {
+	border: 1px solid #ddd;
+	border-left-width: 0;
+	background: #fbfbfb;
+}
+
+.infoBoxBelow {
+	margin: 0 auto;
+	padding: 0;
+	text-align: center;
+}
+
+[color-mode='dark'] .infoBoxContent {
+	border-color: #3e4452;
+	background: #23272e;
+}
+table.wikitable-green {
+	background: #c9f6e1;
+}
+
+.wikitable-green th {
+	background: #13ec93;
+}
+
+.wikitable-green td {
+	background: #f3f3f3;
+}
+.patroller-show,
+.checkuser-show,
+.suppress-show,
+.sysop-show,
+.interface-admin-show {
+	display: none !important;
+}
+rb[data-id='template-ruby']::before {
+	content: '';
+}
+
+rb[data-id='template-ruby']::before,
+.template-ruby-hidden {
+	display: inline-block;
+	width: 0;
+	font-size: 0;
+}
+body .mw-mmv-overlay {
+	z-index: 9999;
+}
+
+body .mw-mmv-wrapper {
+	z-index: 99999;
+}
+.noconvins > .mw-charinsert-item::before {
+	content: '-{';
+}
+
+.noconvins > .mw-charinsert-item::after {
+	content: '}-';
+}
+.mw-revslider-tooltip {
+	z-index: 7;
+}
+.errorbox ul {
+	list-style: none;
+}
+body .ajaxpoll {
+	width: -moz-max-content;
+	width: max-content;
+	max-width: 100%;
+	min-width: 400px;
+}
+
+body,
+#firstHeading {
+	font-family: sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+.skin-vector-2022 #firstHeading {
+	font-weight: 500;
+	padding-left: 0.25em;
+}
+div#simpleSearch button#searchButton {
+	padding-top: 0.1em;
+	padding-bottom: 0.2em;
+	padding-right: 0.1em;
+}
+body.page-Mainpage.rootpage-Mainpage #firstHeading,
+body.page-Mainpage.rootpage-Mainpage #siteSub,
+body.page-Mainpage.rootpage-Mainpage #contentSub,
+body.page-Mainpage.rootpage-Mainpage #siteNotice {
+	display: none;
+}
+#mainpage {
+	display: block;
+	width: 100%;
+	text-align: left;
+	margin: 0 auto;
+	max-width: 1030px;
+}
+
+.mainpage-title {
+	font-family: 'PingFang SC', sans-serif;
+	font-size: 1.618em;
+	color: #228b22;
+	margin: 0;
+	background: #deede0;
+	font-weight: 400;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+
+.mainpage-title:lang(zh-hant),
+.mainpage-title:lang(zh-tw) {
+	font-family: 'PingFang TC', sans-serif;
+}
+
+.mainpage-title:lang(zh-hk) {
+	font-family: 'PingFang HK', sans-serif;
+}
+
+.mainpage-content,
+.mainpage-1stcontent {
+	vertical-align: top;
+	padding: 0.5em 0.42890625rem;
+	min-height: 7em;
+}
+
+.mainpage-content.nomobile {
+	min-height: auto;
+}
+
+.clear-div {
+	clear: both;
+}
+.mainpage-container {
+	display: flex;
+}
+
+.mainpage-container .mainpage-newsbox,
+.mainpage-container .mainpage-box {
+	display: flex;
+	flex-direction: column;
+}
+
+.mainpage-container .mainpage-newsbox {
+	width: calc(200% / 3);
+}
+
+.mainpage-container .mainpage-box {
+	width: calc(100% / 3);
+}
+
+.mainpage-container .mainpage-content,
+.mainpage-container .mainpage-1stcontent {
+	flex: auto;
+}
+
+.mainpage-container .mainpage-title {
+	flex: none;
+	margin-right: -1px;
+}
+
+.block,
+.content-box {
+	width: 100%;
+}
+
+.content-box {
+	display: flex;
+}
+
+.parallel .content-box {
+	flex-direction: row;
+}
+
+.parallel .boite {
+	flex-grow: 1;
+}
+#siteSub {
+	display: inline;
+	font-size: 90%;
+	font-weight: 400;
+	font-style: normal;
+	text-align: right;
+}
+#siteNotice .scrollDiv {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+	margin-left: 0 !important;
+	height: 1.28rem;
+}
+
+#siteNotice .scrollDiv:hover {
+	font-weight: 700;
+}
+
+#siteNotice .scrollDiv:empty {
+	display: none;
+}
+
+#siteNotice .scrollDiv > * {
+	list-style: none;
+	padding-left: 0;
+	position: absolute;
+	width: 100%;
+	top: 1.28rem;
+}
+
+#siteNotice .scrollDiv > *:first-child {
+	top: 0;
+}
+
+#siteNotice .scrollDiv.scrolling.animation,
+#siteNotice .scrollDiv.scrolling.animation > * {
+	transition: all 0.37s ease-in-out;
+}
+.mw-body a.external:visited {
+	color: #36b;
+}
+#mw-content-text i:not([role='img']) {
+	margin-right: 3px;
+}
+.mw-mmv-overlay {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgb(0 0 0 / 80%);
+	opacity: 0.73;
+}
+
+body.mediawiki.mw-mmv-lightbox-open #mw-page-base,
+body.mediawiki.mw-mmv-lightbox-open #mw-head-base,
+body.mediawiki.mw-mmv-lightbox-open #mw-navigation,
+body.mediawiki.mw-mmv-lightbox-open #content,
+body.mediawiki.mw-mmv-lightbox-open #footer,
+body.mediawiki.mw-mmv-lightbox-open #globalWrapper {
+	display: inherit;
+}
+
+body.mediawiki.mw-mmv-lightbox-open > * {
+	display: inherit;
+}
+
+body.mediawiki.mw-mmv-lightbox-open > script,
+body.mediawiki.mw-mmv-lightbox-open > style {
+	display: none;
+}
+
+body.mediawiki.mw-mmv-lightbox-open {
+	overflow: hidden;
+}
+
+body .mw-mmv-wrapper {
+	position: fixed;
+}
+.mw-mmv-image-metadata-column.mw-mmv-image-metadata-desc-column {
+	width: 30%;
+}
+
+.mw-mmv-image-metadata-column.mw-mmv-image-metadata-links-column {
+	width: 70%;
+	max-width: 70%;
+}
+
+ul.mw-mmv-image-links li {
+	float: left;
+	padding: 0.3em 1em;
+}
+
+div.mw-mmv-image-desc-div,
+div.mw-mmv-image-links-div {
+	display: block;
+}
+
+div.metadata-panel-is-closed .mw-mmv-image-links li.mw-mmv-license-li {
+	height: inherit;
+	line-height: inherit;
+}
+
+.mw-mmv-warning-visible .mw-mmv-download-dialog .mw-mmv-dialog-down-arrow {
+	background-color: #fff;
+}
+
+.mw-mmv-warning-visible .mw-mmv-dialog-warning,
+.mw-mmv-warning-visible .mw-mmv-download-attribution {
+	display: none !important;
+}
+.common-box {
+	padding: 0.2em 0.4em;
+	border: 1px solid #ddd;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	-o-border-radius: 10px;
+	-webkit-box-shadow: #666 0 2px 3px;
+	-moz-box-shadow: #666 0 2px 3px;
+	border-radius: 10px;
+	box-shadow: #666 0 2px 3px;
+}
+.mw-datatable.TablePager {
+	width: 100%;
+	table-layout: fixed;
+	overflow-wrap: break-word;
+}
+#breadcrumb {
+	background-image: url('//img.moegirl.org.cn/breadcrumb/bc_bg.png');
+	color: red;
+	border: solid 1px #cacaca;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+#breadcrumb span {
+	float: left;
+	padding-left: 10px;
+}
+
+#breadcrumb a {
+	display: block;
+	background: url('//img.moegirl.org.cn/breadcrumb/bc_separator.png') no-repeat right;
+	padding-right: 15px;
+	color: #454545;
+}
+
+#breadcrumb a:hover {
+	color: #35acc5;
+}
+.infotemplatebox {
+	float: right;
+	width: 280px;
+	font-size: 90%;
+	margin: 1em 0 1em 1em;
+	background: #f9f9f9;
+	border: 1px #999 solid;
+	border-collapse: collapse;
+	word-break: break-all;
+	clear: right;
+}
+.my-buttons {
+	padding: 0.5em;
+}
+
+.my-buttons a {
+	text-decoration: none;
+	border: 1px #069 outset;
+	padding: 0.1em;
+}
+
+.my-buttons a:hover,
+.my-buttons a:active {
+	border-style: inset;
+}
+pre {
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre,
+code,
+textarea,
+.CodeMirror,
+[style*='monospace'] {
+	text-autospace: no-autospace;
+	text-spacing-trim: space-all;
+}
+
+input {
+	text-spacing-trim: space-all;
+}
+
+table.navbox {
+	border: 1px solid #aaa;
+	clear: both;
+	margin: auto;
+	padding: 1px;
+	text-align: center;
+	width: 100%;
+}
+
+table.navbox + table.navbox {
+	margin-top: -1px;
+}
+
+.navbox-title,
+.navbox-abovebelow,
+table.navbox th {
+	padding-left: 1em;
+	padding-right: 1em;
+	text-align: center;
+}
+
+.navbox-group {
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.navbox,
+.navbox-subgroup {
+	background: none repeat scroll 0 0 var(--theme-card-background-color, #fdfdfd);
+}
+
+.navbox-list {
+	border-color: #fdfdfd;
+}
+
+.navbox-title,
+table.navbox th {
+	background: none repeat scroll 0 0 #a5e4a5;
+}
+
+.navbox-abovebelow,
+.navbox-group,
+.navbox-subgroup .navbox-title {
+	background: none repeat scroll 0 0 #c0ecc0;
+}
+
+.navbox-subgroup .navbox-group,
+.navbox-subgroup .navbox-abovebelow {
+	background: none repeat scroll 0 0 #e6f6e6;
+}
+
+.navbox-even {
+	background: none repeat scroll 0 0 #f5fcf5;
+}
+
+.navbox-odd {
+	background: none repeat scroll 0 0 #fdfdfd;
+}
+.wikitable {
+	max-width: 100%;
+}
+.thumb.tcenter {
+	float: none;
+	clear: both;
+	display: block;
+	margin: 0 auto;
+}
+body.ns-2 div#catlinks {
+	display: none !important;
+}
+.editRequest {
+	text-align: center;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	margin: 1em 2.5em;
+	padding: 1em;
+	background: white;
+}
+
+.editRequest .newComment {
+	white-space: nowrap;
+	background: #347bff;
+	color: #fff;
+	border: 1px solid #347bff;
+	text-shadow: 0 1px rgb(0 0 0 / 10%);
+	font-family: inherit;
+	font-size: 1em;
+	min-width: 4em;
+	max-width: 28.75em;
+	padding: 0.5em 1em;
+	margin: 0;
+	border-radius: 2px;
+	box-sizing: border-box;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	zoom: 1;
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
+	cursor: pointer;
+}
+.reference-text > ul.listInRef,
+.reference-text > ol.listInRef {
+	margin: -1.5em 0 0 2em;
+}
+.container {
+	position: relative;
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 0 20px;
+	box-sizing: border-box;
+}
+
+.div,
+.divs,
+.column,
+.columns {
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+}
+@media (min-width: 400px) {
+}
+@media (min-width: 800px) {
+	.div,
+	.divs,
+	.column,
+	.columns {
+		margin-left: 0.3%;
+	}
+
+	.div:first-child,
+	.divs:first-child,
+	.column:first-child,
+	.columns:first-child {
+		margin-left: 0;
+	}
+
+	.one.div,
+	.one.divs {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.two.divs {
+		width: 49.85%;
+	}
+
+	.three.divs {
+		width: 33.1333333333%;
+	}
+
+	.four.divs {
+		width: 24.775%;
+	}
+
+	.five.divs {
+		width: 19.76%;
+	}
+
+	.six.divs {
+		width: 16.4166666667%;
+	}
+
+	.seven.divs {
+		width: 14.0285714286%;
+	}
+
+	.eight.divs {
+		width: 12.2375%;
+	}
+
+	.nine.divs {
+		width: 10.8444444444%;
+	}
+
+	.ten.divs {
+		width: 9.73%;
+	}
+
+	.eleven.divs {
+		width: 8.81818181818%;
+	}
+
+	.twelve.divs {
+		width: 8.05833333333%;
+	}
+
+	.one.column,
+	.one.columns {
+		width: 8.05833333333%;
+	}
+
+	.two.columns {
+		width: 16.4166666667%;
+	}
+
+	.three.columns {
+		width: 24.775%;
+	}
+
+	.four.columns {
+		width: 33.1333333333%;
+	}
+
+	.five.columns {
+		width: 41.4916666667%;
+	}
+
+	.six.columns {
+		width: 49.85%;
+	}
+
+	.seven.columns {
+		width: 58.2083333333%;
+	}
+
+	.eight.columns {
+		width: 66.5666666667%;
+	}
+
+	.nine.columns {
+		width: 74.925%;
+	}
+
+	.ten.columns {
+		width: 83.2833333333%;
+	}
+
+	.eleven.columns {
+		width: 91.6416666667%;
+	}
+
+	.twelve.columns {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.one-third.column {
+		width: 33.1333333333%;
+	}
+
+	.two-thirds.column {
+		width: 66.5666666667%;
+	}
+
+	.one-half.column {
+		width: 49.85%;
+	}
+	.offset-by-one.column,
+	.offset-by-one.columns {
+		margin-left: 8.66666666667%;
+	}
+
+	.offset-by-two.column,
+	.offset-by-two.columns {
+		margin-left: 17.3333333333%;
+	}
+
+	.offset-by-three.column,
+	.offset-by-three.columns {
+		margin-left: 26%;
+	}
+
+	.offset-by-four.column,
+	.offset-by-four.columns {
+		margin-left: 34.6666666667%;
+	}
+
+	.offset-by-five.column,
+	.offset-by-five.columns {
+		margin-left: 43.3333333333%;
+	}
+
+	.offset-by-six.column,
+	.offset-by-six.columns {
+		margin-left: 52%;
+	}
+
+	.offset-by-seven.column,
+	.offset-by-seven.columns {
+		margin-left: 60.6666666667%;
+	}
+
+	.offset-by-eight.column,
+	.offset-by-eight.columns {
+		margin-left: 69.3333333333%;
+	}
+
+	.offset-by-nine.column,
+	.offset-by-nine.columns {
+		margin-left: 78%;
+	}
+
+	.offset-by-ten.column,
+	.offset-by-ten.columns {
+		margin-left: 86.6666666667%;
+	}
+
+	.offset-by-eleven.column,
+	.offset-by-eleven.columns {
+		margin-left: 95.3333333333%;
+	}
+
+	.offset-by-one-third.column,
+	.offset-by-one-third.columns {
+		margin-left: 34.6666666667%;
+	}
+
+	.offset-by-two-thirds.column,
+	.offset-by-two-thirds.columns {
+		margin-left: 69.3333333333%;
+	}
+
+	.offset-by-one-half.column,
+	.offset-by-one-half.columns {
+		margin-left: 52%;
+	}
+}
+.wikitable.mw-collapsible caption {
+	border: 1px solid rgb(170 170 170 / 37%);
+	border-bottom-width: 0;
+	background-color: rgb(249 249 249);
+}
+
+.wikitable.mw-collapsible.mw-collapsed caption {
+	border-bottom-width: 1px;
+}
+.mw-category-group {
+	-moz-column-break-inside: avoid;
+	break-inside: avoid;
+}
+
+.mw-category-group:nth-child(1):nth-last-child(1),
+.mw-category-group:nth-child(1):nth-last-child(2),
+.mw-category-group:nth-child(2):nth-last-child(1) {
+	-moz-column-break-inside: auto;
+	break-inside: auto;
+}
+#wikieditor-toolbar-file-dialog + .ui-dialog-buttonpane > .ui-dialog-buttonset > .ui-button:last-child {
+	display: none;
+}
+.mw-explainconflict ~ #editform {
+	display: flex;
+	flex-direction: column;
+}
+
+.mw-explainconflict ~ #editform > * {
+	order: 2;
+}
+
+.mw-explainconflict ~ #editform > h2,
+.mw-explainconflict ~ #editform > h2 ~ * {
+	order: 1;
+}
+
+.mw-explainconflict ~ #editform > h2 > .mw-headline::after {
+	content: '（请滚动查看，可拖动右下角斜线符号调整高度）';
+}
+
+.mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after,
+.mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
+	content: '（由于技术限制，此处为全文版本，请使用 Ctrl+F | ⌘+F 搜索相关差异，可拖动右下角斜线符号调整高度）';
+}
+
+html[lang='zh-hant' i] .mw-explainconflict ~ #editform > h2 > .mw-headline::after {
+	content: '（請滾動查看，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-hk' i] .mw-explainconflict ~ #editform > h2 > .mw-headline::after {
+	content: '（請滾動查看，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-tw' i] .mw-explainconflict ~ #editform > h2 > .mw-headline::after {
+	content: '（請滾動查看，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-hant' i] .mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after {
+	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-hant' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
+	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-hk' i] .mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after {
+	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-hk' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
+	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after {
+	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
+}
+
+html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
+	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
+}
+
+.mw-explainconflict ~ #editform > textarea[readonly] {
+	height: 20vh;
+	width: 100% !important;
+	resize: vertical;
+}
+
+.mw-explainconflict ~ #editform > .diff-container {
+	height: 20vh;
+	overflow-y: auto;
+	border: 1px solid gray;
+	resize: vertical;
+}
+
+.mw-explainconflict ~ #editform > .wikiEditor-ui::before {
+	content: '编辑框（最新版本）';
+	font-size: 1.5em;
+	margin: 1em 0 0.25em;
+	font-family: serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+	line-height: 1.3;
+	padding: 0;
+	font-weight: 700;
+	border-bottom: 1px solid #0074f9;
+	color: #000;
+	background: none;
+	overflow: hidden;
+	display: block;
+}
+
+html[lang='zh-hant' i] .mw-explainconflict ~ #editform > .wikiEditor-ui::before {
+	content: '編輯框（最新修訂）';
+}
+
+html[lang='zh-hk' i] .mw-explainconflict ~ #editform > .wikiEditor-ui::before {
+	content: '編輯框（最新修訂）';
+}
+
+html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .wikiEditor-ui::before {
+	content: '編輯框（最新修訂）';
+}
+
+[color-mode='dark'] .infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
+[color-mode='dark'] .infobox2:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
+[color-mode='dark'] .moe-infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
+[color-mode='dark'] .infotemplatebox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
+[color-mode='dark'] .infoboxSpecial:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
+[color-mode='dark'] .ztdh:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
+[color-mode='dark'] #powersearch,
+[color-mode='dark'] #topicpath {
+	color: #222;
+	filter: brightness(0.75);
+}
+
+[color-mode='dark'] .infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
+[color-mode='dark'] .infobox2:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
+[color-mode='dark'] .moe-infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
+[color-mode='dark'] .infotemplatebox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
+[color-mode='dark'] .infoboxSpecial:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
+[color-mode='dark'] .ztdh:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
+[color-mode='dark'] #powersearch a:not(.new) {
+	--color: #155d33;
+}
+
+[color-mode='dark'] input[type='text'] {
+	color: var(--theme-text-color);
+}
+
+[color-mode='dark'] .navbox:not(.dark-theme-invert-disabled) {
+	--theme-link-color: rgb(51 102 187);
+
+	color: rgb(44 62 80);
+	filter: brightness(0.75);
+}
+
+[color-mode='dark'] .mw-datatable,
+[color-mode='dark'] .mw-json,
+[color-mode='dark'] table.wikitable {
+	background-color: var(--theme-background-color);
+	color: var(--theme-text-color);
+}
+
+.noprint.plainlinks.hlist.navbar.nomobile {
+	width: 300px !important;
+}

@@ -1,7 +1,7 @@
 {
 	"name": "vocawiki-frontend",
 	"scripts": {
-		"format": "prettier \"*.{ts,json,md}\" \"src/**/*.{ts,json,md}\" \"scripts/**/*.{ts,json,md}\" --write --log-level warn",
+		"format": "prettier \"*.{ts,css,scss,json,md}\" \"src/**/*.{ts,css,scss,json,md}\" \"scripts/**/*.{ts,css,scss,json,md}\" --write --log-level warn",
 		"check": "bun run ./scripts/check-type",
 		"lint": "eslint .",
 		"test": "bun run check && bun run lint",
@@ -24,6 +24,7 @@
 		"fs-extra": "^11.3.2",
 		"globals": "^16.4.0",
 		"prettier": "^3.6.2",
+		"sass-embedded": "^1.93.2",
 		"type-fest": "^5.0.1",
 		"types-mediawiki": "^2.0.0",
 		"typescript": "^5.9.2",
