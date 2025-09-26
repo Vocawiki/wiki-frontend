@@ -10,22 +10,26 @@ interface PageImagesResult {
 	}
 }
 async function getPageImages(titles: string[]): Promise<PageImagesResult> {
+	if (titles.length === 0) return {}
+
 	const api = new mw.Api()
 	const data = (await api.get({
 		action: 'query',
 		format: 'json',
 		formatversion: '2',
 		prop: 'pageimages',
+		pithumbsize: 128,
 		piprop: 'thumbnail',
 		pilicense: 'any',
 		titles: titles,
 	})) as unknown as {
 		query: {
+			batchcomplete: boolean
 			pages: {
 				pageid: number
 				ns: number
 				title: string
-				thumbnail: {
+				thumbnail?: {
 					source: string
 					width: number
 					height: number
@@ -33,20 +37,23 @@ async function getPageImages(titles: string[]): Promise<PageImagesResult> {
 			}[]
 		}
 	}
-	const result = Object.fromEntries(data.query.pages.map((x) => [x.title, x.thumbnail]))
+	const result = Object.fromEntries(data.query.pages.filter((x) => x.thumbnail).map((x) => [x.title, x.thumbnail!]))
 	return result
 }
 
-async function setBackground() {
-	const items = ([...document.querySelectorAll('.new-article-list li')] as HTMLLIElement[])
-		.map((li) => ({ liElem: li, title: li.querySelector('a')?.title }))
-		.filter((x) => x.title) as { liElem: HTMLLIElement; title: string }[]
+async function applyPageImageOnDOM() {
+	const items = ([...document.querySelectorAll('.latest-article-list li')] as HTMLLIElement[])
+		.map((liElem) => {
+			const anchorElem = liElem.querySelector('a')
+			return anchorElem?.title ? { liElem, anchorElem, title: anchorElem.title } : null
+		})
+		.filter((x) => x !== null)
 	const pageImages = await getPageImages([...new Set(items.map((x) => x.title))])
-	for (const { liElem, title } of items) {
+	for (const { anchorElem, title } of items) {
 		if (!pageImages[title]) continue
 		const { source } = pageImages[title]
-		liElem.style.backgroundImage = `url("${source}")`
+		anchorElem.insertAdjacentHTML('afterbegin', `<div class="latest-article-image"><img src="${source}" alt=""></div>`)
 	}
 }
 
-void setBackground()
+void applyPageImageOnDOM()

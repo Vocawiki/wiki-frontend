@@ -69,7 +69,7 @@ async function buildEntity({ type, name, path }: { type: 'widget' | 'gadget'; na
 		target: 'browser',
 		naming: fileName,
 		minify: {
-			whitespace: true,
+			whitespace: false,
 			identifiers: false,
 			syntax: true,
 			keepNames: true,
