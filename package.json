@@ -6,7 +6,8 @@
 		"lint": "eslint .",
 		"test": "bun run check && bun run lint",
 		"build": "bun run ./scripts/build",
-		"deploy": "bun run ./scripts/deploy"
+		"push": "bun run ./scripts/push",
+		"deploy": "bun run build && bun run push"
 	},
 	"private": true,
 	"type": "module",

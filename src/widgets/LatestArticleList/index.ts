@@ -9,7 +9,7 @@ interface PageImagesResult {
 		height: number
 	}
 }
-async function getPageImages(titles: string[]): Promise<PageImagesResult> {
+async function fetchPageImages(titles: string[]): Promise<PageImagesResult> {
 	if (titles.length === 0) return {}
 
 	const api = new mw.Api()
@@ -42,18 +42,34 @@ async function getPageImages(titles: string[]): Promise<PageImagesResult> {
 }
 
 async function applyPageImageOnDOM() {
-	const items = ([...document.querySelectorAll('.latest-article-list li')] as HTMLLIElement[])
+	const pageItems = ([...document.querySelectorAll('.latest-article-list li')] as HTMLLIElement[])
 		.map((liElem) => {
-			const anchorElem = liElem.querySelector('a')
-			return anchorElem?.title ? { liElem, anchorElem, title: anchorElem.title } : null
+			const anchorElem: HTMLAnchorElement | null = liElem.querySelector('a[href^="/"]')
+			return anchorElem?.title ? { liElem, anchorElem, title: anchorElem.textContent } : null
 		})
 		.filter((x) => x !== null)
-	const pageImages = await getPageImages([...new Set(items.map((x) => x.title))])
-	for (const { anchorElem, title } of items) {
-		if (!pageImages[title]) continue
-		const { source } = pageImages[title]
-		anchorElem.insertAdjacentHTML('afterbegin', `<div class="latest-article-image"><img src="${source}" alt=""></div>`)
-	}
+
+	pageItems.forEach(({ anchorElem }) => {
+		// 因为它需要一个单独的元素来使 CSS 的 text-overflow: ellipsis 生效
+		anchorElem.innerHTML = `<div class="latest-article-title">${anchorElem.innerHTML}</div>`
+	})
+
+	const pageImages = await fetchPageImages([...new Set(pageItems.map((x) => x.title))])
+
+	pageItems.forEach(({ anchorElem, title }) => {
+		const pageImage = pageImages[title]
+		if (!pageImage) {
+			return
+		}
+		anchorElem.insertAdjacentHTML(
+			'afterbegin',
+			// SB MW 不让用在 templatestyles 里用 -webkit-mask-image，只能写在这里。
+			`<div class="latest-article-image" style="-webkit-mask-image: -webkit-linear-gradient(0deg, #fff 1em, transparent); mask-image: linear-gradient(90deg, #fff 1em, transparent);"><img src="${pageImage.source}" loading="lazy" alt=""></div>`,
+		)
+	})
 }
 
-void applyPageImageOnDOM()
+// TODO: Bun 的打包器不会转换语法，等换打包器了改成 ??=
+// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+window.RLQ = window.RLQ || []
+window.RLQ.push([['mediawiki.api'], applyPageImageOnDOM])

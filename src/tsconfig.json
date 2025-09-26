@@ -1,8 +1,10 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"target": "es2019",
-		"module": "es2015"
+		"target": "es2018",
+		"module": "es2015",
+		"rootDir": ".",
+		"outDir": "./dist"
 	},
 	"include": ["**/*"]
 }

@@ -7,14 +7,14 @@ export function getWidgetCode(args: { name: string; description?: string; srcPat
 	}
 	const noinclude = [
 		args.description,
-		`此文件为自动生成，手动修改将会被覆盖，请至[https://github.com/Vocawiki/wiki-frontend/blob/${args.srcPath}]修改源代码。`,
+		`此文件为自动生成，手动修改将会被覆盖，请至[https://github.com/Vocawiki/wiki-frontend/blob/main/${args.srcPath}]修改源代码。`,
 	]
 		.filter((x) => x)
 		.join('\n\n')
 
 	const identifier = `${args.name}_called`
 
-	return `<noinclude>${noinclude}</noinclude><includeonly><!--{if !isset($${identifier}) || !$${identifier}}{assign var="${identifier}" value=true scope="global"}--><script type="module">
+	return `<noinclude>${noinclude}</noinclude><includeonly><!--{if !isset($${identifier}) || !$${identifier}}--><!--{assign var="${identifier}" value=true scope="global"}--><script type="module">
 ${args.script.trim()}
 </script><!--{/if}--></includeonly>
 `

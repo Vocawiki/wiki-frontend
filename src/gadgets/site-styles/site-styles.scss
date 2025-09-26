@@ -1,11 +1,12 @@
+@use 'public-utils';
+@use 'heimu';
+
 .select-none,
 .tab .TabLabel {
 	-webkit-user-select: none;
 	user-select: none;
 }
 
-.hidden,
-.tab .TabContentText,
 .sidebar-character,
 #ca-varlang-0,
 #ca-varlang-1,
@@ -13,267 +14,261 @@
 	display: none;
 }
 
-/* from https://github.com/twbs/bootstrap/blob/cb021439c683d9805e2864c58095b92d405e9b11/scss/mixins/_visually-hidden.scss */
-.visually-hidden {
-	position: absolute !important;
-	width: 1px !important;
-	height: 1px !important;
-	padding: 0 !important;
-	margin: -1px !important;
-	overflow: hidden !important;
-	-webkit-clip-path: inset(50%) !important;
-	clip-path: inset(50%) !important;
-	white-space: nowrap !important;
-	border: 0 !important;
-}
+.tab {
+	.TabLabelText {
+		@extend .hidden;
+		padding: 1px;
+		background: #fff;
+		cursor: pointer;
+		flex: none;
+	}
 
-.tab .TabLabelText {
-	padding: 1px;
-	background: #fff;
-	cursor: pointer;
-	flex: none;
-}
+	.TabLabel {
+		z-index: 2;
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+	}
 
-.tab .TabLabel {
-	z-index: 2;
-	position: relative;
-	display: flex;
-	flex-wrap: wrap;
-}
+	.TabLabelText.selected {
+		padding: 1px;
+		background: white;
+	}
 
-.tab .TabLabelText.selected {
-	padding: 1px;
-	background: white;
-}
+	.TabContent {
+		background: white;
+		padding: 20px 30px;
+		position: relative;
+		z-index: 1;
+		border: 1px solid #aaa;
+	}
 
-.tab .TabContent {
-	background: white;
-	padding: 20px 30px;
-	position: relative;
-	z-index: 1;
-	border: 1px solid #aaa;
-}
+	.TabContentText.selected {
+		display: block;
+	}
 
-.tab .TabContentText.selected {
-	display: block;
-}
+	.tabLabelTop .TabLabelText {
+		border-top: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+	}
 
-.tab .tabLabelTop .TabLabelText {
-	border-top: 3px solid transparent;
-	border-left: 1px solid transparent;
-	border-right: 1px solid transparent;
-}
+	.tabLabelTop .TabLabelText.selected {
+		border-top: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+	}
 
-.tab .tabLabelTop .TabLabelText.selected {
-	border-top: 3px solid green;
-	border-left: 1px solid #aaa;
-	border-right: 1px solid #aaa;
-}
+	.tabLabelTop.reverse .TabLabelText {
+		border-bottom: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+		border-top: 1px solid transparent;
+	}
 
-.tab .tabLabelTop.reverse .TabLabelText {
-	border-bottom: 3px solid transparent;
-	border-left: 1px solid transparent;
-	border-right: 1px solid transparent;
-	border-top: 1px solid transparent;
-}
+	.tabLabelTop.reverse .TabLabelText.selected {
+		border-bottom: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+		border-top: 1px solid transparent;
+	}
 
-.tab .tabLabelTop.reverse .TabLabelText.selected {
-	border-bottom: 3px solid green;
-	border-left: 1px solid #aaa;
-	border-right: 1px solid #aaa;
-	border-top: 1px solid transparent;
-}
+	.tabLabelBottom .TabLabelText {
+		border-bottom: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+	}
 
-.tab .tabLabelBottom .TabLabelText {
-	border-bottom: 3px solid transparent;
-	border-left: 1px solid transparent;
-	border-right: 1px solid transparent;
-}
+	.tabLabelBottom .TabLabelText.selected {
+		border-bottom: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+	}
 
-.tab .tabLabelBottom .TabLabelText.selected {
-	border-bottom: 3px solid green;
-	border-left: 1px solid #aaa;
-	border-right: 1px solid #aaa;
-}
+	.tabLabelBottom.reverse .TabLabelText {
+		border-top: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+	}
 
-.tab .tabLabelBottom.reverse .TabLabelText {
-	border-top: 3px solid transparent;
-	border-left: 1px solid transparent;
-	border-right: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-}
+	.tabLabelBottom.reverse .TabLabelText.selected {
+		border-top: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+		border-bottom: 1px solid transparent;
+	}
 
-.tab .tabLabelBottom.reverse .TabLabelText.selected {
-	border-top: 3px solid green;
-	border-left: 1px solid #aaa;
-	border-right: 1px solid #aaa;
-	border-bottom: 1px solid transparent;
-}
+	.tabLabelLeft .TabLabelText {
+		border-left: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+	}
 
-.tab .tabLabelLeft .TabLabelText {
-	border-left: 3px solid transparent;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-}
+	.tabLabelLeft .TabLabelText.selected {
+		border-left: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+	}
 
-.tab .tabLabelLeft .TabLabelText.selected {
-	border-left: 3px solid green;
-	border-top: 1px solid #aaa;
-	border-bottom: 1px solid #aaa;
-}
+	.tabLabelLeft.reverse .TabLabelText {
+		border-right: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+		border-left: 1px solid transparent;
+	}
 
-.tab .tabLabelLeft.reverse .TabLabelText {
-	border-right: 3px solid transparent;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-	border-left: 1px solid transparent;
-}
+	.tabLabelLeft.reverse .TabLabelText.selected {
+		border-right: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+		border-left: 1px solid transparent;
+	}
 
-.tab .tabLabelLeft.reverse .TabLabelText.selected {
-	border-right: 3px solid green;
-	border-top: 1px solid #aaa;
-	border-bottom: 1px solid #aaa;
-	border-left: 1px solid transparent;
-}
+	.tabLabelRight .TabLabelText {
+		border-right: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+	}
 
-.tab .tabLabelRight .TabLabelText {
-	border-right: 3px solid transparent;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-}
+	.tabLabelRight .TabLabelText.selected {
+		border-right: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+	}
 
-.tab .tabLabelRight .TabLabelText.selected {
-	border-right: 3px solid green;
-	border-top: 1px solid #aaa;
-	border-bottom: 1px solid #aaa;
-}
+	.tabLabelRight.reverse .TabLabelText {
+		border-left: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+		border-right: 1px solid transparent;
+	}
 
-.tab .tabLabelRight.reverse .TabLabelText {
-	border-left: 3px solid transparent;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-	border-right: 1px solid transparent;
-}
+	.tabLabelRight.reverse .TabLabelText.selected {
+		border-left: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+		border-right: 1px solid transparent;
+	}
 
-.tab .tabLabelRight.reverse .TabLabelText.selected {
-	border-left: 3px solid green;
-	border-top: 1px solid #aaa;
-	border-bottom: 1px solid #aaa;
-	border-right: 1px solid transparent;
-}
+	.Tabs .TabDivider {
+		width: 100%;
+		order: 2;
+	}
 
-.tab .Tabs .TabDivider {
-	width: 100%;
-	order: 2;
-}
+	.Tabs.reverse .TabDivider {
+		height: 2px;
+	}
 
-.tab .Tabs.reverse .TabDivider {
-	height: 2px;
-}
+	.Tabs.tabLabelLeft .TabLabel,
+	.Tabs.tabLabelRight .TabContent {
+		order: 1;
+	}
 
-.tab .Tabs.tabLabelLeft .TabLabel,
-.tab .Tabs.tabLabelRight .TabContent {
-	order: 1;
-}
+	.Tabs.tabLabelLeft .TabContent,
+	.Tabs.tabLabelRight .TabLabel {
+		order: 3;
+	}
 
-.tab .Tabs.tabLabelLeft .TabContent,
-.tab .Tabs.tabLabelRight .TabLabel {
-	order: 3;
-}
+	.Tabs.tabLabelLeft,
+	.Tabs.tabLabelRight {
+		display: flex;
+		flex-wrap: nowrap;
+		width: auto;
+	}
 
-.tab .Tabs.tabLabelLeft,
-.tab .Tabs.tabLabelRight {
-	display: flex;
-	flex-wrap: nowrap;
-	width: auto;
-}
+	.Tabs.tabLabelLeft .TabDivider,
+	.Tabs.tabLabelRight .TabDivider {
+		height: 100%;
+		width: 0;
+	}
 
-.tab .Tabs.tabLabelLeft .TabDivider,
-.tab .Tabs.tabLabelRight .TabDivider {
-	height: 100%;
-	width: 0;
-}
+	.Tabs.tabLabelLeft.reverse .TabDivider,
+	.Tabs.tabLabelRight.reverse .TabDivider {
+		width: 1px;
+	}
 
-.tab .Tabs.tabLabelLeft.reverse .TabDivider,
-.tab .Tabs.tabLabelRight.reverse .TabDivider {
-	width: 1px;
-}
+	.Tabs.tabLabelLeft .TabLabel,
+	.Tabs.tabLabelRight .TabLabel {
+		flex-direction: column;
+	}
 
-.tab .Tabs.tabLabelLeft .TabLabel,
-.tab .Tabs.tabLabelRight .TabLabel {
-	flex-direction: column;
-}
-
-.tab .Tabs.tabLabelLeft:not(.AutoWidth) .TabContent,
-.tab .Tabs.tabLabelRight:not(.AutoWidth) .TabContent {
-	flex: 1;
+	.Tabs.tabLabelLeft:not(.AutoWidth) .TabContent,
+	.Tabs.tabLabelRight:not(.AutoWidth) .TabContent {
+		flex: 1;
+	}
 }
 
 .Tabs {
 	max-width: 100%;
+
+	&.AutoWidth {
+		display: table-cell;
+	}
+
+	&.FloatLeft {
+		float: left;
+		margin-right: 1em;
+	}
+
+	&.FloatRight {
+		float: right;
+		margin-left: 1em;
+	}
+
+	.Tab {
+		border-bottom: 1px solid #aaa;
+
+		&:first-child {
+			border-top: 1px solid #aaa;
+		}
+		.TabLabelText {
+			padding: 7px;
+		}
+		.TabContentText {
+			padding: 3px;
+		}
+	}
 }
 
-.Tabs.AutoWidth {
-	display: table-cell;
+.infotemplatebox > table td > .Tabs {
+	.TabLabel,
+	.TabContent {
+		margin: 0 -1px;
+	}
 }
 
-.Tabs.FloatLeft {
-	float: left;
-	margin-right: 1em;
+.annotation {
+	> span {
+		cursor: pointer;
+	}
+
+	.oo-ui-popupWidget {
+		z-index: 1000001;
+		white-space: normal;
+		color: #000;
+		font-weight: normal;
+	}
+
+	.oo-ui-popupWidget-popup {
+		width: -moz-fit-content !important;
+		width: fit-content !important;
+	}
+
+	.oo-ui-popupWidget-body {
+		width: -moz-fit-content;
+		width: fit-content;
+		min-width: 5.5em;
+		max-width: 11em !important;
+		overflow: auto;
+	}
 }
 
-.Tabs.FloatRight {
-	float: right;
-	margin-left: 1em;
-}
-
-.Tabs .Tab {
-	border-bottom: 1px solid #aaa;
-}
-
-.Tabs .Tab:first-child {
-	border-top: 1px solid #aaa;
-}
-
-.Tabs .Tab .TabLabelText {
-	padding: 7px;
-}
-
-.Tabs .Tab .TabContentText {
-	padding: 3px;
-}
-
-.infotemplatebox > table td > .Tabs .TabLabel,
-.infotemplatebox > table td > .Tabs .TabContent {
-	margin: 0 -1px;
-}
-.annotation > span {
-	cursor: pointer;
-}
-
-.annotation .oo-ui-popupWidget {
-	z-index: 1000001;
-	white-space: normal;
-	color: #000;
-	font-weight: normal;
-}
-
-.annotation .oo-ui-popupWidget-popup {
-	width: -moz-fit-content !important;
-	width: fit-content !important;
-}
-
-.annotation .oo-ui-popupWidget-body {
-	width: -moz-fit-content;
-	width: fit-content;
-	min-width: 5.5em;
-	max-width: 11em !important;
-	overflow: auto;
-}
 .columns-list > ul:first-child,
 .columns-list > ol:first-child {
 	margin-top: 0;
 }
+
 span[lang] {
 	font-family: initial;
 	font-feature-settings: 'locl' on;
@@ -336,69 +331,7 @@ span[lang='ja' i] [style*='italic' i] {
 [style*='font-family:' i] span[lang='ja' i] [style*='italic' i] {
 	font-family: inherit;
 }
-.heimu,
-.heimu rt {
-	--heimu-color: #252525;
-	--heimu-text-color: #fff;
-	--heimu-link-color: #add8e6;
-	--heimu-visited-link-color: #c5cae9;
-	--heimu-new-link-color: #fcc;
-	--heimu-new-visited-link-color: #ef9a9a;
-	--heimu-extiw-visited-link-color: #d1c4e9;
 
-	background-color: var(--heimu-color);
-}
-
-.heimu,
-.heimu a,
-a .heimu,
-a.new .heimu,
-span.heimu a:visited,
-span.heimu a.new,
-span.heimu a.external,
-span.heimu a.external:visited,
-span.heimu a.extiw,
-span.heimu a.extiw:visited,
-span.heimu a.mw-disambig,
-span.heimu a.mw-redirect {
-	transition: color 0.13s linear;
-	color: var(--heimu-color);
-	text-shadow: none;
-}
-
-span.heimu:hover,
-span.heimu:active {
-	color: var(--heimu-text-color);
-}
-
-span.heimu:hover a,
-a:hover span.heimu {
-	color: var(--heimu-link-color);
-}
-
-span.heimu:hover a:visited,
-a:visited:hover span.heimu {
-	color: var(--heimu-visited-link-color);
-}
-
-span.heimu:hover a.new,
-a.new:hover span.heimu {
-	color: var(--heimu-new-link-color);
-}
-
-span.heimu a.new:hover:visited,
-a.new:hover:visited span.heimu {
-	color: var(--heimu-new-visited-link-color);
-}
-
-span.heimu:hover a.extiw:visited,
-a.extiw:visited:hover span.heimu {
-	color: var(--heimu-extiw-visited-link-color);
-}
-[color-mode='dark'] .heimu,
-[color-mode='dark'] .heimu rt {
-	--heimu-color: #5e6272;
-}
 s.just-kidding-text {
 	color: #666;
 	text-decoration-color: #000;
@@ -1204,84 +1137,42 @@ html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .m
 	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
 }
 
-.mw-explainconflict ~ #editform > textarea[readonly] {
-	height: 20vh;
-	width: 100% !important;
-	resize: vertical;
-}
+.mw-explainconflict ~ #editform {
+	> textarea[readonly] {
+		height: 20vh;
+		width: 100% !important;
+		resize: vertical;
+	}
+	> .diff-container {
+		height: 20vh;
+		overflow-y: auto;
+		border: 1px solid gray;
+		resize: vertical;
+	}
+	> .wikiEditor-ui::before {
+		content: '编辑框（最新版本）';
+		font-size: 1.5em;
+		margin: 1em 0 0.25em;
+		font-family: serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+		line-height: 1.3;
+		padding: 0;
+		font-weight: 700;
+		border-bottom: 1px solid #0074f9;
+		color: #000;
+		background: none;
+		overflow: hidden;
+		display: block;
 
-.mw-explainconflict ~ #editform > .diff-container {
-	height: 20vh;
-	overflow-y: auto;
-	border: 1px solid gray;
-	resize: vertical;
-}
-
-.mw-explainconflict ~ #editform > .wikiEditor-ui::before {
-	content: '编辑框（最新版本）';
-	font-size: 1.5em;
-	margin: 1em 0 0.25em;
-	font-family: serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-	line-height: 1.3;
-	padding: 0;
-	font-weight: 700;
-	border-bottom: 1px solid #0074f9;
-	color: #000;
-	background: none;
-	overflow: hidden;
-	display: block;
-}
-
-html[lang='zh-hant' i] .mw-explainconflict ~ #editform > .wikiEditor-ui::before {
-	content: '編輯框（最新修訂）';
-}
-
-html[lang='zh-hk' i] .mw-explainconflict ~ #editform > .wikiEditor-ui::before {
-	content: '編輯框（最新修訂）';
-}
-
-html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .wikiEditor-ui::before {
-	content: '編輯框（最新修訂）';
-}
-
-[color-mode='dark'] .infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
-[color-mode='dark'] .infobox2:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
-[color-mode='dark'] .moe-infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
-[color-mode='dark'] .infotemplatebox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
-[color-mode='dark'] .infoboxSpecial:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
-[color-mode='dark'] .ztdh:not(#GaiBuHuiZhenYouRenYongZheGeClassBa),
-[color-mode='dark'] #powersearch,
-[color-mode='dark'] #topicpath {
-	color: #222;
-	filter: brightness(0.75);
-}
-
-[color-mode='dark'] .infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
-[color-mode='dark'] .infobox2:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
-[color-mode='dark'] .moe-infobox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
-[color-mode='dark'] .infotemplatebox:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
-[color-mode='dark'] .infoboxSpecial:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
-[color-mode='dark'] .ztdh:not(#GaiBuHuiZhenYouRenYongZheGeClassBa) a:not(.new),
-[color-mode='dark'] #powersearch a:not(.new) {
-	--color: #155d33;
-}
-
-[color-mode='dark'] input[type='text'] {
-	color: var(--theme-text-color);
-}
-
-[color-mode='dark'] .navbox:not(.dark-theme-invert-disabled) {
-	--theme-link-color: rgb(51 102 187);
-
-	color: rgb(44 62 80);
-	filter: brightness(0.75);
-}
-
-[color-mode='dark'] .mw-datatable,
-[color-mode='dark'] .mw-json,
-[color-mode='dark'] table.wikitable {
-	background-color: var(--theme-background-color);
-	color: var(--theme-text-color);
+		html[lang='zh-hant' i] & {
+			content: '編輯框（最新修訂）';
+		}
+		html[lang='zh-hk' i] & {
+			content: '編輯框（最新修訂）';
+		}
+		html[lang='zh-tw' i] & {
+			content: '編輯框（最新修訂）';
+		}
+	}
 }
 
 .noprint.plainlinks.hlist.navbar.nomobile {

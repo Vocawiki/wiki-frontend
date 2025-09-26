@@ -32,7 +32,7 @@ async function pushPages(pages: Page[]) {
 	}
 }
 
-async function pushPage(api: MediaWikiApi, page: Page, summary = '测试') {
+async function pushPage(api: MediaWikiApi, page: Page, summary = '推送构建后的代码') {
 	await api.postWithEditToken({
 		action: 'edit',
 		format: 'json',
@@ -46,5 +46,4 @@ async function pushPage(api: MediaWikiApi, page: Page, summary = '测试') {
 	})
 }
 
-// await pushPages(await getBuiltPages())
-await pushPages([{ title: 'Help:沙盒', content: '初音未来\n\n初音来了' }])
+await pushPages(await getBuiltPages())

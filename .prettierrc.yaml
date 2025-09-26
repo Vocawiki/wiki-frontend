@@ -11,6 +11,12 @@ bracketSameLine: false
 arrowParens: always
 singleAttributePerLine: false
 
+overrides:
+  - files: '*.{css,scss,sass,less}'
+    options:
+      tabWidth: 4
+      singleQuote: false
+
 plugins:
   - '@ianvs/prettier-plugin-sort-imports'
 
@@ -25,4 +31,4 @@ importOrder:
   - '^/'
   - '^\.\./'
   - '^\./'
-importOrderTypeScriptVersion: '5.8.0'
+importOrderTypeScriptVersion: '5.9.2'
