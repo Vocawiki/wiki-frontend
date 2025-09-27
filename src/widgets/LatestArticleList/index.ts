@@ -15,6 +15,10 @@ interface PageItem {
 	title: string
 }
 
+// SB Extension:MobileFrontend，破坏我的 script 标签
+const LT = String.fromCodePoint(0x3c)
+const GT = String.fromCodePoint(0x3e)
+
 async function fetchPageImages(titles: string[]): Promise<PageImagesResult> {
 	if (titles.length === 0) return {}
 
@@ -57,14 +61,14 @@ function getPageItemsAndModifyDOM(): PageItem[] {
 
 	pageItems.forEach(({ anchorElem }) => {
 		// 因为它需要一个单独的元素来使 CSS 的 text-overflow: ellipsis 生效
-		anchorElem.innerHTML = `<div class="latest-article-title">${anchorElem.innerHTML}</div>`
+		anchorElem.innerHTML = `${LT}div class="latest-article-title"${GT}${anchorElem.innerHTML}${LT}/div${GT}`
 	})
 
 	// 添加“查看更多”按钮
 	;[...document.querySelectorAll('.latest-article-list ol')].forEach((ol) => {
 		ol.insertAdjacentHTML(
 			'beforeend',
-			`<li class="latest-article-list-view-more"><a href="${encodeURI('/Special:最新页面')}"><div class="latest-article-title">查看更多</div></a></li>`,
+			`${LT}li class="latest-article-list-view-more"${GT}${LT}a href="${encodeURI('/Special:最新页面')}"${GT}${LT}div class="latest-article-title"${GT}查看更多${LT}/div${GT}${LT}/a${GT}${LT}/li${GT}`,
 		)
 	})
 
@@ -82,7 +86,7 @@ async function applyPageImageOnDOM(pageItems: PageItem[]) {
 		anchorElem.insertAdjacentHTML(
 			'afterbegin',
 			// SB MW 不让用在 templatestyles 里用 -webkit-mask-image，只能写在这里。
-			`<div class="latest-article-image" style="-webkit-mask-image: -webkit-linear-gradient(0deg, #fff 1em, transparent); mask-image: linear-gradient(90deg, #fff 1em, transparent);"><img src="${pageImage.source}" loading="lazy" alt=""></div>`,
+			`${LT}div class="latest-article-image" style="-webkit-mask-image: -webkit-linear-gradient(0deg, #fff 1em, transparent); mask-image: linear-gradient(90deg, #fff 1em, transparent);"${GT}${LT}img src="${pageImage.source}" loading="lazy" alt=""${GT}${LT}/div${GT}`,
 		)
 	})
 }
