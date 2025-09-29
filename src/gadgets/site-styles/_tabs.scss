@@ -1,0 +1,226 @@
+@use "utils";
+
+.tab {
+	.TabLabelText {
+		display: none;
+		padding: 1px;
+		background: #fff;
+		cursor: pointer;
+		flex: none;
+	}
+
+	.TabLabel {
+		@include utils.select-none;
+		z-index: 2;
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.TabLabelText.selected {
+		padding: 1px;
+		background: white;
+	}
+
+	.TabContent {
+		background: white;
+		padding: 20px 30px;
+		position: relative;
+		z-index: 1;
+		border: 1px solid #aaa;
+	}
+
+	.TabContentText.selected {
+		display: block;
+	}
+
+	.tabLabelTop .TabLabelText {
+		border-top: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+	}
+
+	.tabLabelTop .TabLabelText.selected {
+		border-top: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+	}
+
+	.tabLabelTop.reverse .TabLabelText {
+		border-bottom: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+		border-top: 1px solid transparent;
+	}
+
+	.tabLabelTop.reverse .TabLabelText.selected {
+		border-bottom: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+		border-top: 1px solid transparent;
+	}
+
+	.tabLabelBottom .TabLabelText {
+		border-bottom: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+	}
+
+	.tabLabelBottom .TabLabelText.selected {
+		border-bottom: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+	}
+
+	.tabLabelBottom.reverse .TabLabelText {
+		border-top: 3px solid transparent;
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+	}
+
+	.tabLabelBottom.reverse .TabLabelText.selected {
+		border-top: 3px solid green;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+		border-bottom: 1px solid transparent;
+	}
+
+	.tabLabelLeft .TabLabelText {
+		border-left: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+	}
+
+	.tabLabelLeft .TabLabelText.selected {
+		border-left: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+	}
+
+	.tabLabelLeft.reverse .TabLabelText {
+		border-right: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+		border-left: 1px solid transparent;
+	}
+
+	.tabLabelLeft.reverse .TabLabelText.selected {
+		border-right: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+		border-left: 1px solid transparent;
+	}
+
+	.tabLabelRight .TabLabelText {
+		border-right: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+	}
+
+	.tabLabelRight .TabLabelText.selected {
+		border-right: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+	}
+
+	.tabLabelRight.reverse .TabLabelText {
+		border-left: 3px solid transparent;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+		border-right: 1px solid transparent;
+	}
+
+	.tabLabelRight.reverse .TabLabelText.selected {
+		border-left: 3px solid green;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+		border-right: 1px solid transparent;
+	}
+
+	.Tabs .TabDivider {
+		width: 100%;
+		order: 2;
+	}
+
+	.Tabs.reverse .TabDivider {
+		height: 2px;
+	}
+
+	.Tabs.tabLabelLeft .TabLabel,
+	.Tabs.tabLabelRight .TabContent {
+		order: 1;
+	}
+
+	.Tabs.tabLabelLeft .TabContent,
+	.Tabs.tabLabelRight .TabLabel {
+		order: 3;
+	}
+
+	.Tabs.tabLabelLeft,
+	.Tabs.tabLabelRight {
+		display: flex;
+		flex-wrap: nowrap;
+		width: auto;
+	}
+
+	.Tabs.tabLabelLeft .TabDivider,
+	.Tabs.tabLabelRight .TabDivider {
+		height: 100%;
+		width: 0;
+	}
+
+	.Tabs.tabLabelLeft.reverse .TabDivider,
+	.Tabs.tabLabelRight.reverse .TabDivider {
+		width: 1px;
+	}
+
+	.Tabs.tabLabelLeft .TabLabel,
+	.Tabs.tabLabelRight .TabLabel {
+		flex-direction: column;
+	}
+
+	.Tabs.tabLabelLeft:not(.AutoWidth) .TabContent,
+	.Tabs.tabLabelRight:not(.AutoWidth) .TabContent {
+		flex: 1;
+	}
+}
+
+.Tabs {
+	max-width: 100%;
+
+	&.AutoWidth {
+		display: table-cell;
+	}
+
+	&.FloatLeft {
+		float: left;
+		margin-right: 1em;
+	}
+
+	&.FloatRight {
+		float: right;
+		margin-left: 1em;
+	}
+
+	.Tab {
+		border-bottom: 1px solid #aaa;
+
+		&:first-child {
+			border-top: 1px solid #aaa;
+		}
+		.TabLabelText {
+			padding: 7px;
+		}
+		.TabContentText {
+			padding: 3px;
+		}
+	}
+}
+
+.infotemplatebox > table td > .Tabs {
+	.TabLabel,
+	.TabContent {
+		margin: 0 -1px;
+	}
+}

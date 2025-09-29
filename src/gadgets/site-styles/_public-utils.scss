@@ -1,6 +1,7 @@
+@use "utils";
+
 .select-none {
-	-webkit-user-select: none;
-	user-select: none;
+	@include utils.select-none;
 }
 
 .hidden {

@@ -1,243 +1,35 @@
-@use 'public-utils';
-@use 'heimu';
+// 最初源自 https://zh.moegirl.org.cn/MediaWiki:Gadget-site-styles.css
+// 版权协定：CC BY-NC-SA 3.0
+// 后续由Vocawiki编辑者贡献
 
-.select-none,
-.tab .TabLabel {
-	-webkit-user-select: none;
-	user-select: none;
-}
+@use "public-utils";
+@use "typography";
+@use "heimu";
+@use "tabs";
+@use "ruby";
+@use "infobox";
+@use "navbox";
+@use "main_page";
 
 .sidebar-character,
+// 语言选择下拉框的zh-Hans、zh-Hant等
 #ca-varlang-0,
 #ca-varlang-1,
 #ca-varlang-2 {
 	display: none;
 }
 
-.tab {
-	.TabLabelText {
-		@extend .hidden;
-		padding: 1px;
-		background: #fff;
-		cursor: pointer;
-		flex: none;
-	}
-
-	.TabLabel {
-		z-index: 2;
-		position: relative;
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.TabLabelText.selected {
-		padding: 1px;
-		background: white;
-	}
-
-	.TabContent {
-		background: white;
-		padding: 20px 30px;
-		position: relative;
-		z-index: 1;
-		border: 1px solid #aaa;
-	}
-
-	.TabContentText.selected {
-		display: block;
-	}
-
-	.tabLabelTop .TabLabelText {
-		border-top: 3px solid transparent;
-		border-left: 1px solid transparent;
-		border-right: 1px solid transparent;
-	}
-
-	.tabLabelTop .TabLabelText.selected {
-		border-top: 3px solid green;
-		border-left: 1px solid #aaa;
-		border-right: 1px solid #aaa;
-	}
-
-	.tabLabelTop.reverse .TabLabelText {
-		border-bottom: 3px solid transparent;
-		border-left: 1px solid transparent;
-		border-right: 1px solid transparent;
-		border-top: 1px solid transparent;
-	}
-
-	.tabLabelTop.reverse .TabLabelText.selected {
-		border-bottom: 3px solid green;
-		border-left: 1px solid #aaa;
-		border-right: 1px solid #aaa;
-		border-top: 1px solid transparent;
-	}
-
-	.tabLabelBottom .TabLabelText {
-		border-bottom: 3px solid transparent;
-		border-left: 1px solid transparent;
-		border-right: 1px solid transparent;
-	}
-
-	.tabLabelBottom .TabLabelText.selected {
-		border-bottom: 3px solid green;
-		border-left: 1px solid #aaa;
-		border-right: 1px solid #aaa;
-	}
-
-	.tabLabelBottom.reverse .TabLabelText {
-		border-top: 3px solid transparent;
-		border-left: 1px solid transparent;
-		border-right: 1px solid transparent;
-		border-bottom: 1px solid transparent;
-	}
-
-	.tabLabelBottom.reverse .TabLabelText.selected {
-		border-top: 3px solid green;
-		border-left: 1px solid #aaa;
-		border-right: 1px solid #aaa;
-		border-bottom: 1px solid transparent;
-	}
-
-	.tabLabelLeft .TabLabelText {
-		border-left: 3px solid transparent;
-		border-top: 1px solid transparent;
-		border-bottom: 1px solid transparent;
-	}
-
-	.tabLabelLeft .TabLabelText.selected {
-		border-left: 3px solid green;
-		border-top: 1px solid #aaa;
-		border-bottom: 1px solid #aaa;
-	}
-
-	.tabLabelLeft.reverse .TabLabelText {
-		border-right: 3px solid transparent;
-		border-top: 1px solid transparent;
-		border-bottom: 1px solid transparent;
-		border-left: 1px solid transparent;
-	}
-
-	.tabLabelLeft.reverse .TabLabelText.selected {
-		border-right: 3px solid green;
-		border-top: 1px solid #aaa;
-		border-bottom: 1px solid #aaa;
-		border-left: 1px solid transparent;
-	}
-
-	.tabLabelRight .TabLabelText {
-		border-right: 3px solid transparent;
-		border-top: 1px solid transparent;
-		border-bottom: 1px solid transparent;
-	}
-
-	.tabLabelRight .TabLabelText.selected {
-		border-right: 3px solid green;
-		border-top: 1px solid #aaa;
-		border-bottom: 1px solid #aaa;
-	}
-
-	.tabLabelRight.reverse .TabLabelText {
-		border-left: 3px solid transparent;
-		border-top: 1px solid transparent;
-		border-bottom: 1px solid transparent;
-		border-right: 1px solid transparent;
-	}
-
-	.tabLabelRight.reverse .TabLabelText.selected {
-		border-left: 3px solid green;
-		border-top: 1px solid #aaa;
-		border-bottom: 1px solid #aaa;
-		border-right: 1px solid transparent;
-	}
-
-	.Tabs .TabDivider {
-		width: 100%;
-		order: 2;
-	}
-
-	.Tabs.reverse .TabDivider {
-		height: 2px;
-	}
-
-	.Tabs.tabLabelLeft .TabLabel,
-	.Tabs.tabLabelRight .TabContent {
-		order: 1;
-	}
-
-	.Tabs.tabLabelLeft .TabContent,
-	.Tabs.tabLabelRight .TabLabel {
-		order: 3;
-	}
-
-	.Tabs.tabLabelLeft,
-	.Tabs.tabLabelRight {
-		display: flex;
-		flex-wrap: nowrap;
-		width: auto;
-	}
-
-	.Tabs.tabLabelLeft .TabDivider,
-	.Tabs.tabLabelRight .TabDivider {
-		height: 100%;
-		width: 0;
-	}
-
-	.Tabs.tabLabelLeft.reverse .TabDivider,
-	.Tabs.tabLabelRight.reverse .TabDivider {
-		width: 1px;
-	}
-
-	.Tabs.tabLabelLeft .TabLabel,
-	.Tabs.tabLabelRight .TabLabel {
-		flex-direction: column;
-	}
-
-	.Tabs.tabLabelLeft:not(.AutoWidth) .TabContent,
-	.Tabs.tabLabelRight:not(.AutoWidth) .TabContent {
-		flex: 1;
-	}
+.patroller-show,
+.checkuser-show,
+.suppress-show,
+.sysop-show,
+.interface-admin-show,
+// 用户页分类
+body.ns-2 div#catlinks {
+	display: none !important;
 }
 
-.Tabs {
-	max-width: 100%;
-
-	&.AutoWidth {
-		display: table-cell;
-	}
-
-	&.FloatLeft {
-		float: left;
-		margin-right: 1em;
-	}
-
-	&.FloatRight {
-		float: right;
-		margin-left: 1em;
-	}
-
-	.Tab {
-		border-bottom: 1px solid #aaa;
-
-		&:first-child {
-			border-top: 1px solid #aaa;
-		}
-		.TabLabelText {
-			padding: 7px;
-		}
-		.TabContentText {
-			padding: 3px;
-		}
-	}
-}
-
-.infotemplatebox > table td > .Tabs {
-	.TabLabel,
-	.TabContent {
-		margin: 0 -1px;
-	}
-}
-
+// T:注解
 .annotation {
 	> span {
 		cursor: pointer;
@@ -269,143 +61,11 @@
 	margin-top: 0;
 }
 
-span[lang] {
-	font-family: initial;
-	font-feature-settings: 'locl' on;
-	-webkit-font-feature-settings: 'locl' on;
-}
-
-[style*='font:' i] span[lang],
-[style*='font-family:' i] span[lang] {
-	font-family: inherit;
-}
-@font-face {
-	font-family: JapaneseItalic;
-	src: local(meiryo);
-}
-
-i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang='ja' i] {
-	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-[style*='italic' i] span[lang='ja' i] {
-	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-span[lang='ja' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) {
-	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-span[lang='ja' i] [style*='italic' i] {
-	font-family: JapaneseItalic, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-[style*='font:' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang='ja' i] {
-	font-family: inherit;
-}
-
-[style*='font:' i] [style*='italic' i] span[lang='ja' i] {
-	font-family: inherit;
-}
-
-[style*='font-family:' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang='ja' i] {
-	font-family: inherit;
-}
-
-[style*='font-family:' i] [style*='italic' i] span[lang='ja' i] {
-	font-family: inherit;
-}
-
-[style*='font:' i] span[lang='ja' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) {
-	font-family: inherit;
-}
-
-[style*='font:' i] span[lang='ja' i] [style*='italic' i] {
-	font-family: inherit;
-}
-
-[style*='font-family:' i] span[lang='ja' i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) {
-	font-family: inherit;
-}
-
-[style*='font-family:' i] span[lang='ja' i] [style*='italic' i] {
-	font-family: inherit;
-}
-
 s.just-kidding-text {
 	color: #666;
 	text-decoration-color: #000;
 }
-.infoBox {
-	margin: 0 auto;
-	width: 80%;
-	box-sizing: border-box;
-}
 
-.infoBoxTitle {
-	margin: 3px auto;
-	padding: 0;
-	text-align: center;
-	font-weight: 700;
-}
-
-.infoBoxIcon {
-	display: table-cell;
-	padding: 2px 0 2px 0.5em;
-	vertical-align: middle;
-}
-
-.infoBoxText {
-	display: table-cell;
-	padding: 0.25em 0.5em 0.25em 1.3em;
-	width: 100%;
-	vertical-align: middle;
-}
-
-.infoBoxContent {
-	border: 1px solid #ddd;
-	border-left-width: 0;
-	background: #fbfbfb;
-}
-
-.infoBoxBelow {
-	margin: 0 auto;
-	padding: 0;
-	text-align: center;
-}
-
-[color-mode='dark'] .infoBoxContent {
-	border-color: #3e4452;
-	background: #23272e;
-}
-table.wikitable-green {
-	background: #c9f6e1;
-}
-
-.wikitable-green th {
-	background: #13ec93;
-}
-
-.wikitable-green td {
-	background: #f3f3f3;
-}
-.patroller-show,
-.checkuser-show,
-.suppress-show,
-.sysop-show,
-.interface-admin-show {
-	display: none !important;
-}
-rb[data-id='template-ruby']::before {
-	content: '';
-}
-
-rb[data-id='template-ruby']::before,
-.template-ruby-hidden {
-	display: inline-block;
-	width: 0;
-	font-size: 0;
-}
 body .mw-mmv-overlay {
 	z-index: 9999;
 }
@@ -414,11 +74,11 @@ body .mw-mmv-wrapper {
 	z-index: 99999;
 }
 .noconvins > .mw-charinsert-item::before {
-	content: '-{';
+	content: "-{";
 }
 
 .noconvins > .mw-charinsert-item::after {
-	content: '}-';
+	content: "}-";
 }
 .mw-revslider-tooltip {
 	z-index: 7;
@@ -435,7 +95,7 @@ body .ajaxpoll {
 
 body,
 #firstHeading {
-	font-family: sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+	font-family: sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .skin-vector-2022 #firstHeading {
 	font-weight: 500;
@@ -446,81 +106,9 @@ div#simpleSearch button#searchButton {
 	padding-bottom: 0.2em;
 	padding-right: 0.1em;
 }
-body.page-Mainpage.rootpage-Mainpage #firstHeading,
-body.page-Mainpage.rootpage-Mainpage #siteSub,
-body.page-Mainpage.rootpage-Mainpage #contentSub,
-body.page-Mainpage.rootpage-Mainpage #siteNotice {
-	display: none;
-}
-#mainpage {
-	display: block;
-	width: 100%;
-	text-align: left;
-	margin: 0 auto;
-	max-width: 1030px;
-}
-
-.mainpage-title {
-	font-family: 'PingFang SC', sans-serif;
-	font-size: 1.618em;
-	color: #228b22;
-	margin: 0;
-	background: #deede0;
-	font-weight: 400;
-	height: 30px;
-	line-height: 30px;
-	text-align: center;
-}
-
-.mainpage-title:lang(zh-hant),
-.mainpage-title:lang(zh-tw) {
-	font-family: 'PingFang TC', sans-serif;
-}
-
-.mainpage-title:lang(zh-hk) {
-	font-family: 'PingFang HK', sans-serif;
-}
-
-.mainpage-content,
-.mainpage-1stcontent {
-	vertical-align: top;
-	padding: 0.5em 0.42890625rem;
-	min-height: 7em;
-}
-
-.mainpage-content.nomobile {
-	min-height: auto;
-}
 
 .clear-div {
 	clear: both;
-}
-.mainpage-container {
-	display: flex;
-}
-
-.mainpage-container .mainpage-newsbox,
-.mainpage-container .mainpage-box {
-	display: flex;
-	flex-direction: column;
-}
-
-.mainpage-container .mainpage-newsbox {
-	width: calc(200% / 3);
-}
-
-.mainpage-container .mainpage-box {
-	width: calc(100% / 3);
-}
-
-.mainpage-container .mainpage-content,
-.mainpage-container .mainpage-1stcontent {
-	flex: auto;
-}
-
-.mainpage-container .mainpage-title {
-	flex: none;
-	margin-right: -1px;
 }
 
 .block,
@@ -581,7 +169,7 @@ body.page-Mainpage.rootpage-Mainpage #siteNotice {
 .mw-body a.external:visited {
 	color: #36b;
 }
-#mw-content-text i:not([role='img']) {
+#mw-content-text i:not([role="img"]) {
 	margin-right: 3px;
 }
 .mw-mmv-overlay {
@@ -669,7 +257,7 @@ div.metadata-panel-is-closed .mw-mmv-image-links li.mw-mmv-license-li {
 	overflow-wrap: break-word;
 }
 #breadcrumb {
-	background-image: url('//img.moegirl.org.cn/breadcrumb/bc_bg.png');
+	background-image: url("//img.moegirl.org.cn/breadcrumb/bc_bg.png");
 	color: red;
 	border: solid 1px #cacaca;
 	border-radius: 10px;
@@ -683,7 +271,7 @@ div.metadata-panel-is-closed .mw-mmv-image-links li.mw-mmv-license-li {
 
 #breadcrumb a {
 	display: block;
-	background: url('//img.moegirl.org.cn/breadcrumb/bc_separator.png') no-repeat right;
+	background: url("//img.moegirl.org.cn/breadcrumb/bc_separator.png") no-repeat right;
 	padding-right: 15px;
 	color: #454545;
 }
@@ -725,7 +313,7 @@ pre,
 code,
 textarea,
 .CodeMirror,
-[style*='monospace'] {
+[style*="monospace"] {
 	text-autospace: no-autospace;
 	text-spacing-trim: space-all;
 }
@@ -734,64 +322,6 @@ input {
 	text-spacing-trim: space-all;
 }
 
-table.navbox {
-	border: 1px solid #aaa;
-	clear: both;
-	margin: auto;
-	padding: 1px;
-	text-align: center;
-	width: 100%;
-}
-
-table.navbox + table.navbox {
-	margin-top: -1px;
-}
-
-.navbox-title,
-.navbox-abovebelow,
-table.navbox th {
-	padding-left: 1em;
-	padding-right: 1em;
-	text-align: center;
-}
-
-.navbox-group {
-	font-weight: 700;
-	white-space: nowrap;
-}
-
-.navbox,
-.navbox-subgroup {
-	background: none repeat scroll 0 0 var(--theme-card-background-color, #fdfdfd);
-}
-
-.navbox-list {
-	border-color: #fdfdfd;
-}
-
-.navbox-title,
-table.navbox th {
-	background: none repeat scroll 0 0 #a5e4a5;
-}
-
-.navbox-abovebelow,
-.navbox-group,
-.navbox-subgroup .navbox-title {
-	background: none repeat scroll 0 0 #c0ecc0;
-}
-
-.navbox-subgroup .navbox-group,
-.navbox-subgroup .navbox-abovebelow {
-	background: none repeat scroll 0 0 #e6f6e6;
-}
-
-.navbox-even {
-	background: none repeat scroll 0 0 #f5fcf5;
-}
-
-.navbox-odd {
-	background: none repeat scroll 0 0 #fdfdfd;
-}
 .wikitable {
 	max-width: 100%;
 }
@@ -800,9 +330,6 @@ table.navbox th {
 	clear: both;
 	display: block;
 	margin: 0 auto;
-}
-body.ns-2 div#catlinks {
-	display: none !important;
 }
 .editRequest {
 	text-align: center;
@@ -836,225 +363,14 @@ body.ns-2 div#catlinks {
 	font-weight: bold;
 	cursor: pointer;
 }
+
+// 注释里的列表
 .reference-text > ul.listInRef,
 .reference-text > ol.listInRef {
 	margin: -1.5em 0 0 2em;
 }
-.container {
-	position: relative;
-	width: 100%;
-	max-width: 960px;
-	margin: 0 auto;
-	padding: 0 20px;
-	box-sizing: border-box;
-}
 
-.div,
-.divs,
-.column,
-.columns {
-	width: 100%;
-	float: left;
-	box-sizing: border-box;
-}
-@media (min-width: 400px) {
-}
-@media (min-width: 800px) {
-	.div,
-	.divs,
-	.column,
-	.columns {
-		margin-left: 0.3%;
-	}
-
-	.div:first-child,
-	.divs:first-child,
-	.column:first-child,
-	.columns:first-child {
-		margin-left: 0;
-	}
-
-	.one.div,
-	.one.divs {
-		width: 100%;
-		margin-left: 0;
-	}
-
-	.two.divs {
-		width: 49.85%;
-	}
-
-	.three.divs {
-		width: 33.1333333333%;
-	}
-
-	.four.divs {
-		width: 24.775%;
-	}
-
-	.five.divs {
-		width: 19.76%;
-	}
-
-	.six.divs {
-		width: 16.4166666667%;
-	}
-
-	.seven.divs {
-		width: 14.0285714286%;
-	}
-
-	.eight.divs {
-		width: 12.2375%;
-	}
-
-	.nine.divs {
-		width: 10.8444444444%;
-	}
-
-	.ten.divs {
-		width: 9.73%;
-	}
-
-	.eleven.divs {
-		width: 8.81818181818%;
-	}
-
-	.twelve.divs {
-		width: 8.05833333333%;
-	}
-
-	.one.column,
-	.one.columns {
-		width: 8.05833333333%;
-	}
-
-	.two.columns {
-		width: 16.4166666667%;
-	}
-
-	.three.columns {
-		width: 24.775%;
-	}
-
-	.four.columns {
-		width: 33.1333333333%;
-	}
-
-	.five.columns {
-		width: 41.4916666667%;
-	}
-
-	.six.columns {
-		width: 49.85%;
-	}
-
-	.seven.columns {
-		width: 58.2083333333%;
-	}
-
-	.eight.columns {
-		width: 66.5666666667%;
-	}
-
-	.nine.columns {
-		width: 74.925%;
-	}
-
-	.ten.columns {
-		width: 83.2833333333%;
-	}
-
-	.eleven.columns {
-		width: 91.6416666667%;
-	}
-
-	.twelve.columns {
-		width: 100%;
-		margin-left: 0;
-	}
-
-	.one-third.column {
-		width: 33.1333333333%;
-	}
-
-	.two-thirds.column {
-		width: 66.5666666667%;
-	}
-
-	.one-half.column {
-		width: 49.85%;
-	}
-	.offset-by-one.column,
-	.offset-by-one.columns {
-		margin-left: 8.66666666667%;
-	}
-
-	.offset-by-two.column,
-	.offset-by-two.columns {
-		margin-left: 17.3333333333%;
-	}
-
-	.offset-by-three.column,
-	.offset-by-three.columns {
-		margin-left: 26%;
-	}
-
-	.offset-by-four.column,
-	.offset-by-four.columns {
-		margin-left: 34.6666666667%;
-	}
-
-	.offset-by-five.column,
-	.offset-by-five.columns {
-		margin-left: 43.3333333333%;
-	}
-
-	.offset-by-six.column,
-	.offset-by-six.columns {
-		margin-left: 52%;
-	}
-
-	.offset-by-seven.column,
-	.offset-by-seven.columns {
-		margin-left: 60.6666666667%;
-	}
-
-	.offset-by-eight.column,
-	.offset-by-eight.columns {
-		margin-left: 69.3333333333%;
-	}
-
-	.offset-by-nine.column,
-	.offset-by-nine.columns {
-		margin-left: 78%;
-	}
-
-	.offset-by-ten.column,
-	.offset-by-ten.columns {
-		margin-left: 86.6666666667%;
-	}
-
-	.offset-by-eleven.column,
-	.offset-by-eleven.columns {
-		margin-left: 95.3333333333%;
-	}
-
-	.offset-by-one-third.column,
-	.offset-by-one-third.columns {
-		margin-left: 34.6666666667%;
-	}
-
-	.offset-by-two-thirds.column,
-	.offset-by-two-thirds.columns {
-		margin-left: 69.3333333333%;
-	}
-
-	.offset-by-one-half.column,
-	.offset-by-one-half.columns {
-		margin-left: 52%;
-	}
-}
+// wikitable 的 caption
 .wikitable.mw-collapsible caption {
 	border: 1px solid rgb(170 170 170 / 37%);
 	border-bottom-width: 0;
@@ -1064,80 +380,61 @@ body.ns-2 div#catlinks {
 .wikitable.mw-collapsible.mw-collapsed caption {
 	border-bottom-width: 1px;
 }
+
+// 分类页同开头的页面的列表不分段
 .mw-category-group {
 	-moz-column-break-inside: avoid;
 	break-inside: avoid;
 }
 
-.mw-category-group:nth-child(1):nth-last-child(1),
-.mw-category-group:nth-child(1):nth-last-child(2),
-.mw-category-group:nth-child(2):nth-last-child(1) {
+.mw-category-group:first-child:last-child,
+// 只有一个列表时
+.mw-category-group:first-child:nth-last-child(2),
+// 只有两个列表时
+.mw-category-group:nth-child(2):last-child {
 	-moz-column-break-inside: auto;
 	break-inside: auto;
 }
-#wikieditor-toolbar-file-dialog + .ui-dialog-buttonpane > .ui-dialog-buttonset > .ui-button:last-child {
-	display: none;
-}
+
+// 编辑冲突界面排版
 .mw-explainconflict ~ #editform {
 	display: flex;
 	flex-direction: column;
-}
 
-.mw-explainconflict ~ #editform > * {
-	order: 2;
-}
+	> * {
+		order: 2;
+	}
 
-.mw-explainconflict ~ #editform > h2,
-.mw-explainconflict ~ #editform > h2 ~ * {
-	order: 1;
-}
+	> h2,
+	> h2 ~ * {
+		order: 1;
+	}
 
-.mw-explainconflict ~ #editform > h2 > .mw-headline::after {
-	content: '（请滚动查看，可拖动右下角斜线符号调整高度）';
-}
+	> h2 > .mw-headline::after {
+		content: "（请滚动查看，可拖动右下角斜线符号调整高度）";
 
-.mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after,
-.mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
-	content: '（由于技术限制，此处为全文版本，请使用 Ctrl+F | ⌘+F 搜索相关差异，可拖动右下角斜线符号调整高度）';
-}
+		html[lang="zh-hant" i] &,
+		html[lang="zh-hk" i] &,
+		html[lang="zh-tw" i] & {
+			content: "（請滾動查看，可拖動右下角斜線符號調整高度）";
+		}
+	}
 
-html[lang='zh-hant' i] .mw-explainconflict ~ #editform > h2 > .mw-headline::after {
-	content: '（請滾動查看，可拖動右下角斜線符號調整高度）';
-}
+	#wikieditor-toolbar-file-dialog + .ui-dialog-buttonpane > .ui-dialog-buttonset > .ui-button:last-child {
+		display: none;
+	}
 
-html[lang='zh-hk' i] .mw-explainconflict ~ #editform > h2 > .mw-headline::after {
-	content: '（請滾動查看，可拖動右下角斜線符號調整高度）';
-}
+	& > .diff + h2 > .mw-headline::after,
+	& > .diff-container + h2 > .mw-headline::after {
+		content: "（由于技术限制，此处为全文版本，请使用 Ctrl+F | ⌘+F 搜索相关差异，可拖动右下角斜线符号调整高度）";
 
-html[lang='zh-tw' i] .mw-explainconflict ~ #editform > h2 > .mw-headline::after {
-	content: '（請滾動查看，可拖動右下角斜線符號調整高度）';
-}
+		html[lang="zh-hant" i] &,
+		html[lang="zh-hk" i] &,
+		html[lang="zh-tw" i] & {
+			content: "（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）";
+		}
+	}
 
-html[lang='zh-hant' i] .mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after {
-	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
-}
-
-html[lang='zh-hant' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
-	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
-}
-
-html[lang='zh-hk' i] .mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after {
-	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
-}
-
-html[lang='zh-hk' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
-	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
-}
-
-html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .diff + h2 > .mw-headline::after {
-	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
-}
-
-html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .mw-headline::after {
-	content: '（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）';
-}
-
-.mw-explainconflict ~ #editform {
 	> textarea[readonly] {
 		height: 20vh;
 		width: 100% !important;
@@ -1150,10 +447,10 @@ html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .m
 		resize: vertical;
 	}
 	> .wikiEditor-ui::before {
-		content: '编辑框（最新版本）';
+		content: "编辑框（最新版本）";
 		font-size: 1.5em;
 		margin: 1em 0 0.25em;
-		font-family: serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+		font-family: serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 		line-height: 1.3;
 		padding: 0;
 		font-weight: 700;
@@ -1163,14 +460,10 @@ html[lang='zh-tw' i] .mw-explainconflict ~ #editform > .diff-container + h2 > .m
 		overflow: hidden;
 		display: block;
 
-		html[lang='zh-hant' i] & {
-			content: '編輯框（最新修訂）';
-		}
-		html[lang='zh-hk' i] & {
-			content: '編輯框（最新修訂）';
-		}
-		html[lang='zh-tw' i] & {
-			content: '編輯框（最新修訂）';
+		html[lang="zh-hant" i] &,
+		html[lang="zh-hk" i],
+		html[lang="zh-tw" i] & {
+			content: "編輯框（最新修訂）";
 		}
 	}
 }

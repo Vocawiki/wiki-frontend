@@ -1,0 +1,76 @@
+body.page-Mainpage.rootpage-Mainpage {
+	#firstHeading,
+	#siteSub,
+	#contentSub,
+	#siteNotice {
+		display: none;
+	}
+}
+
+#mainpage {
+	display: block;
+	width: 100%;
+	text-align: left;
+	margin: 0 auto;
+	max-width: 1030px;
+}
+
+.mainpage-title {
+	font-family: "PingFang SC", sans-serif;
+	font-size: 1.618em;
+	color: #228b22;
+	margin: 0;
+	background: #deede0;
+	font-weight: 400;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+
+.mainpage-title:lang(zh-hant),
+.mainpage-title:lang(zh-tw) {
+	font-family: "PingFang TC", sans-serif;
+}
+
+.mainpage-title:lang(zh-hk) {
+	font-family: "PingFang HK", sans-serif;
+}
+
+.mainpage-content,
+.mainpage-1stcontent {
+	vertical-align: top;
+	padding: 0.5em 0.42890625rem;
+	min-height: 7em;
+}
+
+.mainpage-content.nomobile {
+	min-height: auto;
+}
+
+.mainpage-container {
+	display: flex;
+}
+
+.mainpage-container .mainpage-newsbox,
+.mainpage-container .mainpage-box {
+	display: flex;
+	flex-direction: column;
+}
+
+.mainpage-container .mainpage-newsbox {
+	width: calc(200% / 3);
+}
+
+.mainpage-container .mainpage-box {
+	width: calc(100% / 3);
+}
+
+.mainpage-container .mainpage-content,
+.mainpage-container .mainpage-1stcontent {
+	flex: auto;
+}
+
+.mainpage-container .mainpage-title {
+	flex: none;
+	margin-right: -1px;
+}

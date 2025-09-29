@@ -1,0 +1,12 @@
+// TODO: <rb>已被弃用
+
+rb[data-id="template-ruby"]::before {
+	content: "";
+}
+
+rb[data-id="template-ruby"]::before,
+.template-ruby-hidden {
+	display: inline-block;
+	width: 0;
+	font-size: 0;
+}

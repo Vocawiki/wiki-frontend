@@ -1,15 +1,25 @@
-# vocawiki-frontend
+# Vocawiki前端代码库
 
-To install dependencies:
+开发步骤：
+1. 安装依赖：
 
-```bash
-bun install
-```
+   ```bash
+   pnpm i
+   ```
+2. 修改代码。
+3. 格式化代码：
 
-To run:
+   ```bash
+   pnpm run format
+   ```
+4. 检查代码问题：
 
-```bash
-bun run index.ts
-```
+   ```bash
+   pnpm run test
+   ```
+5. 试构建：
 
-This project was created using `bun init` in bun v1.2.21. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+   ```bash
+   pnpm run build
+   ```
+6. 提交代码。提交前需确保完成3、4、5步。

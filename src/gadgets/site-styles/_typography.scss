@@ -1,0 +1,34 @@
+span[lang] {
+	font-family: initial;
+	-webkit-font-feature-settings: "locl" on;
+	font-feature-settings: "locl" on;
+}
+
+[style*="font:" i] span[lang],
+[style*="font-family:" i] span[lang] {
+	font-family: inherit;
+}
+
+// 下面这几坨好恶心
+@font-face {
+	font-family: JapaneseItalic;
+	src: local(meiryo);
+}
+
+i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang="ja" i],
+[style*="italic" i] span[lang="ja" i],
+span[lang="ja" i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa),
+span[lang="ja" i] [style*="italic" i] {
+	font-family: JapaneseItalic, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+[style*="font:" i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang="ja" i],
+[style*="font:" i] [style*="italic" i] span[lang="ja" i],
+[style*="font-family:" i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa) span[lang="ja" i],
+[style*="font-family:" i] [style*="italic" i] span[lang="ja" i],
+[style*="font:" i] span[lang="ja" i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa),
+[style*="font:" i] span[lang="ja" i] [style*="italic" i],
+[style*="font-family:" i] span[lang="ja" i] i:not(.GaiBuHuiZhenYouRenYongZheGeClassBa),
+[style*="font-family:" i] span[lang="ja" i] [style*="italic" i] {
+	font-family: inherit;
+}

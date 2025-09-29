@@ -1,0 +1,223 @@
+// 这玩意是非常远古时代的东西了，找个机会给它革掉
+/*
+ * Skeleton V2.0.4
+ * Copyright 2014, Dave Gamache
+ * www.getskeleton.com
+ * Free to use under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ * 12/29/2014
+ */
+.container {
+	position: relative;
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 0 20px;
+	box-sizing: border-box;
+}
+
+.div,
+.divs,
+.column,
+.columns {
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+}
+
+@media (min-width: 800px) {
+	.div,
+	.divs,
+	.column,
+	.columns {
+		margin-left: 0.3%;
+	}
+
+	.div:first-child,
+	.divs:first-child,
+	.column:first-child,
+	.columns:first-child {
+		margin-left: 0;
+	}
+
+	.one.div,
+	.one.divs {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.two.divs {
+		width: 49.85%;
+	}
+
+	.three.divs {
+		width: 33.1333333333%;
+	}
+
+	.four.divs {
+		width: 24.775%;
+	}
+
+	.five.divs {
+		width: 19.76%;
+	}
+
+	.six.divs {
+		width: 16.4166666667%;
+	}
+
+	.seven.divs {
+		width: 14.0285714286%;
+	}
+
+	.eight.divs {
+		width: 12.2375%;
+	}
+
+	.nine.divs {
+		width: 10.8444444444%;
+	}
+
+	.ten.divs {
+		width: 9.73%;
+	}
+
+	.eleven.divs {
+		width: 8.81818181818%;
+	}
+
+	.twelve.divs {
+		width: 8.05833333333%;
+	}
+
+	.one.column,
+	.one.columns {
+		width: 8.05833333333%;
+	}
+
+	.two.columns {
+		width: 16.4166666667%;
+	}
+
+	.three.columns {
+		width: 24.775%;
+	}
+
+	.four.columns {
+		width: 33.1333333333%;
+	}
+
+	.five.columns {
+		width: 41.4916666667%;
+	}
+
+	.six.columns {
+		width: 49.85%;
+	}
+
+	.seven.columns {
+		width: 58.2083333333%;
+	}
+
+	.eight.columns {
+		width: 66.5666666667%;
+	}
+
+	.nine.columns {
+		width: 74.925%;
+	}
+
+	.ten.columns {
+		width: 83.2833333333%;
+	}
+
+	.eleven.columns {
+		width: 91.6416666667%;
+	}
+
+	.twelve.columns {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.one-third.column {
+		width: 33.1333333333%;
+	}
+
+	.two-thirds.column {
+		width: 66.5666666667%;
+	}
+
+	.one-half.column {
+		width: 49.85%;
+	}
+	.offset-by-one.column,
+	.offset-by-one.columns {
+		margin-left: 8.66666666667%;
+	}
+
+	.offset-by-two.column,
+	.offset-by-two.columns {
+		margin-left: 17.3333333333%;
+	}
+
+	.offset-by-three.column,
+	.offset-by-three.columns {
+		margin-left: 26%;
+	}
+
+	.offset-by-four.column,
+	.offset-by-four.columns {
+		margin-left: 34.6666666667%;
+	}
+
+	.offset-by-five.column,
+	.offset-by-five.columns {
+		margin-left: 43.3333333333%;
+	}
+
+	.offset-by-six.column,
+	.offset-by-six.columns {
+		margin-left: 52%;
+	}
+
+	.offset-by-seven.column,
+	.offset-by-seven.columns {
+		margin-left: 60.6666666667%;
+	}
+
+	.offset-by-eight.column,
+	.offset-by-eight.columns {
+		margin-left: 69.3333333333%;
+	}
+
+	.offset-by-nine.column,
+	.offset-by-nine.columns {
+		margin-left: 78%;
+	}
+
+	.offset-by-ten.column,
+	.offset-by-ten.columns {
+		margin-left: 86.6666666667%;
+	}
+
+	.offset-by-eleven.column,
+	.offset-by-eleven.columns {
+		margin-left: 95.3333333333%;
+	}
+
+	.offset-by-one-third.column,
+	.offset-by-one-third.columns {
+		margin-left: 34.6666666667%;
+	}
+
+	.offset-by-two-thirds.column,
+	.offset-by-two-thirds.columns {
+		margin-left: 69.3333333333%;
+	}
+
+	.offset-by-one-half.column,
+	.offset-by-one-half.columns {
+		margin-left: 52%;
+	}
+}
