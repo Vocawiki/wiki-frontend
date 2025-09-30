@@ -1,10 +1,35 @@
 import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
+import { parseArgs } from 'node:util'
 
 import { MediaWikiApi } from 'wiki-saikou'
 
 import { getPageTitleFromFileName } from '../utils/page'
+
+const { values: args } = parseArgs({
+	args: Bun.argv,
+	options: {
+		summary: {
+			type: 'string',
+			short: 's',
+		},
+		help: {
+			type: 'boolean',
+			short: 'h',
+		},
+	},
+	strict: true,
+	allowPositionals: true,
+})
+
+if (args.help) {
+	console.log('参数:')
+	console.log('  -s, --summary <val>    编辑摘要')
+	console.log('  -h, --help             显示帮助')
+} else {
+	await pushPages(await getBuiltPages(), args.summary)
+}
 
 interface Page {
 	title: string
@@ -23,17 +48,18 @@ async function getBuiltPages(): Promise<Page[]> {
 	)
 }
 
-async function pushPages(pages: Page[]) {
+async function pushPages(pages: Page[], summary = '推送构建后的代码') {
 	const { DEPLOY_USERNAME: username, DEPLOY_PASSWORD: password } = process.env
 	assert(username && password, '环境变量中需要有用户名和密码')
 	const api = new MediaWikiApi('https://voca.wiki/api.php')
 	await api.login(username, password)
+
 	for (const page of pages) {
-		await pushPage(api, page)
+		await pushPage(api, page, summary)
 	}
 }
 
-async function pushPage(api: MediaWikiApi, page: Page, summary = '推送构建后的代码') {
+async function pushPage(api: MediaWikiApi, page: Page, summary: string) {
 	await api.postWithEditToken({
 		action: 'edit',
 		format: 'json',
@@ -46,5 +72,3 @@ async function pushPage(api: MediaWikiApi, page: Page, summary = '推送构建�
 		bot: true,
 	})
 }
-
-await pushPages(await getBuiltPages())
