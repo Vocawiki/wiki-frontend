@@ -1,0 +1,381 @@
+[
+	{ "type": "h2", "text": "user" },
+	{
+		"type": "gadget",
+		"name": "Logout-confirm",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "Logout-confirm.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "Navigation_popups",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "popups.css" },
+				{ "type": "existing", "name": "popups.js" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"dependencies": [
+				"ext.gadget.site-lib",
+				"mediawiki.util",
+				"mediawiki.api",
+				"mediawiki.user",
+				"user.options",
+				"mediawiki.jqueryMsg",
+				"ext.gadget.libPolyfill"
+			],
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "ShowAvatar",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "ShowAvatar.css" },
+				{ "type": "existing", "name": "ShowAvatar.js" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": true
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "MarkRights",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "MarkRights.css" },
+				{ "type": "existing", "name": "MarkRights.js" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": false
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "Purge",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "Purge.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["ext.gadget.site-lib"]
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "sidebarHidden",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "sidebarHidden.css" },
+				{ "type": "existing", "name": "sidebarHidden.js" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["ext.gadget.LocalObjectStorage"],
+			"availableFor": { "skins": ["vector"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "editCount",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "editCount.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "mwPanel",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "mwPanel.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"dependencies": ["ext.gadget.site-lib"],
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "shortlink",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "shortlink.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "colorLinks",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "colorLinks.css" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "SideBarPic",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "SideBarPic.css" },
+				{ "type": "existing", "name": "SideBarPic.js" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["mediawiki.Uri"],
+			"type": "general"
+		}
+	},
+	{ "type": "h2", "text": "edit" },
+	{
+		"type": "gadget",
+		"name": "HotCat",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "HotCat.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"availableFor": { "rights": ["edit"] }
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "InPageEdit",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "InPageEdit.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "Wikiplus",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "Wikiplus.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"dependencies": ["ext.gadget.libCachedCode"],
+			"availableFor": { "rights": ["edit"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "Wikiplus-highlight",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "Wikiplus-highlight.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"dependencies": ["ext.gadget.libOOUIDialog", "ext.gadget.libPolyfill", "mediawiki.util"],
+			"availableFor": { "rights": ["edit"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "moesync",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "moesync.js" },
+				{ "type": "existing", "name": "moesync.css" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["oojs-ui", "mediawiki.diff.styles", "oojs-ui-core", "ext.gadget.site-lib"],
+			"availableFor": { "rights": ["edit"] },
+			"type": "general"
+		}
+	},
+	{ "type": "h2", "text": "interface" },
+	{
+		"type": "gadget",
+		"name": "allmessageFilter",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "allmessageFilter.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["ext.gadget.libOOUIDialog"],
+			"availableFor": { "rights": ["editinterface"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "interfaceVariantConverter",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "interfaceVariantConverter.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": [
+				"mediawiki.api",
+				"mediawiki.ForeignApi",
+				"oojs-ui",
+				"ext.gadget.libPolyfill",
+				"ext.gadget.libCachedCode"
+			],
+			"availableFor": { "rights": ["editinterface"], "namespaces": ["8"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "text-autospace",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "text-autospace.css" }],
+			"withResourceLoader": false,
+			"defaultEnabled": true,
+			"type": "styles"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "text-spacing-trim",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "text-spacing-trim.css" }],
+			"withResourceLoader": false,
+			"defaultEnabled": true,
+			"type": "styles"
+		}
+	},
+	{ "type": "h2", "text": "admin" },
+	{
+		"type": "gadget",
+		"name": "rollback-summary",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "rollback-summary.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["ext.gadget.libOOUIDialog", "mediawiki.api", "ext.gadget.site-lib"],
+			"availableFor": { "rights": ["rollback"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "CleanDeleteReasons",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "CleanDeleteReasons.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"availableFor": { "rights": ["delete"], "actions": ["delete"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "deletion",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "deletion.css" },
+				{ "type": "existing", "name": "deletion.js" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["ext.gadget.site-lib", "ext.gadget.libOOUIDialog", "mediawiki.util", "mediawiki.api"],
+			"availableFor": { "rights": ["delete"], "namespaces": ["14"] },
+			"type": "general"
+		}
+	},
+	{ "type": "h2", "text": "system" },
+	{
+		"type": "gadget",
+		"name": "site-js",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "site-js.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": ["ext.gadget.libOOUIDialog", "user", "mediawiki.api"],
+			"hidden": true,
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "site-lib",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "site-lib.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"dependencies": ["mediawiki.util"],
+			"hidden": true,
+			"availableFor": { "targets": ["desktop", "mobile"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "site-styles",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "site-styles.css" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"hidden": true,
+			"type": "styles"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "LocalObjectStorage",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "LocalObjectStorage.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"dependencies": ["ext.gadget.libPolyfill"],
+			"hidden": true,
+			"availableFor": { "targets": ["desktop", "mobile"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "libOOUIDialog",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "libOOUIDialog.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"dependencies": [
+				"oojs-ui",
+				"oojs-ui-widgets",
+				"oojs-ui.styles.indicators",
+				"oojs-ui.styles.icons-alerts",
+				"ext.gadget.libPolyfill"
+			],
+			"hidden": true,
+			"availableFor": { "targets": ["desktop", "mobile"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "libPolyfill",
+		"meta": {
+			"pages": [
+				{ "type": "existing", "name": "libPolyfill.js" },
+				{ "type": "existing", "name": "libPolyfill-crypto.randomUUID.js" }
+			],
+			"withResourceLoader": true,
+			"defaultEnabled": true,
+			"hidden": true,
+			"availableFor": { "targets": ["desktop", "mobile"] },
+			"type": "general"
+		}
+	},
+	{
+		"type": "gadget",
+		"name": "libCachedCode",
+		"meta": {
+			"pages": [{ "type": "existing", "name": "libCachedCode.js" }],
+			"withResourceLoader": true,
+			"defaultEnabled": false,
+			"dependencies": ["ext.gadget.LocalObjectStorage"],
+			"hidden": true,
+			"type": "general"
+		}
+	}
+]

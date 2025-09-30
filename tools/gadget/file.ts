@@ -1,10 +1,17 @@
+import assert from 'node:assert/strict'
+
 import { srcDistExtensionMap } from './types'
 
-export function getFileInfo(fileName: string): { baseName: string; extension: string; builtExtension: string } {
+export interface FileInfo {
+	baseName: string
+	extension: string
+	builtExtension: string
+}
+
+export function getFileInfo(fileName: string): FileInfo {
 	const match = fileName.match(/^(.*)\.([^.]+)$/)
-	if (!match) {
-		throw new RangeError(`文件名不合法：${fileName}`)
-	}
+	assert(match, `不受支持的文件名：${fileName}`)
+
 	const baseName = match[1]!
 	const extension = match[2]!
 

@@ -10,6 +10,7 @@ bracketSpacing: true
 bracketSameLine: false
 arrowParens: always
 singleAttributePerLine: false
+endOfLine: lf
 
 overrides:
   - files: '*.{css,scss,sass,less}'

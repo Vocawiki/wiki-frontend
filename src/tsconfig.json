@@ -6,5 +6,5 @@
 		"rootDir": "."
 	},
 	"include": ["**/*"],
-	"exclude": ["gadgets/*/meta.ts"]
+	"exclude": ["gadgets/**/(meta).ts"]
 }

@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict'
+
 import type { Simplify } from 'type-fest'
 
 import { getFileInfo } from './file'
@@ -8,22 +10,14 @@ export type { GadgetMeta } from './types'
 type FilerByValueType<T, V> = {
 	[K in keyof T as T[K] extends V ? K : never]: T[K]
 }
-type GadgetMetaOnlyRootFlags = FilerByValueType<GadgetMeta, boolean | undefined>
+type GadgetMetaOnlyRootFlags = Omit<FilerByValueType<GadgetMeta, boolean | undefined>, 'supportsUrlLoad'>
 type GadgetMetaOnlyRootLists = FilerByValueType<GadgetMeta, (string | number)[] | undefined>
 type GadgetMetaOnlyRootSingleValues = Simplify<
-	FilerByValueType<GadgetMeta, string | undefined> & {
-		[K in keyof GadgetMeta as GadgetMeta[K] extends boolean | null | undefined
-			? null extends GadgetMeta[K]
-				? K
-				: never
-			: never]: GadgetMeta[K]
-	}
+	FilerByValueType<GadgetMeta, string | undefined> & Pick<GadgetMeta, 'supportsUrlLoad'>
 >
 
 export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string {
-	if (!/^[A-Za-z][A-Za-z0-9\-_.]*$/.test(gadgetName)) {
-		throw new RangeError(`gadget名不合法：${gadgetName}`)
-	}
+	assert.match(gadgetName, /^[A-Za-z][A-Za-z0-9\-_.]*$/, `gadget名不合法：${gadgetName}`)
 
 	const options: string[] = []
 
@@ -49,28 +43,24 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 		if (values.length === 0) return
 		const list = values.map((v) => {
 			const str = String(v)
-			if (/^\s*$/.test(str)) {
-				throw new RangeError(`${gadgetName}的meta中，${name}字段出现了空白字符串`)
-			}
+			assert.doesNotMatch(str, /^\s*$/, `${gadgetName}的meta中，${name}字段出现了空白字符串`)
 			return str
 		})
 
-		options.push(`${name} = ${list.join(', ')}`)
+		options.push(`${name}=${list.join(', ')}`)
 	}
 
 	function value(name: keyof GadgetMetaOnlyRootSingleValues): void
-	function value(name: string, value?: string | boolean | null): void
-	function value(name: string, value?: string | boolean | null): void {
+	function value(name: string, value: string | boolean): void
+	function value(name: string, value?: string | boolean): void {
 		if (arguments.length === 1) {
 			value = meta[name as keyof GadgetMetaOnlyRootSingleValues]
 		}
-		if (value == null) return
+		if (value === undefined) return
 
 		const str = String(value)
-		if (/^\s*$/.test(str)) {
-			throw new RangeError(`${gadgetName}的meta中，${name}字段出现了空白字符串`)
-		}
-		options.push(`${name} = ${value}`)
+		assert.doesNotMatch(str, /^\s*$/, `${gadgetName}的meta中，${name}字段出现了空白字符串`)
+		options.push(`${name}=${value}`)
 	}
 
 	const af = meta.availableFor ?? {}
@@ -91,6 +81,7 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 	list('peers')
 	list('codexIcons')
 	value('supportsUrlLoad')
+	// 被移除的选项就不加了，除非我们还想支持旧版 MediaWiki
 
 	const pages = meta.pages.map((page) => {
 		switch (page.type) {
@@ -104,5 +95,5 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 		}
 	})
 
-	return `* ${gadgetName} [${options.join(' | ')}] | ${pages.join(' | ')}`
+	return `* ${gadgetName} [${options.join('|')}] | ${pages.join(' | ')}`
 }

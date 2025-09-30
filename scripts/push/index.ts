@@ -1,7 +1,10 @@
+import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
 import { MediaWikiApi } from 'wiki-saikou'
+
+import { getPageTitleFromFileName } from '../utils/page'
 
 interface Page {
 	title: string
@@ -11,20 +14,18 @@ async function getBuiltPages(): Promise<Page[]> {
 	const entries = await readdir('out/pages', { withFileTypes: true })
 	return Promise.all(
 		entries.map(async (entry) => {
-			if (!entry.isFile()) throw new Error('out/pages出现了不是文件的' + entry.name)
+			assert(entry.isFile(), 'out/pages出现了不是文件的' + entry.name)
 
-			const pageName = entry.name.replace('#', ':').replace(/.txt$/, '')
+			const pageTitle = getPageTitleFromFileName(entry.name)
 			const pageContent = await Bun.file(join(entry.parentPath, entry.name)).text()
-			return { title: pageName, content: pageContent }
+			return { title: pageTitle, content: pageContent }
 		}),
 	)
 }
 
 async function pushPages(pages: Page[]) {
 	const { DEPLOY_USERNAME: username, DEPLOY_PASSWORD: password } = process.env
-	if (!(username && password)) {
-		throw new Error('环境变量中需要有用户名和密码')
-	}
+	assert(username && password, '环境变量中需要有用户名和密码')
 	const api = new MediaWikiApi('https://voca.wiki/api.php')
 	await api.login(username, password)
 	for (const page of pages) {
