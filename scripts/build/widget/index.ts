@@ -3,7 +3,6 @@ import { readdir } from 'node:fs/promises'
 
 import { writeBuiltPage } from '@/scripts/utils/page'
 import { getFileInfo } from '@/tools/gadget/file'
-
 import { getWidgetCode } from './widget-template'
 
 export async function buildWidgets() {

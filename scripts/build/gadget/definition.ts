@@ -3,8 +3,9 @@
 
 import assert from 'node:assert/strict'
 
-import type { GadgetMeta } from '@/tools/gadget'
 import type { NonEmptyTuple } from 'type-fest'
+
+import type { GadgetMeta } from '@/tools/gadget'
 
 /**
  * 解析单个gadget的定义
