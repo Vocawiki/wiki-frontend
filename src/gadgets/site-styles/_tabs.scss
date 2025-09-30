@@ -2,11 +2,15 @@
 
 .tab {
 	.TabLabelText {
-		display: none;
 		padding: 1px;
 		background: #fff;
 		cursor: pointer;
 		flex: none;
+
+		&.selected {
+			padding: 1px;
+			background: white;
+		}
 	}
 
 	.TabLabel {
@@ -17,11 +21,6 @@
 		flex-wrap: wrap;
 	}
 
-	.TabLabelText.selected {
-		padding: 1px;
-		background: white;
-	}
-
 	.TabContent {
 		background: white;
 		padding: 20px 30px;
@@ -30,8 +29,12 @@
 		border: 1px solid #aaa;
 	}
 
-	.TabContentText.selected {
-		display: block;
+	.TabContentText {
+		display: none;
+
+		&.selected {
+			display: block;
+		}
 	}
 
 	.tabLabelTop .TabLabelText {
