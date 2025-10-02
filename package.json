@@ -2,9 +2,9 @@
 	"name": "vocawiki-frontend",
 	"scripts": {
 		"format": "prettier \"*.{ts,css,scss,json,md}\" \"src/**/*.{ts,css,scss,json,md}\" \"scripts/**/*.{ts,css,scss,json,md}\" --write --log-level warn",
-		"check": "bun run ./scripts/check-type",
-		"lint": "eslint .",
-		"test": "bun run check && bun run lint",
+		"check:type": "bun run ./scripts/check-type",
+		"check:lint": "eslint .",
+		"check": "bun run check:type && bun run check:lint",
 		"build": "bun run ./scripts/build",
 		"push": "bun run ./scripts/push",
 		"deploy": "bun run build && bun run push"

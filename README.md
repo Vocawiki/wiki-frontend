@@ -38,7 +38,7 @@
 4. 检查代码问题：
 
    ```sh
-   pnpm run test
+   pnpm run check
    ```
 
 5. 试构建：
