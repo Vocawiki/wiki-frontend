@@ -2,12 +2,15 @@ name: 部署到Vocawiki
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    environment: Amerobot
+    env:
+      DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+      DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
@@ -24,8 +27,8 @@ jobs:
       - name: 上传制品
         uses: actions/upload-artifact@v4
         with:
-          name: 构建结果
+          name: built_pages
           path: out/pages/
           if-no-files-found: error
       - name: 部署
-        run: pnpm run push
+        run: 'pnpm run push --summary "(GitHub Actions) ${{ github.event.head_commit.author.name }}: ${{ github.event.head_commit.message }}"'
