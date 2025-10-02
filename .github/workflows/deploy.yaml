@@ -1,0 +1,31 @@
+name: 部署到Vocawiki
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - name: 安装依赖
+        run: pnpm install
+      - name: 检查代码
+        run: pnpm run check
+      - name: 构建
+        run: pnpm run build
+      - name: 上传制品
+        uses: actions/upload-artifact@v4
+        with:
+          name: 构建结果
+          path: out/pages/
+          if-no-files-found: error
+      - name: 部署
+        run: pnpm run push
