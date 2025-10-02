@@ -19,6 +19,7 @@ export default [
 	'Wikiplus',
 	'Wikiplus-highlight',
 	'moesync',
+	'Cat-a-lot',
 	{ type: 'h2', text: 'interface' },
 	'allmessageFilter',
 	'interfaceVariantConverter',
