@@ -1,3 +1,5 @@
+import { FastAverageColor } from 'fast-average-color'
+
 /**
  * @file 供{{tl|首页/最新条目}}使用。
  */
@@ -18,6 +20,7 @@ interface PageItem {
 // SB Extension:MobileFrontend，破坏我的 script 标签
 const LT = String.fromCodePoint(0x3c)
 const GT = String.fromCodePoint(0x3e)
+const THUMB_WIDTH = 128
 
 async function fetchPageImages(titles: string[]): Promise<PageImagesResult> {
 	if (titles.length === 0) return {}
@@ -28,7 +31,7 @@ async function fetchPageImages(titles: string[]): Promise<PageImagesResult> {
 		format: 'json',
 		formatversion: '2',
 		prop: 'pageimages',
-		pithumbsize: 128,
+		pithumbsize: THUMB_WIDTH,
 		piprop: 'thumbnail',
 		pilicense: 'any',
 		titles: titles,
@@ -76,6 +79,7 @@ function getPageItemsAndModifyDOM(): PageItem[] {
 }
 
 async function applyPageImageOnDOM(pageItems: PageItem[]) {
+	const fac = new FastAverageColor()
 	const pageImages = await fetchPageImages([...new Set(pageItems.map((x) => x.title))])
 
 	pageItems.forEach(({ anchorElem, title }) => {
@@ -88,6 +92,18 @@ async function applyPageImageOnDOM(pageItems: PageItem[]) {
 			// SB MW 不让用在 templatestyles 里用 -webkit-mask-image，只能写在这里。
 			`${LT}div class="latest-article-image" style="-webkit-mask-image: -webkit-linear-gradient(0deg, #fff 1em, transparent); mask-image: linear-gradient(90deg, #fff 1em, transparent);"${GT}${LT}img src="${pageImage.source}" loading="lazy" alt=""${GT}${LT}/div${GT}`,
 		)
+		const imgElem = anchorElem.querySelector('img')!
+		void fac
+			.getColorAsync(imgElem, {
+				algorithm: 'dominant',
+				mode: 'speed',
+				left: THUMB_WIDTH * 0.5,
+				width: THUMB_WIDTH * 0.5,
+			})
+			.then((color) => {
+				anchorElem.style.backgroundColor = color.rgb
+				anchorElem.style.color = color.isDark ? '#fff' : '#000'
+			})
 	})
 }
 
