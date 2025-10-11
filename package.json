@@ -6,8 +6,8 @@
 		"check:lint": "eslint .",
 		"check": "bun run check:type && bun run check:lint",
 		"build": "bun run ./scripts/build",
-		"push": "bun run ./scripts/push",
-		"deploy": "bun run build && bun run push"
+		"deploy": "bun run ./scripts/deploy",
+		"before-commit": "bun run format && bun run check && bun run build"
 	},
 	"private": true,
 	"type": "module",

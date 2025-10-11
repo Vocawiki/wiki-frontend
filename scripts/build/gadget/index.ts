@@ -6,8 +6,11 @@ import { writeBuiltPage } from '@/scripts/utils/page'
 import gadgetListMeta from '@/src/gadgets/(meta)'
 import { toGadgetDefinition, type GadgetMeta } from '@/tools/gadget'
 import { getFileInfo } from '@/tools/gadget/file'
+import { noticeForEditors } from '../utils/notice'
 import { compileSCSS } from './compile-css'
 import type { GadgetsDefinition, GadgetsDefinitionNode } from './definition'
+
+const GADGET_LIST_META_PATH = 'src/gadgets/(meta).ts'
 
 export async function buildGadgets() {
 	const definition = await collectGadgetsDefinition()
@@ -37,12 +40,13 @@ async function buildGadget(name: string, meta: GadgetMeta): Promise<void> {
 	await Promise.all(tasks)
 }
 
-async function buildGadgetsDefinition(definition: GadgetsDefinition) {
-	const lines = definition.map((x, index) => {
-		if (x.type === 'h2') {
-			return `${index === 0 ? '' : '\n'}== ${x.text} ==`
+async function buildGadgetsDefinition(definitionNodes: GadgetsDefinition) {
+	const noticeNode: GadgetsDefinitionNode = { type: 'h2', text: noticeForEditors(GADGET_LIST_META_PATH).join('') }
+	const lines = [noticeNode, ...definitionNodes].map((node, index) => {
+		if (node.type === 'h2') {
+			return `${index === 0 ? '' : '\n'}== ${node.text} ==`
 		}
-		return toGadgetDefinition(x.name, x.meta)
+		return toGadgetDefinition(node.name, node.meta)
 	})
 	await writeBuiltPage('MediaWiki:Gadgets-definition', lines.join('\n'))
 }
@@ -57,12 +61,12 @@ async function collectGadgetsDefinition(): Promise<GadgetsDefinition> {
 	const namesInRootMetaButNotInDir = nameSetInRootMeta.difference(nameSetInDir)
 	if (namesInDirButNotInRootMeta.size > 0) {
 		throw new Error(
-			`这些 gadget 没有在\`src/gadgets/(meta).ts\`列出，也未被标记为\`$draft: true\`：${[...namesInDirButNotInRootMeta].join(', ')}`,
+			`这些 gadget 没有在\`${GADGET_LIST_META_PATH}\`列出，也未被标记为\`$draft: true\`：${[...namesInDirButNotInRootMeta].join(', ')}`,
 		)
 	}
 	if (namesInRootMetaButNotInDir.size > 0) {
 		throw new Error(
-			`\`src/gadgets/(meta).ts\`所指定的这些 gadget，在文件夹中不存在或被标记为\`$draft: true\`：${[...namesInRootMetaButNotInDir].join(', ')}`,
+			`\`${GADGET_LIST_META_PATH}\`所指定的这些 gadget，在文件夹中不存在或被标记为\`$draft: true\`：${[...namesInRootMetaButNotInDir].join(', ')}`,
 		)
 	}
 

@@ -130,6 +130,7 @@ export type GadgetMetaPage =
 	| {
 			/** 直接使用现有的 MediaWiki 页面 */
 			type: 'existing'
+			/** 页面名，“MediaWiki:Gadget-”之后的部分 */
 			name: string
 	  }
 

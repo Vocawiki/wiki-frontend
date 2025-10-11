@@ -31,4 +31,4 @@ jobs:
           path: out/pages/
           if-no-files-found: error
       - name: 部署
-        run: 'pnpm run push --summary "(GitHub Actions) ${{ github.event.head_commit.author.name }}: ${{ github.event.head_commit.message }}"'
+        run: 'pnpm run deploy --summary "(GitHub Actions) ${{ github.event.head_commit.author.name }}: ${{ github.event.head_commit.message }}"'
