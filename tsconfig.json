@@ -9,5 +9,5 @@
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["./*", "./lib", "./scripts", "./tools", "./src/gadgets/**/(meta).ts"]
+	"include": ["./*", "./lib", "./scripts", "./tools", "./src/**/(meta).ts"]
 }

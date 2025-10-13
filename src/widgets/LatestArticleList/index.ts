@@ -1,7 +1,3 @@
-/**
- * @file 供{{tl|首页/最新条目}}使用。
- */
-
 import { FastAverageColor } from 'fast-average-color'
 
 interface PageImagesResult {

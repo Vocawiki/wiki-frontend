@@ -70,11 +70,8 @@ async function buildEntity({ name, path }: { name: string; path: string }) {
 	})
 	assert(result.success, `构建${path}失败`)
 
-	const sourceCode = await Bun.file(path).text()
-	const description = sourceCode.match(/@file\s+(.+)/)?.[1]
-	const widgetContent = getWidgetCode({
+	const widgetContent = await getWidgetCode({
 		name,
-		description,
 		srcPath: path,
 		script: await Bun.file(`${outdir}/${fileName}`).text(),
 	})

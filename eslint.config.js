@@ -36,11 +36,7 @@ export default defineConfig([
 		},
 	},
 	{
-		files: [
-			'*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-			'!(src)/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-			'src/gadgets/**/(meta).ts',
-		],
+		files: ['*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', '!(src)/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', 'src/**/(meta).ts'],
 		languageOptions: {
 			parserOptions: {
 				projectService: true,
@@ -51,7 +47,7 @@ export default defineConfig([
 	},
 	{
 		files: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-		ignores: ['src/gadgets/**/(meta).ts'],
+		ignores: ['src/**/(meta).ts'],
 		languageOptions: {
 			parserOptions: {
 				projectService: true,
