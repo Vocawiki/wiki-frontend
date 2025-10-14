@@ -1,5 +1,8 @@
-;(function 为ParserOutput附加容器大小信息() {
-	const PARSER_OUTPUT_CLASS_NAME = 'mw-parser-output'
+;(() => {
+	if (new URLSearchParams(window.location.search).get('disable-container-size')) {
+		return
+	}
+	const mainContainerId = 'mw-content-text'
 	// 断点与 Tailwind CSS 相同
 	const breakpoints: [number, string][] = [
 		[640, 'sm'],
@@ -9,81 +12,58 @@
 		[1536, '2xl'],
 	]
 
-	const contentToInfoMap = new Map<Element, Element>()
-	const resizeObserver = new ResizeObserver((entries) => {
-		entries.forEach(function handleParserOutputResize({ contentBoxSize, contentRect, target }) {
-			const infoElem = contentToInfoMap.get(target)
-			if (!infoElem) {
-				console.warn('contentToInfoMap中不存在如下resizeObserver target：', target)
-				return
-			}
+	function observeResize(observedTarget: Element) {
+		const classList = document.body.classList
+		const breakpointsAndClasses = breakpoints.map(([breakpoint, name]) => [breakpoint, 'main-' + name] as const)
 
-			const classList = infoElem.classList
-			const inlineSize = contentBoxSize ? contentBoxSize[0]!.inlineSize : contentRect.width
+		const resizeObserver = new ResizeObserver((entries) => {
+			const { contentBoxSize, contentRect } = entries[0]!
+			const width = contentBoxSize ? contentBoxSize[0]!.inlineSize : contentRect.width
 
-			for (const [pixels, className] of breakpoints) {
-				if (inlineSize >= pixels) {
-					classList.add(className)
-				} else {
+			let i = breakpointsAndClasses.length - 1
+			for (; i >= 0; i--) {
+				const [breakpoint, className] = breakpointsAndClasses[i]!
+				if (width < breakpoint) {
 					classList.remove(className)
+				} else {
+					break
 				}
+			}
+			for (; i >= 0; i--) {
+				const [, className] = breakpointsAndClasses[i]!
+				classList.add(className)
 			}
 		})
-	})
-
-	function attachDynamicInfo(parserOutputElem: Element) {
-		if (contentToInfoMap.has(parserOutputElem)) {
-			// 这种情况出现在<script>在文档未解析完就执行时
-			return
-		}
-		const infoElem = document.createElement('div')
-		infoElem.setAttribute('hidden', '')
-		infoElem.classList.add('__info')
-		parserOutputElem.insertAdjacentElement('afterbegin', infoElem)
-		contentToInfoMap.set(parserOutputElem, infoElem)
-		resizeObserver.observe(parserOutputElem)
+		resizeObserver.observe(observedTarget, { box: 'content-box' })
 	}
 
-	function detachDynamicInfo(parserOutputElem: Element) {
-		contentToInfoMap.delete(parserOutputElem)
-		resizeObserver.unobserve(parserOutputElem)
+	const contentContainer = document.getElementById(mainContainerId)
+
+	if (contentContainer) {
+		observeResize(contentContainer)
+		return
 	}
 
-	function attachDynamicInfoInDescendants(parent: Element | Document) {
-		const parserOutputElements = [...parent.getElementsByClassName(PARSER_OUTPUT_CLASS_NAME)]
-		parserOutputElements.forEach(attachDynamicInfo)
-	}
+	const elementNodeType = Node.ELEMENT_NODE
+	const mutationObserver = new MutationObserver((mutations, mutationObserver) => {
+		mutations.forEach(({ addedNodes }) => {
+			for (const addedNode of addedNodes) {
+				if (addedNode.nodeType !== elementNodeType) continue
 
-	function detachDynamicInfoInDescendants(parent: Element | Document) {
-		const parserOutputElements = [...parent.getElementsByClassName(PARSER_OUTPUT_CLASS_NAME)]
-		parserOutputElements.forEach(detachDynamicInfo)
-	}
-
-	attachDynamicInfoInDescendants(document)
-
-	const mutationObserver = new MutationObserver((mutations) => {
-		mutations.forEach(function handleChildListMutation(mutation) {
-			const target = mutation.target
-			if (!(target instanceof Element)) return
-			if (target.classList.contains(PARSER_OUTPUT_CLASS_NAME)) return
-
-			mutation.addedNodes.forEach((addedNode) => {
-				if (!(addedNode instanceof Element)) return
-				if (addedNode.classList.contains(PARSER_OUTPUT_CLASS_NAME)) {
-					attachDynamicInfo(addedNode)
+				const addedElem = addedNode as Element
+				if (addedElem.id === mainContainerId) {
+					observeResize(addedElem)
+					mutationObserver.disconnect()
 					return
 				}
-				attachDynamicInfoInDescendants(addedNode)
-			})
 
-			mutation.removedNodes.forEach((removedNode) => {
-				if (!(removedNode instanceof Element)) return
-				if (removedNode.classList.contains(PARSER_OUTPUT_CLASS_NAME)) {
-					detachDynamicInfo(removedNode)
-					return
-				}
-				detachDynamicInfoInDescendants(removedNode)
-			})
+				const queriedElem = addedElem.querySelector('#' + mainContainerId)
+				if (!queriedElem) continue
+
+				observeResize(queriedElem)
+				mutationObserver.disconnect()
+				return
+			}
 		})
 	})
 	mutationObserver.observe(document.body, { subtree: true, childList: true })
