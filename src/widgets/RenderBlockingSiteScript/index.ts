@@ -13,7 +13,10 @@
 	const resizeObserver = new ResizeObserver((entries) => {
 		entries.forEach(function handleParserOutputResize({ contentBoxSize, contentRect, target }) {
 			const infoElem = contentToInfoMap.get(target)
-			if (!infoElem) return
+			if (!infoElem) {
+				console.warn('contentToInfoMap中不存在如下resizeObserver target：', target)
+				return
+			}
 
 			const classList = infoElem.classList
 			const inlineSize = contentBoxSize ? contentBoxSize[0]!.inlineSize : contentRect.width
@@ -29,6 +32,10 @@
 	})
 
 	function attachDynamicInfo(parserOutputElem: Element) {
+		if (contentToInfoMap.has(parserOutputElem)) {
+			// 这种情况出现在<script>在文档未解析完就执行时
+			return
+		}
 		const infoElem = document.createElement('div')
 		infoElem.setAttribute('hidden', '')
 		infoElem.classList.add('__info')
