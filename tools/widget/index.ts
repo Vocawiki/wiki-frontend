@@ -1,10 +1,7 @@
 export interface WidgetMeta {
 	description?: string
-	script?: {
-		attributes?: {
-			type?: 'module' | null
-		} & {
-			[name: string]: string | boolean | null
-		}
+	script: {
+		type: 'module' | null
+		defer: boolean
 	}
 }

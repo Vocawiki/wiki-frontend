@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict'
 
-import { escapeHTML } from 'bun'
 import { construct, crush, shake } from 'radashi'
 import type { RequiredDeep } from 'type-fest'
 
@@ -10,10 +9,47 @@ import { noticeForEditors } from '../utils/notice'
 const defaultMeta: RequiredDeep<WidgetMeta> = {
 	description: '',
 	script: {
-		attributes: {
-			type: 'module',
-		},
+		defer: true,
+		type: null,
 	},
+}
+
+function base64(data: string) {
+	const buf = Buffer.from(data, 'utf8')
+	return buf.toString('base64')
+}
+
+// function base64DataURL({ data, mime }: { data: string; mime: string }): string {
+// 	return `data:${mime};charset=utf-8;base64,${base64(data)}`
+// }
+
+function textDataURL({ data, mime }: { data: string; mime: string }): string {
+	return `data:${mime};charset=utf-8,${encodeURIComponent(data).replaceAll(/%[\dA-F]{2}/g, (s) => {
+		switch (
+			s // Browsers tolerate these characters, and they're frequent
+		) {
+			case '%2B':
+				return '+'
+			case '%2F':
+				return '/'
+			case '%3A':
+				return ':'
+			case '%3D':
+				return '='
+			default:
+				return s.toLowerCase() // 使得压缩率更高
+		}
+	})}`
+}
+
+const replacements: Record<string, string> = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+}
+function escapeAttributeValueInDoubleQuotes(str: string) {
+	return str.replace(/[&<>"]/g, (x) => replacements[x]!)
 }
 
 export async function getWidgetCode(args: { name: string; srcPath: string; script: string }) {
@@ -34,19 +70,22 @@ export async function getWidgetCode(args: { name: string; srcPath: string; scrip
 
 	const noincludeContent = [meta.description, noticeForEditors(args.srcPath).join('')].filter((x) => x).join('\n\n')
 	const identifier = `${args.name}_called`
-	const scriptAttributes = Object.entries(meta.script.attributes)
+	const isClassicScript = meta.script.type === null
+	const isDeferred = meta.script.defer
+	const scriptContent = (isClassicScript ? '"use strict";\n' : '') + args.script.trim()
+	const scriptAttributes = Object.entries({
+		...meta.script,
+		...(isDeferred ? { src: textDataURL({ data: scriptContent, mime: 'text/javascript' }) } : {}),
+	})
 		.map(([k, v]) => {
 			if (v === null || v === false) return null
 			if (v === true) return k
-			return `${k}="${escapeHTML(v)}"`
+			return `${k}="${escapeAttributeValueInDoubleQuotes(v)}"`
 		})
 		.filter((x) => x)
 		.join(' ')
-	const isClassicScript = meta.script.attributes.type === null
-	const scriptContent = (isClassicScript ? '"use strict";\n' : '') + args.script.trim()
 
-	return `<noinclude>${noincludeContent}</noinclude><includeonly><!--{if !isset($${identifier}) || !$${identifier}}--><!--{assign var="${identifier}" value=true scope="global"}--><script${scriptAttributes ? ' ' + scriptAttributes : ''}>
-${scriptContent}
-</script><!--{/if}--></includeonly>
-`
+	return `<noinclude>
+${noincludeContent}
+</noinclude><includeonly><!--{if !isset($${identifier}) || !$${identifier}}--><!--{assign var="${identifier}" value=true scope="global"}--><script${scriptAttributes ? ' ' + scriptAttributes : ''}>${isDeferred ? '' : scriptContent}</script><!--{/if}--></includeonly>`
 }

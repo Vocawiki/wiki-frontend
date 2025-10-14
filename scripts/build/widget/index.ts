@@ -62,10 +62,10 @@ async function buildEntity({ name, path }: { name: string; path: string }) {
 		target: 'browser',
 		naming: fileName,
 		minify: {
-			whitespace: false,
-			identifiers: false,
+			whitespace: true,
+			identifiers: true,
 			syntax: true,
-			keepNames: true,
+			keepNames: false,
 		},
 	})
 	assert(result.success, `构建${path}失败`)

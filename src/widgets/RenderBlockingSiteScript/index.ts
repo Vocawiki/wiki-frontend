@@ -1,7 +1,4 @@
 ;(() => {
-	if (new URLSearchParams(window.location.search).get('disable-container-size')) {
-		return
-	}
 	const mainContainerId = 'mw-content-text'
 	// 断点与 Tailwind CSS 相同
 	const breakpoints: [number, string][] = [
@@ -11,6 +8,9 @@
 		[1280, 'xl'],
 		[1536, '2xl'],
 	]
+
+	const contentContainer = document.getElementById(mainContainerId)
+	if (!contentContainer) return
 
 	function observeResize(observedTarget: Element) {
 		const classList = document.body.classList
@@ -37,34 +37,5 @@
 		resizeObserver.observe(observedTarget, { box: 'content-box' })
 	}
 
-	const contentContainer = document.getElementById(mainContainerId)
-
-	if (contentContainer) {
-		observeResize(contentContainer)
-		return
-	}
-
-	const elementNodeType = Node.ELEMENT_NODE
-	const mutationObserver = new MutationObserver((mutations, mutationObserver) => {
-		mutations.forEach(({ addedNodes }) => {
-			for (const addedNode of addedNodes) {
-				if (addedNode.nodeType !== elementNodeType) continue
-
-				const addedElem = addedNode as Element
-				if (addedElem.id === mainContainerId) {
-					observeResize(addedElem)
-					mutationObserver.disconnect()
-					return
-				}
-
-				const queriedElem = addedElem.querySelector('#' + mainContainerId)
-				if (!queriedElem) continue
-
-				observeResize(queriedElem)
-				mutationObserver.disconnect()
-				return
-			}
-		})
-	})
-	mutationObserver.observe(document.body, { subtree: true, childList: true })
+	observeResize(contentContainer)
 })()
