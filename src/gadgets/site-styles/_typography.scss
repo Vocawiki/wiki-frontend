@@ -1,3 +1,16 @@
+pre,
+code,
+textarea,
+.CodeMirror,
+[style*="monospace"] {
+	text-autospace: no-autospace;
+	text-spacing-trim: space-all;
+}
+
+input {
+	text-spacing-trim: space-all;
+}
+
 span[lang] {
 	font-family: initial;
 	-webkit-font-feature-settings: "locl" on;

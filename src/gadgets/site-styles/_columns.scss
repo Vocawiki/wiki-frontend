@@ -7,6 +7,8 @@
  * http://www.opensource.org/licenses/mit-license.php
  * 12/29/2014
  */
+
+/* 编辑者不要再使用以下类！这些类已被弃用，在可预见的未来会被移除。 */
 .container {
 	position: relative;
 	width: 100%;
@@ -14,6 +16,10 @@
 	margin: 0 auto;
 	padding: 0 20px;
 	box-sizing: border-box;
+}
+
+.clear-div {
+	clear: both;
 }
 
 .div,
@@ -25,7 +31,7 @@
 	box-sizing: border-box;
 }
 
-@media (min-width: 800px) {
+body.main-md {
 	.div,
 	.divs,
 	.column,
@@ -221,3 +227,4 @@
 		margin-left: 52%;
 	}
 }
+/* 编辑者不要再使用以上类！这些类已被弃用，在可预见的未来会被移除。 */

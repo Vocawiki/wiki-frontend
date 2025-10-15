@@ -9,7 +9,8 @@
 @use "ruby";
 @use "columns";
 @use "navbox";
-@use "main_page";
+@use "multimedia-viewer";
+@use "main-page";
 
 .sidebar-character,
 // 语言选择下拉框的zh-Hans、zh-Hant等
@@ -107,10 +108,6 @@ div#simpleSearch button#searchButton {
 	padding-right: 0.1em;
 }
 
-.clear-div {
-	clear: both;
-}
-
 .block,
 .content-box {
 	width: 100%;
@@ -142,10 +139,6 @@ div#simpleSearch button#searchButton {
 	height: 1.28rem;
 }
 
-#siteNotice .scrollDiv:hover {
-	font-weight: 700;
-}
-
 #siteNotice .scrollDiv:empty {
 	display: none;
 }
@@ -172,73 +165,7 @@ div#simpleSearch button#searchButton {
 #mw-content-text i:not([role="img"]) {
 	margin-right: 3px;
 }
-.mw-mmv-overlay {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background-color: rgb(0 0 0 / 80%);
-	opacity: 0.73;
-}
 
-body.mediawiki.mw-mmv-lightbox-open #mw-page-base,
-body.mediawiki.mw-mmv-lightbox-open #mw-head-base,
-body.mediawiki.mw-mmv-lightbox-open #mw-navigation,
-body.mediawiki.mw-mmv-lightbox-open #content,
-body.mediawiki.mw-mmv-lightbox-open #footer,
-body.mediawiki.mw-mmv-lightbox-open #globalWrapper {
-	display: inherit;
-}
-
-body.mediawiki.mw-mmv-lightbox-open > * {
-	display: inherit;
-}
-
-body.mediawiki.mw-mmv-lightbox-open > script,
-body.mediawiki.mw-mmv-lightbox-open > style {
-	display: none;
-}
-
-body.mediawiki.mw-mmv-lightbox-open {
-	overflow: hidden;
-}
-
-body .mw-mmv-wrapper {
-	position: fixed;
-}
-.mw-mmv-image-metadata-column.mw-mmv-image-metadata-desc-column {
-	width: 30%;
-}
-
-.mw-mmv-image-metadata-column.mw-mmv-image-metadata-links-column {
-	width: 70%;
-	max-width: 70%;
-}
-
-ul.mw-mmv-image-links li {
-	float: left;
-	padding: 0.3em 1em;
-}
-
-div.mw-mmv-image-desc-div,
-div.mw-mmv-image-links-div {
-	display: block;
-}
-
-div.metadata-panel-is-closed .mw-mmv-image-links li.mw-mmv-license-li {
-	height: inherit;
-	line-height: inherit;
-}
-
-.mw-mmv-warning-visible .mw-mmv-download-dialog .mw-mmv-dialog-down-arrow {
-	background-color: #fff;
-}
-
-.mw-mmv-warning-visible .mw-mmv-dialog-warning,
-.mw-mmv-warning-visible .mw-mmv-download-attribution {
-	display: none !important;
-}
 .common-box {
 	padding: 0.2em 0.4em;
 	border: 1px solid #ddd;
@@ -251,75 +178,10 @@ div.metadata-panel-is-closed .mw-mmv-image-links li.mw-mmv-license-li {
 	border-radius: 10px;
 	box-shadow: #666 0 2px 3px;
 }
-.mw-datatable.TablePager {
-	width: 100%;
-	table-layout: fixed;
-	overflow-wrap: break-word;
-}
-#breadcrumb {
-	background-image: url("//img.moegirl.org.cn/breadcrumb/bc_bg.png");
-	color: red;
-	border: solid 1px #cacaca;
-	border-radius: 10px;
-	overflow: hidden;
-}
 
-#breadcrumb span {
-	float: left;
-	padding-left: 10px;
-}
-
-#breadcrumb a {
-	display: block;
-	background: url("//img.moegirl.org.cn/breadcrumb/bc_separator.png") no-repeat right;
-	padding-right: 15px;
-	color: #454545;
-}
-
-#breadcrumb a:hover {
-	color: #35acc5;
-}
-.infotemplatebox {
-	float: right;
-	width: 280px;
-	font-size: 90%;
-	margin: 1em 0 1em 1em;
-	background: #f9f9f9;
-	border: 1px #999 solid;
-	border-collapse: collapse;
-	word-break: break-all;
-	clear: right;
-}
-.my-buttons {
-	padding: 0.5em;
-}
-
-.my-buttons a {
-	text-decoration: none;
-	border: 1px #069 outset;
-	padding: 0.1em;
-}
-
-.my-buttons a:hover,
-.my-buttons a:active {
-	border-style: inset;
-}
 pre {
 	white-space: pre-wrap;
 	overflow-wrap: break-word;
-}
-
-pre,
-code,
-textarea,
-.CodeMirror,
-[style*="monospace"] {
-	text-autospace: no-autospace;
-	text-spacing-trim: space-all;
-}
-
-input {
-	text-spacing-trim: space-all;
 }
 
 .wikitable {
@@ -338,30 +200,30 @@ input {
 	margin: 1em 2.5em;
 	padding: 1em;
 	background: white;
-}
 
-.editRequest .newComment {
-	white-space: nowrap;
-	background: #347bff;
-	color: #fff;
-	border: 1px solid #347bff;
-	text-shadow: 0 1px rgb(0 0 0 / 10%);
-	font-family: inherit;
-	font-size: 1em;
-	min-width: 4em;
-	max-width: 28.75em;
-	padding: 0.5em 1em;
-	margin: 0;
-	border-radius: 2px;
-	box-sizing: border-box;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	zoom: 1;
-	vertical-align: middle;
-	text-align: center;
-	font-weight: bold;
-	cursor: pointer;
+	.newComment {
+		white-space: nowrap;
+		background: #347bff;
+		color: #fff;
+		border: 1px solid #347bff;
+		text-shadow: 0 1px rgb(0 0 0 / 10%);
+		font-family: inherit;
+		font-size: 1em;
+		min-width: 4em;
+		max-width: 28.75em;
+		padding: 0.5em 1em;
+		margin: 0;
+		border-radius: 2px;
+		box-sizing: border-box;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		zoom: 1;
+		vertical-align: middle;
+		text-align: center;
+		font-weight: bold;
+		cursor: pointer;
+	}
 }
 
 // 注释里的列表
@@ -371,29 +233,29 @@ input {
 }
 
 // wikitable 的 caption
-.wikitable.mw-collapsible caption {
-	border: 1px solid rgb(170 170 170 / 37%);
-	border-bottom-width: 0;
-	background-color: rgb(249 249 249);
+.wikitable.mw-collapsible {
+	caption {
+		border: 1px solid rgb(170 170 170 / 37%);
+		border-bottom-width: 0;
+		background-color: rgb(249 249 249);
+	}
+	&.mw-collapsed caption {
+		border-bottom-width: 1px;
+	}
 }
 
-.wikitable.mw-collapsible.mw-collapsed caption {
-	border-bottom-width: 1px;
-}
-
-// 分类页同开头的页面的列表不分段
+// 分类页同组页面不被拆分成两栏
 .mw-category-group {
 	-moz-column-break-inside: avoid;
 	break-inside: avoid;
-}
 
-.mw-category-group:first-child:last-child,
-// 只有一个列表时
-.mw-category-group:first-child:nth-last-child(2),
-// 只有两个列表时
-.mw-category-group:nth-child(2):last-child {
-	-moz-column-break-inside: auto;
-	break-inside: auto;
+	// 只有一个或两个列表时
+	&:only-child:last-child,
+	&:first-child:nth-last-child(2),
+	&:nth-child(2):last-child {
+		-moz-column-break-inside: auto;
+		break-inside: auto;
+	}
 }
 
 // 编辑冲突界面排版
@@ -413,9 +275,9 @@ input {
 	> h2 > .mw-headline::after {
 		content: "（请滚动查看，可拖动右下角斜线符号调整高度）";
 
-		html[lang="zh-hant" i] &,
-		html[lang="zh-hk" i] &,
-		html[lang="zh-tw" i] & {
+		html[lang="zh-Hant" i] &,
+		html[lang="zh-HK" i] &,
+		html[lang="zh-TW" i] & {
 			content: "（請滾動查看，可拖動右下角斜線符號調整高度）";
 		}
 	}
@@ -428,9 +290,9 @@ input {
 	& > .diff-container + h2 > .mw-headline::after {
 		content: "（由于技术限制，此处为全文版本，请使用 Ctrl+F | ⌘+F 搜索相关差异，可拖动右下角斜线符号调整高度）";
 
-		html[lang="zh-hant" i] &,
-		html[lang="zh-hk" i] &,
-		html[lang="zh-tw" i] & {
+		html[lang="zh-Hant" i] &,
+		html[lang="zh-HK" i] &,
+		html[lang="zh-TW" i] & {
 			content: "（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）";
 		}
 	}
@@ -460,9 +322,9 @@ input {
 		overflow: hidden;
 		display: block;
 
-		html[lang="zh-hant" i] &,
-		html[lang="zh-hk" i],
-		html[lang="zh-tw" i] & {
+		html[lang="zh-Hant" i] &,
+		html[lang="zh-HK" i],
+		html[lang="zh-TW" i] & {
 			content: "編輯框（最新修訂）";
 		}
 	}
