@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 
+import { construct, crush, shake } from 'radashi'
+import type { RequiredDeep } from 'type-fest'
+
 import { writeBuiltPage } from '@/scripts/utils/page'
 import { getFileInfo } from '@/tools/gadget/file'
+import { defaultWidgetMeta, type WidgetMeta } from '@/tools/widget'
 import { getWidgetCode } from './widget-template'
 
 export async function buildWidgets() {
@@ -51,6 +55,16 @@ async function findEntities(dir: string): Promise<
 }
 
 async function buildEntity({ name, path }: { name: string; path: string }) {
+	assert.match(path, /^src\//, '必须使用“src/”开头的路径')
+	assert.match(name, /^[A-Za-z]\w*$/, '不支持的name')
+
+	const inputtedMeta = ((await import(`@/src/widgets/${name}/(meta)`)) as { default: WidgetMeta }).default
+
+	const meta = construct({
+		...crush(defaultWidgetMeta),
+		...shake(crush(inputtedMeta)),
+	}) as RequiredDeep<WidgetMeta>
+
 	const tempDir = 'widgets'
 
 	const outdir = `out/temp/${tempDir}`
@@ -61,19 +75,15 @@ async function buildEntity({ name, path }: { name: string; path: string }) {
 		outdir: outdir,
 		target: 'browser',
 		naming: fileName,
-		minify: {
-			whitespace: true,
-			identifiers: true,
-			syntax: true,
-			keepNames: false,
-		},
+		minify: meta.buildOptions.minify,
 	})
 	assert(result.success, `构建${path}失败`)
 
-	const widgetContent = await getWidgetCode({
+	const widgetContent = getWidgetCode({
 		name,
 		srcPath: path,
 		script: await Bun.file(`${outdir}/${fileName}`).text(),
+		meta,
 	})
 	await writeBuiltPage(`Widget:${name}`, widgetContent)
 }
