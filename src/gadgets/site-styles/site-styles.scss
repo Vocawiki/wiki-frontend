@@ -333,3 +333,24 @@ pre {
 .noprint.plainlinks.hlist.navbar.nomobile {
 	width: 300px !important;
 }
+
+.infotemplatebox {
+	float: right;
+	width: 280px;
+	font-size: 90%;
+	margin: 1em 0 1em 1em;
+	background: #f9f9f9;
+	border: 1px #999 solid;
+	border-collapse: collapse;
+	word-break: break-all;
+	clear: right;
+
+	body:not(.main-sm) & {
+		width: 100% !important;
+	}
+}
+
+body:not(.main-sm) .infobox {
+	max-width: 100% !important;
+	width: 100% !important;
+}
