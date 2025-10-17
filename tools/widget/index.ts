@@ -3,7 +3,7 @@ import type { OutputOptions } from 'rolldown'
 export interface WidgetMeta {
 	description?: string
 	script: {
-		type: 'module' | null
+		type: 'module' | 'classic'
 	}
-	buildOptions?: Partial<Pick<OutputOptions, 'minify'>>
+	buildOptions?: OutputOptions
 }

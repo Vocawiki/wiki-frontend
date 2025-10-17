@@ -1,5 +1,3 @@
-import { escapeHTML } from 'bun'
-
 import type { WidgetMeta } from '@/tools/widget'
 import { noticeForEditors } from '../utils/notice'
 
@@ -16,20 +14,11 @@ export function getWidgetCode({
 }) {
 	const noincludeContent = [meta.description, noticeForEditors(srcPath).join('')].filter((x) => x).join('\n\n')
 	const identifier = `${name}_called`
-	const isClassicScript = meta.script.type === null
+	const isClassicScript = meta.script.type === 'classic'
 	const scriptContent = (isClassicScript ? '"use strict";' : '') + script.trim()
-	const scriptAttributes = Object.entries(meta.script)
-		.map(([k, v]) => {
-			// @ts-expect-error: 未来使用
-			if (v === null || v === false) return null
-			// @ts-expect-error: 未来使用
-			if (v === true) return k
-			return `${k}="${escapeHTML(v)}"`
-		})
-		.filter((x) => x)
-		.join(' ')
+	const scriptAttributes = meta.script.type === 'module' ? 'type="module"' : ''
 
 	return `<noinclude>
 ${noincludeContent}
-</noinclude><includeonly><!--{if !isset($${identifier}) || !$${identifier}}--><!--{assign var="${identifier}" value=true scope="global"}--><script${scriptAttributes ? ' ' + scriptAttributes : ''}>${scriptContent}</script><!--{/if}--></includeonly>`
+</noinclude><includeonly><!--{if !isset($${identifier}) || !$${identifier}}--><!--{assign var="${identifier}" value=true scope="global"}--><script${scriptAttributes ? ` ${scriptAttributes}` : ''}>${scriptContent}</script><!--{/if}--></includeonly>`
 }

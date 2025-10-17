@@ -78,6 +78,7 @@
       - `<源代码文件>`：目前只能是SCSS文件，入口文件需要在`./(meta).ts`中指定。
   - `widgets/`：
     - `<widget名>/`：将部署到\[\[Widget:`<widget名>`\]\]。
+      - `(meta).ts`：定义了该widget的信息。
       - `index.ts`：源代码，可以导入其他文件，将被剪枝、构建至单个文件。
 - `scripts/`：开发、构建、部署过程中需要用到的代码；
 - `tools/`：`src`、`scripts`共用的代码。它在`src`中用于定义元数据，例如gadget的`(meta).ts`就导入了其中的模块。
