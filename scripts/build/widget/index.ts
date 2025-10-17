@@ -1,12 +1,11 @@
 import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 
-import { construct, crush, shake } from 'radashi'
-import type { RequiredDeep } from 'type-fest'
+import { rolldown, type RolldownBuild } from 'rolldown'
 
 import { writeBuiltPage } from '@/scripts/utils/page'
 import { getFileInfo } from '@/tools/gadget/file'
-import { defaultWidgetMeta, type WidgetMeta } from '@/tools/widget'
+import type { WidgetMeta } from '@/tools/widget'
 import { getWidgetCode } from './widget-template'
 
 export async function buildWidgets() {
@@ -56,34 +55,42 @@ async function findEntities(dir: string): Promise<
 
 async function buildEntity({ name, path }: { name: string; path: string }) {
 	assert.match(path, /^src\//, '必须使用“src/”开头的路径')
-	assert.match(name, /^[A-Za-z]\w*$/, '不支持的name')
+	assert(isValidWidgetName(name), '不支持的widget名：' + name)
 
-	const inputtedMeta = ((await import(`@/src/widgets/${name}/(meta)`)) as { default: WidgetMeta }).default
+	const meta = ((await import(`@/src/widgets/${name}/(meta)`)) as { default: WidgetMeta }).default
 
-	const meta = construct({
-		...crush(defaultWidgetMeta),
-		...shake(crush(inputtedMeta)),
-	}) as RequiredDeep<WidgetMeta>
+	let bundle: RolldownBuild | undefined
+	try {
+		bundle = await rolldown({
+			input: path,
+			tsconfig: 'src/tsconfig.json',
+			transform: {
+				target: [
+					'edge79', // Edge换用Chromium后的第一个版本
+					'chrome109', // 最后一个支持Windows 7的Chrome版本
+				],
+			},
+			treeshake: true,
+			platform: 'browser',
+		})
 
-	const tempDir = 'widgets'
+		const outputOptions = meta.buildOptions ?? {}
+		outputOptions.minify ??= true
+		const { output } = await bundle.generate(outputOptions)
+		assert.equal(output.length, 1, '应当只有一个chunk生成')
 
-	const outdir = `out/temp/${tempDir}`
-	const fileName = `${name}.js`
-	const result = await Bun.build({
-		entrypoints: [path],
-		format: 'esm',
-		outdir: outdir,
-		target: 'browser',
-		naming: fileName,
-		minify: meta.buildOptions.minify,
-	})
-	assert(result.success, `构建${path}失败`)
+		const widgetContent = getWidgetCode({
+			name,
+			srcPath: path,
+			script: output[0].code,
+			meta,
+		})
+		await writeBuiltPage(`Widget:${name}`, widgetContent)
+	} finally {
+		await bundle?.close()
+	}
+}
 
-	const widgetContent = getWidgetCode({
-		name,
-		srcPath: path,
-		script: await Bun.file(`${outdir}/${fileName}`).text(),
-		meta,
-	})
-	await writeBuiltPage(`Widget:${name}`, widgetContent)
+function isValidWidgetName(name: string): boolean {
+	return /^[a-zA-Z]\w*$/.test(name)
 }

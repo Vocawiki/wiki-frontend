@@ -87,12 +87,17 @@ async function collectGadgetsDefinition(): Promise<GadgetsDefinition> {
  */
 async function collectGadgetsInDir(): Promise<{ name: string; meta: GadgetMeta }[]> {
 	const entries = (await readdir('src/gadgets', { withFileTypes: true })).filter((x) => x.isDirectory())
-	const tasks = entries.map(
-		async ({ name }): Promise<{ name: string; meta: GadgetMeta }> => ({
+	const tasks = entries.map(async ({ name }): Promise<{ name: string; meta: GadgetMeta }> => {
+		assert(isValidGadgetName(name), '无效的gadget名：' + name)
+		return {
 			name,
 			meta: ((await import(`@/src/gadgets/${name}/(meta)`)) as { default: GadgetMeta }).default,
-		}),
-	)
+		}
+	})
 	const gadgetDefinitions = (await Promise.all(tasks)).filter((x) => !x.meta.$draft)
 	return gadgetDefinitions
+}
+
+function isValidGadgetName(name: string): boolean {
+	return /^[a-zA-Z](?:[\w\-.]*[a-zA-Z\d])?$/.test(name)
 }

@@ -1,5 +1,4 @@
 import { escapeHTML } from 'bun'
-import type { RequiredDeep } from 'type-fest'
 
 import type { WidgetMeta } from '@/tools/widget'
 import { noticeForEditors } from '../utils/notice'
@@ -13,7 +12,7 @@ export function getWidgetCode({
 	name: string
 	srcPath: string
 	script: string
-	meta: RequiredDeep<WidgetMeta>
+	meta: WidgetMeta
 }) {
 	const noincludeContent = [meta.description, noticeForEditors(srcPath).join('')].filter((x) => x).join('\n\n')
 	const identifier = `${name}_called`
@@ -21,7 +20,9 @@ export function getWidgetCode({
 	const scriptContent = (isClassicScript ? '"use strict";' : '') + script.trim()
 	const scriptAttributes = Object.entries(meta.script)
 		.map(([k, v]) => {
+			// @ts-expect-error: 未来使用
 			if (v === null || v === false) return null
+			// @ts-expect-error: 未来使用
 			if (v === true) return k
 			return `${k}="${escapeHTML(v)}"`
 		})

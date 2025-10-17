@@ -101,8 +101,8 @@ function deleteUndefinedOrEmptyObject(o: object) {
 		}
 		const type = typeof v
 		if (type === 'object') {
-			deleteUndefinedOrEmptyObject(v)
-			if (Object.entries(v).length === 0) {
+			deleteUndefinedOrEmptyObject(v as object)
+			if (Object.entries(v as object).length === 0) {
 				delete (o as Record<string, any>)[k]
 			}
 		} else if (type === 'undefined') {
