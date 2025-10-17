@@ -56,7 +56,7 @@ async function findEntities(dir: string): Promise<
 
 async function buildEntity({ name, path }: { name: string; path: string }) {
 	assert.match(path, /^src\//, '必须使用“src/”开头的路径')
-	assert.match(name, /^[A-Za-z]\w*$/, '不支持的name')
+	assert(isValidWidgetName(name), '不支持的widget名：' + name)
 
 	const inputtedMeta = ((await import(`@/src/widgets/${name}/(meta)`)) as { default: WidgetMeta }).default
 
@@ -86,4 +86,8 @@ async function buildEntity({ name, path }: { name: string; path: string }) {
 		meta,
 	})
 	await writeBuiltPage(`Widget:${name}`, widgetContent)
+}
+
+function isValidWidgetName(name: string): boolean {
+	return /^[a-zA-Z]\w*$/.test(name)
 }
