@@ -3,7 +3,10 @@
 	"compilerOptions": {
 		"target": "es2018",
 		"module": "es2015",
-		"rootDir": "."
+		"rootDir": ".",
+		"paths": {
+			"~/*": ["./*"]
+		}
 	},
 	"include": ["**/*"],
 	"exclude": ["**/(meta).ts"]

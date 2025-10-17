@@ -16,11 +16,9 @@ export default defineConfig([
 		plugins: { js },
 		extends: ['js/recommended', tseslint.configs.recommendedTypeChecked, tseslint.configs.stylisticTypeChecked],
 		rules: {
-			'@typescript-eslint/no-unused-vars': 'off',
-			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/no-unsafe-argument': 'off',
-			'@typescript-eslint/prefer-regexp-exec': 'off',
-			'@typescript-eslint/consistent-indexed-object-style': 'off',
+			'@typescript-eslint/consistent-type-imports': 'error',
+			'@typescript-eslint/no-inferrable-types': ['error', { ignoreParameters: true }],
+			'@typescript-eslint/no-import-type-side-effects': 'error',
 			'@typescript-eslint/prefer-nullish-coalescing': [
 				'error',
 				{
@@ -30,9 +28,11 @@ export default defineConfig([
 					},
 				},
 			],
-			'@typescript-eslint/no-inferrable-types': ['error', { ignoreParameters: true }],
-			'@typescript-eslint/no-import-type-side-effects': 'error',
-			'@typescript-eslint/consistent-type-imports': 'error',
+			'@typescript-eslint/no-unsafe-argument': 'warn',
+			'@typescript-eslint/no-unused-vars': 'warn',
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/prefer-regexp-exec': 'off',
+			'@typescript-eslint/consistent-indexed-object-style': 'off',
 		},
 	},
 	{

@@ -1,5 +1,7 @@
 import { FastAverageColor } from 'fast-average-color'
 
+import { depend } from '~/snippets/rlq'
+
 interface PageImagesResult {
 	[title: string]: {
 		source: string
@@ -104,7 +106,4 @@ async function applyPageImageOnDOM(pageItems: PageItem[]) {
 	})
 }
 
-// TODO: Bun 的打包器不会转换语法，等换打包器了改成 ??=
-// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-window.RLQ = window.RLQ || []
-window.RLQ.push([['mediawiki.api'], () => applyPageImageOnDOM(getPageItemsAndModifyDOM())])
+depend('mediawiki.api', () => applyPageImageOnDOM(getPageItemsAndModifyDOM()))

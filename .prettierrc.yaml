@@ -28,6 +28,7 @@ importOrder:
   - '<THIRD_PARTY_MODULES>'
   - ''
   - '^@/'
+  - '^~/'
   - '^\.\./'
   - '^\./'
 importOrderTypeScriptVersion: '5.9.2'
