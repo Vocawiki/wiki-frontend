@@ -7,4 +7,5 @@ export default {
 	],
 	withResourceLoader: true,
 	defaultEnabled: true,
+	availableFor: { skins: ['vector', 'vector-2022'] },
 } satisfies GadgetMeta
