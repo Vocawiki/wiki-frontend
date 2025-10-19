@@ -4,7 +4,7 @@
 
 <details>
 
-<summary>如果你没有开发环境</summary>
+<summary>如果你没有开发环境……（点击展开）</summary>
 
 > 以下教程面向的是纯小白，如果你有不同见解，按你的方法做既可。
 
@@ -12,7 +12,7 @@
 
 2. [安装Node.js](https://nodejs.org/zh-cn/download)。
 
-   > Windows用户注意不要被上面的Docker唬住了，下载下面的“Windows 安装程序(.msi)”或“独立文件(.zip)”（后者需要手动设置PATH环境变量）。
+   > Windows用户注意不要被上面的Docker吓住了，下载下面的“Windows 安装程序(.msi)”或“独立文件(.zip)”（后者需要手动设置PATH环境变量）。
 
 3. [安装Visual Studio Code](https://code.visualstudio.com/Download)。
 
@@ -29,6 +29,10 @@
    ```sh
    corepack install
    ```
+
+   即可安装。
+
+   > `corepack`为Node.js自带，若系统未找到该命令，请检查Node.js安装选项，以及是否加入PATH。
 
 </details>
 
@@ -79,11 +83,7 @@
   - `widgets/`：
     - `<widget名>/`：将部署到\[\[Widget:`<widget名>`\]\]。
       - `(meta).ts`：定义了该widget的信息。
-      - `index.ts`：源代码，可以导入其他文件，将被剪枝、构建至单个文件。
-- `scripts/`：开发、构建、部署过程中需要用到的代码；
+      - `index.ts`：源代码，可以导入其他文件，将被打包至单个文件。
+- `scripts/`：开发、构建、部署过程中需要用到的脚本；
 - `tools/`：`src`、`scripts`共用的代码。它在`src`中用于定义元数据，例如gadget的`(meta).ts`就导入了其中的模块。
 - `out/`：输出文件夹，可于此处检查构建后的页面内容。
-
-## TODO
-
-- [ ] 检查两次提交的差异，仅推送差异部分
