@@ -56,3 +56,72 @@ table.navbox th {
 .navbox-odd {
 	background: none repeat scroll 0 0 #fdfdfd;
 }
+
+// 窄屏排版
+@media (max-width: 702px) {
+  .mw-parser-output {
+    .navbox {
+      img {
+        max-width: 100% !important;
+        height: auto !important;
+      }
+
+      width: 100% !important;
+      box-sizing: border-box;
+      overflow-x: hidden;
+
+      tr,
+      td {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+      }
+
+      .navbox-group,
+      .navbox-list {
+        width: auto !important;
+        padding: 0.25em 0.75em;
+        border-left: none !important;
+        box-sizing: border-box;
+      }
+
+      // 顶层 group 居中
+      > tbody > tr > .navbox-group,
+      > tr > .navbox-group {
+        text-align: center !important;
+      }
+
+      // list 内容左对齐
+      .navbox-list {
+        text-align: left !important;
+      }
+
+      // 同行纵向分隔
+      .navbox-group + * {
+        border-top: 2px solid #fdfdfd;
+      }
+
+      // 子层缩进：无论几层都固定 0.5em
+      .navbox-list > .navbox-subgroup,
+      .navbox-list > table.navbox {
+        border-left: 0.5em solid transparent;
+      }
+
+      // 标题块级化
+      .navbox-title {
+        display: block;
+        width: 100% !important;
+        box-sizing: border-box;
+        padding: 0.25em 0.75em;
+      }
+
+      // 防止长串撑宽
+      a,
+      span {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+    }
+  }
+}
