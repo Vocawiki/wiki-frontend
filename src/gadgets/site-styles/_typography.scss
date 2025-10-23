@@ -1,3 +1,41 @@
+:root {
+	--font-main: sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	// 参考：
+	// - GitHub: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, "Liberation Mono", monospace
+	// - Tailwind CSS: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+	// - Bootstrap: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+	// - [Gentle Intro to System Default Monospace Fonts](https://ianyepan.github.io/posts/system-default-monospace-fonts-pt1/)
+	--font-mono:
+		ui-monospace,
+		// macOS 默认，不知道为什么几个框架和网站都把 SFMono-Regular 而不是 SF Mono 排在前面
+		SFMono-Regular,
+		"SF Mono",
+		// 如果装了 JetBrains 系的软件就会被安装
+		"JetBrains Mono",
+		// macOS 旧默认，基于 DejaVu 设计，更现代
+		Menlo,
+		// Android 预装
+		"Roboto Mono",
+		// Linux 预装
+		"DejaVu Sans Mono",
+		// Windows 预装。连字可能会使普通用户困扰，因此不使用 Cascadia Code。字形相比前面几个过于有特色，因此放在后面
+		"Cascadia Mono",
+		// macOS 旧旧默认
+		Monaco,
+		// Windows 默认，但是太老了
+		Consolas,
+		// Linux 预装，字形不现代
+		"Liberation Mono",
+		// Android 默认，但是没 Roboto Mono 现代
+		"Droid Sans Mono",
+		// 老古董
+		"Courier New",
+		// 这里不能带 monospace，因为很多浏览器 monospace 的中文是宋体，很出戏，所以这里用 --font-main。
+		// 但也因此我们需要让前面尽可能多地覆盖用户可能有的字体。
+		var(--font-main);
+	// 如果有 --font-sans 和 --font-serif 的需求，可以在这里加。
+}
+
 pre,
 code,
 textarea,
