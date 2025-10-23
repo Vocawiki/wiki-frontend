@@ -351,3 +351,11 @@ body:not(.main-sm) .infobox {
 	max-width: 100% !important;
 	width: 100% !important;
 }
+
+// 加个VS-15防止变成彩色emoji
+.mw-diff-movedpara-right::after {
+	content: "↩\FE0E";
+}
+.mw-diff-movedpara-left::after {
+	content: "↪\FE0E";
+}
