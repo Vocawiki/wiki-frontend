@@ -12,6 +12,7 @@ export default {
 		'mediawiki.util',
 		'mediawiki.api',
 		'mediawiki.user',
+		'mediawiki.util',
 		'user.options',
 		'mediawiki.jqueryMsg',
 		'ext.gadget.libPolyfill',
