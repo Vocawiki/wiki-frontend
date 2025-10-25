@@ -5,6 +5,7 @@ export default [
 	'Logout-confirm',
 	'Navigation_popups',
 	'ShowAvatar',
+	'UserAvatar',
 	'MarkRights',
 	'Purge',
 	'editCount',
