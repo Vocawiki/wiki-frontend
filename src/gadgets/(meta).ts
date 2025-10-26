@@ -8,6 +8,7 @@ export default [
 	'UserAvatar',
 	'MarkRights',
 	'Purge',
+	'RandomSong',
 	'editCount',
 	'mwPanel',
 	'shortlink',
