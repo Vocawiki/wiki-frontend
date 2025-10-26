@@ -8,6 +8,7 @@ import { toGadgetDefinition, type GadgetMeta } from '@/tools/gadget'
 import { getFileInfo } from '@/tools/gadget/file'
 import { noticeForEditors } from '../utils/notice'
 import { compileSCSS } from './compile-css'
+import { compileJS } from './compile-js'
 import type { GadgetsDefinition, GadgetsDefinitionNode } from './definition'
 
 const GADGET_LIST_META_PATH = 'src/gadgets/(meta).ts'
@@ -22,6 +23,14 @@ export async function buildGadgets() {
 const builders: Record<string, (options: { path: string }) => Promise<{ content: string }>> = {
 	async scss({ path }) {
 		const content = await compileSCSS(path)
+		return { content }
+	},
+	async js({ path }) {
+		const content = await compileJS(path)
+		return { content }
+	},
+	async ts({ path }) {
+		const content = await compileJS(path)
 		return { content }
 	},
 }
