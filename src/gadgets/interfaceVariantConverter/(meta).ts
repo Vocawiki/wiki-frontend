@@ -1,7 +1,7 @@
 import type { GadgetMeta } from '@/tools/gadget/types'
 
 export default {
-	pages: [{ type: 'existing', name: 'interfaceVariantConverter.js' }],
+	pages: [{ type: 'source', entry: 'interfaceVariantConverter.js' }],
 	withResourceLoader: true,
 	defaultEnabled: true,
 	dependencies: [
