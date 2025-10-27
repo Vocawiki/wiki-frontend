@@ -56,7 +56,7 @@ function selectCategory(categories: CategoryData[]): string {
 
 async function main() {
 	const newCategory = selectCategory(await getCategoriesData('按作者国籍分类的歌曲'))
-	document.querySelector('#n-随机歌曲 a')?.setAttribute('href', encodeURI(`Special:RandomInCategory/${newCategory}`))
+	document.querySelector('#n-随机歌曲 a')?.setAttribute('href', `/Special:RandomInCategory/${encodeURI(newCategory)}`)
 }
 
 if (document.readyState === 'loading') {
