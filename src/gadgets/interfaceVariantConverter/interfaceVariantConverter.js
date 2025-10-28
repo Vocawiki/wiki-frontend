@@ -21,7 +21,7 @@
 //     [key: string]: any;
 // };
 /* global mw, $, OO, wgULS, libCachedCode */
-$(() => (async () => {
+$(async () => {
     const pagename = mw.config.get("wgPageName");
     const username = mw.config.get("wgUserName");
     // await mw.loader.using(["mediawiki.api", "oojs-ui"]);
@@ -443,5 +443,5 @@ $(() => (async () => {
         $("#mw-notification-area").appendTo($body);
         windowManager.openWindow(aivcDialog);
     });
-})());
+});
 // </pre>

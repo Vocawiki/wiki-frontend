@@ -21,7 +21,10 @@ export async function compileJS(inputPath: string): Promise<string> {
 	})
 
 	try {
-		const { output } = await bundle.generate({ minify: true })
+		const { output } = await bundle.generate({
+			minify: true,
+			format: 'iife',
+		})
 		if (output.length !== 1) {
 			throw new Error(`Expected exactly one chunk, got ${output.length}`)
 		}
