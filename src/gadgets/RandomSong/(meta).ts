@@ -4,6 +4,6 @@ export default {
 	pages: [{ type: 'source', entry: 'RandomSong.ts' }],
 	withResourceLoader: true,
 	defaultEnabled: true,
-	dependencies: ['mediawiki.api'],
+	dependencies: ['mediawiki.api', 'ext.gadget.site-lib'],
 	type: 'general',
 } satisfies GadgetMeta
