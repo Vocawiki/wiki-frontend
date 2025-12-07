@@ -1,0 +1,38 @@
+$extiw-color: #00af89;
+$extiw-hover-color: #00d7a8;
+$disambig-color: #ef8850;
+$disambig-visited-color: #d27138;
+
+a.extiw:not([href*="voca.wiki"]) {
+	&,
+	&:visited,
+	body.heimu_toggle_on span.heimu &,
+	body.heimu_toggle_on & span.heimu {
+		color: $extiw-color;
+	}
+
+	.heimu:hover &,
+	.heimu:hover &:visited,
+	&:hover .heimu,
+	&:hover:visited .heimu {
+		color: $extiw-hover-color;
+	}
+}
+
+a.mw-disambig {
+	&,
+	body.heimu_toggle_on .heimu &,
+	body.heimu_toggle_on & .heimu,
+	.heimu:hover &,
+	&:hover .heimu {
+		color: $disambig-color;
+	}
+
+	&:visited,
+	body.heimu_toggle_on .heimu &:visited,
+	body.heimu_toggle_on &:visited .heimu,
+	.heimu:hover &:visited,
+	&:visited:hover .heimu {
+		color: $disambig-visited-color;
+	}
+}
