@@ -111,7 +111,9 @@ function deleteUndefinedOrEmptyObject(o: object) {
 	}
 }
 
-export type GadgetsDefinitionNode = { type: 'h2'; text: string } | { type: 'gadget'; name: string; meta: GadgetMeta }
+export type GadgetsDefinitionNode =
+	| { type: 'h2'; text: string }
+	| { type: 'gadget'; name: string; meta: GadgetMeta }
 export type GadgetsDefinition = GadgetsDefinitionNode[]
 
 /**

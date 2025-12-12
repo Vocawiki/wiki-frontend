@@ -12,7 +12,9 @@ export function getWidgetCode({
 	script: string
 	meta: WidgetMeta
 }) {
-	const noincludeContent = [meta.description, noticeForEditors(srcPath).join('')].filter((x) => x).join('\n\n')
+	const noincludeContent = [meta.description, noticeForEditors(srcPath).join('')]
+		.filter((x) => x)
+		.join('\n\n')
 	const identifier = `${name}_called`
 	const isClassicScript = meta.script.type === 'classic'
 	const scriptContent = (isClassicScript ? '"use strict";' : '') + script.trim()

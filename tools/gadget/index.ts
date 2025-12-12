@@ -10,7 +10,10 @@ export type { GadgetMeta } from './types'
 type FilerByValueType<T, V> = {
 	[K in keyof T as T[K] extends V ? K : never]: T[K]
 }
-type GadgetMetaOnlyRootFlags = Omit<FilerByValueType<GadgetMeta, boolean | undefined>, 'supportsUrlLoad'>
+type GadgetMetaOnlyRootFlags = Omit<
+	FilerByValueType<GadgetMeta, boolean | undefined>,
+	'supportsUrlLoad'
+>
 type GadgetMetaOnlyRootLists = FilerByValueType<GadgetMeta, (string | number)[] | undefined>
 type GadgetMetaOnlyRootSingleValues = Simplify<
 	FilerByValueType<GadgetMeta, string | undefined> & Pick<GadgetMeta, 'supportsUrlLoad'>

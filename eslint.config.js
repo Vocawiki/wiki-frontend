@@ -14,7 +14,11 @@ export default defineConfig([
 	{
 		files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 		plugins: { js },
-		extends: ['js/recommended', tseslint.configs.recommendedTypeChecked, tseslint.configs.stylisticTypeChecked],
+		extends: [
+			'js/recommended',
+			tseslint.configs.recommendedTypeChecked,
+			tseslint.configs.stylisticTypeChecked,
+		],
 		rules: {
 			'@typescript-eslint/consistent-type-imports': 'error',
 			'@typescript-eslint/no-inferrable-types': ['error', { ignoreParameters: true }],
@@ -36,7 +40,11 @@ export default defineConfig([
 		},
 	},
 	{
-		files: ['*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', '!(src)/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', 'src/**/(meta).ts'],
+		files: [
+			'*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+			'!(src)/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+			'src/**/(meta).ts',
+		],
 		languageOptions: {
 			parserOptions: {
 				projectService: true,

@@ -27,7 +27,9 @@ async function main() {
 	}
 	const hideAll = ($container: JQuery<HTMLElement>) => {
 		$container
-			.find('.menu-content, .menu-content .menu-popout, .menu-content ul ul, .menu-item .menu-title')
+			.find(
+				'.menu-content, .menu-content .menu-popout, .menu-content ul ul, .menu-item .menu-title',
+			)
 			.removeAttr('style')
 		const status = localObjectStorage.getItem('status', {})
 		status[$container.attr('id')!.trim()] = 'hide'

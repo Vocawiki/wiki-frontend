@@ -1,7 +1,7 @@
 {
 	"name": "vocawiki-frontend",
 	"scripts": {
-		"format": "prettier \"*.{ts,css,scss,json,md}\" \"src/**/*.{ts,css,scss,json,md}\" \"scripts/**/*.{ts,css,scss,json,md}\" --write --log-level warn",
+		"format": "prettier --list-different --write .",
 		"check:type": "bun run ./scripts/check-type",
 		"check:lint": "eslint .",
 		"check": "bun run check:type && bun run check:lint",

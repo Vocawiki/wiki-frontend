@@ -17,7 +17,9 @@ if (contentContainer) {
 
 function observeResize(target: Element) {
 	const bodyClassList = document.body.classList
-	const breakpointsAndNames = breakpoints.map(([breakpoint, name]) => [breakpoint, 'main-' + name] as const)
+	const breakpointsAndNames = breakpoints.map(
+		([breakpoint, name]) => [breakpoint, 'main-' + name] as const,
+	)
 
 	const resizeObserver = new ResizeObserver((entries) => {
 		const { contentBoxSize, contentRect } = entries[0]!

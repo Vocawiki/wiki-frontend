@@ -7,7 +7,12 @@ export default {
 	],
 	withResourceLoader: true,
 	defaultEnabled: true,
-	dependencies: ['ext.gadget.site-lib', 'ext.gadget.libOOUIDialog', 'mediawiki.util', 'mediawiki.api'],
+	dependencies: [
+		'ext.gadget.site-lib',
+		'ext.gadget.libOOUIDialog',
+		'mediawiki.util',
+		'mediawiki.api',
+	],
 	availableFor: { rights: ['delete'], namespaces: [14] },
 	type: 'general',
 } satisfies GadgetMeta

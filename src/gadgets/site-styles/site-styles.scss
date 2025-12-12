@@ -273,7 +273,10 @@ pre {
 		}
 	}
 
-	#wikieditor-toolbar-file-dialog + .ui-dialog-buttonpane > .ui-dialog-buttonset > .ui-button:last-child {
+	#wikieditor-toolbar-file-dialog
+		+ .ui-dialog-buttonpane
+		> .ui-dialog-buttonset
+		> .ui-button:last-child {
 		display: none;
 	}
 

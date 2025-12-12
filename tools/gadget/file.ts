@@ -16,7 +16,9 @@ export function getFileInfo(fileName: string): FileInfo {
 	const extension = match[2]!
 
 	if (!(extension in srcDistExtensionMap)) {
-		throw new RangeError(`不支持的文件扩展名：${extension}，仅支持${Object.keys(srcDistExtensionMap).join(', ')}`)
+		throw new RangeError(
+			`不支持的文件扩展名：${extension}，仅支持${Object.keys(srcDistExtensionMap).join(', ')}`,
+		)
 	}
 	const builtExtension = srcDistExtensionMap[extension as keyof typeof srcDistExtensionMap]
 	return { baseName, extension, builtExtension }

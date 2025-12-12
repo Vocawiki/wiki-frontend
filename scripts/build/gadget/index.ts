@@ -16,7 +16,10 @@ const GADGET_LIST_META_PATH = 'src/gadgets/(meta).ts'
 export async function buildGadgets() {
 	const definition = await collectGadgetsDefinition()
 	const gadgets = definition.filter((x) => x.type === 'gadget')
-	const tasks = [buildGadgetsDefinition(definition), ...gadgets.map((x) => buildGadget(x.name, x.meta))]
+	const tasks = [
+		buildGadgetsDefinition(definition),
+		...gadgets.map((x) => buildGadget(x.name, x.meta)),
+	]
 	await Promise.all(tasks)
 }
 
@@ -44,13 +47,19 @@ async function buildGadget(name: string, meta: GadgetMeta): Promise<void> {
 		const builder = builders[fileInfo.extension]
 		assert(builder, `不支持的文件类型: ${fileInfo.extension}，gadget: ${name}`)
 		const { content } = await builder({ path: join('src/gadgets', name, page.entry) })
-		await writeBuiltPage(`MediaWiki:Gadget-${fileInfo.baseName}.${fileInfo.builtExtension}`, content)
+		await writeBuiltPage(
+			`MediaWiki:Gadget-${fileInfo.baseName}.${fileInfo.builtExtension}`,
+			content,
+		)
 	})
 	await Promise.all(tasks)
 }
 
 async function buildGadgetsDefinition(definitionNodes: GadgetsDefinition) {
-	const noticeNode: GadgetsDefinitionNode = { type: 'h2', text: noticeForEditors(GADGET_LIST_META_PATH).join('') }
+	const noticeNode: GadgetsDefinitionNode = {
+		type: 'h2',
+		text: noticeForEditors(GADGET_LIST_META_PATH).join(''),
+	}
 	const lines = [noticeNode, ...definitionNodes].map((node, index) => {
 		if (node.type === 'h2') {
 			return `${index === 0 ? '' : '\n'}== ${node.text} ==`
@@ -95,7 +104,9 @@ async function collectGadgetsDefinition(): Promise<GadgetsDefinition> {
  * 收集所有 `src/gadgets/<name>/(meta).ts` 定义的 gadget，不包括草稿
  */
 async function collectGadgetsInDir(): Promise<{ name: string; meta: GadgetMeta }[]> {
-	const entries = (await readdir('src/gadgets', { withFileTypes: true })).filter((x) => x.isDirectory())
+	const entries = (await readdir('src/gadgets', { withFileTypes: true })).filter((x) =>
+		x.isDirectory(),
+	)
 	const tasks = entries.map(async ({ name }): Promise<{ name: string; meta: GadgetMeta }> => {
 		assert(isValidGadgetName(name), '无效的gadget名：' + name)
 		return {

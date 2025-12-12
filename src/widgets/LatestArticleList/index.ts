@@ -48,12 +48,16 @@ async function fetchPageImages(titles: string[]): Promise<PageImagesResult> {
 			}[]
 		}
 	}
-	const result = Object.fromEntries(data.query.pages.filter((x) => x.thumbnail).map((x) => [x.title, x.thumbnail!]))
+	const result = Object.fromEntries(
+		data.query.pages.filter((x) => x.thumbnail).map((x) => [x.title, x.thumbnail!]),
+	)
 	return result
 }
 
 function getPageItemsAndModifyDOM(): PageItem[] {
-	const pageItems: PageItem[] = ([...document.querySelectorAll('.latest-article-list li')] as HTMLLIElement[])
+	const pageItems: PageItem[] = (
+		[...document.querySelectorAll('.latest-article-list li')] as HTMLLIElement[]
+	)
 		.map((liElem) => {
 			const anchorElem: HTMLAnchorElement | null = liElem.querySelector('a[href^="/"]')
 			return anchorElem?.title ? { liElem, anchorElem, title: anchorElem.textContent } : null
