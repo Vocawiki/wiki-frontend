@@ -3,6 +3,7 @@
 // 后续由Vocawiki编辑者贡献
 
 @use "variables";
+@use "preflight-class";
 @use "public-utils";
 @use "typography";
 @use "heimu";
@@ -165,12 +166,6 @@ div#simpleSearch button#searchButton {
 .common-box {
 	padding: 0.2em 0.4em;
 	border: 1px solid #ddd;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-khtml-border-radius: 10px;
-	-o-border-radius: 10px;
-	-webkit-box-shadow: #666 0 2px 3px;
-	-moz-box-shadow: #666 0 2px 3px;
 	border-radius: 10px;
 	box-shadow: #666 0 2px 3px;
 }
@@ -271,9 +266,9 @@ pre {
 	> h2 > .mw-headline::after {
 		content: "（请滚动查看，可拖动右下角斜线符号调整高度）";
 
-		html[lang="zh-Hant" i] &,
-		html[lang="zh-HK" i] &,
-		html[lang="zh-TW" i] & {
+		:root:lang(zh-Hant) &,
+		:root:lang(zh-HK) &,
+		:root:lang(zh-TW) & {
 			content: "（請滾動查看，可拖動右下角斜線符號調整高度）";
 		}
 	}
@@ -286,9 +281,9 @@ pre {
 	& > .diff-container + h2 > .mw-headline::after {
 		content: "（由于技术限制，此处为全文版本，请使用 Ctrl+F | ⌘+F 搜索相关差异，可拖动右下角斜线符号调整高度）";
 
-		html[lang="zh-Hant" i] &,
-		html[lang="zh-HK" i] &,
-		html[lang="zh-TW" i] & {
+		:root:lang(zh-Hant) &,
+		:root:lang(zh-HK) &,
+		:root:lang(zh-TW) & {
 			content: "（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）";
 		}
 	}
@@ -318,9 +313,9 @@ pre {
 		overflow: hidden;
 		display: block;
 
-		html[lang="zh-Hant" i] &,
-		html[lang="zh-HK" i],
-		html[lang="zh-TW" i] & {
+		:root:lang(zh-Hant) &,
+		:root:lang(zh-HK) &,
+		:root:lang(zh-TW) & {
 			content: "編輯框（最新修訂）";
 		}
 	}

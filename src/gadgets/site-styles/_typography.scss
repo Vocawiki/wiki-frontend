@@ -1,5 +1,12 @@
+body {
+	font-feature-settings: "locl";
+}
+
 pre,
 code,
+kbd,
+samp,
+tt,
 textarea,
 .CodeMirror,
 [style*="monospace"] {
@@ -7,14 +14,20 @@ textarea,
 	text-spacing-trim: space-all;
 }
 
-input {
+input:where(
+	:not([type]),
+	[type="email"],
+	[type="password"],
+	[type="search"],
+	[type="tel"],
+	[type="text"],
+	[type="url"]
+) {
 	text-spacing-trim: space-all;
 }
 
 span[lang] {
 	font-family: initial;
-	-webkit-font-feature-settings: "locl" on;
-	font-feature-settings: "locl" on;
 }
 
 [style*="font:" i] span[lang],

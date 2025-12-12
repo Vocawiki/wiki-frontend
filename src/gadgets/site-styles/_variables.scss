@@ -1,5 +1,6 @@
 :root {
-	--font-main: sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	--font-main:
+		ui-sans-serif, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 	// 参考：
 	// - GitHub: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, "Liberation Mono", monospace
@@ -14,7 +15,6 @@
 	// - Menlo: macOS 旧默认，基于 DejaVu 设计，更现代
 	// - Roboto Mono: Android 预装
 	// - DejaVu Sans Mono: Linux 预装
-	// - Cascadia Mono: Windows 预装。连字可能会使普通用户困扰，因此不使用 Cascadia Code。字形相比前面几个过于有特色，因此放在后面
 	// - Monaco: macOS 旧旧默认
 	// - Consolas: Windows 默认，字形不现代
 	// - Liberation Mono: Linux 预装，字形不现代
