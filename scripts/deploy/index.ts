@@ -51,7 +51,9 @@ async function getBuiltPages(): Promise<Page[]> {
 async function deployPages(pages: Page[], summary = '推送构建后的代码') {
 	const { DEPLOY_USERNAME: username, DEPLOY_PASSWORD: password } = process.env
 	assert(username && password, '环境变量中需要有用户名和密码')
-	const api = new MediaWikiApi('https://voca.wiki/api.php')
+	const api = new MediaWikiApi({
+		baseURL: 'https://voca.wiki/api.php',
+	})
 	await api.login(username, password)
 
 	for (const page of pages) {
