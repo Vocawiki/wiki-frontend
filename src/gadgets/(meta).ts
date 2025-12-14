@@ -31,6 +31,7 @@ export default [
 	'interfaceVariantConverter',
 	{ type: 'h2', text: 'admin' },
 	'rollback-summary',
+	'MarkAsResolved',
 	'registerToDelete',
 	'CleanDeleteReasons',
 	'deletion',
@@ -42,4 +43,5 @@ export default [
 	'libOOUIDialog',
 	'libPolyfill',
 	'libCachedCode',
+	'libDiscussionUtil',
 ] satisfies GadgetListMeta
