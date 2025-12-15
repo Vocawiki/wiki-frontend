@@ -1,4 +1,4 @@
-@use "utils";
+@use "mixins";
 
 .tab {
 	.TabLabelText {
@@ -14,7 +14,7 @@
 	}
 
 	.TabLabel {
-		@include utils.select-none;
+		@include mixins.select-none;
 		z-index: 2;
 		position: relative;
 		display: flex;

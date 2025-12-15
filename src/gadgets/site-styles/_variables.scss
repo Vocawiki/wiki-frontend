@@ -8,7 +8,7 @@
 	// - Tailwind CSS: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
 	// - Bootstrap: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
 	// - [Gentle Intro to System Default Monospace Fonts](https://ianyepan.github.io/posts/system-default-monospace-fonts-pt1/)
-
+	//
 	// 【不要把下面的注释插入到字体列表里，SCSS 处理 CSS 自定义属性时会保留注释。已经在 d67dffd432a9e03d61f4d8caea7e48e7085e1289 吃过一次亏了】
 	// 字体选用理由：
 	// - SF Mono: macOS 默认，不知道为什么几个框架和网站都把 SFMono-Regular 而不是 SF Mono 排在前面

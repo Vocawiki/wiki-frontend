@@ -1,7 +1,7 @@
-@use "utils";
+@use "mixins";
 
 .select-none {
-	@include utils.select-none;
+	@include mixins.select-none;
 }
 
 .hidden {
@@ -21,4 +21,26 @@
 	clip-path: inset(50%) !important;
 	white-space: nowrap !important;
 	border: 0 !important;
+}
+
+// 变量由各皮肤定义
+.text-xs {
+	font-size: var(--text-xs);
+	line-height: var(--text-xs--line-height);
+}
+.text-sm {
+	font-size: var(--text-sm);
+	line-height: var(--text-sm--line-height);
+}
+.text-base {
+	font-size: var(--text-base);
+	line-height: var(--text-base--line-height);
+}
+.text-lg {
+	font-size: var(--text-lg);
+	line-height: var(--text-lg--line-height);
+}
+.text-xl {
+	font-size: var(--text-xl);
+	line-height: var(--text-xl--line-height);
 }

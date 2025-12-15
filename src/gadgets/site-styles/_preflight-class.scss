@@ -84,7 +84,7 @@
 	kbd,
 	samp,
 	pre {
-		font-family: var(--font-mono);
+		font-family: var(--font-mono); // 1
 		font-feature-settings: "locl"; // 2
 		font-variation-settings: normal; // 3
 		font-size: 1em; // 4
