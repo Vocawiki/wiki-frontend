@@ -12,6 +12,10 @@ const componentHTML = `<div
 	aria-describedby="low-ua-version-alert-desc"
 	style="
 		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1rem;
+		line-height: 1.25;
 		position: fixed;
 		bottom: 0;
 		left: 0;
@@ -20,23 +24,20 @@ const componentHTML = `<div
 		left: env(safe-area-inset-left);
 		right: env(safe-area-inset-right);
 		z-index: 200;
-		align-items: center;
-		justify-content: center;
 		pointer-events: none;
 	"
 >
 	<div
 		style="
+			display: flex;
+			align-items: center;
 			padding: 1rem 0.875rem 1rem 1rem;
-			background-color: #cf2b65;
 			color: #ffffff;
+			background-color: #df185f;
 			pointer-events: auto;
 			border-radius: 0.5rem;
 			margin: 1rem 1rem 2rem;
-			box-shadow: 0 0.25rem 1rem rgba(207, 43, 101, 0.5);
-			line-height: 1.25;
-			display: flex;
-			align-items: center;
+			box-shadow: 0 0.25rem 1rem rgba(223, 24, 95, 0.5);
 		"
 	>
 		<div>
@@ -62,24 +63,22 @@ const componentHTML = `<div
 			aria-label="关闭提示"
 			onclick="document.getElementById('low-ua-version-alert').remove()"
 			style="
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
 				margin-left: 1rem;
 				background-color: #fff;
 				width: 1.25em;
 				height: 1.25em;
-				font-size: 1rem;
-				display: flex;
-				line-height: 1;
 				border-radius: 1em;
-				font-weight: 600;
-				align-items: center;
-				justify-content: center;
 				cursor: pointer;
 			"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
-				stroke="#cf2b65"
+				stroke="#df185f"
 				stroke-width="2.5"
 				stroke-linecap="round"
 				style="width: 1em; height: 1em"
@@ -101,27 +100,27 @@ const componentHTML = `<div
  * - Safari 16.4
  *   https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes
  */
-function doesUAMeetMinimumVersion(): boolean {
-	if (CSS.supports('width', '1lh')) {
+const doesUAMeetMinimumVersion = ((cssSupports): boolean => {
+	if (cssSupports('width', '1lh')) {
 		// Chrome >= 109, Safari >= 16.4, Firefox >= 120
 		return true
 	}
 
-	if (!CSS.supports('animation-composition', 'add')) {
+	if (!cssSupports('animation-composition', 'add')) {
 		// Chrome < 112, Safari < 16.0, Firefox < 115
 		return false
 	}
 	// 16.0 <= Safari < 16.4, 115 <= Firefox < 120
 
-	if (CSS.supports('selector(:dir(ltr))')) {
+	if (cssSupports('selector(:dir(ltr))')) {
 		// Firefox >= 115
 		return true
 	}
 
 	// 16.0 <= Safari < 16.4
 	return false
-}
+})(CSS.supports)
 
-if (!doesUAMeetMinimumVersion()) {
+if (!doesUAMeetMinimumVersion) {
 	document.body.insertAdjacentHTML('beforeend', componentHTML)
 }
