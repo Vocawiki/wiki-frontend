@@ -1,7 +1,7 @@
 /**
  * 这段代码需要单独拿出来，而不能放site-js里。
  * 这是因为如果浏览器版本过低不支持site-js里的语法或函数，
- * 会导致的检测低版本浏览器的代码永远无法被执行，失去了意义。
+ * 会导致检测低版本浏览器的代码永远无法被执行，失去了意义。
  */
 
 const componentHTML = `<div
@@ -33,11 +33,6 @@ const componentHTML = `<div
 			pointer-events: auto;
 			border-radius: 0.5rem;
 			margin: 1rem 1rem 2rem;
-			/**
-			 * 这段代码需要单独拿出来，而不能放site-js里。
-			 * 这是因为如果浏览器版本过低不支持site-js里的语法或函数，
-			 * 会导致的检测低版本浏览器的代码永远无法被执行，失去了意义。
-			 */
 			box-shadow: 0 0.25rem 1rem rgba(207, 43, 101, 0.5);
 			line-height: 1.25;
 			display: flex;
