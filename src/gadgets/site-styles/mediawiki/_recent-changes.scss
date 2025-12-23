@@ -1,0 +1,56 @@
+.newpage {
+	color: var(--color-success, #177860);
+}
+
+.minoredit {
+	color: var(--color-placeholder, #72777d);
+}
+
+.botedit {
+	color: var(--color-warning, #886425);
+}
+
+abbr:is(.newpage, .minoredit, .botedit) {
+	position: relative;
+	border-bottom: 0;
+	text-decoration: none;
+
+	&::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: calc(0.5em / 0.875);
+		max-width: calc(100% - 2px);
+		height: calc(0.0625em / 0.875);
+		transform: translate(-50%, calc(0.5em + 0.125em / 0.875));
+		background-color: currentColor;
+		border-radius: 1em;
+		opacity: 0.5;
+		pointer-events: none;
+	}
+}
+
+td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
+	min-width: calc(4em + 6ch);
+	min-width: calc(4ic + 6ch);
+	text-align: right;
+	position: relative;
+
+	> .newpage {
+		position: absolute;
+		left: 0;
+	}
+
+	> .minoredit {
+		position: absolute;
+		left: 1em;
+		left: 1ic;
+	}
+
+	> .botedit {
+		position: absolute;
+		left: 2em;
+		left: 2ic;
+	}
+}
