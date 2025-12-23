@@ -22,7 +22,7 @@ abbr:is(.newpage, .minoredit, .botedit) {
 		left: 50%;
 		width: calc(0.5em / 0.875);
 		max-width: calc(100% - 2px);
-		height: calc(0.0625em / 0.875);
+		height: calc(0.125em / 0.875);
 		transform: translate(-50%, calc(0.5em + 0.125em / 0.875));
 		background-color: currentColor;
 		border-radius: 1em;
