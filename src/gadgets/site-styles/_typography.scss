@@ -7,13 +7,13 @@ code,
 kbd,
 samp,
 tt,
-textarea,
 .CodeMirror,
 [style*="monospace"] {
 	text-autospace: no-autospace;
 	text-spacing-trim: space-all;
 }
 
+textarea,
 input:where(
 	:not([type]),
 	[type="email"],
