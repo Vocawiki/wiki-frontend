@@ -99,9 +99,15 @@ async function deployPages(
 	}
 
 	const deployFinishedAt = new Date()
+	// eslint-disable-next-line @typescript-eslint/unbound-method
+	const compareTitle = new Intl.Collator('en', { numeric: true }).compare
 	const newDeploymentState = deploymentStateSchema.encode({
 		version: 1,
-		pages: Object.fromEntries(pages.map((page) => [page.title, page.sha])),
+		pages: Object.fromEntries(
+			pages
+				.map((page) => [page.title, page.sha] as const)
+				.toSorted(([titleA], [titleB]) => compareTitle(titleA, titleB)),
+		),
 		commitSHA,
 		runId,
 		deployStartedAt,
