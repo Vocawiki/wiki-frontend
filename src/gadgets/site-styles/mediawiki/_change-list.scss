@@ -7,7 +7,7 @@
 }
 
 .botedit {
-	color: var(--color-warning, #886425);
+	color: var(--color-botedit);
 }
 
 abbr:is(.newpage, .minoredit, .botedit) {
@@ -31,6 +31,7 @@ abbr:is(.newpage, .minoredit, .botedit) {
 	}
 }
 
+// 时机成熟后可以把`:lang(zh), :lang(ja), :lang(ko)`换成`:lang(zh, ja, ko)`
 td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
 	min-width: calc(4em + 6ch);
 	min-width: calc(4ic + 6ch);
@@ -77,4 +78,8 @@ td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
 
 .mw-plusminus-neg {
 	background-color: var(--background-color-destructive-subtle, #ffe9e5);
+}
+
+.mw-changeslist-legend .mw-plusminus-pos {
+	border-radius: var(--border-radius-base, 2px);
 }

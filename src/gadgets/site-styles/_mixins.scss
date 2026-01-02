@@ -4,3 +4,28 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+
+@mixin dark-root {
+	:root.skin-theme-clientpref-night {
+		@content;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root.skin-theme-clientpref-os {
+			@content;
+		}
+	}
+}
+
+// 用:where()是为了尽量减少特异性
+@mixin dark {
+	:where(:root).skin-theme-clientpref-night & {
+		@content;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:where(:root).skin-theme-clientpref-os & {
+			@content;
+		}
+	}
+}

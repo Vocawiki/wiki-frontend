@@ -1,3 +1,5 @@
+@use "mixins";
+
 :root {
 	--font-main:
 		ui-sans-serif, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
@@ -31,4 +33,11 @@
 		var(--font-main);
 
 	// 如果有 --font-sans 和 --font-serif 的需求，可以在这里加。
+
+	// 更改列表中的“机器人编辑”标识颜色
+	--color-botedit: #7e5953;
+}
+
+@include mixins.dark-root {
+	--color-botedit: #ab7167;
 }
