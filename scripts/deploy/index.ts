@@ -87,7 +87,7 @@ async function deployPages(
 		rvlimit: 1,
 	}) // WikiSaikou的泛型坏了，`api.get`的泛型是`T`，返回值里不知道哪来的`T_1`
 	const deploymentState = deploymentStateSchema.parse(
-		result.data.query.pages[0].revisions[0].slots.main.content,
+		JSON.parse(result.data.query.pages[0].revisions[0].slots.main.content),
 	)
 	const deployedPages = deploymentState.pages
 
