@@ -54,3 +54,27 @@ td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
 		left: 2ic;
 	}
 }
+
+.mw-diff-bytes {
+	display: inline-block;
+	background: var(--background-color-neutral, #eaecf0);
+	line-height: 1;
+	padding: 0.125rem 0.25rem;
+	box-sizing: border-box;
+	min-width: 1.25em;
+	text-align: center;
+	border-radius: var(--border-radius-base, 2px); // --border-radius-base是Citizen的，2px是Vector的
+
+	&::before,
+	&::after {
+		content: none;
+	}
+}
+
+.mw-plusminus-pos {
+	background-color: var(--background-color-success-subtle, #dff2eb);
+}
+
+.mw-plusminus-neg {
+	background-color: var(--background-color-destructive-subtle, #ffe9e5);
+}
