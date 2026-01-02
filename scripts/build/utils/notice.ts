@@ -1,6 +1,8 @@
+import { BRANCH_NAME, REPO_URL } from '@/scripts/config'
+
 function sourceFileURL(path: string) {
 	path = path.replaceAll('\\', '/')
-	return `https://github.com/Vocawiki/wiki-frontend/blob/main/${path}`
+	return `${REPO_URL}/blob/${BRANCH_NAME}/${path}`
 }
 
 export function noticeForEditors(path: string): string[] {

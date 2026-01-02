@@ -5,6 +5,7 @@ import { parseArgs } from 'node:util'
 
 import { MediaWikiApi, type FexiosFinalContext, type MwApiResponse } from 'wiki-saikou'
 
+import { REPO_NAME, WIKI_API_URL } from '../config'
 import { getPageTitleFromFileName } from '../utils/page'
 import { deploymentStateSchema } from './types'
 
@@ -43,7 +44,7 @@ if (args.help) {
 interface Page {
 	title: string
 	content: string
-	sha: string
+	sha1: string
 }
 async function deployPages(
 	pages: Page[],
@@ -92,7 +93,7 @@ async function deployPages(
 	const deployedPages = deploymentState.pages
 
 	for (const page of pages) {
-		if (page.sha === deployedPages[page.title]) {
+		if (page.sha1 === deployedPages[page.title]) {
 			continue
 		}
 		await deployPage(api, page, summary)
@@ -105,7 +106,7 @@ async function deployPages(
 		version: 1,
 		pages: Object.fromEntries(
 			pages
-				.map((page) => [page.title, page.sha] as const)
+				.map((page) => [page.title, page.sha1] as const)
 				.toSorted(([titleA], [titleB]) => compareTitle(titleA, titleB)),
 		),
 		commitSHA,
@@ -118,7 +119,9 @@ async function deployPages(
 		action: 'edit',
 		title: 'MediaWiki:Deployment.json',
 		text: JSON.stringify(newDeploymentState, null, 2),
-		summary: `更新部署状态（commit SHA：${commitSHA}${runId ? `；run ID：${runId}` : ''}）`,
+		summary: `更新部署状态（版本：[[git:${REPO_NAME}/commit/${commitSHA}|${commitSHA.slice(0, 7)}]]${
+			runId ? `；本次任务：[[git:${REPO_NAME}/actions/runs/${runId}|${runId}]]` : ''
+		}）`,
 		tags: 'Bot',
 		notminor: true,
 		bot: true,
@@ -130,7 +133,7 @@ async function getAPI() {
 	assert(username && password, '环境变量中需要有用户名和密码')
 
 	const api = new MediaWikiApi({
-		baseURL: 'https://voca.wiki/api.php',
+		baseURL: WIKI_API_URL,
 		defaultParams: { action: 'query', format: 'json', formatversion: 2 },
 		throwOnApiError: true,
 	})
@@ -158,7 +161,7 @@ async function getBuiltPages(): Promise<Page[]> {
 			return {
 				title: pageTitle,
 				content: pageContent,
-				sha: await getPageContentSHA1(pageContent),
+				sha1: await getPageContentSHA1(pageContent),
 			}
 		}),
 	)
