@@ -339,14 +339,18 @@ pre {
 	word-break: break-all;
 	clear: right;
 
+	// TODO: 改为移动端优先设计
 	body:not(.main-sm) & {
 		width: 100% !important;
+		float: none !important;
 	}
 }
 
+// TODO: 改为移动端优先设计
 body:not(.main-sm) .infobox {
 	max-width: 100% !important;
 	width: 100% !important;
+	float: none !important;
 }
 
 // 加个VS-15防止变成彩色emoji
