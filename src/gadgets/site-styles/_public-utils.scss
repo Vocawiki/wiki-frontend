@@ -44,3 +44,11 @@
 	font-size: var(--text-xl);
 	line-height: var(--text-xl--line-height);
 }
+
+.image-pixelated {
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+.image-rendering-auto {
+	image-rendering: auto;
+}
