@@ -12,6 +12,7 @@ export default [
 	'editCount',
 	'mwPanel',
 	'shortlink',
+	'noteTA',
 	{ type: 'h2', text: 'skin' },
 	'sidebarHidden',
 	'colorLinks',
