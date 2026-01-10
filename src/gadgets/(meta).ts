@@ -24,6 +24,7 @@ export default [
 	'Cat-a-lot',
 	'HotCat',
 	'InPageEdit',
+	'InPageEdit-NEXT',
 	'Wikiplus',
 	'Wikiplus-highlight',
 	{ type: 'h2', text: 'interface' },
