@@ -79,7 +79,7 @@ function getSong(): string {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 $(async () => {
-	const $link = $('#n-随机歌曲 a')
+	const $link = $('#n-sidebar-random-song a')
 	if (await updateCache()) {
 		$link.on('mousedown', () => {
 			$link.attr('href', mw.util.getUrl(getSong()))
