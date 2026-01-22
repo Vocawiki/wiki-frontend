@@ -10,7 +10,7 @@ export default {
 	dependencies: [
 		'mediawiki.api',
 		'ext.gadget.site-lib',
-		'query.makeCollapsible',
+		'jquery.makeCollapsible',
 		'mediawiki.Uri',
 		'jquery.ui',
 	],
