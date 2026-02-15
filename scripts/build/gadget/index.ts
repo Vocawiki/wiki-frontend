@@ -79,12 +79,12 @@ async function collectGadgetsDefinition(): Promise<GadgetsDefinition> {
 	const namesInRootMetaButNotInDir = nameSetInRootMeta.difference(nameSetInDir)
 	if (namesInDirButNotInRootMeta.size > 0) {
 		throw new Error(
-			`这些 gadget 没有在\`${GADGET_LIST_META_PATH}\`列出，也未被标记为\`$draft: true\`：${[...namesInDirButNotInRootMeta].join(', ')}`,
+			`这些 gadget 没有在\`${GADGET_LIST_META_PATH}\`列出，也未被标记为\`$draft: true\`：${[...namesInDirButNotInRootMeta].join('、')}`,
 		)
 	}
 	if (namesInRootMetaButNotInDir.size > 0) {
 		throw new Error(
-			`\`${GADGET_LIST_META_PATH}\`所指定的这些 gadget，在文件夹中不存在或被标记为\`$draft: true\`：${[...namesInRootMetaButNotInDir].join(', ')}`,
+			`\`${GADGET_LIST_META_PATH}\`所指定的这些 gadget，在文件夹中不存在或被标记为\`$draft: true\`：${[...namesInRootMetaButNotInDir].join('、')}`,
 		)
 	}
 
