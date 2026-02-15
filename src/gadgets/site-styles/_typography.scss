@@ -8,11 +8,7 @@ kbd,
 samp,
 tt,
 .CodeMirror,
-[style*="monospace"] {
-	text-autospace: no-autospace;
-	text-spacing-trim: space-all;
-}
-
+[style*="monospace"],
 textarea,
 input:where(
 	:not([type]),
@@ -23,6 +19,7 @@ input:where(
 	[type="text"],
 	[type="url"]
 ) {
+	text-autospace: no-autospace;
 	text-spacing-trim: space-all;
 }
 
