@@ -17,7 +17,6 @@ export default [
 	'sidebarHidden',
 	'colorLinks',
 	'SideBarPic',
-	'text-autospace',
 	'text-spacing-trim',
 	'userpagecat',
 	{ type: 'h2', text: 'edit' },
