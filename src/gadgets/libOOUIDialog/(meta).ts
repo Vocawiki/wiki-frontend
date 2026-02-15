@@ -11,6 +11,5 @@ export default {
 		'oojs-ui.styles.icons-alerts',
 	],
 	hidden: true,
-	availableFor: { targets: ['desktop', 'mobile'] },
 	type: 'general',
 } satisfies GadgetMeta

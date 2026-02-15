@@ -6,6 +6,5 @@ export default {
 	defaultEnabled: false,
 	dependencies: ['mediawiki.util'],
 	hidden: true,
-	availableFor: { targets: ['desktop', 'mobile'] },
 	type: 'general',
 } satisfies GadgetMeta

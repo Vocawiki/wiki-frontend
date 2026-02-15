@@ -5,6 +5,5 @@ export default {
 	withResourceLoader: true,
 	defaultEnabled: false,
 	hidden: true,
-	availableFor: { targets: ['desktop', 'mobile'] },
 	type: 'general',
 } satisfies GadgetMeta
