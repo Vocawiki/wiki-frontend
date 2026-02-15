@@ -56,3 +56,10 @@
 - `scripts/`：开发、构建、部署过程中需要用到的脚本；
 - `tools/`：`src`、`scripts`共用的代码。它在`src`中用于定义元数据，例如gadget的`(meta).ts`就导入了其中的模块。
 - `out/`：输出文件夹，可于此处检查构建后的页面内容。
+
+## 浏览器兼容性
+
+开发者需要注意`src`文件夹内的代码须满足Vocawiki规定的浏览器兼容性要求，请查阅[Vocawiki 帮助:浏览器兼容性](Help:浏览器兼容性)。
+
+- JS语法可以使用最新语法，[Rolldown](https://github.com/rolldown/rolldown)会将其转译到兼容的语法。
+- 但是，JS API不会自动polyfill。
