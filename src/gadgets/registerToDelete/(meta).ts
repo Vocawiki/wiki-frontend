@@ -9,7 +9,6 @@ export default {
 		'ext.gadget.libOOUIDialog',
 		'ext.gadget.site-lib',
 		'ext.gadget.LocalObjectStorage',
-		'ext.gadget.libPolyfill',
 	],
 	availableFor: { rights: ['edit'] },
 } satisfies GadgetMeta

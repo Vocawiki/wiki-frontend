@@ -15,7 +15,6 @@ export default {
 		'mediawiki.util',
 		'user.options',
 		'mediawiki.jqueryMsg',
-		'ext.gadget.libPolyfill',
 	],
 	type: 'general',
 } satisfies GadgetMeta

@@ -9,7 +9,6 @@ export default {
 	defaultEnabled: true,
 	dependencies: [
 		'mediawiki.api',
-		'ext.gadget.libPolyfill',
 		'ext.gadget.libOOUIDialog',
 		'ext.gadget.site-lib',
 		'ext.gadget.libDiscussionUtil',

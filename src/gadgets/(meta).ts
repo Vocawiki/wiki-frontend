@@ -42,7 +42,6 @@ export default [
 	'site-styles',
 	'LocalObjectStorage',
 	'libOOUIDialog',
-	'libPolyfill',
 	'libCachedCode',
 	'libDiscussionUtil',
 ] satisfies GadgetListMeta

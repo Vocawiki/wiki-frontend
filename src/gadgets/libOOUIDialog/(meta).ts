@@ -9,7 +9,6 @@ export default {
 		'oojs-ui-widgets',
 		'oojs-ui.styles.indicators',
 		'oojs-ui.styles.icons-alerts',
-		'ext.gadget.libPolyfill',
 	],
 	hidden: true,
 	availableFor: { targets: ['desktop', 'mobile'] },

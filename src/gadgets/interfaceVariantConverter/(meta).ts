@@ -4,13 +4,7 @@ export default {
 	pages: [{ type: 'source', entry: 'interfaceVariantConverter.js' }],
 	withResourceLoader: true,
 	defaultEnabled: true,
-	dependencies: [
-		'mediawiki.api',
-		'mediawiki.ForeignApi',
-		'oojs-ui',
-		'ext.gadget.libPolyfill',
-		'ext.gadget.libCachedCode',
-	],
+	dependencies: ['mediawiki.api', 'mediawiki.ForeignApi', 'oojs-ui', 'ext.gadget.libCachedCode'],
 	availableFor: { rights: ['editinterface'], namespaces: [8] },
 	type: 'general',
 } satisfies GadgetMeta
