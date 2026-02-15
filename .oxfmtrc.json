@@ -1,0 +1,31 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"printWidth": 100,
+	"tabWidth": 2,
+	"useTabs": true,
+	"semi": false,
+	"singleQuote": true,
+	"experimentalSortImports": {
+		// TODO: 更新后使用`newlinesBetween`（见 https://github.com/oxc-project/oxc/pull/19358 ）
+		"groups": [
+			["side-effect"],
+			["builtin"],
+			["external", "type-external"],
+			["internal", "type-internal"],
+			["parent", "type-parent"],
+			["sibling", "type-sibling"],
+			["index", "type-index"]
+		]
+	},
+	"experimentalSortPackageJson": false,
+	"overrides": [
+		{
+			"files": ["*.{css,scss,sass,less}"],
+			"options": {
+				"tabWidth": 4,
+				"singleQuote": false
+			}
+		}
+	],
+	"ignorePatterns": ["pnpm-lock.yaml"]
+}

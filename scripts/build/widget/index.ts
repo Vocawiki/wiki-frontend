@@ -6,6 +6,7 @@ import { rolldown, type RolldownBuild } from 'rolldown'
 import { writeBuiltPage } from '@/scripts/utils/page'
 import { getFileInfo } from '@/tools/gadget/file'
 import type { WidgetMeta } from '@/tools/widget'
+
 import { getWidgetCode } from './widget-template'
 
 export async function buildWidgets() {

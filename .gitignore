@@ -29,7 +29,8 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # editors
 .idea
-.vscode
+.vscode/*
+!.vscode/extensions.json
 
 # Finder (MacOS) folder config
 .DS_Store

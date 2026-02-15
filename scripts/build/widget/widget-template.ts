@@ -1,4 +1,5 @@
 import type { WidgetMeta } from '@/tools/widget'
+
 import { noticeForEditors } from '../utils/notice'
 
 export function getWidgetCode({
