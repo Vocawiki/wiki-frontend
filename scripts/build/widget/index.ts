@@ -64,7 +64,6 @@ async function buildEntity({ name, path }: { name: string; path: string }) {
 	try {
 		bundle = await rolldown({
 			input: path,
-			tsconfig: 'src/tsconfig.json',
 			transform: {
 				target: [
 					'edge79', // Edge换用Chromium后的第一个版本

@@ -1,5 +1,3 @@
-import { join } from 'node:path'
-
 import js from '@eslint/js'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
@@ -38,6 +36,12 @@ export default defineConfig([
 			'@typescript-eslint/prefer-regexp-exec': 'off',
 			'@typescript-eslint/consistent-indexed-object-style': 'off',
 		},
+		languageOptions: {
+			parserOptions: {
+				projectService: true,
+				tsconfigRootDir: import.meta.dirname,
+			},
+		},
 	},
 	{
 		files: [
@@ -46,10 +50,6 @@ export default defineConfig([
 			'src/**/(meta).ts',
 		],
 		languageOptions: {
-			parserOptions: {
-				projectService: true,
-				tsconfigRootDir: import.meta.dirname,
-			},
 			globals: globals.node,
 		},
 	},
@@ -57,10 +57,6 @@ export default defineConfig([
 		files: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 		ignores: ['src/**/(meta).ts'],
 		languageOptions: {
-			parserOptions: {
-				projectService: true,
-				tsconfigRootDir: join(import.meta.dirname, 'src'),
-			},
 			globals: globals.browser,
 		},
 	},

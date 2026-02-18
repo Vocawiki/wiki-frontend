@@ -12,7 +12,6 @@ export async function compileJS(inputPath: string): Promise<string> {
 
 	const bundle = await rolldown({
 		input: inputPath,
-		tsconfig: 'src/tsconfig.json',
 		transform: {
 			target: ['edge79', 'chrome109'],
 		},

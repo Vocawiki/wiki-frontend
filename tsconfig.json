@@ -1,12 +1,11 @@
 {
-	"extends": "./tsconfig.base.json",
-	"compilerOptions": {
-		"target": "esnext",
-		"module": "esnext",
-		"lib": ["ESNext"],
-		"paths": {
-			"@/*": ["./*"]
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		},
+		{
+			"path": "./tsconfig.app.json"
 		}
-	},
-	"include": ["./*", "./lib", "./scripts", "./tools", "./src/**/(meta).ts"]
+	]
 }
