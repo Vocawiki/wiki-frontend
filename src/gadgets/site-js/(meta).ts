@@ -1,7 +1,7 @@
 import type { GadgetMeta } from '@/tools/gadget/types'
 
 export default {
-	pages: [{ type: 'existing', name: 'site-js.js' }],
+	pages: [{ type: 'source', entry: 'site-js.ts' }],
 	withResourceLoader: true,
 	defaultEnabled: true,
 	dependencies: ['ext.gadget.libOOUIDialog', 'user', 'mediawiki.api'],
