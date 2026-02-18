@@ -5,7 +5,6 @@
 // 目前行为：转换为 cn/tw/hk 三个变体，hans=cn，hant=tw，tw≠hk 时才创建 hk
 // NOTE: 原来有hk变体、改完之后没有的话没法删除
 
-'use strict'
 // TODO: Fix MultilineTextInput initial height
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */

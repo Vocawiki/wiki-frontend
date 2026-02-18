@@ -9,8 +9,7 @@ import { getFileInfo } from '@/tools/gadget/file'
 
 import { noticeForEditors } from '../utils/notice'
 
-import { compileSCSS } from './compile-css'
-import { compileJS } from './compile-js'
+import { gadgetBuilders } from './builders'
 import type { GadgetsDefinition, GadgetsDefinitionNode } from './definition'
 
 const GADGET_LIST_META_PATH = 'src/gadgets/(meta).ts'
@@ -25,28 +24,13 @@ export async function buildGadgets() {
 	await Promise.all(tasks)
 }
 
-const builders: Record<string, (options: { path: string }) => Promise<{ content: string }>> = {
-	async scss({ path }) {
-		const content = await compileSCSS(path)
-		return { content }
-	},
-	async js({ path }) {
-		const content = await compileJS(path)
-		return { content }
-	},
-	async ts({ path }) {
-		const content = await compileJS(path)
-		return { content }
-	},
-}
-
 async function buildGadget(name: string, meta: GadgetMeta): Promise<void> {
 	const pages = meta.pages
 	const tasks = pages.map(async (page) => {
 		if (page.type === 'existing') return
 
 		const fileInfo = getFileInfo(page.entry)
-		const builder = builders[fileInfo.extension]
+		const builder = gadgetBuilders[fileInfo.extension]
 		assert(builder, `不支持的文件类型: ${fileInfo.extension}，gadget: ${name}`)
 		const { content } = await builder({ path: join('src/gadgets', name, page.entry) })
 		await writeBuiltPage(

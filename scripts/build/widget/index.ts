@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 
-import { rolldown, type RolldownBuild } from 'rolldown'
-
 import { writeBuiltPage } from '@/scripts/utils/page'
 import { getFileInfo } from '@/tools/gadget/file'
 import type { WidgetMeta } from '@/tools/widget'
+
+import { compileJS } from '../compilers/js-compiler'
 
 import { getWidgetCode } from './widget-template'
 
@@ -60,35 +60,14 @@ async function buildEntity({ name, path }: { name: string; path: string }) {
 
 	const meta = ((await import(`@/src/widgets/${name}/(meta)`)) as { default: WidgetMeta }).default
 
-	let bundle: RolldownBuild | undefined
-	try {
-		bundle = await rolldown({
-			input: path,
-			transform: {
-				target: [
-					'edge79', // Edge换用Chromium后的第一个版本
-					'chrome109', // 最后一个支持Windows 7的Chrome版本
-				],
-			},
-			treeshake: true,
-			platform: 'browser',
-		})
-
-		const outputOptions = meta.buildOptions ?? {}
-		outputOptions.minify ??= true
-		const { output } = await bundle.generate(outputOptions)
-		assert.equal(output.length, 1, '应当只有一个chunk生成')
-
-		const widgetContent = getWidgetCode({
-			name,
-			srcPath: path,
-			script: output[0].code,
-			meta,
-		})
-		await writeBuiltPage(`Widget:${name}`, widgetContent)
-	} finally {
-		await bundle?.close()
-	}
+	const code = await compileJS(path, meta.buildOptions)
+	const widgetContent = getWidgetCode({
+		name,
+		srcPath: path,
+		script: code,
+		meta,
+	})
+	await writeBuiltPage(`Widget:${name}`, widgetContent)
 }
 
 function isValidWidgetName(name: string): boolean {
