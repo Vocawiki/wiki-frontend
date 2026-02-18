@@ -7,7 +7,6 @@ import { MediaWikiApi, type FexiosFinalContext, type MwApiResponse } from 'wiki-
 
 import { REPO_NAME, WIKI_API_URL } from '../config'
 import { getPageTitleFromFileName } from '../utils/page'
-
 import { deploymentStateSchema } from './types'
 
 const DEPLOYMENT_STATE_PAGE_TITLE = 'MediaWiki:Deployment.json'

@@ -6,7 +6,6 @@ import { getFileInfo } from '@/tools/gadget/file'
 import type { WidgetMeta } from '@/tools/widget'
 
 import { compileJS } from '../compilers/js-compiler'
-
 import { getWidgetCode } from './widget-template'
 
 export async function buildWidgets() {

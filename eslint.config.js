@@ -1,4 +1,4 @@
-import js from '@eslint/js'
+import eslint from '@eslint/js'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
@@ -8,15 +8,11 @@ import tseslint from 'typescript-eslint'
 // import markdown from '@eslint/markdown'
 // import pluginReact from 'eslint-plugin-react'
 
-export default defineConfig([
+export default defineConfig(
+	eslint.configs.recommended,
+	tseslint.configs.recommendedTypeChecked,
+	tseslint.configs.stylisticTypeChecked,
 	{
-		files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-		plugins: { js },
-		extends: [
-			'js/recommended',
-			tseslint.configs.recommendedTypeChecked,
-			tseslint.configs.stylisticTypeChecked,
-		],
 		rules: {
 			'@typescript-eslint/consistent-type-imports': 'error',
 			'@typescript-eslint/no-inferrable-types': ['error', { ignoreParameters: true }],
@@ -67,4 +63,4 @@ export default defineConfig([
 	// { files: ['**/*.md'], plugins: { markdown }, language: 'markdown/gfm', extends: ['markdown/recommended'] },
 	// { files: ['**/*.css'], plugins: { css }, language: 'css/css', extends: ['css/recommended'] },
 	globalIgnores(['node_modules/', 'out/']),
-])
+)

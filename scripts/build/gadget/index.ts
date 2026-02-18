@@ -8,7 +8,6 @@ import { toGadgetDefinition, type GadgetMeta } from '@/tools/gadget'
 import { getFileInfo } from '@/tools/gadget/file'
 
 import { noticeForEditors } from '../utils/notice'
-
 import { gadgetBuilders } from './builders'
 import type { GadgetsDefinition, GadgetsDefinitionNode } from './definition'
 

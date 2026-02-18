@@ -6,12 +6,16 @@
 	"semi": false,
 	"singleQuote": true,
 	"experimentalSortImports": {
-		// TODO: 更新后使用`newlinesBetween`（见 https://github.com/oxc-project/oxc/pull/19358 ）
+		"newlinesBetween": false,
 		"groups": [
-			["side-effect"],
+			["side_effect"],
+			{ "newlinesBetween": true },
 			["builtin"],
+			{ "newlinesBetween": true },
 			["external", "type-external"],
+			{ "newlinesBetween": true },
 			["internal", "type-internal"],
+			{ "newlinesBetween": true },
 			["parent", "type-parent"],
 			["sibling", "type-sibling"],
 			["index", "type-index"]
