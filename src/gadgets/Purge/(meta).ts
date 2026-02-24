@@ -1,4 +1,4 @@
-import type { GadgetMeta } from '@/tools/gadget/types'
+import type { GadgetMeta } from '@/tools/gadget'
 
 export default {
 	pages: [{ type: 'existing', name: 'Purge.js' }],

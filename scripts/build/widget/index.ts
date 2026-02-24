@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 
+import { getFileInfo } from '@/scripts/utils/file-info'
 import { writeBuiltPage } from '@/scripts/utils/page'
-import { getFileInfo } from '@/tools/gadget/file'
 import type { WidgetMeta } from '@/tools/widget'
 
 import { compileJS } from '../compilers/js-compiler'
@@ -10,7 +10,7 @@ import { getWidgetCode } from './widget-template'
 
 export async function buildWidgets() {
 	const widgetEntries = await findEntities('src/widgets')
-	await Promise.all(widgetEntries.map((entity) => buildEntity(entity)))
+	await Promise.all(widgetEntries.map((entity) => buildWidget(entity)))
 }
 
 /**
@@ -53,7 +53,7 @@ async function findEntities(dir: string): Promise<
 	return (await Promise.all(tasks)).filter((x) => x !== null)
 }
 
-async function buildEntity({ name, path }: { name: string; path: string }) {
+async function buildWidget({ name, path }: { name: string; path: string }) {
 	assert.match(path, /^src\//, '必须使用“src/”开头的路径')
 	assert(isValidWidgetName(name), '不支持的widget名：' + name)
 

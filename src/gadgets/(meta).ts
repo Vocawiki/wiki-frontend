@@ -1,4 +1,4 @@
-import type { GadgetListMeta } from '@/tools/gadget/types'
+import type { GadgetListMeta } from '@/tools/gadget'
 
 export default [
 	{ type: 'h2', text: 'user' },

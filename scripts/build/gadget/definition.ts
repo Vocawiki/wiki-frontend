@@ -1,144 +1,106 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* AnyScript，启动！ */
-
 import assert from 'node:assert/strict'
 
-import type { NonEmptyTuple } from 'type-fest'
+import type { Simplify } from 'type-fest'
 
 import type { GadgetMeta } from '@/tools/gadget'
 
-/**
- * 解析单个gadget的定义
- * @example
- * ```ts
- * const definition = '* Logout-confirm[ResourceLoader|default|type=general]|Logout-confirm.js'
- * const meta = gadgetMetaFromGadgetDefinition(definition)
- */
-export function parseGadgetDefinition(definition: string): { name: string; meta: GadgetMeta } {
-	const match = definition.match(
-		/^\*\s*(?<name>[A-Za-z][A-Za-z0-9\-_.]*)\s*\[(?<options>.+?)\]\s*\|\s*(?<pages>.+?)\s*$/,
-	)
-	assert(match, `无法解析小工具定义：${definition}`)
-	const groups = match.groups!
-	const gadgetName = groups.name!
-	const gadgetOptions = Object.fromEntries(
-		groups.options!.split(/\s*\|\s*/g).map((s) => {
-			const kvMatch = s.match(/^(.+?)\s*=\s*(.+?)$/)
-			if (kvMatch) {
-				return [kvMatch[1], { type: 'kv', value: kvMatch[2]! }]
-			} else {
-				return [s, { type: 'flag' }]
-			}
-		}),
-	) as Record<string, { type: 'flag' } | { type: 'kv'; value: string }>
-
-	function parseList(optionName: string): string[] | undefined {
-		const value = gadgetOptions[optionName]
-		if (!value) return undefined
-		assert(value.type === 'kv')
-		return value.value.split(/\s*,\s*/g)
-	}
-
-	function parseFlag(optionName: string): true | undefined {
-		const value = gadgetOptions[optionName]
-		if (!value) return undefined
-		assert(value.type === 'flag')
-		return true
-	}
-
-	function parseValue(optionName: string): string | undefined {
-		const value = gadgetOptions[optionName]
-		if (!value) return undefined
-		assert(value.type === 'kv')
-		return value.value
-	}
-
-	const gadgetPages = groups.pages!.split(/\s*\|\s*/g)
-	const meta = {
-		pages: gadgetPages.map((page) => ({
-			type: 'existing',
-			name: page,
-		})) as any,
-		withResourceLoader: parseFlag('ResourceLoader') ?? false,
-		defaultEnabled: parseFlag('default') ?? false,
-		hidden: parseFlag('hidden'),
-		type: parseValue('type') as any,
-		packaged: parseFlag('package'),
-		dependencies: parseList('dependencies'),
-		peers: parseList('peers'),
-		availableFor: {
-			rights: parseList('rights') as any,
-			skins: parseList('skins') as any,
-			actions: parseList('actions') as any,
-			categories: parseList('categories') as any,
-			namespaces: (() => {
-				const strings = parseList('namespaces')
-				if (strings === undefined) return undefined
-				return strings.map((s) => Number.parseInt(s)) as unknown as NonEmptyTuple<number>
-			})(),
-			contentModels: parseList('contentModels') as any,
-			targets: parseList('targets') as any,
-		},
-		codexIcons: parseList('codexIcons'),
-		supportsUrlLoad: (() => {
-			const s = parseValue('supportsUrlLoad')
-			if (s === undefined) return undefined
-			if (s === 'true') return true
-			if (s === 'false') return false
-			throw new Error('选项 `supportsUrlLoad` 的值未知')
-		})(),
-		topLoaded: parseFlag('topLoaded'),
-		requiresES6: parseFlag('requiresES6'),
-	} satisfies GadgetMeta
-	deleteUndefinedOrEmptyObject(meta)
-	return { name: gadgetName, meta }
-}
-
-function deleteUndefinedOrEmptyObject(o: object) {
-	for (const [k, v] of Object.entries(o)) {
-		if (Array.isArray(v)) {
-			continue
-		}
-		const type = typeof v
-		if (type === 'object') {
-			deleteUndefinedOrEmptyObject(v as object)
-			if (Object.entries(v as object).length === 0) {
-				delete (o as Record<string, any>)[k]
-			}
-		} else if (type === 'undefined') {
-			delete (o as Record<string, any>)[k]
-		}
-	}
-}
+import { getGadgetSourceFileInfo } from './file-info'
 
 export type GadgetsDefinitionNode =
 	| { type: 'h2'; text: string }
 	| { type: 'gadget'; name: string; meta: GadgetMeta }
 export type GadgetsDefinition = GadgetsDefinitionNode[]
 
-/**
- * 解析[[MediaWiki:Gadgets-definition]]
- * @param content [[MediaWiki:Gadgets-definition]]中的内容
- * @returns 结构化数据
- */
-export function parseGadgetsDefinition(content: string): GadgetsDefinition {
-	return content
-		.split('\n')
-		.map((line): GadgetsDefinitionNode | null => {
-			if (line.trim() === '') return null // 空白行
+type FilerByValueType<T, V> = {
+	[K in keyof T as T[K] extends V ? K : never]: T[K]
+}
+type GadgetMetaOnlyRootFlags = Omit<
+	FilerByValueType<GadgetMeta, boolean | undefined>,
+	'supportsUrlLoad'
+>
+type GadgetMetaOnlyRootLists = FilerByValueType<GadgetMeta, (string | number)[] | undefined>
+type GadgetMetaOnlyRootSingleValues = Simplify<
+	FilerByValueType<GadgetMeta, string | undefined> & Pick<GadgetMeta, 'supportsUrlLoad'>
+>
 
-			if (line.startsWith('*')) {
-				// 定义行
-				return { type: 'gadget', ...parseGadgetDefinition(line) }
-			}
+export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string {
+	assert.match(gadgetName, /^[A-Za-z][A-Za-z0-9\-_.]*$/, `gadget名不合法：${gadgetName}`)
 
-			const match = line.match(/^==\s*(.+?)\s*==\s*$/)
-			if (match) {
-				// 标题行
-				return { type: 'h2', text: match[1]! }
-			}
+	const options: string[] = []
 
-			throw new Error('无法识别的行：' + line)
+	function flag(name: keyof GadgetMetaOnlyRootFlags): void
+	function flag(name: string, enabled: boolean | undefined): void
+	function flag(name: string, enabled?: boolean): void {
+		if (arguments.length === 1) {
+			enabled = meta[name as keyof GadgetMetaOnlyRootFlags]
+		}
+		if (enabled) {
+			options.push(name)
+		}
+	}
+
+	function list(name: keyof GadgetMetaOnlyRootLists): void
+	function list(name: string, values: readonly (string | number)[] | undefined): void
+	function list(name: string, values?: readonly (string | number)[]): void {
+		if (arguments.length === 1) {
+			values = meta[name as keyof GadgetMetaOnlyRootLists]
+		}
+		if (values === undefined) return
+
+		if (values.length === 0) return
+		const list = values.map((v) => {
+			const str = String(v)
+			assert.doesNotMatch(str, /^\s*$/, `${gadgetName}的meta中，${name}字段出现了空白字符串`)
+			return str
 		})
-		.filter((x) => x !== null)
+
+		options.push(`${name}=${list.join(', ')}`)
+	}
+
+	function value(name: keyof GadgetMetaOnlyRootSingleValues): void
+	function value(name: string, value: string | boolean): void
+	function value(name: string, value?: string | boolean): void {
+		if (arguments.length === 1) {
+			value = meta[name as keyof GadgetMetaOnlyRootSingleValues]
+		}
+		if (value === undefined) return
+
+		const str = String(value)
+		assert.doesNotMatch(str, /^\s*$/, `${gadgetName}的meta中，${name}字段出现了空白字符串`)
+		options.push(`${name}=${value}`)
+	}
+
+	const af = meta.availableFor ?? {}
+
+	// 与 https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Gadgets 顺序保持一致以避免遗漏
+	flag('ResourceLoader', meta.withResourceLoader)
+	list('dependencies')
+	list('rights', af.rights)
+	flag('hidden')
+	list('skins', af.skins)
+	list('actions', af.actions)
+	list('categories', af.categories)
+	list('namespaces', af.namespaces)
+	list('contentModels', af.contentModels)
+	flag('default', meta.defaultEnabled)
+	flag('package', meta.packaged)
+	value('type')
+	list('peers')
+	list('codexIcons')
+	value('supportsUrlLoad')
+	// 被移除的选项就不加了，除非我们还想支持旧版 MediaWiki
+
+	const pages = meta.pages.map((page) => {
+		switch (page.type) {
+			case 'source': {
+				const { baseName, builtExtension } = getGadgetSourceFileInfo(page.entry)
+				return `${baseName}.${builtExtension}`
+			}
+			case 'existing': {
+				return page.name
+			}
+		}
+	})
+
+	return `* ${gadgetName} [${options.join('|')}] | ${pages.join(' | ')}`
 }
