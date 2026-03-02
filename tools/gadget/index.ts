@@ -1,4 +1,4 @@
-import type { NonEmptyTuple, Promisable } from 'type-fest'
+import type { NonEmptyTuple, Promisable, Tagged } from 'type-fest'
 
 /**
  * 用户权限
@@ -119,6 +119,33 @@ export const srcDistExtensionMap = {
 }
 export type GadgetSourceFileExtension = keyof typeof srcDistExtensionMap
 
+interface GetContentsContext {
+	noticeForEditors: (srcPath: string) => string[]
+}
+
+/**
+ * 请勿as此类型，请使用{@linkcode customPages}
+ */
+export type GadgetMetaCustomPages = Tagged<
+	{
+		type: 'custom'
+		names: NonEmptyTuple<string>
+		getContents: (ctx: GetContentsContext) => Promisable<Record<string, string>>
+	},
+	'GadgetMetaCustomPages'
+>
+
+export function customPages<const TNames extends NonEmptyTuple<string>>(
+	names: TNames,
+	getContents: (ctx: GetContentsContext) => Promisable<Record<TNames[number], string>>,
+): GadgetMetaCustomPages {
+	return {
+		type: 'custom',
+		names,
+		getContents,
+	} as unknown as GadgetMetaCustomPages
+}
+
 export type GadgetMetaPage =
 	| {
 			/** 从源文件构建 */
@@ -132,15 +159,7 @@ export type GadgetMetaPage =
 			/** 页面名，“MediaWiki:Gadget-”之后的部分 */
 			name: string
 	  }
-	| {
-			type: 'custom'
-			getPages: (ctx: { noticeForEditors: (srcPath: string) => string[] }) => Promisable<
-				{
-					name: string
-					content: string
-				}[]
-			>
-	  }
+	| GadgetMetaCustomPages
 
 /**
  * @see {@linkplain https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Gadgets Gadgets扩展介绍}

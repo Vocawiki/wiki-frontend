@@ -1,25 +1,22 @@
 import tailwindcss from '@tailwindcss/postcss'
 import postcss from 'postcss'
 
-import type { GadgetMeta } from '@/tools/gadget'
+import { customPages, type GadgetMeta } from '@/tools/gadget'
 
 export default {
 	pages: [
-		{
-			type: 'custom',
-			getPages: async ({ noticeForEditors }) => {
-				const entryDir = 'src/gadgets/site-styles'
-				const entryPath = `${entryDir}/index.css`
-				const css = await runPostCSS(entryPath)
-				const content = `/**
- * ${noticeForEditors(entryPath).join('\n * ')}
+		customPages(['site-styles.css'], async ({ noticeForEditors }) => {
+			const entryDir = 'src/gadgets/site-styles'
+			const entryPath = `${entryDir}/index.css`
+			const css = await runPostCSS(entryPath)
+			const content = `/**
+ * ${noticeForEditors(entryDir).join('\n * ')}
  */
 /* <pre> */
 ${css}
 /* </pre> */`
-				return [{ name: 'site-styles.css', content }]
-			},
-		},
+			return { 'site-styles.css': content }
+		}),
 	],
 	withResourceLoader: true,
 	defaultEnabled: true,

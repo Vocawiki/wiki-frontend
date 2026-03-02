@@ -26,6 +26,22 @@ type GadgetMetaOnlyRootSingleValues = Simplify<
 export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string {
 	assert.match(gadgetName, /^[A-Za-z][A-Za-z0-9\-_.]*$/, `gadget名不合法：${gadgetName}`)
 
+	const pages = meta.pages.flatMap((page) => {
+		switch (page.type) {
+			case 'source': {
+				const { baseName, builtExtension } = getGadgetSourceFileInfo(page.entry)
+				return `${baseName}.${builtExtension}`
+			}
+			case 'existing': {
+				return page.name
+			}
+			case 'custom': {
+				return page.names
+			}
+		}
+	})
+	assert(pages.length > 0, `gadget “${gadgetName}” 必须有至少一个页面`)
+
 	const options: string[] = []
 
 	function flag(name: keyof GadgetMetaOnlyRootFlags): void
@@ -89,18 +105,6 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 	list('codexIcons')
 	value('supportsUrlLoad')
 	// 被移除的选项就不加了，除非我们还想支持旧版 MediaWiki
-
-	const pages = meta.pages.map((page) => {
-		switch (page.type) {
-			case 'source': {
-				const { baseName, builtExtension } = getGadgetSourceFileInfo(page.entry)
-				return `${baseName}.${builtExtension}`
-			}
-			case 'existing': {
-				return page.name
-			}
-		}
-	})
 
 	return `* ${gadgetName} [${options.join('|')}] | ${pages.join(' | ')}`
 }

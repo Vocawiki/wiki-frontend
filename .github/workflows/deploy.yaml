@@ -23,6 +23,8 @@ jobs:
       - name: 检查代码
         run: pnpm run check
       - name: 构建
+        env:
+          NODE_ENV: production
         run: pnpm run build
       - name: 上传制品
         uses: actions/upload-artifact@v6

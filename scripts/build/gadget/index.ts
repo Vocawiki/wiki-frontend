@@ -33,7 +33,8 @@ async function buildGadget(name: string, meta: GadgetMeta): Promise<void> {
 		if (page.type === 'existing') return
 
 		if (page.type === 'custom') {
-			const tasks = (await page.getPages({ noticeForEditors })).map(async ({ name, content }) => {
+			const pages = Object.entries(await page.getContents({ noticeForEditors }))
+			const tasks = pages.map(async ([name, content]) => {
 				await writeBuiltPage(`MediaWiki:Gadget-${name}`, content)
 			})
 			await Promise.all(tasks)
