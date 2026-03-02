@@ -1,16 +1,24 @@
 import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 
+import type { ReactNode } from 'react'
+
 import { getFileInfo } from '@/scripts/utils/file-info'
 import { writeBuiltPage } from '@/scripts/utils/page'
 import type { WidgetMeta } from '@/tools/widget'
 
+import { compileComponent } from '../compilers'
 import { compileJS } from '../compilers/js-compiler'
-import { getWidgetCode } from './widget-template'
+import { toWidgetWikiContent, toScriptWidgetWikiContent } from './widget-template'
 
 export async function buildWidgets() {
-	const widgetEntries = await findEntities('src/widgets')
+	const widgetEntries = await findWidgets('src/widgets')
 	await Promise.all(widgetEntries.map((entity) => buildWidget(entity)))
+}
+
+interface WidgetSourceInfo {
+	widgetName: string
+	entryFile: string
 }
 
 /**
@@ -26,26 +34,15 @@ async function findIndexFile(underDir: string): Promise<string | null> {
 	return null
 }
 
-async function findEntities(dir: string): Promise<
-	{
-		name: string
-		path: string
-	}[]
-> {
+async function findWidgets(dir: string): Promise<WidgetSourceInfo[]> {
 	const tasks = (await readdir(dir, { withFileTypes: true })).map(async (x) => {
-		if (x.isFile()) {
-			return {
-				name: getFileInfo(x.name).baseName,
-				path: `${x.parentPath}/${x.name}`,
-			}
-		}
 		if (x.isDirectory()) {
 			const dir = `${x.parentPath}/${x.name}`
 			const indexFileName = await findIndexFile(dir)
 			if (indexFileName === null) return null
 			return {
-				name: x.name,
-				path: `${dir}/${indexFileName}`,
+				widgetName: x.name,
+				entryFile: indexFileName,
 			}
 		}
 		return null
@@ -53,22 +50,43 @@ async function findEntities(dir: string): Promise<
 	return (await Promise.all(tasks)).filter((x) => x !== null)
 }
 
-async function buildWidget({ name, path }: { name: string; path: string }) {
-	assert.match(path, /^src\//, '必须使用“src/”开头的路径')
-	assert(isValidWidgetName(name), '不支持的widget名：' + name)
+async function buildWidget({ widgetName, entryFile }: WidgetSourceInfo) {
+	const meta = ((await import(`~/widgets/${widgetName}/(meta)`)) as { default: WidgetMeta }).default
 
-	const meta = ((await import(`@/src/widgets/${name}/(meta)`)) as { default: WidgetMeta }).default
+	let widgetContent: string
 
-	const code = await compileJS(path, meta.buildOptions)
-	const widgetContent = getWidgetCode({
-		name,
-		srcPath: path,
-		script: code,
-		meta,
-	})
-	await writeBuiltPage(`Widget:${name}`, widgetContent)
+	switch (meta.type) {
+		case 'script': {
+			assert(isValidScriptWidgetName(widgetName), 'script模式不支持的widget名：' + widgetName)
+			const code = await compileJS(`src/widgets/${widgetName}/${entryFile}`, meta.buildOptions)
+			widgetContent = toScriptWidgetWikiContent({
+				widgetName,
+				script: code,
+				meta,
+			})
+			break
+		}
+		case 'component': {
+			const Component = (
+				(await import(`~/widgets/${widgetName}/${entryFile}`)) as { default: () => ReactNode }
+			).default
+			const html = await compileComponent(Component())
+			widgetContent = toWidgetWikiContent({
+				widgetName,
+				content: html,
+				meta,
+			})
+			break
+		}
+	}
+
+	await writeBuiltPage(`Widget:${widgetName}`, widgetContent)
 }
 
-function isValidWidgetName(name: string): boolean {
+/**
+ * widget名称用于定义“只嵌入一次”的变量。
+ * 我也不知道具体命名限制，懒得试，写保守点免得遇到问题
+ */
+function isValidScriptWidgetName(name: string): boolean {
 	return /^[a-zA-Z]\w*$/.test(name)
 }

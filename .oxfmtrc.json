@@ -22,6 +22,7 @@
 		]
 	},
 	"experimentalSortPackageJson": false,
+	"sortTailwindcss": { "stylesheet": "./src/gadgets/site-styles/index.css" },
 	"overrides": [
 		{
 			"files": ["*.{css,scss,sass,less}"],

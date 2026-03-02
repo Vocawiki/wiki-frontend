@@ -57,8 +57,8 @@ table.navbox th {
 	background: none repeat scroll 0 0 #fdfdfd;
 }
 
-// 窄屏排版
-// TODO: 有些嵌套是非必要的
+/* 窄屏排版 */
+/* TODO: 有些嵌套是非必要的 */
 body:not(.main-sm) {
 	.navbox {
 		width: 100% !important;
@@ -86,29 +86,29 @@ body:not(.main-sm) {
 			box-sizing: border-box;
 		}
 
-		// 顶层 group 居中
+		/* 顶层 group 居中 */
 		> tbody > tr > .navbox-group,
 		> tr > .navbox-group {
 			text-align: center !important;
 		}
 
-		// list 内容左对齐
+		/* list 内容左对齐 */
 		.navbox-list {
 			text-align: left !important;
 
-			// 子层缩进：无论几层都固定 0.5em
+			/* 子层缩进：无论几层都固定 0.5em */
 			> .navbox-subgroup,
 			> table.navbox {
 				border-left: 0.5em solid transparent;
 			}
 		}
 
-		// 同行纵向分隔
+		/* 同行纵向分隔 */
 		.navbox-group + * {
 			border-top: 2px solid #fdfdfd;
 		}
 
-		// 标题块级化
+		/* 标题块级化 */
 		.navbox-title {
 			display: block;
 			width: 100% !important;
@@ -116,7 +116,7 @@ body:not(.main-sm) {
 			padding: 0.25em 0.75em;
 		}
 
-		// 防止长串撑宽
+		/* 防止长串撑宽 */
 		a,
 		span {
 			overflow-wrap: anywhere;

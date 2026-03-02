@@ -32,6 +32,14 @@ async function buildGadget(name: string, meta: GadgetMeta): Promise<void> {
 	const tasks = pages.map(async (page) => {
 		if (page.type === 'existing') return
 
+		if (page.type === 'custom') {
+			const tasks = (await page.getPages({ noticeForEditors })).map(async ({ name, content }) => {
+				await writeBuiltPage(`MediaWiki:Gadget-${name}`, content)
+			})
+			await Promise.all(tasks)
+			return
+		}
+
 		const fileInfo = getGadgetSourceFileInfo(page.entry)
 		const builder = gadgetBuilders[fileInfo.extension]
 		assert(builder, `不支持的文件类型: ${fileInfo.extension}，gadget: ${name}`)

@@ -1,5 +1,3 @@
-@use "mixins";
-
 .tab {
 	.TabLabelText {
 		padding: 1px;
@@ -14,7 +12,7 @@
 	}
 
 	.TabLabel {
-		@include mixins.select-none;
+		@apply select-none;
 		z-index: 2;
 		position: relative;
 		display: flex;

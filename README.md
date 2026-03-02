@@ -4,7 +4,7 @@
 
 > [!TIP]
 >
-> 如果你没有开发环境，请查阅[准备开发环境](docs/准备开发环境.md)。
+> 如果你刚入门，没有开发环境，请查阅[准备开发环境](docs/准备开发环境.md)。
 
 1. 安装依赖：
 
@@ -12,9 +12,56 @@
    pnpm i
    ```
 
-2. 修改代码。
+2. 如果你使用VS Code（不使用则可跳过，不认可以下内容也可跳过）：
+   1. 进入工作区后会有通知推荐你安装以下扩展：ESLint、Oxc、Tailwind CSS IntelliSense，建议安装。
 
-3. 执行提交前的任务，确保没有报错：
+   2. 将以下内容加入`.vscode/settings.json`（不存在则创建）中：
+      ```jsonc
+      {
+      	"files.associations": {
+      		"**/site-styles/**/*.css": "tailwindcss",
+      		"*.css.txt": "css",
+      		"*.js.txt": "javascript",
+      	},
+      	"[html]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[css]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[scss]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[tailwindcss]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[javascript]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[javascriptreact]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[typescript]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[typescriptreact]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[markdown]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[json]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      	"[jsonc]": {
+      		"editor.defaultFormatter": "oxc.oxc-vscode",
+      	},
+      }
+      ```
+      [理论上](https://code.visualstudio.com/docs/configure/settings#_multiple-languagespecific-editor-settings)上面的语言键是可以合并的，比如`"[javascript][typescript]": { ... }`，但目前合并了没法生效。
+
+3. 修改源代码。
+4. 执行提交前的任务，确保没有报错：
 
    ```sh
    pnpm run before-commit
@@ -39,7 +86,7 @@
       pnpm run build
       ```
 
-4. 提交、推送代码。提交前需确保完成第3步。
+5. 提交、推送代码。提交前需确保完成第4步。
 
 ## 项目结构
 
@@ -62,4 +109,10 @@
 开发者需要注意`src`文件夹内的代码须满足Vocawiki规定的浏览器兼容性要求，请查阅[Vocawiki 帮助:浏览器兼容性](Help:浏览器兼容性)。
 
 - JS语法可以使用最新语法，[Rolldown](https://github.com/rolldown/rolldown)会将其转译到兼容的语法。
-- 但是，JS API不会自动polyfill。
+- 但是，JS API不行，不会自动polyfill。
+
+## 问答
+
+### 为什么要用tab缩进？
+
+每个人喜好的缩进长度不同，正经的编辑器都可以设置tab宽度，使用tab缩进使得你能够将缩进设成你喜欢的宽度——用空格缩进则没法在不修改源代码的情况下做到。

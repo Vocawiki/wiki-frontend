@@ -5,6 +5,6 @@ export default {
 
 * 作者：[[zhmoe:User:Maverick|maverick]]
 * 修订：[[zhmoe:User:Boxsnake|boxsnake]]`,
-	script: { type: 'module' },
-	buildOptions: { minify: false },
+	type: 'script',
+	scriptType: 'module',
 } satisfies WidgetMeta

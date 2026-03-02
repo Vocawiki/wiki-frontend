@@ -5,8 +5,9 @@
 		"module": "esnext",
 		"lib": ["ESNext"],
 		"paths": {
-			"@/*": ["./*"]
+			"@/*": ["./*"],
+			"~/*": ["./src/*"]
 		}
 	},
-	"include": ["./*", "./lib", "./scripts", "./tools", "./src/**/(meta).ts"]
+	"include": ["./*", "./lib", "./scripts", "./tools", "./src/**/(meta).ts", "./src/**/*.tsx"]
 }

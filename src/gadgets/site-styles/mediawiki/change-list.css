@@ -31,7 +31,7 @@ abbr:is(.newpage, .minoredit, .botedit) {
 	}
 }
 
-// 时机成熟后可以把`:lang(zh), :lang(ja), :lang(ko)`换成`:lang(zh, ja, ko)`
+/* 时机成熟后可以把`:lang(zh), :lang(ja), :lang(ko)`换成`:lang(zh, ja, ko)` */
 td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
 	min-width: calc(4em + 6ch);
 	min-width: calc(4ic + 6ch);
@@ -64,7 +64,10 @@ td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
 	box-sizing: border-box;
 	min-width: 1.25em;
 	text-align: center;
-	border-radius: var(--border-radius-base, 2px); // --border-radius-base是Citizen的，2px是Vector的
+	border-radius: var(
+		--border-radius-base,
+		2px
+	); /* --border-radius-base是Citizen的，2px是Vector的 */
 
 	&::before,
 	&::after {

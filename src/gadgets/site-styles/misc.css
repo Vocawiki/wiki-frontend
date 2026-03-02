@@ -1,20 +1,5 @@
-// 最初源自 https://zh.moegirl.org.cn/MediaWiki:Gadget-site-styles.css
-// 版权协定：CC BY-NC-SA 3.0
-// 后续由Vocawiki编辑者贡献
-
-@use "variables";
-@use "preflight-class";
-@use "public-utils";
-@use "typography";
-@use "mediawiki/change-list";
-@use "heimu";
-@use "tabs";
-@use "ruby";
-@use "columns";
-@use "navbox";
-
 .sidebar-character,
-// 语言选择下拉框的zh-Hans、zh-Hant等
+/* 语言选择下拉框的zh-Hans、zh-Hant等 */
 #ca-varlang-0,
 #ca-varlang-1,
 #ca-varlang-2 {
@@ -26,12 +11,12 @@
 .suppress-show,
 .sysop-show,
 .interface-admin-show,
-// 用户页分类
+/* 用户页分类 */
 body.ns-2 div#catlinks {
 	display: none !important;
 }
 
-// T:注解
+/* T:注解 */
 .annotation {
 	> span {
 		cursor: pointer;
@@ -95,10 +80,6 @@ body .ajaxpoll {
 	min-width: 400px;
 }
 
-.skin-vector-2022 #firstHeading {
-	font-weight: 500;
-	padding-left: 0.25em;
-}
 div#simpleSearch button#searchButton {
 	padding-top: 0.1em;
 	padding-bottom: 0.2em;
@@ -217,13 +198,13 @@ pre {
 	}
 }
 
-// 注释里的列表
+/* 注释里的列表 */
 .reference-text > ul.listInRef,
 .reference-text > ol.listInRef {
 	margin: -1.5em 0 0 2em;
 }
 
-// wikitable 的 caption
+/* wikitable 的 caption */
 .wikitable.mw-collapsible {
 	caption {
 		border: 1px solid rgb(170 170 170 / 37%);
@@ -235,12 +216,12 @@ pre {
 	}
 }
 
-// 分类页同组页面不被拆分成两栏
+/* 分类页同组页面不被拆分成两栏 */
 .mw-category-group {
 	-moz-column-break-inside: avoid;
 	break-inside: avoid;
 
-	// 只有一个或两个列表时
+	/* 只有一个或两个列表时 */
 	&:only-child:last-child,
 	&:first-child:nth-last-child(2),
 	&:nth-child(2):last-child {
@@ -249,7 +230,7 @@ pre {
 	}
 }
 
-// 编辑冲突界面排版
+/* 编辑冲突界面排版 */
 .mw-explainconflict ~ #editform {
 	display: flex;
 	flex-direction: column;
@@ -339,31 +320,26 @@ pre {
 	word-break: break-all;
 	clear: right;
 
-	// TODO: 改为移动端优先设计
+	/* TODO: 改为移动端优先设计 */
 	body:not(.main-sm) & {
 		width: 100% !important;
 		float: none !important;
 	}
 }
 
-// TODO: 改为移动端优先设计
+/* TODO: 改为移动端优先设计 */
 body:not(.main-sm) .infobox {
 	max-width: 100% !important;
 	width: 100% !important;
 	float: none !important;
 }
 
-// 加个VS-15防止变成彩色emoji
+/* 加个VS-15防止变成彩色emoji */
 .mw-diff-movedpara-right::after {
 	content: "↩\FE0E";
 }
 .mw-diff-movedpara-left::after {
 	content: "↪\FE0E";
-}
-
-// 不知道为什么竖线不见了
-.mw-content-container .mw-editsection .mw-editsection-divider {
-	display: revert;
 }
 
 .comment-avatar img {

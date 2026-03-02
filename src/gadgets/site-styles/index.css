@@ -1,0 +1,126 @@
+/**
+ * 初始版本源自<https://zh.moegirl.org.cn/MediaWiki:Gadget-site-styles.css>（CC BY-NC-SA 3.0，作者见该页面历史）
+ * 后需版本由Vocawiki编辑者贡献
+ */
+
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@source not inline("container");
+/* [[Help:CSS工具类、变量]]中明确提及的 */
+@source inline(
+	"select-none hidden font-main font-mono text-xs text-sm text-base text-lg text-xl visually-hidden image-pixelated image-rendering-auto"
+);
+
+@custom-variant dark {
+	&:where(:root.skin-theme-clientpref-night, :root.skin-theme-clientpref-night *) {
+		@slot;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		&:where(:root.skin-theme-clientpref-os, :root.skin-theme-clientpref-os *) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant main-sm (&:where(body.main-sm *));
+@custom-variant main-md (&:where(body.main-md *));
+@custom-variant main-lg (&:where(body.main-lg *));
+@custom-variant main-xl (&:where(body.main-xl *));
+@custom-variant main-2xl (&:where(body.main-2xl *));
+
+@theme {
+	/* 下面两个暂时没需要 */
+	--font-sans: initial;
+	--font-serif: initial;
+	--font-main:
+		ui-sans-serif, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji";
+	/**
+	 * 参考：
+	 * - GitHub: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, "Liberation Mono", monospace
+	 * - Tailwind CSS: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+	 * - Bootstrap: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+	 * - [Gentle Intro to System Default Monospace Fonts](https://ianyepan.github.io/posts/system-default-monospace-fonts-pt1/)
+	 *
+	 * 字体选用理由：
+	 * - SF Mono: macOS 默认，不知道为什么几个框架和网站都把 SFMono-Regular 而不是 SF Mono 排在前面
+	 * - JetBrains Mono: 如果装了 JetBrains 系的软件就会被安装
+	 * - Menlo: macOS 旧默认，基于 DejaVu 设计，更现代
+	 * - Roboto Mono: Android 预装
+	 * - DejaVu Sans Mono: Linux 预装
+	 * - Monaco: macOS 旧旧默认
+	 * - Consolas: Windows 默认，字形不现代
+	 * - Liberation Mono: Linux 预装，字形不现代
+	 * - Droid Sans Mono: Android 默认，但是没 Roboto Mono 现代
+	 * - Courier New: 老古董
+	 * - 最后不能是 monospace，因为很多浏览器 monospace 的中文是宋体，很出戏，所以这里用 --font-main，但因此我们需要让前面尽可能多地覆盖用户可能有的字体。
+	 * 不选用的字体：
+	 * - Cascadia Code/Mono: Windows 预装，但是太粗了，和中文不搭。
+	 */
+	--font-mono:
+		ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, "Roboto Mono",
+		"DejaVu Sans Mono", Monaco, Consolas, "Liberation Mono", "Droid Sans Mono", "Courier New",
+		var(--font-main);
+	/* 这两个preflight要用 */
+	--default-font-family: var(--font-main);
+	--default-font-feature-settings: "locl";
+}
+
+:root {
+	font-feature-settings: var(--default-font-feature-settings);
+
+	/* 更改列表中的“机器人编辑”标识颜色 */
+	--color-botedit: #7e5953;
+	@apply dark:[--color-botedit:#ab7167];
+}
+
+@layer base {
+	.preflight {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		border: 0 solid;
+
+		@import "tailwindcss/preflight.css";
+	}
+}
+
+@layer components {
+	.test {
+		@apply font-main;
+	}
+}
+
+/* from https://github.com/twbs/bootstrap/blob/cb021439c683d9805e2864c58095b92d405e9b11/scss/mixins/_visually-hidden.scss */
+@utility visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+@utility image-pixelated {
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+@utility image-rendering-auto {
+	image-rendering: auto;
+}
+
+@import "./typography.css";
+@import "./mediawiki/change-list.css";
+@import "./heimu.css";
+@import "./tabs.css";
+@import "./ruby.css";
+@import "./columns.css";
+@import "./navbox.css";
+@import "./misc.css";

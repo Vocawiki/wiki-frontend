@@ -1,4 +1,4 @@
 {
-	"recommendations": ["dbaeumer.vscode-eslint", "oxc.oxc-vscode"],
+	"recommendations": ["dbaeumer.vscode-eslint", "oxc.oxc-vscode", "bradlc.vscode-tailwindcss"],
 	"unwantedRecommendations": ["esbenp.prettier-vscode"]
 }

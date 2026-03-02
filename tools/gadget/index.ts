@@ -1,4 +1,4 @@
-import type { NonEmptyTuple } from 'type-fest'
+import type { NonEmptyTuple, Promisable } from 'type-fest'
 
 /**
  * 用户权限
@@ -131,6 +131,15 @@ export type GadgetMetaPage =
 			type: 'existing'
 			/** 页面名，“MediaWiki:Gadget-”之后的部分 */
 			name: string
+	  }
+	| {
+			type: 'custom'
+			getPages: (ctx: { noticeForEditors: (srcPath: string) => string[] }) => Promisable<
+				{
+					name: string
+					content: string
+				}[]
+			>
 	  }
 
 /**
