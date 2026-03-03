@@ -76,15 +76,13 @@
 	@apply dark:[--color-botedit:#ab7167];
 }
 
-@layer base {
-	.preflight {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
-		border: 0 solid;
+.preflight {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: 0 solid;
 
-		@import "tailwindcss/preflight.css";
-	}
+	@import "tailwindcss/preflight.css";
 }
 
 @layer components {
@@ -95,17 +93,7 @@
 
 /* from https://github.com/twbs/bootstrap/blob/cb021439c683d9805e2864c58095b92d405e9b11/scss/mixins/_visually-hidden.scss */
 @utility visually-hidden {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	-webkit-clip-path: inset(50%);
-	clip-path: inset(50%);
-	white-space: nowrap;
-	border: 0;
+	@apply sr-only;
 }
 
 @utility image-pixelated {
@@ -114,6 +102,10 @@
 }
 @utility image-rendering-auto {
 	image-rendering: auto;
+}
+
+@utility flex-center {
+	@apply flex items-center justify-center;
 }
 
 @import "./typography.css";

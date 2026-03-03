@@ -22,7 +22,10 @@
 		]
 	},
 	"experimentalSortPackageJson": false,
-	"sortTailwindcss": { "stylesheet": "./src/gadgets/site-styles/index.css" },
+	"sortTailwindcss": {
+		"stylesheet": "./src/gadgets/site-styles/index.css",
+		"functions": ["cn", "cva"]
+	},
 	"overrides": [
 		{
 			"files": ["*.{css,scss,sass,less}"],
