@@ -5,11 +5,14 @@ export default {
 		{
 			type: 'source',
 			entry: 'index.css',
-			outputName: 'site-styles.css',
+			outputName: 'citizen.css',
 		},
 	],
 	withResourceLoader: false,
 	defaultEnabled: true,
 	hidden: true,
 	type: 'styles',
+	availableFor: {
+		skins: ['citizen'],
+	},
 } satisfies GadgetMeta

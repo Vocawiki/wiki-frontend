@@ -29,6 +29,9 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 	const pages = meta.pages.flatMap((page) => {
 		switch (page.type) {
 			case 'source': {
+				if (page.outputName) {
+					return page.outputName
+				}
 				const { baseName, builtExtension } = getGadgetSourceFileInfo(page.entry)
 				return `${baseName}.${builtExtension}`
 			}

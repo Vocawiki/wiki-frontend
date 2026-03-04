@@ -45,10 +45,8 @@ async function buildGadget(name: string, meta: GadgetMeta): Promise<void> {
 		const builder = gadgetBuilders[fileInfo.extension]
 		assert(builder, `不支持的文件类型: ${fileInfo.extension}，gadget: ${name}`)
 		const { content } = await builder({ path: join('src/gadgets', name, page.entry) })
-		await writeBuiltPage(
-			`MediaWiki:Gadget-${fileInfo.baseName}.${fileInfo.builtExtension}`,
-			content,
-		)
+		const outputName = page.outputName ?? `${fileInfo.baseName}.${fileInfo.builtExtension}`
+		await writeBuiltPage(`MediaWiki:Gadget-${outputName}`, content)
 	})
 	await Promise.all(tasks)
 }

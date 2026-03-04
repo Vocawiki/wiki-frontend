@@ -112,8 +112,10 @@ export type PageAction =
 	| 'info'
 	| 'revisiondelete'
 
+export type Skin = 'citizen' | 'vector' | 'vector-2022'
+
 export const srcDistExtensionMap = {
-	scss: 'css',
+	css: 'css',
 	ts: 'js',
 	js: 'js',
 }
@@ -150,8 +152,13 @@ export type GadgetMetaPage =
 	| {
 			/** 从源文件构建 */
 			type: 'source'
-			/** 源文件名，构建后将输出到[[MediaWiki:Gadget-<file_name>.<ext>]]中 */
+			/** 源文件名 */
 			entry: `${string}.${GadgetSourceFileExtension}`
+			/**
+			 * 输出文件名，构建后将部署到[[MediaWiki:Gadget-${outputName}]]中
+			 * @default "(与entry相同，但是后缀为构建后的后缀)"
+			 */
+			outputName?: string
 	  }
 	| {
 			/** 直接使用现有的 MediaWiki 页面 */
@@ -216,7 +223,7 @@ export interface GadgetMeta {
 		/**
 		 * 仅对使用指定皮肤的用户启用小工具（并在参数设置中可见）
 		 */
-		skins?: NonEmptyTuple<string>
+		skins?: NonEmptyTuple<Skin>
 		/**
 		 * 仅在指定的页面操作中可用
 		 * @example ['edit', 'history'] // 仅在编辑页面和历史记录页面上加载小工具

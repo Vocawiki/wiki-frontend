@@ -84,5 +84,5 @@ td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
 }
 
 .mw-changeslist-legend .mw-plusminus-pos {
-	border-radius: var(--border-radius-base, 2px);
+	@apply rounded-sm;
 }

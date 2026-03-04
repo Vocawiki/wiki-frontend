@@ -1,0 +1,84 @@
+@layer theme {
+	:root,
+	:host {
+		--text-base: var(--font-size-medium, 1rem);
+		--text-base--line-height: var(--line-height-content);
+		--text-xs: calc(var(--text-base) * 0.75);
+		--text-xs--line-height: calc(1 / 0.75);
+		--text-sm: calc(var(--text-base) * 0.875);
+		--text-sm--line-height: calc(1.25 / 0.875);
+		--text-lg: calc(var(--text-base) * 1.125);
+		--text-lg--line-height: calc(1.75 / 1.125);
+		--text-xl: calc(var(--text-base) * 1.25);
+		--text-xl--line-height: calc(1.75 / 1.25);
+
+		--radius-xs: 2px;
+		--radius-sm: 2px;
+		--radius-md: 2px;
+		--radius-container: 0px;
+	}
+}
+
+html,
+body {
+	@apply font-main;
+}
+
+body {
+	text-autospace: normal;
+}
+
+pre, code, tt, kbd, samp, .mw-code,
+/* 编辑差异 */
+.diff-editfont-monospace .diff-addedline,
+.diff-editfont-monospace .diff-deletedline,
+.diff-editfont-monospace .diff-context,
+.diff-editfont-monospace .mw-diff-inline-added,
+.diff-editfont-monospace .mw-diff-inline-deleted,
+.diff-editfont-monospace .mw-diff-inline-moved,
+.diff-editfont-monospace .mw-diff-inline-changed,
+.diff-editfont-monospace .mw-diff-inline-context,
+/* 编辑框 */
+.wikiEditor-ui .ace_editor,
+/* JSON内容模型查看器 */
+.mw-json-value, .mw-json-single-value {
+	@apply font-mono;
+}
+
+.mw-body-content kbd {
+	border-radius: 2px;
+	padding: 1px 4px;
+	background-color: var(--background-color-neutral-subtle, #f8f9fa);
+	color: var(--color-emphasized, #101418);
+	border: 1px solid var(--border-color-muted, #dadde3);
+	border-bottom-width: 2px;
+}
+
+.mobileonly {
+	display: none !important;
+}
+
+/* header logo */
+.mw-logo {
+	--logo-unit: 4.5px;
+	height: 50px;
+}
+.mw-logo-icon {
+	width: calc(8 * var(--logo-unit));
+	height: calc(8 * var(--logo-unit));
+	margin-right: calc(3 * var(--logo-unit));
+}
+.mw-logo-wordmark {
+	height: calc(4.25 * var(--logo-unit));
+}
+
+/* 评论区 */
+#flowthread {
+	grid-area: content-end / content-start;
+}
+
+/* 首页 */
+body.page-Main_Page.action-view .vector-page-titlebar,
+body.page-Main_Page.action-view #siteSub {
+	@apply visually-hidden;
+}

@@ -6,34 +6,15 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "../../tailwind-config.css";
+
 @source not inline("container");
 /* [[Help:CSS工具类、变量]]中明确提及的 */
 @source inline(
 	"select-none hidden font-main font-mono text-xs text-sm text-base text-lg text-xl visually-hidden image-pixelated image-rendering-auto"
 );
 
-@custom-variant dark {
-	&:where(:root.skin-theme-clientpref-night, :root.skin-theme-clientpref-night *) {
-		@slot;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		&:where(:root.skin-theme-clientpref-os, :root.skin-theme-clientpref-os *) {
-			@slot;
-		}
-	}
-}
-
-@custom-variant main-sm (&:where(body.main-sm *));
-@custom-variant main-md (&:where(body.main-md *));
-@custom-variant main-lg (&:where(body.main-lg *));
-@custom-variant main-xl (&:where(body.main-xl *));
-@custom-variant main-2xl (&:where(body.main-2xl *));
-
 @theme {
-	/* 下面两个暂时没需要 */
-	--font-sans: initial;
-	--font-serif: initial;
 	--font-main:
 		ui-sans-serif, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
 		"Noto Color Emoji";
@@ -63,17 +44,20 @@
 		ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, "Roboto Mono",
 		"DejaVu Sans Mono", Monaco, Consolas, "Liberation Mono", "Droid Sans Mono", "Courier New",
 		var(--font-main);
+
 	/* 这两个preflight要用 */
 	--default-font-family: var(--font-main);
 	--default-font-feature-settings: "locl";
 }
 
 :root {
-	font-feature-settings: var(--default-font-feature-settings);
-
 	/* 更改列表中的“机器人编辑”标识颜色 */
 	--color-botedit: #7e5953;
-	@apply dark:[--color-botedit:#ab7167];
+	@variant dark {
+		--color-botedit: #ab7167;
+	}
+
+	font-feature-settings: var(--default-font-feature-settings);
 }
 
 .preflight {
@@ -83,29 +67,6 @@
 	border: 0 solid;
 
 	@import "tailwindcss/preflight.css";
-}
-
-@layer components {
-	.test {
-		@apply font-main;
-	}
-}
-
-/* from https://github.com/twbs/bootstrap/blob/cb021439c683d9805e2864c58095b92d405e9b11/scss/mixins/_visually-hidden.scss */
-@utility visually-hidden {
-	@apply sr-only;
-}
-
-@utility image-pixelated {
-	image-rendering: crisp-edges;
-	image-rendering: pixelated;
-}
-@utility image-rendering-auto {
-	image-rendering: auto;
-}
-
-@utility flex-center {
-	@apply flex items-center justify-center;
 }
 
 @import "./typography.css";

@@ -1,6 +1,6 @@
 import type { GadgetSourceFileExtension } from '@/tools/gadget'
 
-import { compileJS, compileSCSS } from '../compilers'
+import { compileCSS, compileJS } from '../compilers'
 import { noticeForEditors } from '../utils/notice'
 
 export type GadgetBuilder = (ctx: { path: string }) => Promise<{ content: string }>
@@ -22,18 +22,16 @@ const buildJSOrTSGadget: GadgetBuilder = async ({ path }) => {
 }
 
 export const gadgetBuilders: Record<GadgetSourceFileExtension, GadgetBuilder> = {
-	scss: async ({ path }) => {
-		const code = await compileSCSS(path)
+	css: async ({ path }) => {
+		const css = await compileCSS(path)
 		const content = `/**
  * ${noticeForEditors(path).join('\n * ')}
  */
 /* <pre> */
-${code}
+${css}
 /* </pre> */`
-
 		return { content }
 	},
-
 	js: buildJSOrTSGadget,
 	ts: buildJSOrTSGadget,
 }

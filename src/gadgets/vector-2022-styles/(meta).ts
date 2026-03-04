@@ -5,11 +5,14 @@ export default {
 		{
 			type: 'source',
 			entry: 'index.css',
-			outputName: 'site-styles.css',
+			outputName: 'vector-2022.css',
 		},
 	],
 	withResourceLoader: false,
 	defaultEnabled: true,
 	hidden: true,
 	type: 'styles',
+	availableFor: {
+		skins: ['vector-2022'],
+	},
 } satisfies GadgetMeta

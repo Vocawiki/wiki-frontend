@@ -1,0 +1,373 @@
+@layer theme {
+	:root,
+	:host {
+		--text-xs: 0.625rem;
+		--text-xs--line-height: calc(0.875 / 0.625);
+		--text-sm: 0.75rem;
+		--text-sm--line-height: calc(1 / 0.75);
+		--text-base: 0.875rem;
+		--text-base--line-height: calc(1.25 / 0.875);
+		--text-lg: 1rem;
+		--text-lg--line-height: calc(1.5 / 1);
+		--text-xl: 1.125rem;
+		--text-xl--line-height: calc(1.75 / 1.125);
+
+		--radius-xs: 2px;
+		--radius-sm: 2px;
+		--radius-md: 2px;
+		--radius-container: 0px;
+	}
+}
+
+:root {
+	/* Codex
+
+	https://doc.wikimedia.org/codex/latest/design-tokens/color.html
+
+	通过以下方式获取所有变量：
+	```js
+	[...document.querySelectorAll('.cdx-table__table tbody tr')].map(x => `--${x.querySelector('.cdx-docs-tokens-table__name').id}: ${x.querySelector('.cdx-docs-tokens-table__value__token-value').textContent};`).join('\n')
+	```
+	*/
+	--color-base: #202122;
+	--color-base-fixed: #202122;
+	--color-base--hover: #404244;
+	--color-emphasized: #101418;
+	--color-subtle: #54595d;
+	--color-placeholder: #72777d;
+	--color-disabled: #a2a9b1;
+	--color-disabled-emphasized: #a2a9b1;
+	--color-inverted: #fff;
+	--color-inverted-fixed: #fff;
+	--color-progressive: #36c;
+	--color-progressive--hover: #3056a9;
+	--color-progressive--active: #233566;
+	--color-progressive--focus: #36c;
+	--color-destructive: #bf3c2c;
+	--color-destructive--hover: #9f3526;
+	--color-destructive--active: #612419;
+	--color-destructive--focus: #36c;
+	--color-visited: #6a60b0;
+	--color-visited--hover: #534fa3;
+	--color-visited--active: #353262;
+	--color-destructive--visited: #9f5555;
+	--color-destructive--visited--hover: #854848;
+	--color-destructive--visited--active: #512e2e;
+	--color-error: #bf3c2c;
+	--color-error--hover: #9f3526;
+	--color-error--active: #612419;
+	--color-warning: #886425;
+	--color-success: #177860;
+	--color-notice: #404244;
+	--color-icon-error: #f54739;
+	--color-icon-warning: #ab7f2a;
+	--color-icon-success: #099979;
+	--color-icon-notice: #72777d;
+	--color-content-added: #006400;
+	--color-content-removed: #8b0000;
+	--color-base--subtle: #54595d;
+	--color-link: #36c;
+	--color-link--hover: #3056a9;
+	--color-link--active: #233566;
+	--color-link--focus: #36c;
+	--color-link--visited: #6a60b0;
+	--color-link--visited--hover: #534fa3;
+	--color-link--visited--active: #353262;
+	--color-link-red: #bf3c2c;
+	--color-link-red--hover: #9f3526;
+	--color-link-red--active: #612419;
+	--color-link-red--focus: #36c;
+	--color-link-red--visited: #9f5555;
+	--color-link-red--visited--hover: #854848;
+	--color-link-red--visited--active: #512e2e;
+	--background-color-base: #fff;
+	--background-color-base-fixed: #fff;
+	--background-color-neutral: #eaecf0;
+	--background-color-neutral-subtle: #f8f9fa;
+	--background-color-interactive: #eaecf0;
+	--background-color-interactive--hover: #dadde3;
+	--background-color-interactive--active: #c8ccd1;
+	--background-color-interactive-subtle: #f8f9fa;
+	--background-color-interactive-subtle--hover: #eaecf0;
+	--background-color-interactive-subtle--active: #dadde3;
+	--background-color-disabled: #dadde3;
+	--background-color-disabled-subtle: #eaecf0;
+	--background-color-inverted: #101418;
+	--background-color-progressive: #36c;
+	--background-color-progressive--hover: #3056a9;
+	--background-color-progressive--active: #233566;
+	--background-color-progressive--focus: #36c;
+	--background-color-progressive-subtle: #e8eeff;
+	--background-color-progressive-subtle--hover: #d9e2ff;
+	--background-color-progressive-subtle--active: #b6d4fb;
+	--background-color-destructive: #bf3c2c;
+	--background-color-destructive--hover: #9f3526;
+	--background-color-destructive--active: #612419;
+	--background-color-destructive--focus: #36c;
+	--background-color-destructive-subtle: #ffe9e5;
+	--background-color-destructive-subtle--hover: #ffdad3;
+	--background-color-destructive-subtle--active: #ffc8bd;
+	--background-color-error: #f54739;
+	--background-color-error--hover: #d74032;
+	--background-color-error--active: #bf3c2c;
+	--background-color-error-subtle: #ffe9e5;
+	--background-color-error-subtle--hover: #ffdad3;
+	--background-color-error-subtle--active: #ffc8bd;
+	--background-color-warning-subtle: #fdf2d5;
+	--background-color-success-subtle: #dff2eb;
+	--background-color-notice-subtle: #eaecf0;
+	--background-color-content-added: #a3d3ff;
+	--background-color-content-removed: #ffe49c;
+	--background-color-transparent: transparent;
+	--background-color-backdrop-light: rgba(255, 255, 255, 0.65);
+	--background-color-backdrop-dark: rgba(0, 0, 0, 0.65);
+	--background-color-button-quiet--hover: rgba(0, 24, 73, 0.027);
+	--background-color-button-quiet--active: rgba(0, 24, 73, 0.082);
+	--background-color-input-binary--checked: #36c;
+	--background-color-tab-list-item-framed--hover: rgba(255, 255, 255, 0.3);
+	--background-color-tab-list-item-framed--active: rgba(255, 255, 255, 0.65);
+	--border-color-base: #a2a9b1;
+	--border-color-emphasized: #202122;
+	--border-color-subtle: #c8ccd1;
+	--border-color-muted: #dadde3;
+	--border-color-interactive: #72777d;
+	--border-color-interactive--hover: #27292d;
+	--border-color-interactive--active: #202122;
+	--border-color-disabled: #c8ccd1;
+	--border-color-inverted: #fff;
+	--border-color-inverted-fixed: #fff;
+	--border-color-progressive: #6485d1;
+	--border-color-progressive--hover: #3056a9;
+	--border-color-progressive--active: #233566;
+	--border-color-progressive--focus: #36c;
+	--border-color-destructive: #f54739;
+	--border-color-destructive--hover: #9f3526;
+	--border-color-destructive--active: #612419;
+	--border-color-destructive--focus: #36c;
+	--border-color-error: #f54739;
+	--border-color-error--hover: #9f3526;
+	--border-color-error--active: #612419;
+	--border-color-warning: #ab7f2a;
+	--border-color-warning--hover: #735421;
+	--border-color-warning--active: #453217;
+	--border-color-success: #099979;
+	--border-color-notice: #72777d;
+	--border-color-content-added: #a3d3ff;
+	--border-color-content-removed: #ffe49c;
+	--border-color-transparent: transparent;
+	--border-color-divider: #a2a9b1;
+	--border-color-input--hover: #72777d;
+	--border-color-input-binary: #72777d;
+	--border-color-input-binary--hover: #3056a9;
+	--border-color-input-binary--active: #233566;
+	--border-color-input-binary--focus: #36c;
+	--border-color-input-binary--checked: #6485d1;
+	--box-shadow-color-base: #a2a9b1;
+	--box-shadow-color-progressive--active: #233566;
+	--box-shadow-color-progressive--focus: #36c;
+	--box-shadow-color-progressive-selected: #36c;
+	--box-shadow-color-progressive-selected--hover: #3056a9;
+	--box-shadow-color-progressive-selected--active: #233566;
+	--box-shadow-color-destructive--focus: #36c;
+	--box-shadow-color-inverted: #fff;
+	--box-shadow-color-alpha-base: rgba(0, 0, 0, 0.06);
+	--box-shadow-color-transparent: transparent;
+	--accent-color-base: #36c;
+}
+
+body {
+	text-autospace: normal;
+}
+
+html,
+body,
+#firstHeading {
+	@apply font-main;
+}
+
+pre, code, tt, kbd, samp, .mw-code,
+/* 编辑差异 */
+.diff-editfont-monospace .diff-addedline,
+.diff-editfont-monospace .diff-deletedline,
+.diff-editfont-monospace .diff-context,
+.diff-editfont-monospace .mw-diff-inline-added,
+.diff-editfont-monospace .mw-diff-inline-deleted,
+.diff-editfont-monospace .mw-diff-inline-moved,
+.diff-editfont-monospace .mw-diff-inline-changed,
+.diff-editfont-monospace .mw-diff-inline-context,
+/* 编辑框 */
+.wikiEditor-ui .ace_editor,
+/* JSON内容模型查看器 */
+.mw-json-value, .mw-json-single-value {
+	@apply font-mono;
+}
+
+.mw-body-content kbd {
+	border-radius: 2px;
+	padding: 1px 4px;
+	background-color: var(--background-color-neutral-subtle, #f8f9fa);
+	color: var(--color-emphasized, #101418);
+	border: 1px solid var(--border-color-muted, #dadde3);
+	border-bottom-width: 2px;
+}
+
+#content {
+	position: relative;
+	z-index: 7;
+}
+
+#mw-navigation div.vectorMenu div.menu {
+	z-index: 9;
+}
+
+#mw-panel #p-logo {
+	width: 176px;
+	height: 188px;
+	margin: 0 0 0 -0.5em;
+}
+
+#mw-panel #p-logo .mw-wiki-logo {
+	width: 100%;
+	height: 100%;
+	background: url(/images/e/e5/Vocawiki_logo_with_wordmark-vertical-dark.svg) no-repeat
+		center/128px;
+	filter: drop-shadow(0 0px 4px #fff) drop-shadow(0 0px 4px #fff);
+}
+
+div#mw-page-base {
+	background: none;
+	height: 100px;
+}
+
+#left-navigation,
+#right-navigation {
+	margin-top: 60px;
+	min-height: 40px;
+}
+
+div#mw-panel {
+	top: 0;
+	text-shadow: 1px 1px #f6f6f6;
+}
+
+div#mw-panel div.portal {
+	padding-bottom: 1em;
+}
+
+div#mw-head div.vectorMenu h4 {
+	height: 1.9em;
+	margin-bottom: 0;
+	padding-top: 1.25em;
+	padding-bottom: 0;
+	padding-right: 0.5em;
+}
+div.vectorTabs ul li,
+#mw-head div.vectorMenu {
+	background-image: none !important;
+	background-color: transparent !important;
+}
+
+div.vectorTabs,
+div.vectorTabs span,
+div.vectorTabs ul,
+div#mw-head div.vectorMenu h3 {
+	background-image: none !important;
+}
+
+#left-navigation,
+#right-navigation,
+div.vectorTabs ul li.selected {
+	background-image: linear-gradient(
+		rgb(255 255 255 / 0%),
+		rgb(255 255 255 / 30%) 30%,
+		rgb(255 255 255 / 50%)
+	) !important;
+	background-color: transparent !important;
+}
+div#p-personal {
+	background-color: rgb(255 255 255 / 80%);
+	padding: 5px 10px 5px 0;
+	box-shadow: #666 0 1px 5px;
+}
+#pt-notifications-alert .mw-echo-notifications-badge,
+#pt-notifications-notice .mw-echo-notifications-badge {
+	text-indent: -99999px;
+}
+
+#pt-notifications-alert .mw-echo-notifications-badge::after,
+#pt-notifications-notice .mw-echo-notifications-badge::after {
+	text-indent: 0;
+}
+#p-personal ul {
+	padding-left: 0;
+}
+div#mw-panel {
+	font-size: 18px;
+	width: 10.5rem;
+}
+
+h1 {
+	font-weight: 700;
+	border-bottom: 2px solid #0074f9;
+}
+
+.ns-0 div#content,
+.ns-0 div#p-cactions li a:hover,
+.ns-0 div#p-cactions li.selected a {
+	background-color: rgb(255 255 255 / 80%);
+}
+
+div#content,
+div#p-cactions li a:hover,
+div#p-cactions li.selected a {
+	background-color: rgb(247 251 255 / 80%);
+}
+div.vectorMenu ul {
+	display: flex;
+	flex-flow: column;
+}
+
+/* 首页 */
+body.page-Main_Page.action-view #firstHeading,
+body.page-Main_Page.action-view #siteSub {
+	@apply visually-hidden!;
+}
+
+/* 背景图片 */
+body.sideBarPic-executed #mw-panel > .mw-portlet,
+body.sideBarPic-executed #p-variants,
+body.sideBarPic-executed #p-personal {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+body.sideBarPic-executed #p-personal {
+	border: 1px solid #a7d7f9;
+	padding-right: 0.5rem;
+}
+
+body.sideBarPic-executed #mw-panel > .mw-portlet {
+	border-left: 1px solid #a7d7f9;
+	border-right: 1px solid #a7d7f9;
+}
+
+body.sideBarPic-executed #mw-panel > .mw-portlet:first-of-type {
+	border-top: 1px solid #a7d7f9;
+}
+
+body.sideBarPic-executed #mw-panel > .mw-portlet:last-of-type {
+	border-bottom: 1px solid #a7d7f9;
+}
+
+#footer {
+	display: flow-root;
+}
+
+/* 其他 */
+.mobileonly {
+	display: none !important;
+}
+
+#pt-userpage a {
+	background-image: none !important;
+	padding-left: 0 !important;
+}

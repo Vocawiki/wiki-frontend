@@ -1,0 +1,296 @@
+/* 临时修复开始 未PR */
+/*
+  这个类是“警告：您正在编辑的页面用于为软件提供界面文本。更改此页面将影响此wiki上其他用户的用户界面外观。”
+  以及“请记住这只是预览。您的更改尚未发布”等消息所用的消息框
+*/
+.cdx-message {
+	border-radius: var(--border-radius-medium);
+}
+/* 临时修复结束 */
+
+@layer theme {
+	:root,
+	:host {
+		--text-xs: var(--font-size-x-small);
+		--text-xs--line-height: var(--line-height-x-small);
+		--text-sm: var(--font-size-small);
+		--text-sm--line-height: var(--line-height-small);
+		--text-base: var(--font-size-medium);
+		--text-base--line-height: var(--line-height-content);
+		--text-lg: var(--font-size-large);
+		--text-lg--line-height: var(--line-height-large);
+		--text-xl: var(--font-size-x-large);
+		--text-xl--line-height: var(--line-height-x-large);
+
+		--radius-xs: 0.125rem;
+		--radius-sm: var(--radius-base);
+		--radius-md: var(--border-radius-medium);
+		--radius-container: var(--border-radius-large);
+	}
+}
+
+:root {
+	/**
+	 * 覆盖Citizen token
+	 */
+	/* 调整主题色色相为青蓝色 */
+	--color-progressive-oklch__h: 215;
+	/* 调亮背景 */
+	--color-surface-0-oklch__l: 99%;
+	/* 较亮的颜色需要的饱和度比较暗的颜色更低，由于我们调亮了背景，故此处调低饱和度 */
+	--color-surface-0-oklch__c: 0.006;
+	--color-surface-1-oklch__c: 0.013;
+	/* 对于青蓝色来说，皮肤计算色超出sRGB色域，导致色域缩窄后的对比度偏低，故重设 */
+	--color-link: #006cad;
+	/* 皮肤默认访问过的链接颜色与未访问时一致，此处重设 */
+	--color-visited: #6a60b0;
+
+	/* 对不支持oklch的浏览器 */
+	--color-progressive-hsl__h: 188.57;
+	--color-progressive-hsl__s: 100%;
+	--color-progressive-hsl__l: 32.94%;
+	--color-surface-0-hsl__l: 98.24%;
+	--color-surface-0-hsl__s: 77.78%;
+	--color-surface-1-hsl__l: 95.49%;
+	--color-surface-1-hsl__s: 65.22%;
+	--color-surface-2-hsl__l: 92.35%;
+	--color-surface-2-hsl__s: 58.97%;
+
+	/* --font-family-base: var(--font-main);
+	--font-family-monospace: var(--font-mono); */
+
+	@variant dark {
+		/* 恢复皮肤默认值 */
+		--color-surface-0-oklch__c: 0.01;
+		--color-surface-1-oklch__c: 0.015;
+	}
+}
+
+.citizen-body {
+	--text-xs: var(--font-size-x-small);
+	--text-xs--line-height: var(--line-height-x-small);
+	--text-sm: var(--font-size-small);
+	--text-sm--line-height: var(--line-height-small);
+	--text-base: var(--font-size-medium);
+	--text-base--line-height: var(--line-height-content);
+	--text-lg: var(--font-size-large);
+	--text-lg--line-height: var(--line-height-large);
+	--text-xl: var(--font-size-x-large);
+	--text-xl--line-height: var(--line-height-x-large);
+
+	@apply text-sm;
+}
+
+html,
+body {
+	font-variation-settings: normal;
+}
+
+.mw-body-content kbd {
+	padding: 2px 4px;
+	border-radius: var(--border-radius-base);
+	color: var(--color-emphasized);
+	background-color: var(--color-surface-2);
+	border: var(--border-width-base) solid var(--border-color-base);
+	border-bottom-width: var(--border-width-thick);
+}
+
+/* 凭什么不让复制标题 */
+.citizen-sections-enabled .citizen-section-heading:not(:active) {
+	user-select: initial;
+}
+
+/* 修复移动端搜索结果被撑大 */
+.mw-search-results-container {
+	float: none;
+}
+
+@media (min-width: 1120px) {
+	.mobileonly {
+		display: none !important;
+	}
+}
+
+@media not (min-width: 1120px) {
+	.nomobile {
+		display: none !important;
+	}
+
+	/* 修复移动端pagetool乱飞 */
+	.page-actions {
+		bottom: calc(var(--header-size) + max(env(safe-area-inset-bottom), var(--space-xs)));
+	}
+}
+
+/* 移除无用的其他语言数量提示 */
+.citizen-page-languages .citizen-dropdown-summary::after {
+	content: none !important;
+}
+
+/* 侧边栏图标 */
+.mw-portlet a:not(:has(.citizen-ui-icon))::before {
+	display: block;
+	width: var(--size-icon);
+	min-width: var(--size-icon);
+	height: var(--size-icon);
+	min-height: var(--size-icon);
+	background-color: currentcolor;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	-webkit-mask-image: var(--image);
+	mask-image: var(--image);
+}
+
+#n-log a::before {
+	content: "";
+	--image: url(/images/7/7f/Portlet-logs.svg);
+}
+
+#n-sidebar-random-song a::before {
+	content: "";
+	--image: url(/images/5/5e/Portlet-dieSing.svg);
+}
+
+#n-sidebar-random-producer a::before {
+	content: "";
+	--image: url(/images/b/bb/Portlet-dieAvatar.svg);
+}
+
+#n-sidebar-discussion-board a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/speechBubbles-ltr.svg);
+}
+
+#n-sidebar-sandbox a::before {
+	content: "";
+	--image: url(/images/e/e7/Portlet-sandbox.svg);
+}
+
+#n-sidebar-pages-to-be-modified a::before {
+	content: "";
+	--image: url(/images/0/02/Portlet-toBeEdited.svg);
+}
+
+#n-sidebar-batch-upload a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/upload.svg);
+}
+
+#t-replacetext a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/articlesSearch-ltr.svg);
+}
+
+#ca-purge a::before {
+	content: "";
+	--image: url(/extensions/ConfirmEdit/resources/images/refresh.svg);
+}
+
+#ca-sync a::before {
+	content: "";
+	--image: url(/images/b/b1/Portlet-sync.svg);
+}
+
+#ca-special-specialAssociatedNavigationLinks-link-0 > a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/eye.svg);
+}
+
+#ca-special-specialAssociatedNavigationLinks-link-1 > a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/listBullet-ltr.svg);
+}
+
+#ca-special-specialAssociatedNavigationLinks-link-2 > a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/edit.svg);
+}
+
+#ca-special-specialAssociatedNavigationLinks-link-3 > a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/trash.svg);
+}
+
+#t-needdelete a::before,
+#ca-lr-ffd a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/trash.svg);
+}
+
+#t-pagelog a::before {
+	content: "";
+	--image: url(/images/7/7f/Portlet-logs.svg);
+}
+
+#t-prefixindex a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/articles-rtl.svg);
+}
+
+#t-cite a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/quotes-ltr.svg);
+}
+
+#t-viewavatar a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/userAvatar.svg);
+}
+
+#t-usercomments a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/speechBubble-ltr.svg);
+}
+
+#Wikiplus-Edit-TopBtn a::before {
+	content: "";
+	transform: scale(1.1);
+	--image: url(/images/b/bf/Wikiplus_icon.svg);
+}
+
+#ca-quick-edit a::before {
+	content: "";
+	transform: scale(1.1);
+	--image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20style='width:%201em%3B%20height:%201em'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%20class='icon%20icon-tabler%20icons-tabler-outline%20icon-tabler-pencil-bolt'%3E%3Cpath%20stroke='none'%20d='M0%200h24v24H0z'%20fill='none'/%3E%3Cpath%20d='M4%2020h4l10.5%20-10.5a2.828%202.828%200%201%200%20-4%20-4l-10.5%2010.5v4'/%3E%3Cpath%20d='M13.5%206.5l4%204'/%3E%3Cpath%20d='M19%2016l-2%203h4l-2%203'/%3E%3C/svg%3E");
+}
+
+/* 页底logo */
+@media (min-width: 640px) {
+	.citizen-footer__siteinfo {
+		flex-basis: 20rem;
+		flex-grow: 0;
+	}
+}
+#footer-sitetitle {
+	--logo-unit: 5px;
+	flex-direction: row;
+	align-items: center;
+	gap: calc(3 * var(--logo-unit));
+}
+#footer-sitetitle .mw-logo-icon {
+	width: calc(8 * var(--logo-unit));
+	height: calc(8 * var(--logo-unit));
+}
+#footer-sitetitle .mw-logo-wordmark {
+	height: calc(4.25 * var(--logo-unit));
+	width: auto;
+}
+
+/* 编辑工具栏优化 */
+.wikiEditor-ui-toolbar .group .label {
+	white-space: nowrap;
+}
+
+body:not(.main-sm) .ui-dialog.wikiEditor-toolbar-dialog {
+	width: 100% !important;
+}
+
+.test {
+	& {
+		width: 100%;
+	}
+}
