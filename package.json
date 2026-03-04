@@ -2,7 +2,7 @@
 	"name": "vocawiki-frontend",
 	"scripts": {
 		"format": "oxfmt",
-		"check:type": "tsc --noEmit",
+		"check:type": "tsc --project tsconfig.app.json --noEmit && tsc --project tsconfig.node.json --noEmit",
 		"check:lint": "eslint .",
 		"check": "pnpm run check:type && pnpm run check:lint",
 		"build": "bun run --bun --tsconfig-override ./tsconfig.node.json ./scripts/build",
