@@ -56,8 +56,8 @@
 	--color-surface-2-hsl__l: 92.35%;
 	--color-surface-2-hsl__s: 58.97%;
 
-	/* --font-family-base: var(--font-main);
-	--font-family-monospace: var(--font-mono); */
+	--font-family-base: var(--font-main);
+	--font-family-monospace: var(--font-mono);
 
 	@variant dark {
 		/* 恢复皮肤默认值 */
