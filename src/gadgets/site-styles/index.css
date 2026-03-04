@@ -5,6 +5,7 @@
 
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 @import "../../tailwind-config.css";
 
 @source not inline("container");
@@ -76,6 +77,3 @@
 @import "./columns.css";
 @import "./navbox.css";
 @import "./misc.css";
-
-/* utilities不设layer，以获得更高的优先级 */
-@import "tailwindcss/utilities.css";
