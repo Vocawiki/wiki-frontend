@@ -5,6 +5,12 @@
 	--font-main: var(--skin-specific);
 	--font-mono: var(--skin-specific);
 
+	/* https://doc.wikimedia.org/codex/latest/design-tokens/breakpoint.html */
+	--breakpoint-codex-mobile: 320px;
+	--breakpoint-codex-tablet: 640px;
+	--breakpoint-codex-desktop: 1120px;
+	--breakpoint-codex-desktop-wide: 1680px;
+
 	/* 每个皮肤不同 */
 	--text-*: initial;
 	--text-xs: var(--skin-specific);

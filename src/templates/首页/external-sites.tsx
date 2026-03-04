@@ -149,7 +149,7 @@ function SiteItem({
 	return (
 		<li
 			className={cn(
-				'contents leading-0 font-medium *:flex *:items-center *:gap-2 *:rounded-md! *:bg-(--bg)! *:p-2! *:text-(--fg)!',
+				'contents leading-none font-medium *:flex *:items-center *:gap-2 *:rounded-md! *:bg-(--bg)! *:p-2! *:text-(--fg)!',
 				withRoundedIcon && '[&_img]:rounded-(--border-radius-base)',
 			)}
 			style={

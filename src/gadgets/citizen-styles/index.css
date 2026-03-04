@@ -77,8 +77,6 @@
 	--text-lg--line-height: var(--line-height-large);
 	--text-xl: var(--font-size-x-large);
 	--text-xl--line-height: var(--line-height-x-large);
-
-	@apply text-sm;
 }
 
 html,
@@ -105,19 +103,17 @@ body {
 	float: none;
 }
 
-@media (min-width: 1120px) {
-	.mobileonly {
-		display: none !important;
-	}
+.mobileonly {
+	@apply codex-desktop:hidden!;
 }
 
-@media not (min-width: 1120px) {
-	.nomobile {
-		display: none !important;
-	}
+.nomobile {
+	@apply not-codex-desktop:hidden!;
+}
 
-	/* 修复移动端pagetool乱飞 */
-	.page-actions {
+/* 修复移动端pagetool乱飞 */
+.page-actions {
+	@variant not-codex-desktop {
 		bottom: calc(var(--header-size) + max(env(safe-area-inset-bottom), var(--space-xs)));
 	}
 }
@@ -255,8 +251,8 @@ body {
 }
 
 /* 页底logo */
-@media (min-width: 640px) {
-	.citizen-footer__siteinfo {
+.citizen-footer__siteinfo {
+	@variant codex-tablet {
 		flex-basis: 20rem;
 		flex-grow: 0;
 	}

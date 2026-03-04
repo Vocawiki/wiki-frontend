@@ -16,6 +16,10 @@
    1. 进入工作区后会有通知推荐你安装以下扩展：ESLint、Oxc、Tailwind CSS IntelliSense，建议安装。
 
    2. 将以下内容加入`.vscode/settings.json`（不存在则创建）中：
+
+      <details>
+      <summary>展开</summary>
+
       ```jsonc
       {
       	"files.associations": {
@@ -23,6 +27,7 @@
       		"*.css.txt": "css",
       		"*.js.txt": "javascript",
       	},
+      	"tailwindCSS.experimental.configFile": "src/tailwind-config.css",
       	"[html]": {
       		"editor.defaultFormatter": "oxc.oxc-vscode",
       	},
@@ -55,7 +60,12 @@
       	},
       }
       ```
-      [理论上](https://code.visualstudio.com/docs/configure/settings#_multiple-languagespecific-editor-settings)上面的语言键是可以合并的，比如`"[javascript][typescript]": { ... }`，但目前合并了没法生效。
+
+      </details>
+
+      > [理论上](https://code.visualstudio.com/docs/configure/settings#_multiple-languagespecific-editor-settings)上面的语言键是可以合并的，比如`"[javascript][typescript]": { ... }`，但目前一合并就失效。
+      >
+      > 另外 microsoft/vscode#40233 什么时候好啊。
 
 3. 修改源代码。
 4. 执行提交前的任务，确保没有报错：
@@ -65,25 +75,11 @@
    ```
 
    此命令实际一次性完成了三个任务：
-   1. 格式化代码：
+   1. 格式化代码：`pnpm run format`；
+   2. 检查代码问题：`pnpm run check`；
+   3. 构建：`pnpm run build`，构建产物可在`out/pages`查看。
 
-      ```sh
-      pnpm run format
-      ```
-
-   2. 检查代码问题：
-
-      ```sh
-      pnpm run check
-      ```
-
-   3. 尝试构建：
-
-      ```sh
-      pnpm run build
-      ```
-
-5. 提交、推送代码。提交前需确保完成第4步。
+5. 提交、推送代码。提交前须确保完成第4步。
 
 ## 项目结构
 
@@ -105,8 +101,8 @@
 
 开发者需要注意`src`文件夹内的代码须满足Vocawiki规定的浏览器兼容性要求，请查阅[Vocawiki 帮助:浏览器兼容性](Help:浏览器兼容性)。
 
-- JS语法可以使用最新语法，[Rolldown](https://github.com/rolldown/rolldown)会将其转译到兼容的语法。
-- 但是，JS API不行，不会自动polyfill。
+- CSS可以会转译一些新特性，比如嵌套语法，完整特性列表见[Lightning CSS文档](https://lightningcss.dev/transpilation.html)。
+- JS语法可以使用最新语法，[Rolldown](https://github.com/rolldown/rolldown)会将其转译到兼容的语法。但是，JS API不行，不会自动polyfill。
 
 ## 问答
 
