@@ -23,6 +23,7 @@
 		"eslint-plugin-react": "^7.37.5",
 		"fs-extra": "^11.3.4",
 		"globals": "^17.4.0",
+		"lightningcss": "^1.31.1",
 		"oxfmt": "^0.36.0",
 		"postcss": "^8.5.8",
 		"radashi": "^12.7.2",

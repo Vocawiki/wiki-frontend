@@ -31,8 +31,7 @@ abbr:is(.newpage, .minoredit, .botedit) {
 	}
 }
 
-/* 时机成熟后可以把`:lang(zh), :lang(ja), :lang(ko)`换成`:lang(zh, ja, ko)` */
-td.mw-enhanced-rc:where(:lang(zh), :lang(ja), :lang(ko)) {
+td.mw-enhanced-rc:where(:lang(zh, ja, ko)) {
 	min-width: calc(4em + 6ch);
 	min-width: calc(4ic + 6ch);
 	text-align: right;

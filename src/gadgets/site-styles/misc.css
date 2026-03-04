@@ -30,12 +30,10 @@ body.ns-2 div#catlinks {
 	}
 
 	.oo-ui-popupWidget-popup {
-		width: -moz-fit-content !important;
 		width: fit-content !important;
 	}
 
 	.oo-ui-popupWidget-body {
-		width: -moz-fit-content;
 		width: fit-content;
 		min-width: 5.5em;
 		max-width: 11em !important;
@@ -187,8 +185,6 @@ pre {
 		margin: 0;
 		border-radius: 2px;
 		box-sizing: border-box;
-		-webkit-appearance: none;
-		-moz-appearance: none;
 		appearance: none;
 		zoom: 1;
 		vertical-align: middle;
@@ -238,7 +234,7 @@ pre {
 	--content-please-scroll: "（请滚动查看，可拖动右下角斜线符号调整高度）";
 	--content-search: "（由于技术限制，此处为全文版本，请使用 Ctrl+F | ⌘+F 搜索相关差异，可拖动右下角斜线符号调整高度）";
 	--content-latest-version: "编辑框（最新版本）";
-	:root:is(:lang(zh-Hant), :lang(zh-HK), :lang(zh-TW)) & {
+	:root:lang(zh-Hant, zh-HK, zh-TW) & {
 		--content-please-scroll: "（請滾動查看，可拖動右下角斜線符號調整高度）";
 		--content-search: "（由於技術限制，此處為全文版本，請使用 Ctrl+F | ⌘+F 搜索相關差異，可拖動右下角斜線符號調整高度）";
 		--content-latest-version: "編輯框（最新修訂）";

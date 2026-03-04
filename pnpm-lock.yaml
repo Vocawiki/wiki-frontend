@@ -57,6 +57,9 @@ importers:
       globals:
         specifier: ^17.4.0
         version: 17.4.0
+      lightningcss:
+        specifier: ^1.31.1
+        version: 1.31.1
       oxfmt:
         specifier: ^0.36.0
         version: 0.36.0

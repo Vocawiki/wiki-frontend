@@ -2,20 +2,54 @@ import assert from 'node:assert/strict'
 import { join, relative } from 'node:path'
 
 import tailwindcss from '@tailwindcss/postcss'
+import { Features, transform } from 'lightningcss'
 import postcss, { AtRule, type Root, type Plugin } from 'postcss'
 
 import { IS_PRODUCTION } from '@/tools/utils'
 
 export async function compileCSS(path: string): Promise<string> {
-	const srcCSS = await Bun.file(path).text()
-	const result = await postcssInstance.process(srcCSS, { from: path, to: undefined })
+	let css = await Bun.file(path).text()
 
-	return cleanPlaceholders(result.css)
+	css = (
+		await postcssInstance.process(css, {
+			from: path,
+			to: undefined,
+		})
+	).css
+
+	css = cleanTailwindPlaceholders(css)
+
+	const result = transform({
+		filename: path,
+		code: Buffer.from(css),
+		targets: {
+			chrome: version(109),
+			safari: version(16, 3), // 虽然明面上是16.4，但是仁慈点。16.3与Chrome 109发布时间差不多
+			firefox: version(109), // 虽然明面上是115，但同上
+		},
+		exclude: Features.FontFamilySystemUi,
+		minify: IS_PRODUCTION,
+		sourceMap: false,
+	})
+
+	for (const warning of result.warnings) {
+		console.warn('Lightning CSS warning:', warning)
+	}
+
+	return result.code.toString()
+}
+
+function version(major: number, minor = 0, patch = 0) {
+	return (major << 16) | (minor << 8) | patch
 }
 
 const postcssInstance = postcss(
 	postcssInsertImportTailwindConfig('src/tailwind-config.css'),
-	tailwindcss({ base: 'src', optimize: IS_PRODUCTION ? { minify: false } : false }),
+	tailwindcss({
+		base: 'src',
+		// optimize: IS_PRODUCTION ? { minify: false } : false,
+		optimize: false,
+	}) as Plugin,
 )
 
 function postcssInsertImportTailwindConfig(importPath: string): Plugin {
@@ -54,8 +88,7 @@ function postcssInsertImportTailwindConfig(importPath: string): Plugin {
 	}
 }
 
-function cleanPlaceholders(css: string): string {
-	return css
-		.replaceAll(/(?<=;|\{)\s*--[a-z-]+:\s*var\(--skin-specific\);?/gm, '') // 移除“--xxx: var(--skin-specific)”
-		.replaceAll(/(?<=\*\/\n):root,\s*:host\s*\{\s*\}\s*/gm, '') // 移除空的 “:root, :host {}”
+function cleanTailwindPlaceholders(css: string): string {
+	return css.replaceAll(/(?<=;|\{)\s*--[a-z-]+:\s*var\(--skin-specific\);?/gm, '') // 移除“--xxx: var(--skin-specific)”
+	// .replaceAll(/(?<=\*\/\n):root,\s*:host\s*\{\s*\}\s*/gm, '') // 移除空的 “:root, :host {}”
 }

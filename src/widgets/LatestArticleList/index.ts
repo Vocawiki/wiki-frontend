@@ -91,8 +91,7 @@ async function applyPageImageOnDOM(pageItems: PageItem[]) {
 		}
 		anchorElem.insertAdjacentHTML(
 			'afterbegin',
-			// SB MW 不让用在 templatestyles 里用 -webkit-mask-image，只能写在这里。
-			`${LT}div class="latest-article-image" style="-webkit-mask-image: -webkit-linear-gradient(0deg, #fff 1em, transparent); mask-image: linear-gradient(90deg, #fff 1em, transparent);"${GT}${LT}img src="${pageImage.source}" loading="lazy" alt=""${GT}${LT}/div${GT}`,
+			`${LT}div class="latest-article-image mask-r-from-6"${GT}${LT}img src="${pageImage.source}" loading="lazy" alt=""${GT}${LT}/div${GT}`,
 		)
 		anchorElem.classList.add('has-image')
 		const imgElem = anchorElem.querySelector('img')!
