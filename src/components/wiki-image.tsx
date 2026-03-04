@@ -8,9 +8,10 @@ interface WikiImageUniqueProps {
 export type WikiImageProps = WikiImageUniqueProps &
 	Omit<React.ComponentProps<'img'>, 'src' | 'srcset'>
 
-export function WikiImage({ name: fileName, ...props }: WikiImageProps) {
+// TODO: 通过机器人将图片标记为正在使用
+export function WikiImage({ name: fileName, alt, ...props }: WikiImageProps) {
 	const src = toImageURL(fileName)
-	return <img {...props} src={src} />
+	return <img loading="lazy" {...props} alt={alt ?? fileName} src={src} />
 }
 
 function normalizeWikiTitle(title: string): string {

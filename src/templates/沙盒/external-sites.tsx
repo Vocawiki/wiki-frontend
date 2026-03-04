@@ -18,10 +18,10 @@ export function ExternalSites() {
 				<div
 					className={cn(
 						'flex-center',
-						'main-lg:grow main-lg:rounded-(--border-radius-large) main-lg:border main-lg:border-(--border-color-subtle) main-lg:bg-(--background-color-neutral-subtle) main-lg:p-2',
+						'main-lg:grow main-lg:rounded-container main-lg:border main-lg:border-(--border-color-subtle) main-lg:bg-(--background-color-neutral-subtle) main-lg:p-2',
 					)}
 				>
-					<div className="*:flex *:items-center *:gap-2 *:rounded-(--border-radius-medium,2px) *:border *:border-[#fbd68a] *:bg-[#fffbec]! *:p-1.75! *:pr-2.25! *:leading-none *:text-[#ae420a]! *:[box-shadow:0_1px_3px_rgba(131,100,0,.1),0_1px_2px_-1px_rgba(131,100,0,.1)]">
+					<div className="*:flex *:items-center *:gap-2 *:rounded-md! *:border *:border-[#fbd68a] *:bg-[#fffbec]! *:p-1.75! *:pr-2.25! *:leading-none *:text-[#ae420a]! *:[box-shadow:0_1px_3px_rgba(131,100,0,.1),0_1px_2px_-1px_rgba(131,100,0,.1)]">
 						<Wiki.Link href="https://vcpedia.cn/%E9%A6%96%E9%A1%B5">
 							<Wiki.Image
 								file="VCPedia logo.png"
@@ -29,7 +29,7 @@ export function ExternalSites() {
 								height={36}
 								link={false}
 								alt=""
-								className="flex-center size-10 [&_img]:rounded-(--border-radius-base)"
+								className="flex-center size-10"
 							/>
 							<div>
 								<div className="font-medium">VCPedia</div>
@@ -78,6 +78,7 @@ export function ExternalSites() {
 						href="https://vocaloid.fandom.com/wiki/Vocaloid_Wiki"
 						icon="VOCALOID Wiki icon.png"
 						withPixelatedIcon
+						withRoundedIcon
 						bg="#e0e9f3"
 						fg="#285d8e"
 					>
@@ -86,6 +87,7 @@ export function ExternalSites() {
 					<SiteItem
 						href="https://vocaloidlyrics.miraheze.org/wiki/Vocaloid_Lyrics_Wiki"
 						icon="Vocaloid Lyrics Wiki avatar.png"
+						withRoundedIcon
 						bg="#d7ede7"
 						fg="#006a4d"
 					>
@@ -131,6 +133,7 @@ function SiteItem({
 	href,
 	icon,
 	withPixelatedIcon,
+	withRoundedIcon,
 	children,
 	bg,
 	fg,
@@ -138,13 +141,17 @@ function SiteItem({
 	href: string
 	icon: string
 	withPixelatedIcon?: boolean
+	withRoundedIcon?: boolean
 	children: ReactNode
 	bg: string
 	fg: string
 }) {
 	return (
 		<li
-			className="contents leading-0 font-medium *:flex *:items-center *:gap-2 *:rounded-(--border-radius-medium,2px) *:bg-(--bg) *:p-2! *:text-(--fg)"
+			className={cn(
+				'contents leading-0 font-medium *:flex *:items-center *:gap-2 *:rounded-md! *:bg-(--bg)! *:p-2! *:text-(--fg)!',
+				withRoundedIcon && '[&_img]:rounded-(--border-radius-base)',
+			)}
 			style={
 				{
 					'--bg': bg,
@@ -158,10 +165,7 @@ function SiteItem({
 					width={24}
 					link={false}
 					alt=""
-					className={cn(
-						'shrink-0 [&_img]:rounded-(--border-radius-base)',
-						withPixelatedIcon ? 'image-pixelated' : undefined,
-					)}
+					className={cn('shrink-0', withPixelatedIcon && 'image-pixelated')}
 				/>
 				{children}
 			</Wiki.Link>
