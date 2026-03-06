@@ -60,13 +60,15 @@
 	font-feature-settings: var(--default-font-feature-settings);
 }
 
-.preflight {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-	border: 0 solid;
+@layer base {
+	.preflight {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		border: 0 solid;
 
-	@import "tailwindcss/preflight.css";
+		@import "tailwindcss/preflight.css";
+	}
 }
 
 @import "./typography.css";
