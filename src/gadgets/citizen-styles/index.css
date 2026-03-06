@@ -6,6 +6,11 @@
 .cdx-message {
 	border-radius: var(--border-radius-medium);
 }
+
+/* “编辑模板数据”按钮多出了不需要的方括号 https://voca.wiki/?curid=10617 */
+.mw-templatedata-caption .mw-editsection-bracket {
+	display: none;
+}
 /* 临时修复结束 */
 
 @layer theme {
