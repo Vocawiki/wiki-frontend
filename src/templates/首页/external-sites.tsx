@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import * as Wiki from '~/components/wikitext'
 import { cn } from '~/lib/utils'
 
-export function ExternalSites() {
+export function ExternalSites({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
@@ -11,7 +11,8 @@ export function ExternalSites() {
 				'main-lg:flex-row main-lg:justify-between main-xl:gap-12',
 				'[&_.mw-heading]:contents',
 				// 链接交互动画
-				'[&_a]:transition-[filter] [&_a]:duration-200 [&_a:active]:brightness-92 [&_a:active]:saturate-106 [&_a:active]:transition-none [&_a:hover]:brightness-96 [&_a:hover]:saturate-103',
+				'[&_a]:transition-[filter] [&_a]:duration-200 [&_a]:hover:brightness-96 [&_a]:hover:saturate-103 [&_a]:active:brightness-92 [&_a]:active:saturate-106 [&_a]:active:transition-none',
+				className,
 			)}
 		>
 			<Section title="友情链接" className="main-lg:grow">
@@ -21,7 +22,7 @@ export function ExternalSites() {
 						'main-lg:grow main-lg:rounded-container main-lg:border main-lg:border-(--border-color-subtle) main-lg:bg-(--background-color-neutral-subtle) main-lg:p-2',
 					)}
 				>
-					<div className="*:flex *:items-center *:gap-2 *:rounded-md! *:border *:border-[#fbd68a] *:bg-[#fffbec]! *:p-1.75! *:pr-2.25! *:leading-none *:text-[#ae420a]! *:[box-shadow:0_1px_3px_rgba(131,100,0,.1),0_1px_2px_-1px_rgba(131,100,0,.1)]">
+					<div className="*:flex *:items-center *:gap-2 *:rounded-md *:border *:border-[#fbd68a] *:bg-[#fffbec] *:p-1.75 *:pr-2.25 *:leading-none *:text-[#ae420a] *:[box-shadow:0_1px_3px_rgba(131,100,0,.1),0_1px_2px_-1px_rgba(131,100,0,.1)]">
 						<Wiki.Link href="https://vcpedia.cn/%E9%A6%96%E9%A1%B5">
 							<Wiki.Image
 								file="VCPedia logo.png"
@@ -45,7 +46,7 @@ export function ExternalSites() {
 			<Section title="其他相关站点">
 				<ul
 					className={cn(
-						'm-0! grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(calc(3rem+11em),1fr))] justify-center gap-2',
+						'm-0! grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(calc(3rem+11em),1fr))] justify-center gap-2 text-sm',
 						'main-md:mx-auto! main-md:max-w-max main-md:grid-cols-3',
 					)}
 					role="list"
@@ -149,7 +150,7 @@ function SiteItem({
 	return (
 		<li
 			className={cn(
-				'contents leading-none font-medium *:flex *:items-center *:gap-2 *:rounded-md! *:bg-(--bg)! *:p-2! *:text-(--fg)!',
+				'contents leading-none font-medium *:flex *:items-center *:gap-2 *:rounded-md *:bg-(--bg)! *:p-2! *:text-(--fg)',
 				withRoundedIcon && '[&_img]:rounded-(--border-radius-base)',
 			)}
 			style={

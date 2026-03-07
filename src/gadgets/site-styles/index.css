@@ -3,9 +3,9 @@
  * 后需版本由Vocawiki编辑者贡献
  */
 
-@layer theme, base, components, utilities;
+/* @layer theme, base, components, utilities; */
+@layer theme;
 @import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
 @import "../../tailwind-config.css";
 
 @source not inline("container");
@@ -60,17 +60,6 @@
 	font-feature-settings: var(--default-font-feature-settings);
 }
 
-@layer base {
-	.preflight {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
-		border: 0 solid;
-
-		@import "tailwindcss/preflight.css";
-	}
-}
-
 @import "./typography.css";
 @import "./mediawiki/change-list.css";
 @import "./heimu.css";
@@ -79,3 +68,27 @@
 @import "./columns.css";
 @import "./navbox.css";
 @import "./misc.css";
+
+/**
+ * 全站存在太多无layer的样式，这些样式经常覆盖Tailwind的样式，过于降低开发体验。
+ * 使用`:not(#a#b)`这种只会增加优先级而没有副作用的选择器，可以覆盖掉大部分全站样式。
+ * 不用担心嵌套选择器展开后一堆`:not(#a#b)`导致长度爆炸，这种重复内容对于gzip来说不在话下。
+ */
+/* 充当原本的base层 */
+.preflight:not(#a#b) {
+	all: revert;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: 0 solid;
+
+	:where(:not(img, svg, svg *, video, canvas, audio, iframe, embed, object, math, math *)) {
+		all: revert;
+	}
+
+	@import "tailwindcss/preflight.css";
+}
+/* 充当原本的utilities层 */
+:not(#a#b#a) {
+	@import "tailwindcss/utilities.css";
+}

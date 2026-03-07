@@ -285,9 +285,3 @@ body {
 body:not(.main-sm) .ui-dialog.wikiEditor-toolbar-dialog {
 	width: 100% !important;
 }
-
-.test {
-	& {
-		width: 100%;
-	}
-}
