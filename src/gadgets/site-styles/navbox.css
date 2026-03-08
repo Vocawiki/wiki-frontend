@@ -1,14 +1,14 @@
 table.navbox {
 	border: 1px solid #aaa;
 	clear: both;
-	margin: auto;
+	margin-inline: auto;
 	padding: 1px;
 	text-align: center;
 	width: 100%;
-}
 
-table.navbox + table.navbox {
-	margin-top: -1px;
+	+ & {
+		margin-top: -1px;
+	}
 }
 
 .navbox-title,
@@ -26,41 +26,60 @@ table.navbox th {
 
 .navbox,
 .navbox-subgroup {
-	background: none repeat scroll 0 0 var(--theme-card-background-color, #fdfdfd);
+	background-color: white;
+	@variant dark {
+		background-color: transparent;
+	}
 }
 
 .navbox-list {
 	border-color: #fdfdfd;
+	@variant dark {
+		border-color: #0d0d0d;
+	}
 }
 
 .navbox-title,
 table.navbox th {
-	background: none repeat scroll 0 0 #a5e4a5;
+	background-color: rgb(203 239 249);
+	@variant dark {
+		background-color: rgb(203 239 249 / 0.1);
+	}
 }
 
 .navbox-abovebelow,
 .navbox-group,
 .navbox-subgroup .navbox-title {
-	background: none repeat scroll 0 0 #c0ecc0;
+	background-color: rgb(217 244 252);
+	@variant dark {
+		background-color: rgb(217 244 252 / 0.1);
+	}
 }
 
 .navbox-subgroup .navbox-group,
 .navbox-subgroup .navbox-abovebelow {
-	background: none repeat scroll 0 0 #e6f6e6;
+	background-color: rgb(227 247 252);
+	@variant dark {
+		background-color: rgb(227 247 252 / 0.05);
+	}
 }
 
 .navbox-even {
-	background: none repeat scroll 0 0 #f5fcf5;
+	background-color: rgb(241 250 253);
+	@variant dark {
+		background-color: rgb(217 244 252 / 0.05);
+	}
 }
 
 .navbox-odd {
-	background: none repeat scroll 0 0 #fdfdfd;
+	background-color: rgb(255 255 255);
+	@variant dark {
+		background-color: transparent;
+	}
 }
 
-/* 窄屏排版 */
-/* TODO: 有些嵌套是非必要的 */
-body:not(.main-sm) {
-	.navbox {
+.navbox {
+	@variant not-main-sm {
 		width: 100% !important;
 		box-sizing: border-box;
 		overflow-x: hidden;
@@ -84,43 +103,27 @@ body:not(.main-sm) {
 			padding: 0.25em 0.75em;
 			border-left: none !important;
 			box-sizing: border-box;
-		}
 
-		/* 顶层 group 居中 */
-		> tbody > tr > .navbox-group,
-		> tr > .navbox-group {
-			text-align: center !important;
-		}
-
-		/* list 内容左对齐 */
-		.navbox-list {
-			text-align: left !important;
-
-			/* 子层缩进：无论几层都固定 0.5em */
-			> .navbox-subgroup,
-			> table.navbox {
+			.navbox-subgroup,
+			table.navbox {
 				border-left: 0.5em solid transparent;
 			}
 		}
 
-		/* 同行纵向分隔 */
 		.navbox-group + * {
 			border-top: 2px solid #fdfdfd;
+			@variant dark {
+				border-top-color: #0d0d0d;
+			}
 		}
 
-		/* 标题块级化 */
 		.navbox-title {
 			display: block;
-			width: 100% !important;
-			box-sizing: border-box;
-			padding: 0.25em 0.75em;
 		}
 
-		/* 防止长串撑宽 */
 		a,
 		span {
-			overflow-wrap: anywhere;
-			word-break: break-word;
+			overflow-wrap: break-word;
 		}
 	}
 }
