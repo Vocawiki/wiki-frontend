@@ -1,14 +1,14 @@
 table.navbox {
 	border: 1px solid #aaa;
 	clear: both;
-	margin: auto;
+	margin-inline: auto;
 	padding: 1px;
 	text-align: center;
 	width: 100%;
-}
 
-table.navbox + table.navbox {
-	margin-top: -1px;
+	+ & {
+		margin-top: -1px;
+	}
 }
 
 .navbox-title,
@@ -26,39 +26,60 @@ table.navbox th {
 
 .navbox,
 .navbox-subgroup {
-	background: rgba(255,255,255,1);
+	background-color: white;
+	@variant dark {
+		background-color: transparent;
+	}
 }
 
 .navbox-list {
 	border-color: #fdfdfd;
+	@variant dark {
+		border-color: #0d0d0d;
+	}
 }
 
 .navbox-title,
 table.navbox th {
-	background: rgba(203,239,249,1);
+	background-color: rgb(203 239 249);
+	@variant dark {
+		background-color: rgb(203 239 249 / 0.1);
+	}
 }
 
 .navbox-abovebelow,
 .navbox-group,
 .navbox-subgroup .navbox-title {
-	background: rgba(217,244,252,1);
+	background-color: rgb(217 244 252);
+	@variant dark {
+		background-color: rgb(217 244 252 / 0.1);
+	}
 }
 
 .navbox-subgroup .navbox-group,
 .navbox-subgroup .navbox-abovebelow {
-	background: rgba(227,247,252,1);
+	background-color: rgb(227 247 252);
+	@variant dark {
+		background-color: rgb(227 247 252 / 0.05);
+	}
 }
 
 .navbox-even {
-	background: rgba(241,250,253,1);
+	background-color: rgb(241 250 253);
+	@variant dark {
+		background-color: rgb(217 244 252 / 0.05);
+	}
 }
 
 .navbox-odd {
-	background: rgba(255,255,255,1);
+	background-color: rgb(255 255 255);
+	@variant dark {
+		background-color: transparent;
+	}
 }
 
-body:not(.main-sm) {
-	.navbox {
+.navbox {
+	@variant not-main-sm {
 		width: 100% !important;
 		box-sizing: border-box;
 		overflow-x: hidden;
@@ -91,6 +112,9 @@ body:not(.main-sm) {
 
 		.navbox-group + * {
 			border-top: 2px solid #fdfdfd;
+			@variant dark {
+				border-top-color: #0d0d0d;
+			}
 		}
 
 		.navbox-title {
@@ -100,49 +124,6 @@ body:not(.main-sm) {
 		a,
 		span {
 			overflow-wrap: break-word;
-		}
-	}
-}
-
-@variant dark {
-	.navbox,
-	.navbox-subgroup {
-		background: transparent;
-	}
-
-	.navbox-list {
-		border-color: #0d0d0d;
-	}
-
-	.navbox-title,
-	table.navbox th {
-		background: rgba(203,239,249,0.1);
-	}
-
-	.navbox-abovebelow,
-	.navbox-group,
-	.navbox-subgroup .navbox-title {
-		background: rgba(217,244,252,0.1);
-	}
-
-	.navbox-subgroup .navbox-group,
-	.navbox-subgroup .navbox-abovebelow {
-		background: rgba(227,247,252,0.05);
-	}
-
-	.navbox-even {
-		background: rgba(217,244,252,0.05);
-	}
-
-	.navbox-odd {
-		background: transparent;
-	}
-
-	body:not(.main-sm) {
-		.navbox {
-			.navbox-group + * {
-				border-top: 2px solid #0d0d0d;
-			}
 		}
 	}
 }
