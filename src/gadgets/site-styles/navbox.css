@@ -98,8 +98,7 @@ body:not(.main-sm) {
 
 	a,
 	span {
-		overflow-wrap: anywhere;
-		word-break: break-word;
+		overflow-wrap: break-word;
     }
   }
 }
