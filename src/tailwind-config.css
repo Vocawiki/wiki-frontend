@@ -68,6 +68,11 @@
 @custom-variant main-lg (&:where(body.main-lg *));
 @custom-variant main-xl (&:where(body.main-xl *));
 @custom-variant main-2xl (&:where(body.main-2xl *));
+@custom-variant main-not-sm (&:where(body:not(.main-sm) *));
+@custom-variant main-not-md (&:where(body:not(.main-md) *));
+@custom-variant main-not-lg (&:where(body:not(.main-lg) *));
+@custom-variant main-not-xl (&:where(body:not(.main-xl) *));
+@custom-variant main-not-2xl (&:where(body:not(.main-2xl) *));
 
 @utility visually-hidden {
 	@apply sr-only;

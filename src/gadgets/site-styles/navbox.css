@@ -79,7 +79,7 @@ table.navbox th {
 }
 
 .navbox {
-	@variant not-main-sm {
+	@variant main-not-sm {
 		width: 100% !important;
 		box-sizing: border-box;
 		overflow-x: hidden;
