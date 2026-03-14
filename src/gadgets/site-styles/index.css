@@ -88,7 +88,7 @@
 
 	@import "tailwindcss/preflight.css";
 }
-/* 充当原本的utilities层 */
-:not(#a#b#a) {
+/* 充当原本的utilities层，对该@rule的处理逻辑见Lightning CSS侧（/scripts/build/compilers） */
+@tw-utilities {
 	@import "tailwindcss/utilities.css";
 }

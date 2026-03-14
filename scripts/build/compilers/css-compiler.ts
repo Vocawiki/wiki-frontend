@@ -2,10 +2,19 @@ import assert from 'node:assert/strict'
 import { join, relative } from 'node:path'
 
 import tailwindcss from '@tailwindcss/postcss'
-import { Features, transform } from 'lightningcss'
+import {
+	Features,
+	transform,
+	type Declaration,
+	type MediaQuery,
+	type Rule,
+	type Selector,
+	type TransformOptions,
+} from 'lightningcss'
 import postcss, { AtRule, type Root, type Plugin } from 'postcss'
+import { traverse } from 'radashi'
 
-import { IS_PRODUCTION } from '@/lib/config'
+import { IS_PRODUCTION } from '../../../lib/config' // 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名@/lib
 
 const postcssInstance = postcss(
 	postcssInsertImportTailwindConfig('src/tailwind-config.css'),
@@ -28,16 +37,9 @@ export async function compileCSS(path: string): Promise<string> {
 	css = cleanTailwindPlaceholders(css)
 
 	const result = transform({
+		...lightningCSSOptions,
 		filename: path,
 		code: Buffer.from(css),
-		targets: {
-			chrome: version(109),
-			safari: version(16, 3), // 虽然明面上是16.4，但是仁慈点。16.3与Chrome 109发布时间差不多
-			firefox: version(109), // 虽然明面上是115，但同上
-		},
-		exclude: Features.FontFamilySystemUi,
-		minify: IS_PRODUCTION,
-		sourceMap: false,
 	})
 
 	for (const warning of result.warnings) {
@@ -45,6 +47,163 @@ export async function compileCSS(path: string): Promise<string> {
 	}
 
 	return result.code.toString()
+}
+
+export const lightningCSSOptions = {
+	targets: {
+		chrome: version(109),
+		safari: version(16, 3), // 虽然明面上是16.4，但是仁慈点。16.3与Chrome 109发布时间差不多
+		firefox: version(109), // 虽然明面上是115，但同上
+	},
+	exclude: Features.FontFamilySystemUi,
+	minify: IS_PRODUCTION,
+	sourceMap: false,
+	// @tw-utilities 的处理逻辑：
+	// @tw-utilities {
+	//   .class-1 { color: #001; }
+	//   .class-2 .class-3 { color: #002; }
+	//   div.class-4 { color: #004; }
+	//   .class-5 { .class-6 { color: #004; } }
+	//   /* ... */
+	// }
+	// 转换为：
+	// .class-1:not(#a#a#b) { color: #001; }
+	// .class-2 .class-3:not(#a#a#b) { color: #002; }
+	// div.class-4:not(#a#a#b) { color: #004; }
+	// .class-6 { .class-7:not(#a#a#b) { color: #004; } }
+	// /* ... */
+	// 目的是增加选择器的优先级
+	customAtRules: {
+		'tw-utilities': {
+			prelude: null, // 该 at-rule 没有前置参数 (如 @my-at-rule (xxx) 中的 xxx)
+			body: 'rule-list', // 告诉解析器，大括号内是一组 CSS 规则
+		},
+	},
+	visitor: {
+		Rule: {
+			custom: {
+				'tw-utilities': (rule) => {
+					// rule.body.value 包含了 @my-at-rule 中解析出的所有子规则
+					for (const ruleInBody of rule.body.value) {
+						transformLeafSelector(ruleInBody)
+					}
+
+					// 绕过 https://github.com/parcel-bundler/lightningcss/issues/1081
+					traverse(rule.body.value, (value, key, parent) => {
+						if (value === null && typeof key === 'string') {
+							delete parent[key as keyof typeof parent]
+						}
+					})
+
+					// 把 @tw-utilities { ... } 脱壳，用其内部代码替换掉自身
+					return rule.body.value
+				},
+			},
+		},
+	},
+} satisfies Omit<
+	TransformOptions<{
+		'tw-utilities': {
+			prelude: null
+			body: 'rule-list'
+		}
+	}>,
+	'filename' | 'code'
+>
+
+/**
+ * @returns 是否转换了选择器
+ */
+function transformLeafSelector(rule: Rule<Declaration, MediaQuery>): boolean {
+	switch (rule.type) {
+		case 'style': {
+			const childRules = rule.value.rules
+			if (childRules && childRules.length > 0) {
+				const isEachChildRulesTransformed = childRules.map((rule) => transformLeafSelector(rule))
+				assert(
+					new Set(isEachChildRulesTransformed).size === 1,
+					'暂不支持部分嵌套规则转换而另一部分不转换的情况',
+				)
+				const allChildRulesAreTransformed = isEachChildRulesTransformed[0]!
+				if (allChildRulesAreTransformed) {
+					const { declarations = [], importantDeclarations = [] } = rule.value.declarations ?? {}
+					assert(
+						declarations.length + importantDeclarations.length === 0,
+						`暂不支持既有自身属性又有嵌套样式的样式：${JSON.stringify(rule.value)}`,
+					)
+					// 嵌套的选择器已经转换，不再转换当前选择器
+					return true
+				}
+				// 嵌套规则里面没有选择器，可能是@media之类的
+			}
+			// 转换选择器
+			for (const selector of rule.value.selectors) {
+				transformSelector(selector)
+			}
+			return true
+		}
+
+		case 'container':
+		case 'starting-style':
+		case 'supports':
+		case 'media': {
+			const childRules = rule.value.rules
+			assert(childRules && childRules.length > 0, '必须存在嵌套规则')
+			const isEachChildRulesTransformed = childRules.map((rule) => transformLeafSelector(rule))
+			assert(
+				new Set(isEachChildRulesTransformed).size === 1,
+				'暂不支持部分嵌套规则转换而另一部分不转换的情况',
+			)
+			return isEachChildRulesTransformed[0]!
+		}
+
+		case 'counter-style':
+		case 'custom-media':
+		case 'font-face':
+		case 'font-palette-values':
+		case 'font-feature-values':
+		case 'import':
+		case 'keyframes':
+		case 'layer-statement':
+		case 'namespace':
+		case 'nested-declarations':
+		case 'property':
+		case 'view-transition':
+		case 'viewport':
+			// 跳过
+			return false
+
+		default:
+			throw new Error(`不支持的规则类型：${rule.type}。${JSON.stringify(rule)}`)
+	}
+}
+
+function transformSelector(selector: Selector) {
+	const lastComponentIndex = selector.findLastIndex((component) => {
+		switch (component.type) {
+			case 'universal':
+			case 'type': // 指元素选择器
+			case 'class':
+			case 'pseudo-class':
+			case 'attribute':
+			case 'id':
+				return true
+		}
+		return false
+	})
+	assert(lastComponentIndex !== -1, 'selector中不存在可以插入:not()的component')
+	// 在component之后插入 :not(#a#a#b)
+	selector.splice(lastComponentIndex + 1, 0, {
+		type: 'pseudo-class',
+		kind: 'not',
+		selectors: [
+			[
+				{ type: 'id', name: 'a' },
+				{ type: 'id', name: 'a' },
+				{ type: 'id', name: 'b' },
+			],
+		],
+	})
 }
 
 function version(major: number, minor = 0, patch = 0) {

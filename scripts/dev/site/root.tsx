@@ -1,3 +1,7 @@
+/// <reference types="vite/client" />
+import './.cache/software.css'
+import './index.css'
+
 import { Router } from './app/router'
 
 export function Root(props: { url: URL }) {
@@ -11,8 +15,6 @@ export function Root(props: { url: URL }) {
 				<meta charSet="UTF-8" />
 				<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 				<title>Vocawiki开发</title>
-				<link rel="stylesheet" href=".cache/software.css" />
-				<link rel="stylesheet" href="index.css" />
 				<style>
 					{`
 #citizen-preferences__card form {

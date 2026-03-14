@@ -1,3 +1,3 @@
-export * from './css-compiler'
-export * from './js-compiler'
-export * from './component-compiler'
+export { compileCSS } from './css-compiler'
+export { compileJS } from './js-compiler'
+export { compileComponent } from './component-compiler'

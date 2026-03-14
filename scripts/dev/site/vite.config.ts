@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react'
 import rsc from '@vitejs/plugin-rsc'
 import { defineConfig } from 'vite'
 
+import { IS_DEVELOPMENT } from '../../../lib/config'
+import { lightningCSSOptions } from '../../build/compilers/css-compiler'
+
 export default defineConfig({
 	plugins: [rsc(), react(), tailwindcss()],
 	resolve: {
@@ -12,6 +15,14 @@ export default defineConfig({
 		// 目前Vite仅用于开发，若用于构建，一定要谨慎对待环境变量！
 		'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'unavailable'),
 		'process.env.SHOULD_CONVERT_WIKITEXT_TO_HTML': '"true"',
+	},
+	css: {
+		transformer: 'lightningcss',
+		lightningcss: {
+			...lightningCSSOptions,
+			...(IS_DEVELOPMENT ? { targets: undefined } : {}),
+			errorRecovery: IS_DEVELOPMENT,
+		},
 	},
 
 	// specify entry point for each environment.
