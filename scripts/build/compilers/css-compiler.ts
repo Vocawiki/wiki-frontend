@@ -5,7 +5,15 @@ import tailwindcss from '@tailwindcss/postcss'
 import { Features, transform } from 'lightningcss'
 import postcss, { AtRule, type Root, type Plugin } from 'postcss'
 
-import { IS_PRODUCTION } from '@/tools/utils'
+import { IS_PRODUCTION } from '@/lib/config'
+
+const postcssInstance = postcss(
+	postcssInsertImportTailwindConfig('src/tailwind-config.css'),
+	tailwindcss({
+		base: 'src',
+		optimize: false,
+	}) as Plugin,
+)
 
 export async function compileCSS(path: string): Promise<string> {
 	let css = await Bun.file(path).text()
@@ -42,15 +50,6 @@ export async function compileCSS(path: string): Promise<string> {
 function version(major: number, minor = 0, patch = 0) {
 	return (major << 16) | (minor << 8) | patch
 }
-
-const postcssInstance = postcss(
-	postcssInsertImportTailwindConfig('src/tailwind-config.css'),
-	tailwindcss({
-		base: 'src',
-		// optimize: IS_PRODUCTION ? { minify: false } : false,
-		optimize: false,
-	}) as Plugin,
-)
 
 function postcssInsertImportTailwindConfig(importPath: string): Plugin {
 	const configFileName = 'tailwind-config.css'

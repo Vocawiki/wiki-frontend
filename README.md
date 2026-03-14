@@ -23,7 +23,7 @@
       ```jsonc
       {
       	"files.associations": {
-      		"**/src/**/*.css": "tailwindcss",
+      		"*.css": "tailwindcss",
       		"*.css.txt": "css",
       		"*.js.txt": "javascript",
       	},
@@ -67,7 +67,7 @@
       >
       > 另外 microsoft/vscode#40233 什么时候好啊。
 
-3. 修改源代码。
+3. 修改源代码。可用`pnpm run dev`实时预览对组件的开发（目前仅支持`src/templates`文件夹内的）。
 4. 执行提交前的任务，确保没有报错：
 
    ```sh

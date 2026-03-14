@@ -5,4 +5,5 @@ export {
 	WikitextIncludeOnly as IncludeOnly,
 	WikitextNoInclude as NoInclude,
 	WikitextOnlyInclude as OnlyInclude,
-} from './include'
+} from './transclude'
+export { WikitextNoLanguageConversion as NoConversion } from './language-convert'

@@ -1,5 +1,7 @@
 import { Fragment, type ReactNode } from 'react'
 
+import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
+
 export interface WikitextTemplateProps {
 	title: string
 	args?: Record<string, ReactNode> | ReactNode[]
@@ -20,7 +22,7 @@ export function WikitextTemplate({ title, args }: WikitextTemplateProps) {
 		))
 	}
 
-	return (
+	const wikitext = (
 		<>
 			{'{{'}
 			{title}
@@ -28,4 +30,10 @@ export function WikitextTemplate({ title, args }: WikitextTemplateProps) {
 			{'}}'}
 		</>
 	)
+
+	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) {
+		return <code>{wikitext}</code>
+	}
+
+	return wikitext
 }

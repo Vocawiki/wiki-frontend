@@ -1,9 +1,6 @@
 import * as z from 'zod'
 
-const isoDatetimeToDate = z.codec(z.iso.datetime(), z.date(), {
-	decode: (isoString) => new Date(isoString),
-	encode: (date) => date.toISOString(),
-})
+import { isoDatetimeToDate } from '@/lib/zod'
 
 export const deploymentStateSchema = z.object({
 	version: z.literal(1),

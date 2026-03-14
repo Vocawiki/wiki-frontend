@@ -12,7 +12,6 @@
 	--breakpoint-codex-desktop-wide: 1680px;
 
 	/* 每个皮肤不同 */
-	--text-*: initial;
 	--text-xs: var(--skin-specific);
 	--text-xs--line-height: var(--skin-specific);
 	--text-sm: var(--skin-specific);

@@ -1,13 +1,14 @@
 {
 	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
-		"target": "es2018",
-		"module": "es2015",
+		"target": "es2020",
+		"module": "es2020",
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
 		"rootDir": "./src",
 		"paths": {
-			"~/*": ["./src/*"]
-		}
+			"~/*": ["./src/*"],
+		},
 	},
 	"include": ["src/**/*"],
-	"exclude": ["**/(meta).ts", "**/*.tsx"]
+	"exclude": ["**/(meta).ts", "**/*.tsx"],
 }

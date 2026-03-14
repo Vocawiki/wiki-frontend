@@ -1,7 +1,8 @@
 import type { CSSProperties, ReactNode } from 'react'
 
+import { cn } from '@/lib/utils'
+import { LangSpan } from '@/src/components/wiki-templates/lang'
 import * as Wiki from '~/components/wikitext'
-import { cn } from '~/lib/utils'
 
 export function ExternalSites({ className }: { className?: string }) {
 	return (
@@ -57,7 +58,7 @@ export function ExternalSites({ className }: { className?: string }) {
 						bg="#fbebd5"
 						fg="#b05d00"
 					>
-						{'-{vocaloid中文歌詞wiki}-'}
+						<Wiki.NoConversion>vocaloid中文歌詞wiki</Wiki.NoConversion>
 					</SiteItem>
 					<SiteItem
 						href="https://utauchn.huijiwiki.com/wiki/%E9%A6%96%E9%A1%B5"
@@ -65,7 +66,7 @@ export function ExternalSites({ className }: { className?: string }) {
 						bg="#e8e8e9"
 						fg="#525153"
 					>
-						{'-{UTAU中华组wiki}-'}
+						<Wiki.NoConversion>UTAU中华组wiki</Wiki.NoConversion>
 					</SiteItem>
 					<SiteItem
 						href="https://w.atwiki.jp/hmiku/"
@@ -73,7 +74,7 @@ export function ExternalSites({ className }: { className?: string }) {
 						bg="#fbebd5"
 						fg="#b05d00"
 					>
-						{'{{lj|初音ミク Wiki}}'}
+						<LangSpan lang="ja">初音ミク Wiki</LangSpan>
 					</SiteItem>
 					<SiteItem
 						href="https://vocaloid.fandom.com/wiki/Vocaloid_Wiki"
