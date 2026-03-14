@@ -28,7 +28,7 @@
 		--text-xl--line-height: var(--line-height-x-large);
 
 		--radius-xs: 0.125rem;
-		--radius-sm: var(--radius-base);
+		--radius-sm: var(--border-radius-base);
 		--radius-md: var(--border-radius-medium);
 		--radius-container: var(--border-radius-large);
 	}
