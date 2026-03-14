@@ -31,7 +31,7 @@ function WikitextExternalLink({ href, children }: WikitextExternalLinkProps) {
 	}
 	return (
 		<>
-			[[{href}|{children}]]
+			[{href} {children}]
 		</>
 	)
 }
