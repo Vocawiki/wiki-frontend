@@ -27,7 +27,16 @@ export default defineConfig(
 				},
 			],
 			'@typescript-eslint/no-unsafe-argument': 'warn',
-			'@typescript-eslint/no-unused-vars': 'warn',
+			// Note: you must disable the base rule as it can report incorrect errors
+			'no-unused-vars': 'off',
+			'@typescript-eslint/no-unused-vars': [
+				'warn',
+				{
+					args: 'all',
+					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+				},
+			],
 			'@typescript-eslint/no-explicit-any': 'off',
 			'@typescript-eslint/prefer-regexp-exec': 'off',
 			'@typescript-eslint/consistent-indexed-object-style': 'off',
@@ -46,7 +55,7 @@ export default defineConfig(
 			'src/**/(meta).ts',
 		],
 		languageOptions: {
-			globals: globals.node,
+			globals: { ...globals.node, ...globals.browser },
 		},
 	},
 	{
