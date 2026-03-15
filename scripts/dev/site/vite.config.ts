@@ -7,7 +7,19 @@ import { IS_DEVELOPMENT } from '../../../lib/config'
 import { lightningCSSOptions } from '../../build/compilers/css-compiler'
 
 export default defineConfig({
-	plugins: [rsc(), react(), tailwindcss()],
+	plugins: [
+		rsc(),
+		react(),
+		tailwindcss(),
+		{
+			// https://github.com/vitejs/vite-plugin-react/issues/1118 修复后可移除
+			name: 'fix-tailwind-full-reload',
+			configResolved(config) {
+				const plugin = config.plugins.find((p) => p.name === '@tailwindcss/vite:generate:serve')
+				delete plugin?.hotUpdate
+			},
+		},
+	],
 	resolve: {
 		tsconfigPaths: true,
 	},
