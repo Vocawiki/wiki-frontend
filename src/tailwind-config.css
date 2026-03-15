@@ -1,4 +1,6 @@
 @theme {
+	--color-subtle: var(--color-subtle);
+
 	/* 下面两个暂时没需要 */
 	--font-sans: initial;
 	--font-serif: initial;
@@ -47,6 +49,8 @@
 	--radius-xs: var(--skin-specific);
 	--radius-sm: var(--skin-specific);
 	--radius-md: var(--skin-specific);
+	/* 在Citizen上可以是完全圆形，而Vector上则比较方 */
+	--radius-max: var(--skin-specific);
 	--radius-container: var(--skin-specific);
 	/**
 	 * 等最低目标浏览器支持infinity后可去除，瓶颈在Firefox >= 114
@@ -92,4 +96,8 @@
 
 @utility flex-center {
 	@apply flex items-center justify-center;
+}
+
+@utility auto-interact-fx {
+	@apply transition-[filter] hover:brightness-95 hover:saturate-103 active:brightness-92 active:saturate-106 active:transition-none;
 }

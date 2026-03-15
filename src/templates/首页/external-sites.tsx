@@ -8,11 +8,9 @@ export function ExternalSites({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				'plainlinks preflight flex flex-col gap-8',
+				'flex flex-col gap-8',
 				'main-lg:flex-row main-lg:justify-between main-xl:gap-12',
-				'[&_.mw-heading]:contents',
-				// 链接交互动画
-				'[&_a]:transition-[filter] [&_a]:hover:brightness-96 [&_a]:hover:saturate-103 [&_a]:active:brightness-92 [&_a]:active:saturate-106 [&_a]:active:transition-none',
+				'[&_.mw-heading]:contents [&_a]:auto-interact-fx',
 				className,
 			)}
 		>
@@ -123,7 +121,7 @@ function Section({
 }) {
 	return (
 		<div className={cn('flex flex-col gap-2', className)}>
-			<h2 className="grow-0 text-center text-sm leading-none font-medium text-(--color-subtle) main-lg:ml-1 main-lg:text-left">
+			<h2 className="grow-0 text-center text-sm leading-none font-medium text-subtle main-lg:ml-1 main-lg:text-left">
 				{title}
 			</h2>
 			{children}

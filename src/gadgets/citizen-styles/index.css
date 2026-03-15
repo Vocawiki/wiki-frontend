@@ -30,6 +30,7 @@
 		--radius-xs: 0.125rem;
 		--radius-sm: var(--border-radius-base);
 		--radius-md: var(--border-radius-medium);
+		--radius-max: var(--radius-full);
 		--radius-container: var(--border-radius-large);
 	}
 }

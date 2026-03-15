@@ -2,6 +2,7 @@
 import './.cache/software.css'
 import './index.css'
 
+import { ClientInitializer } from './app/client-initializer'
 import { Preferences } from './app/preferences'
 import { Router } from './app/router'
 
@@ -86,6 +87,7 @@ export function Root(props: { url: URL }) {
 						</div>
 					</div>
 					<main className="mw-body ve-init-mw-desktopArticleTarget-targetContainer" id="content">
+						<ClientInitializer />
 						<Router {...props} />
 					</main>
 
