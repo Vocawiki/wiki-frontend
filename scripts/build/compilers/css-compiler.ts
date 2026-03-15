@@ -9,6 +9,7 @@ import {
 	type MediaQuery,
 	type Rule,
 	type Selector,
+	type SelectorComponent,
 	type TransformOptions,
 } from 'lightningcss'
 import postcss, { AtRule, type Root, type Plugin } from 'postcss'
@@ -111,6 +112,19 @@ export const lightningCSSOptions = {
 	'filename' | 'code'
 >
 
+/** `:not(#a#a#b)`，用于增加选择器优先级 */
+const theSelectorComponent: SelectorComponent = {
+	type: 'pseudo-class',
+	kind: 'not',
+	selectors: [
+		[
+			{ type: 'id', name: 'a' },
+			{ type: 'id', name: 'a' },
+			{ type: 'id', name: 'b' },
+		],
+	],
+}
+
 /**
  * @returns 是否转换了选择器
  */
@@ -126,11 +140,28 @@ function transformLeafSelector(rule: Rule<Declaration, MediaQuery>): boolean {
 				)
 				const allChildRulesAreTransformed = isEachChildRulesTransformed[0]!
 				if (allChildRulesAreTransformed) {
-					const { declarations = [], importantDeclarations = [] } = rule.value.declarations ?? {}
-					assert(
-						declarations.length + importantDeclarations.length === 0,
-						`暂不支持既有自身属性又有嵌套样式的样式：${JSON.stringify(rule.value)}`,
-					)
+					const declarations = rule.value.declarations ?? {}
+					if (declarations.declarations?.length || declarations.importantDeclarations?.length) {
+						// 既有自身属性又有嵌套样式时，把
+						// .parent {
+						//   color: red;
+						//   .child:not(#a#a#b) { ... }
+						// }
+						// 变成
+						// .parent {
+						//   &:not(#a#a#b) { color: red; }
+						//   .child:not(#a#a#b) { ... }
+						// }
+						delete rule.value.declarations
+						childRules.unshift({
+							type: 'style',
+							value: {
+								loc: rule.value.loc,
+								selectors: [[{ type: 'nesting' }, theSelectorComponent]],
+								declarations,
+							},
+						})
+					}
 					// 嵌套的选择器已经转换，不再转换当前选择器
 					return true
 				}
@@ -193,17 +224,7 @@ function transformSelector(selector: Selector) {
 	})
 	assert(lastComponentIndex !== -1, 'selector中不存在可以插入:not()的component')
 	// 在component之后插入 :not(#a#a#b)
-	selector.splice(lastComponentIndex + 1, 0, {
-		type: 'pseudo-class',
-		kind: 'not',
-		selectors: [
-			[
-				{ type: 'id', name: 'a' },
-				{ type: 'id', name: 'a' },
-				{ type: 'id', name: 'b' },
-			],
-		],
-	})
+	selector.splice(lastComponentIndex + 1, 0, theSelectorComponent)
 }
 
 function version(major: number, minor = 0, patch = 0) {
