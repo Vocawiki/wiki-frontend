@@ -73,6 +73,7 @@
 }
 
 .citizen-body {
+	/* 由于Citizen有调节内容字号的功能，此处需要再定义一遍 */
 	--text-xs: var(--font-size-x-small);
 	--text-xs--line-height: var(--line-height-x-small);
 	--text-sm: var(--font-size-small);
@@ -88,6 +89,11 @@
 html,
 body {
 	font-variation-settings: normal;
+}
+
+.citizen-body-container {
+	/* 用于utility force-inline-full */
+	container: article-container / inline-size;
 }
 
 .mw-body-content kbd {

@@ -1,11 +1,13 @@
 const mainContainerId = 'mw-content-text'
-// 断点与 Tailwind CSS 相同
+// 从sm到2xl的断点与Tailwind CSS相同
 const breakpoints: [number, string][] = [
-	[640, 'sm'],
-	[768, 'md'],
-	[1024, 'lg'],
-	[1280, 'xl'],
-	[1536, '2xl'],
+	[28 * 16, '2xs'],
+	[32 * 16, 'xs'],
+	[40 * 16, 'sm'],
+	[48 * 16, 'md'],
+	[64 * 16, 'lg'],
+	[80 * 16, 'xl'],
+	[96 * 16, '2xl'],
 ]
 
 const contentContainer = document.getElementById(mainContainerId)

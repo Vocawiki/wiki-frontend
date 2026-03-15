@@ -3,9 +3,9 @@ import { ExternalSites } from './external-sites'
 
 export default function MainPage() {
 	return (
-		<div className="preflight plainlinks mt-4 mb-15 space-y-12 leading-none">
+		<div className="preflight plainlinks mt-6 mb-15 space-y-10 leading-none">
 			<BilibiliVideos />
-			<ExternalSites className="mb-8" />
+			<ExternalSites />
 		</div>
 	)
 }
