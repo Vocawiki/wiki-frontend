@@ -4,6 +4,6 @@ import { buildGadgets } from './gadget'
 import { buildWidgets } from './widget'
 import { buildWikitextPages } from './wikitext'
 
-await emptyDir('out')
+await emptyDir('out/pages')
 const tasks = [buildGadgets(), buildWidgets(), buildWikitextPages()]
 await Promise.all(tasks)
