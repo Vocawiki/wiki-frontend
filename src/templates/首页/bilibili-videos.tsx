@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 
+import { cn } from '@/lib/utils'
 import * as Wiki from '~/components/wikitext'
 
 interface BilibiliVideo {
@@ -71,11 +72,11 @@ function VideoCard({
 }: BilibiliVideo) {
 	return (
 		<li
-			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-sm *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm"
+			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-sm *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm [&_img]:w-full"
 			style={{ '--bg-color': bgColor, '--fg-color': fgColor } as CSSProperties}
 		>
 			<Wiki.Link href={`https://www.bilibili.com/video/${videoId}`}>
-				<Wiki.Image file={coverFile} link={false} width={300} className="[&_img]:w-full" />
+				<Wiki.Image file={coverFile} link={false} width={360} />
 				<div className="space-y-1 p-2">
 					<div className="line-clamp-2 h-[2lh] text-sm leading-tight font-medium">{title}</div>
 					<div className="text-xs leading-none opacity-90">{dateFormatter.format(uploadedAt)}</div>
