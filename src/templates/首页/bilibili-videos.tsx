@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react'
 
-import { cn } from '@/lib/utils'
 import * as Wiki from '~/components/wikitext'
 
 interface BilibiliVideo {
@@ -49,7 +48,7 @@ export function BilibiliVideos() {
 					关注我们的官方账号
 				</div>
 			</div>
-			<ul className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-4">
+			<ul className="grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4 sm:grid-cols-[repeat(auto-fill,minmax(14rem,1fr))]">
 				{videos
 					.toSorted((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
 					.map((video) => (
