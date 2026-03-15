@@ -82,9 +82,7 @@ const templateFix = ($content: JQuery<HTMLElement>) => {
 
 // 列表侧边距
 const listMarginLeft = () => {
-	$(
-		'.mw-parser-output ul:not(.margin-left-set), .mw-parser-output ol:not(.margin-left-set), #mw-content-text > pre.prettyprint ul:not(.margin-left-set), #mw-content-text > pre.prettyprint ol:not(.margin-left-set)',
-	).each((_, ele) => {
+	$('.mw-parser-output :is(ol, ul):not(.margin-left-set, .preflight *)').each((_, ele) => {
 		const $ele = $(ele)
 		if (/none.+none/i.test($ele.css('list-style')) || $ele.is('.gallery')) {
 			if ($ele.parent().is('li') && $ele.parent().parent().is('ul, ol')) {

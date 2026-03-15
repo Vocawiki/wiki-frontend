@@ -41,7 +41,7 @@ export function BilibiliVideos() {
 				<h2 className="text-lg leading-none font-semibold [grid-area:title] not-main-sm:self-end">
 					术力口百科姬
 				</h2>
-				<div className="contents text-sm leading-none font-medium text-white *:w-max *:rounded-max *:bg-(--background-color-progressive) *:px-4! *:py-3! *:[grid-area:link] not-main-sm:*:justify-self-end main-sm:*:px-3.25! main-sm:*:py-2!">
+				<div className="contents text-sm leading-none font-medium text-white *:w-max *:rounded-max *:bg-(--background-color-progressive)! *:px-4! *:py-3! *:[grid-area:link] not-main-sm:*:justify-self-end main-sm:*:px-3.25! main-sm:*:py-2!">
 					<Wiki.Link href="https://space.bilibili.com/10003900">哔哩哔哩</Wiki.Link>
 				</div>
 				<div className="text-sm leading-none text-subtle [grid-area:sub] not-main-sm:self-start">

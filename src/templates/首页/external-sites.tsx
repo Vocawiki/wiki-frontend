@@ -45,7 +45,7 @@ export function ExternalSites({ className }: { className?: string }) {
 			<Section title="其他相关站点">
 				<ul
 					className={cn(
-						'm-0! grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(calc(3rem+11em),1fr))] justify-center gap-2 text-sm',
+						'grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(calc(3rem+11em),1fr))] justify-center gap-2 text-sm',
 						'main-md:mx-auto! main-md:max-w-max main-md:grid-cols-3',
 					)}
 					role="list"
