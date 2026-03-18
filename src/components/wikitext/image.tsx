@@ -1,8 +1,6 @@
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
-import { TokenList } from '@/lib/utils'
-import { normalizeWikiTitle, withBaseURL } from '@/lib/wiki'
 
-import { WikiImage } from '../wiki-image'
+import { WikitextImageDevPreview } from './image-dev-preview'
 
 export interface WikitextImageProps {
 	file: string
@@ -11,12 +9,21 @@ export interface WikitextImageProps {
 	link?: string | false
 	alt?: string
 	className?: string
+	suppressSbWikitextError?: boolean
 }
 
 export function WikitextImage(props: WikitextImageProps) {
-	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) return <WikitextImageHTML {...props} />
+	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) return <WikitextImageDevPreview {...props} />
 
-	const { file, width, height, link, alt, className } = props
+	const { file, width, height, link, alt, className, suppressSbWikitextError } = props
+
+	if (className?.includes(']') && !suppressSbWikitextError) {
+		// 出错的例子：
+		// [https://example.com [[File:xxx|class=[&_img]:xxx]]]
+		throw new Error(
+			'SB wikitext会解析错误，不建议在class里包含“]”。如果确需包含，请设置suppressSbWikitextError',
+		)
+	}
 
 	let size: string | undefined = ''
 	if (width) {
@@ -41,44 +48,4 @@ export function WikitextImage(props: WikitextImageProps) {
 		.join('|')
 
 	return `[[File:${file}${args ? `|${args}` : ''}]]`
-}
-
-function WikitextImageHTML({ file, width, height, link, alt, className }: WikitextImageProps) {
-	const normalizedTitle = 'File:' + normalizeWikiTitle(file)
-	// 对于真正的wikitext，width和height并不是下面这个逻辑
-	const img = (
-		<WikiImage
-			alt={alt}
-			file={file}
-			decoding="async"
-			width={width}
-			height={height}
-			className="mw-file-element"
-			// data-file-width=""
-			// data-file-height=""
-		/>
-	)
-	const wrapper = link ? (
-		<a
-			href={withBaseURL('/' + normalizedTitle)}
-			onClick={(e) => {
-				e.preventDefault()
-				location.hash = '#/media/' + normalizedTitle
-			}}
-			className="mw-file-description"
-		>
-			{img}
-		</a>
-	) : (
-		<span>{img}</span>
-	)
-
-	const sizeIsUnset = width === undefined && height === undefined
-	const classList = new TokenList(sizeIsUnset ? 'mw-default-size' : undefined, className)
-
-	return (
-		<span className={classList.length > 0 ? classList.toString() : undefined} typeof="mw:File">
-			{wrapper}
-		</span>
-	)
 }

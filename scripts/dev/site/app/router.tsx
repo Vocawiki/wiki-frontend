@@ -1,5 +1,8 @@
 import type { ComponentType } from 'react'
 
+import { withBaseURL } from '@/lib/wiki'
+
+import { BackButton } from './back-button'
 import { MainPage } from './main-page'
 import { pages, type PageToPreview } from './pages'
 import { SiteMain } from './site-main'
@@ -13,8 +16,19 @@ export async function Router({ url }: { url: URL }) {
 	const pageInfo = pages.get(pageName)
 	if (!pageInfo) {
 		return (
-			<SiteMain title="404 Not Found">
-				<p>{pageName}不存在。</p>
+			<SiteMain title={pageName}>
+				<p>不存在“{pageName}”。</p>
+				<ul>
+					<li>
+						<BackButton linkLike>返回上一页</BackButton>
+					</li>
+					<li>
+						查看
+						<a href={withBaseURL(`/${pageName}`)} target="_blank">
+							Vocawiki同名页面
+						</a>
+					</li>
+				</ul>
 			</SiteMain>
 		)
 	}

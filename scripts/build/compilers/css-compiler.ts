@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { join, relative } from 'node:path'
+import { join, relative, resolve } from 'node:path'
 
 import tailwindcss from '@tailwindcss/postcss'
 import {
@@ -18,7 +18,7 @@ import { traverse } from 'radashi'
 import { IS_PRODUCTION } from '../../../lib/config' // 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名@/lib
 
 const postcssInstance = postcss(
-	postcssInsertImportTailwindConfig('src/tailwind-config.css'),
+	postcssInsertImportTailwindConfig('src/gadgets/site-styles/index.css'),
 	tailwindcss({
 		base: 'src',
 		optimize: false,
@@ -218,6 +218,7 @@ function transformSelector(selector: Selector) {
 			case 'pseudo-class':
 			case 'attribute':
 			case 'id':
+			case 'nesting':
 				return true
 		}
 		return false
@@ -231,28 +232,28 @@ function version(major: number, minor = 0, patch = 0) {
 	return (major << 16) | (minor << 8) | patch
 }
 
-function postcssInsertImportTailwindConfig(importPath: string): Plugin {
-	const configFileName = 'tailwind-config.css'
-	assert(importPath.endsWith(configFileName), `importPath必须是包含"${configFileName}"`)
-
+function postcssInsertImportTailwindConfig(referencePath: string): Plugin {
 	return {
-		postcssPlugin: 'postcss-insert-import-tailwind-config',
+		postcssPlugin: 'postcss-ensure-reference-tailwind-theme',
 		Once(root: Root) {
-			// 检查是否已存在 @import config 规则
+			const srcFilePath = root.source?.input.file
+			assert(srcFilePath, '插件当前处理的文件未知路径')
+
+			if (resolve(srcFilePath) === resolve(referencePath)) {
+				return
+			}
+
+			// 检查是否已存在 @reference 规则
 			const hasExistingImport = root.some((node) => {
-				return (
-					node.type === 'atrule' && node.name === 'import' && node.params.includes(configFileName)
-				)
+				return node.type === 'atrule' && node.name === 'reference'
 			})
 			if (hasExistingImport) return
 
-			const srcFilePath = root.source?.input.file
-			assert(srcFilePath, '插件当前处理的文件未知路径')
 			const srcFileDir = join(srcFilePath, '..')
-			const relativeImportPath = relative(srcFileDir, importPath).replaceAll('\\', '/')
+			const relativeImportPath = relative(srcFileDir, referencePath).replaceAll('\\', '/')
 
 			const importRule = new AtRule({
-				name: 'import',
+				name: 'reference',
 				params: `"${relativeImportPath}"`,
 			})
 

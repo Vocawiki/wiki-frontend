@@ -2,10 +2,19 @@ import type { ReactNode } from 'react'
 
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
 
-export interface WikitextInternalLinkProps {
-	target: string
+export interface WikitextInternalLinkPropsSimple {
+	page?: undefined
+	children: string
+}
+
+export interface WikitextInternalLinkPropsComplex {
+	page: string
 	children: ReactNode
 }
+
+export type WikitextInternalLinkProps =
+	| WikitextInternalLinkPropsSimple
+	| WikitextInternalLinkPropsComplex
 
 export interface WikitextExternalLinkProps {
 	href: string
@@ -36,17 +45,23 @@ function WikitextExternalLink({ href, children }: WikitextExternalLinkProps) {
 	)
 }
 
-function WikitextInternalLink({ target, children }: WikitextInternalLinkProps) {
+function WikitextInternalLink({ page, children }: WikitextInternalLinkProps) {
 	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) {
+		const link = page ?? children
 		return (
-			<a href={'/' + target} title={target}>
+			<a href={`/${link}`} title={link}>
 				{children}
 			</a>
 		)
 	}
+
+	if (page === undefined) {
+		return <>[[{children}]]</>
+	}
+
 	return (
 		<>
-			[[{target}|{children}]]
+			[[{page}|{children}]]
 		</>
 	)
 }

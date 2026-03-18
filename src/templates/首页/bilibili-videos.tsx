@@ -37,6 +37,7 @@ export function BilibiliVideos() {
 				<Wiki.Image
 					file="术力口百科姬头像.jpg"
 					className="size-12 overflow-hidden rounded-max shadow-sm [grid-area:avatar] main-2xs:size-14"
+					suppressSbWikitextError
 					width={64}
 					height={64}
 					link={false}
@@ -48,11 +49,11 @@ export function BilibiliVideos() {
 				<div className="contents text-sm leading-none font-medium text-white *:w-max *:rounded-max *:bg-(--background-color-progressive)! *:px-3.25! *:py-2.5! *:[grid-area:link] not-main-sm:*:justify-self-end">
 					<Wiki.Link href={accountURL}>哔哩哔哩</Wiki.Link>
 				</div>
-				<div className="text-xs leading-none text-subtle [grid-area:sub] not-main-sm:self-start main-2xs:text-sm">
+				<div className="-my-3 text-xs leading-none text-subtle [grid-area:sub] *:block *:py-3 not-main-sm:self-start main-2xs:text-sm">
 					<Wiki.Link href={accountURL}>关注我们的官方账号</Wiki.Link>
 				</div>
 			</div>
-			<ul className="grid grid-cols-2 gap-2 not-main-2xs:force-inline-full not-main-2xs:pr-[max(0.5rem,env(safe-area-inset-right))] not-main-2xs:pl-[max(0.5rem,env(safe-area-inset-left))] main-sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] main-sm:gap-3">
+			<ul className="grid grid-cols-2 gap-1.5 not-main-2xs:force-inline-full not-main-2xs:pr-[max(6px,env(safe-area-inset-right))] not-main-2xs:pl-[max(6px,env(safe-area-inset-left))] main-2xs:gap-2 main-sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] main-sm:gap-3">
 				{videos
 					.toSorted((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
 					.map((video) => (
@@ -75,7 +76,7 @@ function VideoCard({
 }: BilibiliVideo) {
 	return (
 		<li
-			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-sm *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm [&_img]:w-full"
+			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-sm *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm main-2xs:*:rounded-md [&_img]:w-full"
 			style={{ '--bg-color': bgColor, '--fg-color': fgColor } as CSSProperties}
 		>
 			<Wiki.Link href={`https://www.bilibili.com/video/${videoId}`}>

@@ -6,7 +6,6 @@
 /* @layer theme, base, components, utilities; */
 @layer theme;
 @import "tailwindcss/theme.css" layer(theme);
-@import "../../tailwind-config.css";
 
 @source not inline("container");
 /* [[Help:CSS工具类、变量]]中明确提及的 */
@@ -15,6 +14,9 @@
 );
 
 @theme {
+	/* 下面两个暂时没需要 */
+	--font-sans: initial;
+	--font-serif: initial;
 	--font-main:
 		ui-sans-serif, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
 		"Noto Color Emoji";
@@ -48,6 +50,145 @@
 	/* 这两个preflight要用 */
 	--default-font-family: var(--font-main);
 	--default-font-feature-settings: "locl";
+
+	--color-subtle: var(--color-subtle);
+
+	/* https://doc.wikimedia.org/codex/latest/design-tokens/breakpoint.html */
+	--breakpoint-codex-mobile: 320px;
+	--breakpoint-codex-tablet: 640px;
+	--breakpoint-codex-desktop: 1120px;
+	--breakpoint-codex-desktop-wide: 1680px;
+
+	/* 每个皮肤不同 */
+	--text-xs: var(--skin-specific);
+	--text-xs--line-height: var(--skin-specific);
+	--text-sm: var(--skin-specific);
+	--text-sm--line-height: var(--skin-specific);
+	--text-base: var(--skin-specific);
+	--text-base--line-height: var(--skin-specific);
+	--text-lg: var(--skin-specific);
+	--text-lg--line-height: var(--skin-specific);
+	--text-xl: var(--skin-specific);
+	--text-xl--line-height: var(--skin-specific);
+
+	/* 参考：
+	Citizen:
+    --border-radius-base: 4px;
+	--border-radius-medium: calc(var(--border-radius-base) * 2); = 8px
+    --border-radius-large: calc(var(--border-radius-base) * 3); = 12px
+
+	Tailwind:
+	--radius-xs: 0.125rem; = 2px
+	--radius-sm: 0.25rem; = 4px
+	--radius-md: 0.375rem; = 6px
+	--radius-lg: 0.5rem; = 8px
+	--radius-xl: 0.75rem; = 12px
+
+	shadcn/ui:
+  	--radius: 0.625rem;
+	--radius-sm: calc(var(--radius) - 4px); = 6px
+	--radius-md: calc(var(--radius) - 2px); = 8px
+	--radius-lg: var(--radius); = 10px
+	--radius-xl: calc(var(--radius) + 4px); = 14px
+	*/
+	--radius-*: initial;
+	--radius-xs: var(--skin-specific);
+	--radius-sm: var(--skin-specific);
+	--radius-md: var(--skin-specific);
+	/* 在Citizen上可以是完全圆形，而Vector上则比较方 */
+	--radius-max: var(--skin-specific);
+	--radius-container: var(--skin-specific);
+	/**
+	 * 等最低目标浏览器支持infinity后可去除，瓶颈在Firefox >= 114
+	 * https://caniuse.com/mdn-css_types_calc-keyword_infinity
+	 */
+	--radius-full: 99999px;
+}
+
+@custom-variant dark {
+	&:where(:root.skin-theme-clientpref-night, :root.skin-theme-clientpref-night *) {
+		@slot;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		&:where(:root.skin-theme-clientpref-os, :root.skin-theme-clientpref-os *) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant not-dark {
+	&:where(:root.skin-theme-clientpref-day, :root.skin-theme-clientpref-day *) {
+		@slot;
+	}
+
+	@media not (prefers-color-scheme: dark) {
+		&:where(:root.skin-theme-clientpref-os, :root.skin-theme-clientpref-os *) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant main-2xs (&:where(body.main-2xs *));
+@custom-variant main-xs (&:where(body.main-xs *));
+@custom-variant main-sm (&:where(body.main-sm *));
+@custom-variant main-md (&:where(body.main-md *));
+@custom-variant main-lg (&:where(body.main-lg *));
+@custom-variant main-xl (&:where(body.main-xl *));
+@custom-variant main-2xl (&:where(body.main-2xl *));
+@custom-variant main-not-sm (&:where(body:not(.main-sm) *));
+@custom-variant main-not-md (&:where(body:not(.main-md) *));
+@custom-variant main-not-lg (&:where(body:not(.main-lg) *));
+@custom-variant main-not-xl (&:where(body:not(.main-xl) *));
+@custom-variant main-not-2xl (&:where(body:not(.main-2xl) *));
+
+@utility fill {
+	position: absolute;
+	inset: 0;
+}
+
+@utility visually-hidden {
+	@apply sr-only;
+}
+
+@utility image-pixelated {
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+@utility image-rendering-auto {
+	image-rendering: auto;
+}
+
+@utility flex-center {
+	@apply flex items-center justify-center;
+}
+
+@utility auto-interact-fx {
+	@apply transition-[filter] hover:brightness-95 hover:saturate-103 active:brightness-92 active:saturate-106 active:transition-none;
+}
+
+@utility force-inline-full {
+	@container article-container (width > 0) {
+		:where(body.skin-citizen) & {
+			margin-inline: calc(50% - 50cqi - var(--padding-page));
+		}
+	}
+
+	:where(
+			:root.vector-feature-main-menu-pinned-disabled:is(
+					.vector-toc-not-available,
+					.vector-feature-toc-pinned-clientpref-0
+				).vector-feature-page-tools-pinned-disabled.vector-feature-appearance-pinned-clientpref-0
+		)
+		& {
+		margin-inline: calc(50% - 50vw);
+	}
+
+	@media (width < 1120px) {
+		:where(body.skin-vector-2022) & {
+			margin-inline: calc(50% - 50vw);
+		}
+	}
 }
 
 :root {
