@@ -73,7 +73,7 @@ export function TopicPortal({
 
 			<div className="pointer-events-none relative flex-center h-27 flex-col p-2">
 				<div className="min-h-(--h-button) grow" />
-				<div className="text-center transition not-dark:text-shadow-[0_0_4px_#fff,0_0_4px_#fff,0_0_8px_#fff,0_0_8px_#fff] group-hover/portal:[a:not(:hover)~*_&]:scale-90 group-hover/portal:[a:not(:hover)~*_&]:blur-[2px]">
+				<div className="text-center transition not-dark:text-shadow-[0_0_4px_#fff,0_0_4px_#fff,0_0_8px_#fff,0_0_8px_#fff] group-hover/portal:[a:not(:hover)~*>&]:scale-90 group-hover/portal:[a:not(:hover)~*>&]:blur-[2px]">
 					<div
 						aria-hidden
 						className="mr-[-1em] mb-1 text-xs leading-none tracking-[1em] opacity-0 transition-[letter-spacing,margin,opacity] duration-100 ease-in select-none group-hover/portal:mr-0 group-hover/portal:tracking-normal group-hover/portal:opacity-100 group-hover/portal:duration-[.25s,.25s,.15s] group-hover/portal:ease-out"
