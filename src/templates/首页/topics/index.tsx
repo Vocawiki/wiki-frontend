@@ -82,7 +82,9 @@ export function Topics() {
 					<TopicSeeMore page="Template:音声合成软件" />
 				</Section>
 				<Section>
-					<SectionHeader>虚拟歌手</SectionHeader>
+					<SectionHeader button={{ page: '虚拟歌手', children: '查看条目' }}>
+						虚拟歌手
+					</SectionHeader>
 					<TopicPortal
 						image="MikuNewType_main.png"
 						imageAlign="top"
@@ -157,7 +159,13 @@ function Section({ children }: { children: ReactNode }) {
 	)
 }
 
-function SectionHeader({ children }: { children: string }) {
+function SectionHeader({
+	children,
+	button = { page: `Template:${children}`, children: '查看全部' },
+}: {
+	children: string
+	button?: { page: string; children: ReactNode }
+}) {
 	return (
 		<div
 			className={cn(
@@ -167,8 +175,8 @@ function SectionHeader({ children }: { children: string }) {
 			<h3 className="text-xl leading-none font-semibold before:text-(--color-progressive) before:content-['#'] not-dark:text-shadow-[0_0_4px_#fff,0_0_8px_#fff]">
 				{children}
 			</h3>
-			<SeeAllButton page={`Template:${children}`} className="*:-mb-2.5">
-				查看全部
+			<SeeAllButton page={button.page} className="*:-mb-2.5">
+				{button.children}
 			</SeeAllButton>
 		</div>
 	)
