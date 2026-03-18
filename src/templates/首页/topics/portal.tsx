@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
+import { WikiImage } from '@/src/components/wiki-image'
 import * as Wiki from '~/components/wikitext'
 
 export function TopicPortal({
@@ -56,7 +57,7 @@ export function TopicPortal({
 							right: imageClip.right ? `calc(-1 * ${imageClip.right})` : undefined,
 						}}
 					>
-						<Wiki.Image file={image} link={false} alt="" width={128} />
+						<WikiImage file={image} alt="" width={128} />
 					</div>
 				</div>
 				{/* 颜色遮罩 */}
