@@ -18,6 +18,7 @@ export function WikiImage({ file: fileName, alt, ...props }: WikiImageProps) {
 function toImageURL(fileName: string): string {
 	const normalizedName = normalizeWikiTitle(fileName)
 	const hash = Md5.hashStr(normalizedName)
+	// FIXME: 路径不应总是有域名
 	const url = `/images/${hash[0]}/${hash.slice(0, 2)}/${encodeURIComponent(normalizedName)}`
-	return withBaseURL(url)
+	return withBaseURL(url, { absolute: true })
 }
