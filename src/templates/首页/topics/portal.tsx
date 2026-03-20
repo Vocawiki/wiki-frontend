@@ -134,7 +134,7 @@ function LinkButtonInPortal({
 						'border-gray-300 bg-white/60 backdrop-filter-[contrast(.5)saturate(5)brightness(1.8)var(--tw-backdrop-blur)] group-hover/click-zone:shadow-lg group-hover/click-zone:backdrop-filter-[brightness(95%)saturate(15)var(--tw-backdrop-blur)] group-hover/portal:backdrop-filter-[saturate(2)var(--tw-backdrop-blur)] active:shadow-none not-dark:shadow-xs not-dark:text-shadow-[0_0_1px_#fff,0_0_2px_#fff] not-dark:group-hover/click-zone:bg-white/20',
 						'dark:border-gray-400 dark:bg-gray-950/50 dark:backdrop-filter-[saturate(5)brightness(1.5)var(--tw-backdrop-blur)] dark:group-hover/click-zone:border-white dark:group-hover/click-zone:bg-transparent dark:group-hover/click-zone:shadow-[0_0_2px_#fff,0_0_8px_1px_#fff] dark:group-hover/click-zone:backdrop-filter-[saturate(5)brightness(1.5)var(--tw-backdrop-blur)]',
 						// 大小调整
-						'group-hover/click-zone:px-3.25! group-hover/click-zone:py-2.25! group-hover/portal:px-1.75 group-hover/portal:py-1.25',
+						'group-hover/click-zone:px-3.75! group-hover/click-zone:py-2.75! group-hover/portal:px-1.75 group-hover/portal:py-1.25',
 					)}
 				>
 					{children}
