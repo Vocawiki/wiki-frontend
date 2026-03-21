@@ -116,12 +116,11 @@ body {
 	float: none;
 }
 
-.mobileonly {
-	@apply codex-desktop:hidden!;
+body.main-lg .mobileonly {
+	display: none !important;
 }
-
-.nomobile {
-	@apply not-codex-desktop:hidden!;
+body:not(.main-lg) .nomobile {
+	display: none !important;
 }
 
 /* 修复移动端pagetool乱飞 */
