@@ -95,6 +95,7 @@
 	--radius-xs: var(--skin-specific);
 	--radius-sm: var(--skin-specific);
 	--radius-md: var(--skin-specific);
+	--radius-lg: var(--skin-specific);
 	/* 在Citizen上可以是完全圆形，而Vector上则比较方 */
 	--radius-max: var(--skin-specific);
 	--radius-container: var(--skin-specific);

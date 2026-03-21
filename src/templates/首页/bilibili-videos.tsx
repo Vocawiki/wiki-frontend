@@ -13,7 +13,7 @@ interface BilibiliVideo {
 
 const videos: BilibiliVideo[] = [
 	{
-		title: '高手云集！历届VCCL_REMIX榜首回顾',
+		title: '高手云集！历届VCCL REMIX榜首回顾',
 		videoId: 'BV1sBAnzZE2e',
 		uploadedAt: new Date('2026-03-20T17:30:00+0800'),
 		bgColor: '#468801',
@@ -83,7 +83,7 @@ function VideoCard({
 }: BilibiliVideo) {
 	return (
 		<li
-			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-sm *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm [&_img]:w-full"
+			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-sm *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm main-2xs:*:rounded-md [&_img]:w-full"
 			style={{ '--bg-color': bgColor, '--fg-color': fgColor } as CSSProperties}
 		>
 			<Wiki.Link href={`https://www.bilibili.com/video/${videoId}`}>

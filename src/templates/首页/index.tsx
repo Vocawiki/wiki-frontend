@@ -5,7 +5,7 @@ import { Topics } from './topics'
 export default function MainPage() {
 	return (
 		<div className="space-y-12">
-			<div className="preflight">
+			<div className="preflight leading-none">
 				<Topics />
 			</div>
 			{'{{{1|}}}'}

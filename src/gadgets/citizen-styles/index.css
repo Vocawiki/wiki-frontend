@@ -27,11 +27,12 @@
 		--text-xl: var(--font-size-x-large);
 		--text-xl--line-height: var(--line-height-x-large);
 
-		--radius-xs: 0.125rem;
-		--radius-sm: var(--border-radius-base);
-		--radius-md: var(--border-radius-medium);
+		--radius-xs: 0.125rem; /* 2px */
+		--radius-sm: var(--border-radius-base); /* 4px */
+		--radius-md: calc((var(--border-radius-base) + var(--border-radius-medium)) / 2); /* 6px */
+		--radius-lg: var(--border-radius-medium); /* 8px */
 		--radius-max: var(--radius-full);
-		--radius-container: var(--border-radius-large);
+		--radius-container: var(--border-radius-large); /* 12px */
 	}
 }
 

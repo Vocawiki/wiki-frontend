@@ -21,7 +21,7 @@ export function ExternalSites({ className }: { className?: string }) {
 						'main-lg:grow main-lg:rounded-container main-lg:border main-lg:border-(--border-color-subtle) main-lg:bg-(--background-color-neutral-subtle) main-lg:p-2',
 					)}
 				>
-					<div className="*:flex *:items-center *:gap-2 *:rounded-md *:border *:border-[#fbd68a] *:bg-[#fffbec]! *:p-1.75! *:pr-2.25! *:leading-none *:text-[#ae420a] *:[box-shadow:0_1px_3px_rgba(131,100,0,.1),0_1px_2px_-1px_rgba(131,100,0,.1)]">
+					<div className="*:flex *:items-center *:gap-2 *:rounded-lg *:border *:border-[#fbd68a] *:bg-[#fffbec]! *:p-1.75! *:pr-2.25! *:leading-none *:text-[#ae420a] *:[box-shadow:0_1px_3px_rgba(131,100,0,.1),0_1px_2px_-1px_rgba(131,100,0,.1)]">
 						<Wiki.Link href="https://vcpedia.cn/%E9%A6%96%E9%A1%B5">
 							<Wiki.Image
 								file="VCPedia logo.png"
@@ -149,7 +149,7 @@ function SiteItem({
 	return (
 		<li
 			className={cn(
-				'contents leading-none font-medium *:flex *:items-center *:gap-2 *:rounded-md *:bg-(--bg)! *:p-2! *:text-(--fg)',
+				'contents leading-none font-medium *:flex *:items-center *:gap-2 *:rounded-lg *:bg-(--bg)! *:p-2! *:text-(--fg)',
 				withRoundedIcon && '[&_img]:rounded-(--border-radius-base)',
 			)}
 			style={

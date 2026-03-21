@@ -26,8 +26,8 @@ export function TopicPortal({
 	return (
 		<div
 			className={cn(
-				'group/portal relative rounded-md dark:text-white',
-				'[&>a]:absolute [&>a]:inset-0 [&>a]:block [&>a]:overflow-hidden [&>a]:rounded-md [&>a]:border [&>a]:border-gray-300 [&>a]:bg-white [&>a]:shadow-xs [&>a]:transition',
+				'group/portal relative grid rounded-lg dark:text-white',
+				'[&>a]:absolute [&>a]:inset-0 [&>a]:block [&>a]:overflow-hidden [&>a]:rounded-lg [&>a]:border [&>a]:border-gray-300 [&>a]:bg-white [&>a]:shadow-xs [&>a]:transition',
 				'[&>a]:hover:border-slate-300 [&>a]:hover:shadow-md [&>a]:active:shadow-none',
 				'dark:[&>a]:border-gray-600 dark:[&>a]:hover:border-white dark:[&>a]:hover:shadow-[0_0_4px_#fff,0_0_12px_#fff]',
 				className,
@@ -71,21 +71,16 @@ export function TopicPortal({
 				<div className="visually-hidden select-none">查看条目：{children}</div>
 			</Wiki.Link>
 
-			<div className="pointer-events-none relative flex-center h-27 flex-col p-2">
+			<div className="pointer-events-none relative flex-center min-h-27 flex-col p-2">
 				<div className="min-h-(--h-button) grow" />
-				<div className="text-center transition not-dark:text-shadow-[0_0_4px_#fff,0_0_4px_#fff,0_0_8px_#fff,0_0_8px_#fff] group-hover/portal:[a:not(:hover)~*>&]:scale-90 group-hover/portal:[a:not(:hover)~*>&]:blur-[2px]">
-					<div
-						aria-hidden
-						className="mr-[-1em] mb-1 text-xs leading-none tracking-[1em] opacity-0 transition-[letter-spacing,margin,opacity] duration-100 ease-in select-none group-hover/portal:mr-0 group-hover/portal:tracking-normal group-hover/portal:opacity-100 group-hover/portal:duration-[.25s,.25s,.15s] group-hover/portal:ease-out"
-					>
+				<div
+					aria-hidden
+					className="text-center transition not-dark:text-shadow-[0_0_4px_#fff,0_0_4px_#fff,0_0_8px_#fff,0_0_8px_#fff] group-hover/portal:[a:not(:hover)~*>&]:scale-90 group-hover/portal:[a:not(:hover)~*>&]:blur-[2px]"
+				>
+					<div className="mr-[-1em] mb-1 text-xs leading-none tracking-[1em] opacity-0 transition-[letter-spacing,margin,opacity] duration-100 ease-in select-none group-hover/portal:mr-0 group-hover/portal:tracking-normal group-hover/portal:opacity-100 group-hover/portal:duration-[.25s,.25s,.15s] group-hover/portal:ease-out">
 						查看条目
 					</div>
-					<div
-						aria-hidden
-						className="text-center text-lg leading-none font-semibold transition-all"
-					>
-						{children}
-					</div>
+					<div className="text-center font-semibold transition-all">{children}</div>
 				</div>
 				<div className="min-h-0.5 transition-[flex-grow] group-hover/portal:grow" />
 				{withNavigation && (
@@ -102,7 +97,7 @@ export function TopicSeeMore({ page, children = '查看更多' }: { page: string
 	return (
 		<div
 			className={cn(
-				'contents text-center text-sm font-medium *:flex-center *:rounded-md *:border *:border-gray-300 *:bg-(--background-color-interactive) *:p-4 *:shadow-xs *:transition *:hover:border-slate-300 *:hover:shadow-md *:active:shadow-none',
+				'contents text-center text-sm leading-none font-medium *:flex-center *:rounded-lg *:border *:border-gray-300 *:bg-(--background-color-interactive) *:p-2 *:shadow-xs *:transition *:hover:border-slate-300 *:hover:shadow-md *:active:shadow-none',
 				'dark:*:border-gray-600 dark:*:hover:border-white dark:*:hover:shadow-[0_0_4px_#fff,0_0_12px_#fff]',
 			)}
 		>

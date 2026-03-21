@@ -88,7 +88,7 @@ export function Topics() {
 					<TopicPortal
 						image="MikuNewType_main.png"
 						imageAlign="top"
-						imageClip={{ top: '6px', left: '30px', right: '30px' }}
+						imageClip={{ top: '6px', left: '50px', right: '50px' }}
 						withNavigation
 					>
 						初音未来
@@ -102,20 +102,16 @@ export function Topics() {
 					<TopicPortal
 						image="RinLen_v4x.png"
 						imageAlign="top"
-						imageClip={{ top: '44px', left: '70px', right: '70px' }}
+						imageClip={{ top: '42px', left: '70px', right: '70px' }}
 					>
 						镜音铃·连
 					</TopicPortal>
-					<TopicPortal image="KAF+YOU_KAFU_COMPILATION_ALBUM.jpg" imageAlign="top" withNavigation>
-						可不
-					</TopicPortal>
 					<TopicPortal
-						image="VOCALOID_IA01.png"
+						image="Ch_img_kaitov3.png"
 						imageAlign="top"
-						imageClip={{ left: '40px', right: '24px' }}
-						withNavigation
+						imageClip={{ left: '20px', right: '130px' }}
 					>
-						IA
+						KAITO
 					</TopicPortal>
 					<TopicPortal
 						image="Yuki_v4.jpg"
@@ -126,6 +122,21 @@ export function Topics() {
 						歌爱雪
 					</TopicPortal>
 					<TopicPortal
+						image="可不CeVIO立绘.png"
+						imageAlign="top"
+						imageClip={{ top: '-5px', left: '0px', right: '-20px' }}
+						withNavigation
+					>
+						可不
+					</TopicPortal>
+					<TopicPortal
+						image="足立レイ2.png"
+						imageAlign="top"
+						imageClip={{ top: '20px', left: '70px', right: '80px' }}
+					>
+						足立零
+					</TopicPortal>
+					<TopicPortal
 						image="V4_color.png"
 						imageAlign="top"
 						imageClip={{ top: '12px' }}
@@ -134,14 +145,25 @@ export function Topics() {
 						flower
 					</TopicPortal>
 					<TopicPortal
-						image="SeeU_left.png"
+						image="俊达萌003.png"
 						imageAlign="top"
-						imageClip={{ top: '20px', left: '30px', right: '30px' }}
+						imageClip={{ top: '60px', left: '25px', right: '40px' }}
 						withNavigation
 					>
-						SeeU
+						俊达萌
 					</TopicPortal>
-					<TopicSeeMore page="Template:虚拟歌手衍生角色">虚拟歌手衍生角色</TopicSeeMore>
+					<TopicPortal
+						image="VOCALOID_IA01.png"
+						imageAlign="top"
+						imageClip={{ left: '40px', right: '24px' }}
+						withNavigation
+					>
+						IA
+					</TopicPortal>
+					<div className="grid gap-2">
+						<TopicSeeMore page="Category:按音声合成软件分类的角色">查看更多</TopicSeeMore>
+						<TopicSeeMore page="Template:虚拟歌手衍生角色">衍生角色</TopicSeeMore>
+					</div>
 				</Section>
 			</div>
 		</>
@@ -169,7 +191,7 @@ function SectionHeader({
 	return (
 		<div
 			className={cn(
-				'col-span-2 flex-center flex-col gap-2 overflow-hidden rounded-md border border-gray-300 bg-(--background-color-progressive-subtle) shadow-xs dark:border-gray-600',
+				'col-span-2 flex-center flex-col gap-2 overflow-hidden rounded-lg border border-gray-300 bg-(--background-color-progressive-subtle) shadow-xs dark:border-gray-600',
 			)}
 		>
 			<h3 className="text-xl leading-none font-semibold before:text-(--color-progressive) before:content-['#'] not-dark:text-shadow-[0_0_4px_#fff,0_0_8px_#fff]">
