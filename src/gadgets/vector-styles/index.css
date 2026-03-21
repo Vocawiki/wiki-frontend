@@ -291,15 +291,7 @@ div#p-personal {
 	padding: 5px 10px 5px 0;
 	box-shadow: #666 0 1px 5px;
 }
-#pt-notifications-alert .mw-echo-notifications-badge,
-#pt-notifications-notice .mw-echo-notifications-badge {
-	text-indent: -99999px;
-}
 
-#pt-notifications-alert .mw-echo-notifications-badge::after,
-#pt-notifications-notice .mw-echo-notifications-badge::after {
-	text-indent: 0;
-}
 #p-personal ul {
 	padding-left: 0;
 }
