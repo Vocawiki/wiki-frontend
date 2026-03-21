@@ -99,7 +99,7 @@
 
 ## 浏览器兼容性
 
-开发者需要注意`src`文件夹内的代码须满足Vocawiki规定的浏览器兼容性要求，请查阅[Vocawiki 帮助:浏览器兼容性](Help:浏览器兼容性)。
+开发者需要注意`src`文件夹内的代码须满足Vocawiki规定的浏览器兼容性要求，请查阅Vocawiki的[帮助:浏览器兼容性](https://voca.wiki/Help:浏览器兼容性)。
 
 - CSS可以会转译一些新特性，比如嵌套语法，完整特性列表见[Lightning CSS文档](https://lightningcss.dev/transpilation.html)。
 - JS语法可以使用最新语法，[Rolldown](https://github.com/rolldown/rolldown)会将其转译到兼容的语法。但是，JS API不行，不会自动polyfill。
