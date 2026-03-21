@@ -1,3 +1,8 @@
+/**
+ * 本文件进入仓库前的编辑历史和贡献者请见
+ * https://voca.wiki/MediaWiki:Gadget-SideBarPic.css?action=history
+ */
+
 /* 侧边栏logo或左下角图片添加 */
 body.sideBarPic-executed {
 	.sidebar-character {
@@ -82,7 +87,7 @@ body.sideBarPic .vector-sticky-pinned-container::after {
 			var(--color-surface-0-oklch__l) var(--color-surface-0-oklch__c)
 				var(--color-progressive-oklch__h) / 90%
 		);
-		/* https://github.com/parcel-bundler/lightningcss/issues/109 */
+		/* https://github.com/parcel-bundler/lightningcss/issues/109 TODO: 上游bug修复后恢复 */
 		/* background-color: color-mix(var(--color-surface-0) 90%, transparent); */
 	}
 
@@ -95,7 +100,7 @@ body.sideBarPic .vector-sticky-pinned-container::after {
 			var(--color-surface-2-oklch__l) var(--color-surface-2-oklch__c)
 				var(--color-progressive-oklch__h) / 80%
 		);
-		/* https://github.com/parcel-bundler/lightningcss/issues/109 */
+		/* https://github.com/parcel-bundler/lightningcss/issues/109 TODO: 上游bug修复后恢复 */
 		/* background-color: color-mix(var(--color-surface-2) 80%, transparent); */
 	}
 
@@ -108,7 +113,7 @@ body.sideBarPic .vector-sticky-pinned-container::after {
 			var(--color-surface-1-oklch__l) var(--color-surface-1-oklch__c)
 				var(--color-progressive-oklch__h) / 80%
 		);
-		/* https://github.com/parcel-bundler/lightningcss/issues/109 */
+		/* https://github.com/parcel-bundler/lightningcss/issues/109 TODO: 上游bug修复后恢复 */
 		/* background-color: color-mix(var(--color-surface-1) 80%, transparent); */
 	}
 }

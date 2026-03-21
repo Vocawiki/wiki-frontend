@@ -103,7 +103,7 @@
 	 * 等最低目标浏览器支持infinity后可去除，瓶颈在Firefox >= 114
 	 * https://caniuse.com/mdn-css_types_calc-keyword_infinity
 	 */
-	--radius-full: 99999px;
+	--radius-full: 9999px;
 }
 
 @custom-variant dark {

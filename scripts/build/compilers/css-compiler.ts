@@ -13,9 +13,10 @@ import {
 	type TransformOptions,
 } from 'lightningcss'
 import postcss, { AtRule, type Root, type Plugin } from 'postcss'
-import { traverse } from 'radashi'
+import { mapValues, traverse } from 'radashi'
 
 import { IS_PRODUCTION } from '../../../lib/config' // 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名@/lib
+import { CSS_BROWSER_TARGETS } from '../browser-target'
 
 const postcssInstance = postcss(
 	postcssInsertImportTailwindConfig('src/gadgets/site-styles/index.css'),
@@ -50,12 +51,16 @@ export async function compileCSS(path: string): Promise<string> {
 	return result.code.toString()
 }
 
-export const lightningCSSOptions = {
-	targets: {
-		chrome: version(109),
-		safari: version(16, 3), // 虽然明面上是16.4，但是仁慈点。16.3与Chrome 109发布时间差不多
-		firefox: version(109), // 虽然明面上是115，但同上
-	},
+export const lightningCSSOptions: Omit<
+	TransformOptions<{
+		'tw-utilities': {
+			prelude: null
+			body: 'rule-list'
+		}
+	}>,
+	'filename' | 'code'
+> = {
+	targets: mapValues(CSS_BROWSER_TARGETS, ([major, minor, patch]) => version(major, minor, patch)),
 	exclude: Features.FontFamilySystemUi,
 	minify: IS_PRODUCTION,
 	sourceMap: false,
@@ -71,7 +76,7 @@ export const lightningCSSOptions = {
 	// .class-1:not(#a#a#b) { color: #001; }
 	// .class-2 .class-3:not(#a#a#b) { color: #002; }
 	// div.class-4:not(#a#a#b) { color: #004; }
-	// .class-6 { .class-7:not(#a#a#b) { color: #004; } }
+	// .class-5 { .class-6:not(#a#a#b) { color: #004; } }
 	// /* ... */
 	// 目的是增加选择器的优先级
 	customAtRules: {
@@ -81,6 +86,31 @@ export const lightningCSSOptions = {
 		},
 	},
 	visitor: {
+		// Tailwind会在CSS文件中加入如
+		// `/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */`
+		// 的注释，更新Tailwind版本时会在站内产生大量无意义的编辑记录。
+		// 此处删除注释中“tailwind v4.X.X”的小版本，防止该问题。
+		StyleSheet: IS_PRODUCTION
+			? (sheet) => {
+					const comments = sheet.licenseComments
+					if (comments.length === 0) return
+					comments[0] = comments[0]!.replace(/(?<=tailwindcss v\d+)\.\d+\.\d+/, '')
+
+					// https://github.com/parcel-bundler/lightningcss/issues/1081 TODO: 上游bug修复后移除
+					traverse(sheet, (value, key, parent) => {
+						if (value === null && typeof key === 'string') {
+							delete parent[key as keyof typeof parent]
+						}
+					})
+
+					return {
+						licenseComments: comments,
+						rules: sheet.rules,
+						sourceMapUrls: sheet.sourceMapUrls,
+						sources: sheet.sources,
+					}
+				}
+			: undefined,
 		Rule: {
 			custom: {
 				'tw-utilities': (rule) => {
@@ -89,7 +119,7 @@ export const lightningCSSOptions = {
 						transformLeafSelector(ruleInBody)
 					}
 
-					// 绕过 https://github.com/parcel-bundler/lightningcss/issues/1081
+					// https://github.com/parcel-bundler/lightningcss/issues/1081 TODO: 上游bug修复后移除
 					traverse(rule.body.value, (value, key, parent) => {
 						if (value === null && typeof key === 'string') {
 							delete parent[key as keyof typeof parent]
@@ -102,15 +132,7 @@ export const lightningCSSOptions = {
 			},
 		},
 	},
-} satisfies Omit<
-	TransformOptions<{
-		'tw-utilities': {
-			prelude: null
-			body: 'rule-list'
-		}
-	}>,
-	'filename' | 'code'
->
+}
 
 /** `:not(#a#a#b)`，用于增加选择器优先级 */
 const theSelectorComponent: SelectorComponent = {
