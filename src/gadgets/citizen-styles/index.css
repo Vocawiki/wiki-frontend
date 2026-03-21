@@ -130,6 +130,11 @@ body:not(.main-lg) .nomobile {
 	}
 }
 
+/* 这里不该有毛玻璃效果 */
+.citizen-toc-card.citizen-menu__card {
+	backdrop-filter: none;
+}
+
 /* 移除无用的其他语言数量提示 */
 .citizen-page-languages .citizen-dropdown-summary::after {
 	content: none !important;

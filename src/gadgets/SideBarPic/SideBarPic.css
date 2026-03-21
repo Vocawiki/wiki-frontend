@@ -1,0 +1,114 @@
+/* 侧边栏logo或左下角图片添加 */
+body.sideBarPic-executed {
+	.sidebar-character {
+		position: fixed;
+		left: -3px;
+		z-index: -2;
+	}
+
+	.sidebar-character.top {
+		top: 0;
+	}
+
+	.sidebar-character.bottom {
+		bottom: 0;
+	}
+
+	#wglogo {
+		display: none;
+	}
+}
+
+/* 低像素设备隐藏 */
+.sidebar-character {
+	@variant not-codex-tablet {
+		display: none !important;
+	}
+}
+
+body.sideBarPic.skin-vector-2022:not(.DeceasedPerson) #mw-panel .portal {
+	background-color: rgb(246 246 246 / 90%);
+	margin-left: -0.75em;
+	margin-right: 0;
+	padding-left: 1.5em;
+	padding-right: 0.95em;
+}
+
+body.sideBarPic.skin-vector-2022:not(.DeceasedPerson) #mw-panel #p-logo + .portal {
+	padding-top: 1.1em;
+	margin-top: 0;
+}
+
+body.sideBarPic:not(.DeceasedPerson) .sidebar-character.active {
+	display: block;
+}
+
+body.sideBarPic-executed.show-logo:not(.DeceasedPerson) #mw-panel #p-logo {
+	height: 160px;
+}
+
+body.sideBarPic-executed.show-logo:not(.DeceasedPerson) #mw-panel #p-logo .mw-wiki-logo {
+	background-image: url("/images/e/e5/Vocawiki_logo_with_wordmark-vertical-dark.svg");
+	height: 160px;
+}
+
+body.sideBarPic:not(.DeceasedPerson) #footer {
+	background-color: rgb(255 255 255 / 70%);
+}
+
+/* vector-2022 背景图片 */
+body.sideBarPic.skin-vector-2022.mediawiki .mw-page-container,
+body.sideBarPic .vector-header-container .mw-header,
+body.sideBarPic .vector-dropdown .vector-dropdown-content {
+	background-color: rgb(255 255 255 / 90%);
+}
+
+body.sideBarPic .vector-pinned-container {
+	background-color: transparent;
+}
+
+body.sideBarPic .vector-sticky-pinned-container::after {
+	display: none;
+}
+
+/* Citizen */
+:where(body.skin-citizen).sideBarPic {
+	.citizen-page-container {
+		background-color: hsl(
+			var(--color-progressive-hsl__h) var(--color-surface-0-hsl__s)
+				var(--color-surface-0-hsl__l) / 90%
+		);
+		background-color: oklch(
+			var(--color-surface-0-oklch__l) var(--color-surface-0-oklch__c)
+				var(--color-progressive-oklch__h) / 90%
+		);
+		/* https://github.com/parcel-bundler/lightningcss/issues/109 */
+		/* background-color: color-mix(var(--color-surface-0) 90%, transparent); */
+	}
+
+	.citizen-sitenotice-container {
+		background-color: hsl(
+			var(--color-progressive-hsl__h) var(--color-surface-2-hsl__s)
+				var(--color-surface-2-hsl__l) / 80%
+		);
+		background-color: oklch(
+			var(--color-surface-2-oklch__l) var(--color-surface-2-oklch__c)
+				var(--color-progressive-oklch__h) / 80%
+		);
+		/* https://github.com/parcel-bundler/lightningcss/issues/109 */
+		/* background-color: color-mix(var(--color-surface-2) 80%, transparent); */
+	}
+
+	.citizen-footer {
+		background-color: hsl(
+			var(--color-progressive-hsl__h) var(--color-surface-1-hsl__s)
+				var(--color-surface-1-hsl__l) / 80%
+		);
+		background-color: oklch(
+			var(--color-surface-1-oklch__l) var(--color-surface-1-oklch__c)
+				var(--color-progressive-oklch__h) / 80%
+		);
+		/* https://github.com/parcel-bundler/lightningcss/issues/109 */
+		/* background-color: color-mix(var(--color-surface-1) 80%, transparent); */
+	}
+}

@@ -15,7 +15,10 @@ export async function compileJS(input: InputOption, options: OutputOptions = {})
 					'safari16.4',
 				],
 			},
-			treeshake: true,
+			treeshake: {
+				// import { ... } from 'radashi' 会导致Array.isArray、Number.isInteger被保留
+				propertyReadSideEffects: false,
+			},
 			platform: 'browser',
 		})
 
