@@ -84,3 +84,8 @@ body.page-Main_Page.action-view .vector-page-titlebar,
 body.page-Main_Page.action-view #siteSub {
 	@apply visually-hidden;
 }
+
+/* 相关条目描述 */
+.cdx-card__text__description {
+	@apply line-clamp-1;
+}

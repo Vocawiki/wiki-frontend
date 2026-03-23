@@ -365,3 +365,8 @@ body.sideBarPic-executed #mw-panel > .mw-portlet:last-of-type {
 	background-image: none !important;
 	padding-left: 0 !important;
 }
+
+/* 相关条目描述 */
+.cdx-card__text__description {
+	@apply line-clamp-1;
+}
