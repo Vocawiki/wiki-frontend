@@ -1,3 +1,4 @@
+import { assert } from 'radashi'
 import type { ReactNode } from 'react'
 
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
@@ -31,6 +32,8 @@ export function WikitextLink(props: WikitextLinkProps) {
 }
 
 function WikitextExternalLink({ href, children }: WikitextExternalLinkProps) {
+	assert(/^https?:\/\//.test(href), 'href必须以“http(s)://”开头')
+
 	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) {
 		return (
 			<a target="_blank" rel="noreferrer noopener" className="external text" href={href}>
@@ -46,8 +49,14 @@ function WikitextExternalLink({ href, children }: WikitextExternalLinkProps) {
 }
 
 function WikitextInternalLink({ page, children }: WikitextInternalLinkProps) {
+	const link = page ?? children
+
+	assert(
+		!/^(?:Category|分[类類]|File|Image|文件|[档檔]案|[图圖][片像]):/i.test(link),
+		`[[${link}]]不是一个有效的wikitext链接，是否忘记在开头加冒号？`,
+	)
+
 	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) {
-		const link = page ?? children
 		return (
 			<a href={`/${link}`} title={link}>
 				{children}
