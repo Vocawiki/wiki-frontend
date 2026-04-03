@@ -12,11 +12,12 @@ declare global {
 polyfillRandomUUID()
 
 /* 检查是否为维护组成员 */
-const wgUserGroups = mw.config.get('wgUserGroups')
+const { wgUserGroups, wgNamespaceNumber, wgCanonicalSpecialPageName } = mw.config.get([
+	'wgUserGroups',
+	'wgNamespaceNumber',
+	'wgCanonicalSpecialPageName',
+])
 const isSysOp = wgUserGroups!.includes('sysop')
-
-const wgNamespaceNumber = mw.config.get('wgNamespaceNumber')
-const wgCanonicalSpecialPageName = mw.config.get('wgCanonicalSpecialPageName')
 
 const $window = $(window)
 

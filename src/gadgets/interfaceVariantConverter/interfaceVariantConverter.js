@@ -20,12 +20,14 @@
 //     [key: string]: any;
 // };
 $(async () => {
-	const pagename = mw.config.get('wgPageName')
-	const username = mw.config.get('wgUserName')
+	const { wgPageName, wgUserName, wgArticleId } = mw.config.get([
+		'wgPageName',
+		'wgUserName',
+		'wgArticleId',
+	])
 	// await mw.loader.using(["mediawiki.api", "oojs-ui"]);
 
-	const pageid = mw.config.get('wgArticleId')
-	const basepage = pagename.replace(/\/.*?$/, '')
+	const basepage = wgPageName.replace(/\/.*?$/, '')
 	const api = new mw.Api()
 
 	const lrAivc = $.extend(
@@ -56,8 +58,8 @@ $(async () => {
 			? (
 					await api.get({
 						action: 'parse',
-						assertuser: username,
-						pageid,
+						assertuser: wgUserName,
+						pageid: wgArticleId,
 						prop: 'wikitext',
 					})
 				).parse.wikitext['*']
@@ -457,7 +459,7 @@ $(async () => {
 						(
 							await api.post({
 								action: 'parse',
-								assertuser: username,
+								assertuser: wgUserName,
 								text,
 								contentmodel: 'wikitext',
 								prop: 'text',
@@ -514,10 +516,10 @@ $(async () => {
 						const text = this.textInputs[variant].getValue()
 						return api.postWithToken('csrf', {
 							action: 'edit',
-							assertuser: username,
+							assertuser: wgUserName,
 							title: variantPage(variant),
 							text,
-							summary: `自动转换自[[${pagename}]]`,
+							summary: `自动转换自[[${wgPageName}]]`,
 							tags: 'VariantConverter|Automation tool',
 							watchlist: this.config.watchlist,
 							nocreate:
