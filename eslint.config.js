@@ -62,7 +62,14 @@ export default defineConfig(
 		files: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 		ignores: ['src/**/(meta).ts'],
 		languageOptions: {
-			globals: globals.browser,
+			globals: {
+				...globals.browser,
+				mw: 'readonly',
+				$: 'readonly',
+				OO: 'readonly',
+				wgULS: 'readonly',
+				libCachedCode: 'readonly',
+			},
 		},
 	},
 	// pluginReact.configs.flat.recommended,

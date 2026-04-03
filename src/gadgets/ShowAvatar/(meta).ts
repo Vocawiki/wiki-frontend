@@ -2,8 +2,8 @@ import type { GadgetMeta } from '@/tools/gadget'
 
 export default {
 	pages: [
-		{ type: 'existing', name: 'ShowAvatar.css' },
-		{ type: 'existing', name: 'ShowAvatar.js' },
+		{ type: 'source', entry: 'ShowAvatar.css' },
+		{ type: 'source', entry: 'ShowAvatar.js' },
 	],
 	withResourceLoader: true,
 	defaultEnabled: true,

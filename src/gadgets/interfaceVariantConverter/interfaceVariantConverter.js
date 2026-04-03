@@ -19,7 +19,6 @@
 // declare var InPageEdit: {
 //     [key: string]: any;
 // };
-/* global mw, $, OO, wgULS, libCachedCode */
 $(async () => {
 	const pagename = mw.config.get('wgPageName')
 	const username = mw.config.get('wgUserName')

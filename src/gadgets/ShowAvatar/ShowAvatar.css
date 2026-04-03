@@ -1,0 +1,29 @@
+#p-personal li {
+	margin-top: 1em;
+	margin-bottom: 0.75em;
+}
+
+#pt-userpage {
+	background: none !important;
+	padding-left: 0px !important;
+}
+
+#pt-avatar {
+	margin-top: 0.25em !important;
+	margin-bottom: 0px !important;
+}
+
+#pt-avatar img {
+	width: 2.5em;
+	border-radius: 50%;
+}
+
+#citizen-avatar {
+	vertical-align: middle;
+	width: 2em;
+	border-radius: 50%;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
