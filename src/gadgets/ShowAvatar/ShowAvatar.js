@@ -13,6 +13,7 @@
 		return $('<img>', attrs)
 	}
 
+	const userpageId = skin === 'vector' ? '#pt-userpage' : '#pt-userpage-2'
 	switch (skin) {
 		case 'vector':
 		case 'vector-2022': {
@@ -25,7 +26,7 @@
 					title: '上传头像',
 				}).append(newAvatar(userId)),
 			)
-			$('#pt-userpage').before($avatar)
+			$(userpageId).before($avatar)
 			break
 		}
 		case 'citizen':
