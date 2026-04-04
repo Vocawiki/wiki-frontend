@@ -342,10 +342,12 @@ body:not(.main-sm) .infobox {
 	text-shadow: none;
 }
 
-html.skin-theme-clientpref-night .comment-replybox textarea,
-html.skin-theme-clientpref-night .comment-toolbar,
-html.skin-theme-clientpref-night .comment-submit {
-	background-color: #1e1e1e;
-	color: #e0e0e0;
-	border: 1px solid #444;
+.comment-replybox textarea,
+.comment-toolbar,
+.comment-submit {
+	@variant dark {
+		background-color: #1e1e1e;
+		color: #e0e0e0;
+		border: 1px solid #444;
+	}
 }
