@@ -13,6 +13,8 @@ export default [
 	'mwPanel',
 	'shortlink',
 	'noteTA',
+	'heimuToggle',
+	'heimuToggleDefaultOn',
 	{ type: 'h2', text: 'skin' },
 	'sidebarHidden',
 	'colorLinks',
@@ -47,4 +49,5 @@ export default [
 	'libOOUIDialog',
 	'libCachedCode',
 	'libDiscussionUtil',
+	'libBottomRightCorner',
 ] satisfies GadgetListMeta
