@@ -1,0 +1,38 @@
+/* 加入仓库前的贡献者参见：https://voca.wiki/index.php?title=MediaWiki:Gadget-InPageEdit-NEXT.css&action=history */
+
+/* 工具箱 */
+@media (max-width: 1119px) {
+	.skin-citizen #ipe-edit-toolbox {
+		right: 8px !important;
+		bottom: 118px !important;
+		transition:
+			bottom var(--transition-duration-medium) var(--transition-timing-function-ease-out),
+			opacity var(--transition-duration-medium) var(--transition-timing-function-ease-out);
+	}
+	/* 向下滚动时贴底 */
+	.skin-citizen.citizen-scroll--down #ipe-edit-toolbox {
+		bottom: 8px !important;
+	}
+	/* 下拉菜单打开时隐藏 */
+	.skin-citizen:has(details.citizen-dropdown-details[open]) #ipe-edit-toolbox {
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+/* 图标 */
+svg.ipe-icon {
+	height: 0.8lh;
+}
+.skin-vector-citizen .mw-editsection svg.ipe-icon {
+	height: 1lh;
+}
+.skin-vector-2022 .mw-editsection svg.ipe-icon,
+.skin-vector .mw-editsection svg.ipe-icon {
+	height: 1em;
+}
+
+/* 编辑工具栏 */
+.wikiEditor-ui-top {
+	position: static !important;
+}

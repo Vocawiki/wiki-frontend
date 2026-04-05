@@ -2,8 +2,8 @@ import type { GadgetMeta } from '@/tools/gadget'
 
 export default {
 	pages: [
-		{ type: 'existing', name: 'InPageEdit-NEXT.css' },
-		{ type: 'source', entry: 'InPageEdit-NEXT.js' },
+		{ type: 'source', entry: 'InPageEdit-NEXT.css' },
+		{ type: 'source', entry: 'InPageEdit-NEXT.ts' },
 	],
 	withResourceLoader: true,
 	defaultEnabled: false,
