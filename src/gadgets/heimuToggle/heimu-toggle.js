@@ -34,7 +34,7 @@ $(() => {
 			}
 		})
 	})
-	if (+mw.user.options.get('gadget-HeimuToggleDefaultOn', 0) === 1) {
+	if (+mw.user.options.get('gadget-heimuToggleDefaultOn', 0) === 1) {
 		btn.trigger('click')
 	}
 })
