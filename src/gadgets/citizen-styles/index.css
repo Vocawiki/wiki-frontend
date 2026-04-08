@@ -1,18 +1,3 @@
-/* 临时修复开始 未PR */
-/*
-  这个类是“警告：您正在编辑的页面用于为软件提供界面文本。更改此页面将影响此wiki上其他用户的用户界面外观。”
-  以及“请记住这只是预览。您的更改尚未发布”等消息所用的消息框
-*/
-.cdx-message {
-	border-radius: var(--border-radius-medium);
-}
-
-/* “编辑模板数据”按钮多出了不需要的方括号 https://voca.wiki/?curid=10617 */
-.mw-templatedata-caption .mw-editsection-bracket {
-	display: none;
-}
-/* 临时修复结束 */
-
 @layer theme {
 	:root,
 	:host {
@@ -43,9 +28,9 @@
 	/* 调整主题色色相为青蓝色 */
 	--color-progressive-oklch__h: 215;
 	/* 调亮背景 */
-	--color-surface-0-oklch__l: 99%;
+	--color-surface-0-oklch__l: 99.62%;
 	/* 较亮的颜色需要的饱和度比较暗的颜色更低，由于我们调亮了背景，故此处调低饱和度 */
-	--color-surface-0-oklch__c: 0.006;
+	--color-surface-0-oklch__c: 0.0053;
 	--color-surface-1-oklch__c: 0.013;
 	/* 对于青蓝色来说，皮肤计算色超出sRGB色域，导致色域缩窄后的对比度偏低，故重设 */
 	--color-link: #006cad;
@@ -53,15 +38,15 @@
 	--color-visited: #6a60b0;
 
 	/* 对不支持oklch的浏览器 */
-	--color-progressive-hsl__h: 188.57;
+	--color-progressive-hsl__h: 188;
 	--color-progressive-hsl__s: 100%;
-	--color-progressive-hsl__l: 32.94%;
-	--color-surface-0-hsl__l: 98.24%;
-	--color-surface-0-hsl__s: 77.78%;
-	--color-surface-1-hsl__l: 95.49%;
-	--color-surface-1-hsl__s: 65.22%;
-	--color-surface-2-hsl__l: 92.35%;
-	--color-surface-2-hsl__s: 58.97%;
+	--color-progressive-hsl__l: 33%;
+	--color-surface-0-hsl__s: 100%;
+	--color-surface-0-hsl__l: 99%;
+	--color-surface-1-hsl__s: 79%;
+	--color-surface-1-hsl__l: 96%;
+	--color-surface-2-hsl__s: 66%;
+	--color-surface-2-hsl__l: 93%;
 
 	--font-family-base: var(--font-main);
 	--font-family-monospace: var(--font-mono);
