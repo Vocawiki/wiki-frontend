@@ -208,10 +208,9 @@ void (async () => {
 
 	// 使挂删模板位于文件页顶部
 	if (wgNamespaceNumber === 6) {
-		// 我真蚌埠住了，这个“will2Be2Deleted”类名
-		if ($('.ns-6 #mw-imagepage-content')[0] && $('.will2Be2Deleted')[0]) {
+		if ($('.ns-6 #mw-imagepage-content')[0] && $('.regToDel')[0]) {
 			$('#file').before($('#mw-imagepage-content'))
 		}
-		$('.ns-6 .will2Be2Deleted').css('margin-bottom', '1rem !important')
+		$('.ns-6 .regToDel').css('margin-bottom', '1rem !important')
 	}
 })()
