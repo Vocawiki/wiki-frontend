@@ -12,10 +12,11 @@ declare global {
 polyfillRandomUUID()
 
 /* 检查是否为维护组成员 */
-const { wgUserGroups, wgNamespaceNumber, wgCanonicalSpecialPageName } = mw.config.get([
+const { wgUserGroups, wgNamespaceNumber, wgCanonicalSpecialPageName, wgAction } = mw.config.get([
 	'wgUserGroups',
 	'wgNamespaceNumber',
 	'wgCanonicalSpecialPageName',
+	'wgAction',
 ])
 const isSysOp = wgUserGroups!.includes('sysop')
 
@@ -212,5 +213,15 @@ void (async () => {
 			$('#file').before($('#mw-imagepage-content'))
 		}
 		$('.ns-6 .regToDel').css('margin-bottom', '1rem !important')
+	}
+
+	// 快速填写编辑摘要
+	if (wgAction === 'edit') {
+		$('[for="wpSummary"] .mw-summary-preset-item a').on('click', (e) => {
+			const summaryBox = $('[name="wpSummary"]')
+			summaryBox.val(`${String(summaryBox.val())} ${$(e.currentTarget).text()}`.trim())
+			summaryBox.trigger('focus')
+			return false
+		})
 	}
 })()
