@@ -1,0 +1,11 @@
+@variant dark {
+	.Wikiplus-Btn {
+		background-color: #1a1a1a;
+	}
+	.Wikiplus-InterBox {
+		background-color: #1a2f2f;
+	}
+	#Wikiplus-Quickedit-Jump a {
+		color: white;
+	}
+}

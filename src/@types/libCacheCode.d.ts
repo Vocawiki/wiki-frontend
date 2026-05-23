@@ -1,0 +1,9 @@
+declare namespace libCachedCode {
+	export function getCachedCode(url: string): Promise<string>
+
+	export function getCachedCodeUrl(url: string): Promise<string>
+
+	export function injectCachedCode(url: string, _type: string): Promise<void>
+
+	export function batchInjectCachedCode(urls: string[], type: string): Promise<void>[]
+}
