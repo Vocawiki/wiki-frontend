@@ -205,6 +205,13 @@ void (async () => {
 		case 'BatchUpload':
 			$('textarea').val('{{Copyright}}')
 			break
+		case 'MassEditRegex':
+			$('#wpPageList').val('')
+			$('#wpMatch').val('')
+			$('#wpReplace').val('')
+			$('#wpSummary').val('// MassEditRegex')
+			$('#wpSummaryLabel').text('摘要：') // 临时修复：批量正则编辑
+			break
 	}
 
 	// 使挂删模板位于文件页顶部
