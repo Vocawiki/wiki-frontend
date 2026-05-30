@@ -13,6 +13,14 @@ interface BilibiliVideo {
 
 const videos: BilibiliVideo[] = [
 	{
+		title: '三站争霸！一口气看完B站/Niconico/YouTube 最速千万术曲',
+		videoId: 'BV17h9xBiEJv',
+		uploadedAt: new Date('2026-04-30T18:30:00+0800'),
+		coverFile: '三站争霸！一口气看完B站_Niconico_YouTube_最速千万术曲.jpg',
+		bgColor: '#744B34',
+		fgColor: '#fff',
+	},
+	{
 		title: '高手云集！历届VCCL REMIX榜首回顾',
 		videoId: 'BV1sBAnzZE2e',
 		uploadedAt: new Date('2026-03-20T17:30:00+0800'),
