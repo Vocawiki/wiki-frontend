@@ -1,3 +1,4 @@
+import { clarifyOldRevisionLicense } from './legacy-license'
 import { polyfillRandomUUID } from './polyfill-random-uuid'
 import { tabs } from './tabs'
 
@@ -227,4 +228,6 @@ void (async () => {
 			return false
 		})
 	}
+
+	clarifyOldRevisionLicense()
 })()
