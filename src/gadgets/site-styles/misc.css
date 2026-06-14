@@ -387,34 +387,34 @@ body:not(.main-sm) .infobox {
 .comment-submit {
 	top: 0.5em;
 	box-sizing: border-box;
-	border-color: var(--border-color-base,#a2a9b1);
+	border-color: var(--border-color-base, #a2a9b1);
 	border-radius: var(--border-radius-base);
-	background-color: var(--background-color-interactive-subtle,#f8f9fa);
+	background-color: var(--background-color-interactive-subtle, #f8f9fa);
 	box-shadow: none;
 	text-shadow: none;
-	color: var(--color-base,#202122);
+	color: var(--color-base, #202122);
 	font-weight: var(--font-weight-medium);
 	transition-property: background-color, color, border-color, box-shadow;
 	transition-duration: 100ms;
 }
 
 .comment-submit:hover {
-	border-color: var(--border-color-base,#a2a9b1);
-	background-color: var(--background-color-base,#fff);
+	border-color: var(--border-color-base, #a2a9b1);
+	background-color: var(--background-color-base, #fff);
 	box-shadow: none;
-	color: var(--color-base--hover,#404244);
+	color: var(--color-base--hover, #404244);
 }
 
 .comment-submit:active {
-	border-color: var(--border-color-interactive,#72777d);
-	background-color: var(--background-color-interactive,#eaecf0);
+	border-color: var(--border-color-interactive, #72777d);
+	background-color: var(--background-color-interactive, #eaecf0);
 	box-shadow: none;
-	color: var(--color-emphasized,#000);
+	color: var(--color-emphasized, #000);
 }
 
 .comment-submit:focus {
-	border-color: var(--border-color-progressive--focus,#36c);
-	box-shadow: inset 0 0 0 1px var(--box-shadow-color-progressive--focus,#36c);
+	border-color: var(--border-color-progressive--focus, #36c);
+	box-shadow: inset 0 0 0 1px var(--box-shadow-color-progressive--focus, #36c);
 }
 
 /* 页码 */
