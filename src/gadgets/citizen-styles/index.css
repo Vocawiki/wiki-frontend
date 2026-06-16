@@ -1,3 +1,15 @@
+/* 临时修复，未PR */
+/* 新版MW把注册页数字的span改成strong了 */
+.mw-body-content .mw-number-text strong {
+	font-family: var(--font-family-base);
+	color: var(--color-emphasized);
+	text-align: inherit;
+	font-size: var(--font-size-xxx-large);
+	font-weight: var(--font-weight-semi-bold);
+	line-height: var(--line-height-xxx-large);
+}
+/* 临时修复结束 */
+
 @layer theme {
 	:root,
 	:host {
