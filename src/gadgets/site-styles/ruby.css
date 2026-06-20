@@ -10,3 +10,7 @@ rb[data-id="template-ruby"]::before,
 	width: 0;
 	font-size: 0;
 }
+
+rt {
+	font-size: 0.75em;
+}
