@@ -6,7 +6,7 @@ export default {
 		{ type: 'existing', name: 'moesync.css' },
 	],
 	withResourceLoader: true,
-	defaultEnabled: true,
+	defaultEnabled: false,
 	dependencies: ['oojs-ui', 'mediawiki.diff.styles', 'oojs-ui-core', 'ext.gadget.site-lib'],
 	availableFor: { rights: ['edit'] },
 	type: 'general',
