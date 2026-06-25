@@ -191,14 +191,29 @@ body:not(.main-lg) .nomobile {
 	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/articlesSearch-ltr.svg);
 }
 
+#ca-flowthreadcontrol a::before {
+	content: "";
+	--image: url(/images/4/4c/OOjs_UI_icon_speechBubbleLock-ltr.svg);
+}
+
 #ca-purge a::before {
 	content: "";
-	--image: url(/extensions/ConfirmEdit/resources/images/refresh.svg);
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/reload.svg);
 }
 
 #ca-sync a::before {
 	content: "";
 	--image: url(/images/b/b1/Portlet-sync.svg);
+}
+
+#ca-VariantConverter a::before {
+	content: "";
+	--image: url(/images/a/aa/OOjs_UI_icon_LC-zh.svg);
+}
+
+#cm-settings a::before {
+	content: "";
+	--image: url(/resources/lib/ooui/themes/wikimediaui/images/icons/code.svg);
 }
 
 #ca-special-specialAssociatedNavigationLinks-link-0 > a::before {
