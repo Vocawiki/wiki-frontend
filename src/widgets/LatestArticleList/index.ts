@@ -60,7 +60,7 @@ function getPageItemsAndModifyDOM(): PageItem[] {
 	)
 		.map((liElem) => {
 			const anchorElem: HTMLAnchorElement | null = liElem.querySelector('a[href^="/"]')
-			return anchorElem?.title ? { liElem, anchorElem, title: anchorElem.textContent } : null
+			return anchorElem?.title ? { liElem, anchorElem, title: anchorElem.title } : null
 		})
 		.filter((x) => x !== null)
 
