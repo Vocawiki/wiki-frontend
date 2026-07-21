@@ -15,8 +15,6 @@ export function SiteMain({ title, children }: { title: ReactNode; children?: Rea
 							>
 								<span className="mw-page-title-main">{title}</span>
 							</h1>
-
-							<div className="mw-indicators"></div>
 						</div>
 						<div id="siteSub">来自Vocawiki</div>
 					</div>

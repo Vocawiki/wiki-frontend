@@ -29,419 +29,404 @@ export function Preferences() {
 	return (
 		<>
 			<style>{styles}</style>
-			<div className="citizen-preferences citizen-header__item citizen-dropdown">
-				<details id="citizen-preferences-details" className="citizen-dropdown-details">
-					<summary
-						className="citizen-dropdown-summary"
-						title="打开/关闭外观设置菜单"
-						aria-details="citizen-preferences__card"
-					>
-						<span className="citizen-ui-icon"></span>
-						<span>打开/关闭外观设置菜单</span>
-					</summary>
-				</details>
-				<div id="citizen-preferences__card" className="citizen-menu__card">
-					<div className="citizen-menu__card-content">
-						<div id="citizen-preferences-content" className="citizen-preferences-content">
-							<div
-								className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-custom-font-size mw-portlet-js citizen-menu"
-								id="skin-client-prefs-citizen-feature-custom-font-size"
-							>
-								<div className="citizen-menu__heading">文字</div>
-								<div className="citizen-menu__content">
-									<ul className="citizen-menu__content-list">
-										<li className="mw-list-item mw-list-item-js">
-											<div>
-												<form
-													onChange={(e) => {
-														const target = e.target as unknown as HTMLInputElement
-														// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-														setFontSize(target.value as any)
-													}}
-												>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-custom-font-size-group"
-															id="skin-client-pref-citizen-feature-custom-font-size-value-small"
-															type="radio"
-															value="small"
-															data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-small"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-small"
-															className="citizen-client-prefs-radio__label"
-														>
-															小
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-custom-font-size-group"
-															id="skin-client-pref-citizen-feature-custom-font-size-value-standard"
-															type="radio"
-															value="standard"
-															data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-standard"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-standard"
-															className="citizen-client-prefs-radio__label"
-														>
-															标准
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-custom-font-size-group"
-															id="skin-client-pref-citizen-feature-custom-font-size-value-large"
-															type="radio"
-															value="large"
-															data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-large"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-large"
-															className="citizen-client-prefs-radio__label"
-														>
-															大
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-custom-font-size-group"
-															id="skin-client-pref-citizen-feature-custom-font-size-value-xlarge"
-															type="radio"
-															value="xlarge"
-															data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-xlarge"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-xlarge"
-															className="citizen-client-prefs-radio__label"
-														>
-															特大
-														</label>
-													</div>
-												</form>
-											</div>
-										</li>
-									</ul>
+
+			<div id="citizen-preferences-content" className="citizen-preferences-content">
+				<div
+					className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-custom-font-size mw-portlet-js citizen-menu"
+					id="skin-client-prefs-citizen-feature-custom-font-size"
+				>
+					<div className="citizen-menu__heading">文字</div>
+					<div className="citizen-menu__content">
+						<ul className="citizen-menu__content-list">
+							<li className="mw-list-item mw-list-item-js">
+								<div>
+									<form
+										onChange={(e) => {
+											const target = e.target as unknown as HTMLInputElement
+											// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+											setFontSize(target.value as any)
+										}}
+									>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-custom-font-size-group"
+												id="skin-client-pref-citizen-feature-custom-font-size-value-small"
+												type="radio"
+												value="small"
+												data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-small"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-small"
+												className="citizen-client-prefs-radio__label"
+											>
+												小
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-custom-font-size-group"
+												id="skin-client-pref-citizen-feature-custom-font-size-value-standard"
+												type="radio"
+												value="standard"
+												data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-standard"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-standard"
+												className="citizen-client-prefs-radio__label"
+											>
+												标准
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-custom-font-size-group"
+												id="skin-client-pref-citizen-feature-custom-font-size-value-large"
+												type="radio"
+												value="large"
+												data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-large"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-large"
+												className="citizen-client-prefs-radio__label"
+											>
+												大
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-custom-font-size-group"
+												id="skin-client-pref-citizen-feature-custom-font-size-value-xlarge"
+												type="radio"
+												value="xlarge"
+												data-event-name="skin-client-pref-citizen-feature-custom-font-size-value-xlarge"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-custom-font-size-value-xlarge"
+												className="citizen-client-prefs-radio__label"
+											>
+												特大
+											</label>
+										</div>
+									</form>
 								</div>
-							</div>
-							<div
-								className="mw-portlet mw-portlet-skin-client-prefs-skin-theme mw-portlet-js citizen-menu"
-								id="skin-client-prefs-skin-theme"
-							>
-								<div className="citizen-menu__heading">颜色</div>
-								<div className="citizen-menu__content">
-									<ul className="citizen-menu__content-list">
-										<li className="mw-list-item mw-list-item-js">
-											<div>
-												<form
-													onChange={(e) => {
-														const target = e.target as unknown as HTMLInputElement
-														// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-														setTheme(target.value as any)
-													}}
-												>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-skin-theme-group"
-															id="skin-client-pref-skin-theme-value-os"
-															type="radio"
-															value="os"
-															data-event-name="skin-client-pref-skin-theme-value-os"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-skin-theme-value-os"
-															className="citizen-client-prefs-radio__label"
-														>
-															自动
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-skin-theme-group"
-															id="skin-client-pref-skin-theme-value-day"
-															type="radio"
-															value="day"
-															data-event-name="skin-client-pref-skin-theme-value-day"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-skin-theme-value-day"
-															className="citizen-client-prefs-radio__label"
-														>
-															浅色
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-skin-theme-group"
-															id="skin-client-pref-skin-theme-value-night"
-															type="radio"
-															value="night"
-															data-event-name="skin-client-pref-skin-theme-value-night"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-skin-theme-value-night"
-															className="citizen-client-prefs-radio__label"
-														>
-															深色
-														</label>
-													</div>
-												</form>
-											</div>
-										</li>
-									</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div
+					className="mw-portlet mw-portlet-skin-client-prefs-skin-theme mw-portlet-js citizen-menu"
+					id="skin-client-prefs-skin-theme"
+				>
+					<div className="citizen-menu__heading">颜色</div>
+					<div className="citizen-menu__content">
+						<ul className="citizen-menu__content-list">
+							<li className="mw-list-item mw-list-item-js">
+								<div>
+									<form
+										onChange={(e) => {
+											const target = e.target as unknown as HTMLInputElement
+											// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+											setTheme(target.value as any)
+										}}
+									>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-skin-theme-group"
+												id="skin-client-pref-skin-theme-value-os"
+												type="radio"
+												value="os"
+												data-event-name="skin-client-pref-skin-theme-value-os"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-skin-theme-value-os"
+												className="citizen-client-prefs-radio__label"
+											>
+												自动
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-skin-theme-group"
+												id="skin-client-pref-skin-theme-value-day"
+												type="radio"
+												value="day"
+												data-event-name="skin-client-pref-skin-theme-value-day"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-skin-theme-value-day"
+												className="citizen-client-prefs-radio__label"
+											>
+												浅色
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-skin-theme-group"
+												id="skin-client-pref-skin-theme-value-night"
+												type="radio"
+												value="night"
+												data-event-name="skin-client-pref-skin-theme-value-night"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-skin-theme-value-night"
+												className="citizen-client-prefs-radio__label"
+											>
+												深色
+											</label>
+										</div>
+									</form>
 								</div>
-							</div>
-							<div
-								className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-custom-width mw-portlet-js citizen-menu"
-								id="skin-client-prefs-citizen-feature-custom-width"
-							>
-								<div className="citizen-menu__heading">宽度</div>
-								<div className="citizen-menu__content">
-									<ul className="citizen-menu__content-list">
-										<li className="mw-list-item mw-list-item-js">
-											<div>
-												<form
-													onChange={(e) => {
-														const target = e.target as unknown as HTMLInputElement
-														// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-														setWidth(target.value as any)
-													}}
-												>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-custom-width-group"
-															id="skin-client-pref-citizen-feature-custom-width-value-standard"
-															type="radio"
-															value="standard"
-															data-event-name="skin-client-pref-citizen-feature-custom-width-value-standard"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-custom-width-value-standard"
-															className="citizen-client-prefs-radio__label"
-														>
-															标准
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-custom-width-group"
-															id="skin-client-pref-citizen-feature-custom-width-value-wide"
-															type="radio"
-															value="wide"
-															data-event-name="skin-client-pref-citizen-feature-custom-width-value-wide"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-custom-width-value-wide"
-															className="citizen-client-prefs-radio__label"
-														>
-															宽
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-custom-width-group"
-															id="skin-client-pref-citizen-feature-custom-width-value-full"
-															type="radio"
-															value="full"
-															data-event-name="skin-client-pref-citizen-feature-custom-width-value-full"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-custom-width-value-full"
-															className="citizen-client-prefs-radio__label"
-														>
-															全宽
-														</label>
-													</div>
-												</form>
-											</div>
-										</li>
-									</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div
+					className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-custom-width mw-portlet-js citizen-menu"
+					id="skin-client-prefs-citizen-feature-custom-width"
+				>
+					<div className="citizen-menu__heading">宽度</div>
+					<div className="citizen-menu__content">
+						<ul className="citizen-menu__content-list">
+							<li className="mw-list-item mw-list-item-js">
+								<div>
+									<form
+										onChange={(e) => {
+											const target = e.target as unknown as HTMLInputElement
+											// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+											setWidth(target.value as any)
+										}}
+									>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-custom-width-group"
+												id="skin-client-pref-citizen-feature-custom-width-value-standard"
+												type="radio"
+												value="standard"
+												data-event-name="skin-client-pref-citizen-feature-custom-width-value-standard"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-custom-width-value-standard"
+												className="citizen-client-prefs-radio__label"
+											>
+												标准
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-custom-width-group"
+												id="skin-client-pref-citizen-feature-custom-width-value-wide"
+												type="radio"
+												value="wide"
+												data-event-name="skin-client-pref-citizen-feature-custom-width-value-wide"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-custom-width-value-wide"
+												className="citizen-client-prefs-radio__label"
+											>
+												宽
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-custom-width-group"
+												id="skin-client-pref-citizen-feature-custom-width-value-full"
+												type="radio"
+												value="full"
+												data-event-name="skin-client-pref-citizen-feature-custom-width-value-full"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-custom-width-value-full"
+												className="citizen-client-prefs-radio__label"
+											>
+												全宽
+											</label>
+										</div>
+									</form>
 								</div>
-							</div>
-							<div
-								className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-pure-black mw-portlet-js citizen-menu"
-								id="skin-client-prefs-citizen-feature-pure-black"
-							>
-								<div className="citizen-menu__heading">纯黑模式</div>
-								<div className="citizen-menu__content">
-									<ul className="citizen-menu__content-list">
-										<li className="mw-list-item mw-list-item-js">
-											<div>
-												<form
-													onChange={(e) => {
-														const target = e.target as unknown as HTMLInputElement
-														// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-														setPureBlack(target.value as any)
-													}}
-												>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-pure-black-group"
-															id="skin-client-pref-citizen-feature-pure-black-value-0"
-															type="radio"
-															value="0"
-															data-event-name="skin-client-pref-citizen-feature-pure-black-value-0"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-pure-black-value-0"
-															className="citizen-client-prefs-radio__label"
-														>
-															关闭
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-pure-black-group"
-															id="skin-client-pref-citizen-feature-pure-black-value-1"
-															type="radio"
-															value="1"
-															data-event-name="skin-client-pref-citizen-feature-pure-black-value-1"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-pure-black-value-1"
-															className="citizen-client-prefs-radio__label"
-														>
-															开启
-														</label>
-													</div>
-												</form>
-											</div>
-										</li>
-									</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div
+					className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-pure-black mw-portlet-js citizen-menu"
+					id="skin-client-prefs-citizen-feature-pure-black"
+				>
+					<div className="citizen-menu__heading">纯黑模式</div>
+					<div className="citizen-menu__content">
+						<ul className="citizen-menu__content-list">
+							<li className="mw-list-item mw-list-item-js">
+								<div>
+									<form
+										onChange={(e) => {
+											const target = e.target as unknown as HTMLInputElement
+											// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+											setPureBlack(target.value as any)
+										}}
+									>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-pure-black-group"
+												id="skin-client-pref-citizen-feature-pure-black-value-0"
+												type="radio"
+												value="0"
+												data-event-name="skin-client-pref-citizen-feature-pure-black-value-0"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-pure-black-value-0"
+												className="citizen-client-prefs-radio__label"
+											>
+												关闭
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-pure-black-group"
+												id="skin-client-pref-citizen-feature-pure-black-value-1"
+												type="radio"
+												value="1"
+												data-event-name="skin-client-pref-citizen-feature-pure-black-value-1"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-pure-black-value-1"
+												className="citizen-client-prefs-radio__label"
+											>
+												开启
+											</label>
+										</div>
+									</form>
 								</div>
-							</div>
-							<div
-								className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-autohide-navigation mw-portlet-js citizen-menu"
-								id="skin-client-prefs-citizen-feature-autohide-navigation"
-							>
-								<div className="citizen-menu__heading">自动隐藏导航</div>
-								<div className="citizen-menu__content">
-									<ul className="citizen-menu__content-list">
-										<li className="mw-list-item mw-list-item-js">
-											<div>
-												<form>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-autohide-navigation-group"
-															id="skin-client-pref-citizen-feature-autohide-navigation-value-0"
-															type="radio"
-															value="0"
-															data-event-name="skin-client-pref-citizen-feature-autohide-navigation-value-0"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-autohide-navigation-value-0"
-															className="citizen-client-prefs-radio__label"
-														>
-															关闭
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-autohide-navigation-group"
-															id="skin-client-pref-citizen-feature-autohide-navigation-value-1"
-															type="radio"
-															value="1"
-															data-event-name="skin-client-pref-citizen-feature-autohide-navigation-value-1"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-autohide-navigation-value-1"
-															className="citizen-client-prefs-radio__label"
-														>
-															开启
-														</label>
-													</div>
-												</form>
-											</div>
-										</li>
-									</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div
+					className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-autohide-navigation mw-portlet-js citizen-menu"
+					id="skin-client-prefs-citizen-feature-autohide-navigation"
+				>
+					<div className="citizen-menu__heading">自动隐藏导航</div>
+					<div className="citizen-menu__content">
+						<ul className="citizen-menu__content-list">
+							<li className="mw-list-item mw-list-item-js">
+								<div>
+									<form>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-autohide-navigation-group"
+												id="skin-client-pref-citizen-feature-autohide-navigation-value-0"
+												type="radio"
+												value="0"
+												data-event-name="skin-client-pref-citizen-feature-autohide-navigation-value-0"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-autohide-navigation-value-0"
+												className="citizen-client-prefs-radio__label"
+											>
+												关闭
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-autohide-navigation-group"
+												id="skin-client-pref-citizen-feature-autohide-navigation-value-1"
+												type="radio"
+												value="1"
+												data-event-name="skin-client-pref-citizen-feature-autohide-navigation-value-1"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-autohide-navigation-value-1"
+												className="citizen-client-prefs-radio__label"
+											>
+												开启
+											</label>
+										</div>
+									</form>
 								</div>
-							</div>
-							<div
-								className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-performance-mode mw-portlet-js citizen-menu"
-								id="skin-client-prefs-citizen-feature-performance-mode"
-							>
-								<div className="citizen-menu__heading">效能模式</div>
-								<div className="citizen-menu__content">
-									<ul className="citizen-menu__content-list">
-										<li className="mw-list-item mw-list-item-js">
-											<div>
-												<form
-													onChange={(e) => {
-														const target = e.target as unknown as HTMLInputElement
-														// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-														setPerformanceMode(target.value as any)
-													}}
-												>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-performance-mode-group"
-															id="skin-client-pref-citizen-feature-performance-mode-value-0"
-															type="radio"
-															value="0"
-															data-event-name="skin-client-pref-citizen-feature-performance-mode-value-0"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-performance-mode-value-0"
-															className="citizen-client-prefs-radio__label"
-														>
-															关
-														</label>
-													</div>
-													<div className="citizen-client-prefs-radio">
-														<input
-															name="skin-client-pref-citizen-feature-performance-mode-group"
-															id="skin-client-pref-citizen-feature-performance-mode-value-1"
-															type="radio"
-															value="1"
-															data-event-name="skin-client-pref-citizen-feature-performance-mode-value-1"
-															className="citizen-client-prefs-radio__input"
-														/>
-														<span className="citizen-client-prefs-radio__icon"></span>
-														<label
-															htmlFor="skin-client-pref-citizen-feature-performance-mode-value-1"
-															className="citizen-client-prefs-radio__label"
-														>
-															开
-														</label>
-													</div>
-												</form>
-											</div>
-										</li>
-									</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div
+					className="mw-portlet mw-portlet-skin-client-prefs-citizen-feature-performance-mode mw-portlet-js citizen-menu"
+					id="skin-client-prefs-citizen-feature-performance-mode"
+				>
+					<div className="citizen-menu__heading">效能模式</div>
+					<div className="citizen-menu__content">
+						<ul className="citizen-menu__content-list">
+							<li className="mw-list-item mw-list-item-js">
+								<div>
+									<form
+										onChange={(e) => {
+											const target = e.target as unknown as HTMLInputElement
+											// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+											setPerformanceMode(target.value as any)
+										}}
+									>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-performance-mode-group"
+												id="skin-client-pref-citizen-feature-performance-mode-value-0"
+												type="radio"
+												value="0"
+												data-event-name="skin-client-pref-citizen-feature-performance-mode-value-0"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-performance-mode-value-0"
+												className="citizen-client-prefs-radio__label"
+											>
+												关
+											</label>
+										</div>
+										<div className="citizen-client-prefs-radio">
+											<input
+												name="skin-client-pref-citizen-feature-performance-mode-group"
+												id="skin-client-pref-citizen-feature-performance-mode-value-1"
+												type="radio"
+												value="1"
+												data-event-name="skin-client-pref-citizen-feature-performance-mode-value-1"
+												className="citizen-client-prefs-radio__input"
+											/>
+											<span className="citizen-client-prefs-radio__icon"></span>
+											<label
+												htmlFor="skin-client-pref-citizen-feature-performance-mode-value-1"
+												className="citizen-client-prefs-radio__label"
+											>
+												开
+											</label>
+										</div>
+									</form>
 								</div>
-							</div>
-						</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>

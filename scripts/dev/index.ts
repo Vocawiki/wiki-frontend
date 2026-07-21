@@ -7,7 +7,7 @@ import { withBaseURL } from '@/lib/wiki'
 import { isoDatetimeToDate } from '@/lib/zod'
 
 const softwareStylesURL = withBaseURL(
-	'/load.php?lang=zh-cn&modules=skins.citizen.codex.styles%7Cskins.citizen.icons%2Cstyles&only=styles&skin=citizen',
+	'/load.php?lang=zh-cn&modules=skins.citizen.codex.styles%7Cskins.citizen.icons%2Cstyles%2Ctokens&only=styles&skin=citizen',
 )
 // TODO: 默认启用的gadget也需要把样式囊括进去
 
