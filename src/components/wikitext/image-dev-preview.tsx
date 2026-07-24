@@ -56,6 +56,7 @@ export function WikitextImageDevPreview({
 	const classList = new TokenList(sizeIsUnset ? 'mw-default-size' : undefined, className)
 
 	return (
+		// eslint-disable-next-line react/no-unknown-property
 		<span className={classList.length > 0 ? classList.toString() : undefined} typeof="mw:File">
 			{wrapper}
 		</span>

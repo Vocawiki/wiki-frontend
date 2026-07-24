@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 
 import { withBaseURL } from '@/lib/wiki'
+import { ExternalLink } from '@/src/components/external-link'
 
 import { BackButton } from './back-button'
 import { MainPage } from './main-page'
@@ -24,9 +25,7 @@ export async function Router({ url }: { url: URL }) {
 					</li>
 					<li>
 						查看
-						<a href={withBaseURL(`/${pageName}`)} target="_blank">
-							Vocawiki同名页面
-						</a>
+						<ExternalLink href={withBaseURL(`/${pageName}`)}>Vocawiki同名页面</ExternalLink>
 					</li>
 				</ul>
 			</SiteMain>

@@ -1,4 +1,5 @@
 import eslint from '@eslint/js'
+import reactPlugin from 'eslint-plugin-react'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
@@ -6,13 +7,22 @@ import tseslint from 'typescript-eslint'
 // import css from '@eslint/css'
 // import json from '@eslint/json'
 // import markdown from '@eslint/markdown'
-// import pluginReact from 'eslint-plugin-react'
 
 export default defineConfig(
 	eslint.configs.recommended,
 	tseslint.configs.recommendedTypeChecked,
 	tseslint.configs.stylisticTypeChecked,
+	reactPlugin.configs.flat.recommended,
+	reactPlugin.configs.flat['jsx-runtime'], // Add this if you are using React 17+
 	{
+		settings: {
+			react: {
+				// React version. "detect" automatically picks the version you have installed.
+				// You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
+				// Defaults to the "defaultVersion" setting and warns if missing, and to "detect" in the future
+				version: '19.2',
+			},
+		},
 		rules: {
 			'@typescript-eslint/consistent-type-imports': 'error',
 			'@typescript-eslint/no-inferrable-types': ['error', { ignoreParameters: true }],
