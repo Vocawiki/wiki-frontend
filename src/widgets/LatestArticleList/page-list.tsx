@@ -84,7 +84,7 @@ function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: 
 	return (
 		<ul
 			className={cn(
-				'grid auto-cols-80 grid-flow-row grid-rows-4 gap-2 overflow-x-auto py-2 *:contents',
+				'grid auto-cols-80 grid-flow-col grid-rows-4 gap-2 overflow-x-auto py-2 *:contents',
 				className,
 			)}
 		>
