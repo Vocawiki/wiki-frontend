@@ -3,7 +3,7 @@ export function LatestArticles() {
 		<div>
 			<h2 className="text-center">最新条目</h2>
 			{'{{#widget:LatestArticleList}}'}
-			<div id="latest-article-list">
+			<div id="latest-article-list" className="preflight">
 				{/* @ts-expect-error 临时措施 */}
 				<dynamicpagelist>
 					{`

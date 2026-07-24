@@ -84,7 +84,7 @@ function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: 
 	return (
 		<ul
 			className={cn(
-				'grid auto-rows-fr gap-2 *:contents main-xs:grid-cols-2 main-md:grid-cols-[repeat(auto-fill,minmax(19rem,1fr))]',
+				'grid auto-cols-80 grid-flow-row grid-rows-4 gap-2 overflow-x-auto py-2 *:contents',
 				className,
 			)}
 		>
@@ -159,7 +159,7 @@ function PageCard({
 					: undefined
 			}
 		>
-			<div className="relative w-26 shrink-0 mask-r-from-12 main-xs:main-not-sm:w-22">
+			<div className="relative w-22 shrink-0 mask-r-from-12 main-md:w-26">
 				{image ? (
 					<img
 						ref={imgRef}
@@ -169,12 +169,15 @@ function PageCard({
 						className="absolute size-full object-cover object-[65%]"
 					/>
 				) : (
-					<div className="absolute top-1/2 left-[46%] -translate-1/2 text-[4rem] font-bold text-(--color-disabled)">
+					<div
+						aria-hidden
+						className="absolute top-1/2 left-[46%] -translate-1/2 text-[4rem] font-bold text-(--color-disabled) select-none"
+					>
 						{firstCharacter(title)}
 					</div>
 				)}
 			</div>
-			<div className="relative flex flex-col p-2 pl-0 main-xs:-ml-2">
+			<div className="relative flex flex-col py-2.5 pr-2 pl-0">
 				<h3 className="-mt-1.5 line-clamp-1 text-base leading-[calc(1em+12px)] font-medium">
 					{title}
 				</h3>
@@ -221,22 +224,30 @@ function SeeMoreButton({ pages }: { pages: PartialPageInfo[] }) {
 					更多
 				</div>
 			</div>
-			<div className="flex min-w-0 grow transition-[left] group-hover:left-12">
-				{image1 && <img src={image1.source} alt="" className="min-w-0 grow object-cover" />}
+			<div className="flex grow -space-x-8">
+				{/* FIXME: 图片不为3个时显示异常 */}
+				{image1 && (
+					<div
+						className="grow bg-cover bg-center"
+						style={{ backgroundImage: `url(${image1.source})` }}
+					/>
+				)}
 				{image2 && (
-					<img
-						src={image2.source}
-						alt=""
-						className="-ml-8 min-w-0 grow object-cover"
-						style={{ clipPath: 'polygon(2rem 0, 100% 0, 100% 100%, 0 100%)' }}
+					<div
+						className="grow basis-4 bg-cover bg-center"
+						style={{
+							backgroundImage: `url(${image2.source})`,
+							clipPath: 'polygon(2rem 0, 100% 0, 100% 100%, 0 100%)',
+						}}
 					/>
 				)}
 				{image3 && (
-					<img
-						src={image3.source}
-						alt=""
-						className="-ml-8 min-w-0 grow object-cover"
-						style={{ clipPath: 'polygon(2rem 0, 100% 0, 100% 100%, 0 100%)' }}
+					<div
+						className="grow basis-2 bg-cover bg-center"
+						style={{
+							backgroundImage: `url(${image3.source})`,
+							clipPath: 'polygon(2rem 0, 100% 0, 100% 100%, 0 100%)',
+						}}
 					/>
 				)}
 			</div>

@@ -47,7 +47,7 @@ import { TopicPortal, TopicSeeMore } from './portal'
  */
 export function Topics() {
 	return (
-		<div className="leading-none">
+		<div className="preflight leading-none">
 			<h2 className="visually-hidden">专题推荐</h2>
 			<div className="space-y-8">
 				<Section>

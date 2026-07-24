@@ -47,7 +47,7 @@ const accountURL = 'https://space.bilibili.com/10003900'
 
 export function BilibiliVideos() {
 	return (
-		<div className="[&_a]:auto-interact-fx">
+		<div className="preflight [&_a]:auto-interact-fx">
 			<div className="mb-2 grid items-center justify-start gap-x-2 gap-y-1 [grid-template:'avatar_title_link'auto'avatar_sub_link'auto/auto_1fr_auto] main-2xs:grid-cols-[auto_auto_auto] main-sm:[grid-template:'avatar_title_link_sub']">
 				<Wiki.Image
 					file="术力口百科姬头像.jpg"

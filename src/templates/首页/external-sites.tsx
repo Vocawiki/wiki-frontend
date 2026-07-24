@@ -8,7 +8,7 @@ export function ExternalSites({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				'flex flex-col gap-8',
+				'preflight flex flex-col gap-8',
 				'main-lg:flex-row main-lg:justify-between main-xl:gap-12',
 				'[&_.mw-heading]:contents [&_a]:auto-interact-fx',
 				className,

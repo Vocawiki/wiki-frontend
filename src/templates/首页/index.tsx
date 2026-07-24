@@ -5,7 +5,7 @@ import { Topics } from './topics'
 
 export default function MainPage() {
 	return (
-		<div className="preflight plainlinks mb-14 space-y-12 leading-none">
+		<div className="plainlinks mb-14 space-y-12 leading-none">
 			<LatestArticles />
 			<Topics />
 			<BilibiliVideos />
