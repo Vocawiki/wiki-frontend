@@ -90,7 +90,7 @@ body {
 }
 
 .citizen-body-container {
-	/* 用于utility force-inline-full */
+	/* 用于utility ignore-article-inline-padding */
 	container: article-container / inline-size;
 }
 

@@ -187,7 +187,7 @@
 	@apply transition-[filter] hover:brightness-95 hover:saturate-103 active:brightness-92 active:saturate-106 active:transition-none;
 }
 
-@utility force-inline-full {
+@utility ignore-article-inline-padding {
 	@container article-container (width > 0) {
 		:where(body.skin-citizen) & {
 			margin-inline: calc(50% - 50cqi - var(--padding-page));
@@ -207,6 +207,14 @@
 	@media (width < 1120px) {
 		:where(body.skin-vector-2022) & {
 			margin-inline: calc(50% - 50vw);
+		}
+	}
+}
+
+@utility ignore-article-max-width {
+	@container article-container (width > 0) {
+		:where(body.skin-citizen) & {
+			margin-inline: calc(50% - 50cqi);
 		}
 	}
 }
