@@ -13,7 +13,7 @@
    ```
 
 2. 如果你使用VS Code（不使用则可跳过，不认可以下内容也可跳过）：
-   1. 进入工作区后会有通知推荐你安装以下扩展：ESLint、Oxc、Tailwind CSS IntelliSense，建议安装。
+   1. 进入工作区后会有通知推荐你安装以下扩展：TypeScript 7、ESLint、Oxc、Tailwind CSS IntelliSense，建议安装。
 
    2. 将以下内容加入`.vscode/settings.json`（不存在则创建）中：
 
@@ -58,6 +58,8 @@
       	"[jsonc]": {
       		"editor.defaultFormatter": "oxc.oxc-vscode",
       	},
+      	"js/ts.experimental.useTsgo": true,
+      	"js/ts.tsdk.path": "node_modules/@typescript/native/lib",
       }
       ```
 

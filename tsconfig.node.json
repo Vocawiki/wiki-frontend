@@ -7,7 +7,8 @@
 		"paths": {
 			"@/*": ["./*"],
 			"~/*": ["./src/*"]
-		}
+		},
+		"types": ["bun"]
 	},
 	"include": ["./*", "./lib", "./scripts", "./tools", "./src/**/(meta).ts", "./src/**/*.tsx"]
 }

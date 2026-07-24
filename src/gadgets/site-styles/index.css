@@ -196,9 +196,9 @@
 
 	:where(
 			:root.vector-feature-main-menu-pinned-disabled:is(
-					.vector-toc-not-available,
-					.vector-feature-toc-pinned-clientpref-0
-				).vector-feature-page-tools-pinned-disabled.vector-feature-appearance-pinned-clientpref-0
+				.vector-toc-not-available,
+				.vector-feature-toc-pinned-clientpref-0
+			).vector-feature-page-tools-pinned-disabled.vector-feature-appearance-pinned-clientpref-0
 		)
 		& {
 		margin-inline: calc(50% - 50vw);
