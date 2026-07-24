@@ -126,7 +126,7 @@ interface GetContentsContext {
 }
 
 /**
- * 请勿as此类型，请使用{@linkcode customPages}
+ * 请勿`as`此类型，请使用{@linkcode customPages}
  */
 export type GadgetMetaCustomPages = Tagged<
 	{
@@ -176,8 +176,11 @@ export interface GadgetMeta {
 	$draft?: true
 	/** wikitext，将会是[[MediaWiki:Gadget-<gadget_name>]]的内容，`undefined`则不创建 */
 	description?: string
-	/** 该 gadget 涉及的页面 */
-	pages: NonEmptyTuple<GadgetMetaPage>
+	/**
+	 * 该 gadget 涉及的页面
+	 *
+	 * 若为`undefined`，则使用index.ts、index.js、index.css，并构建为“Gadget-文件夹名.后缀” */
+	pages?: NonEmptyTuple<GadgetMetaPage>
 	/** 除非小工具仅包含样式，否则 ResourceLoader 是必需的 */
 	withResourceLoader: boolean
 	/** 是否默认启用 */

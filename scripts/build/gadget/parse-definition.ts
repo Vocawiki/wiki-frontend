@@ -10,9 +10,8 @@ import assert from 'node:assert/strict'
 
 import type { NonEmptyTuple } from 'type-fest'
 
-import type { GadgetMeta } from '@/tools/gadget'
-
 import type { GadgetsDefinition, GadgetsDefinitionNode } from './definition'
+import type { ParsedGadgetMeta } from './types'
 
 /**
  * 解析单个gadget的定义
@@ -21,7 +20,7 @@ import type { GadgetsDefinition, GadgetsDefinitionNode } from './definition'
  * const definition = '* Logout-confirm[ResourceLoader|default|type=general]|Logout-confirm.js'
  * const meta = gadgetMetaFromGadgetDefinition(definition)
  */
-export function parseGadgetDefinition(definition: string): { name: string; meta: GadgetMeta } {
+export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 	const match = definition.match(
 		/^\*\s*(?<name>[A-Za-z][A-Za-z0-9\-_.]*)\s*\[(?<options>.+?)\]\s*\|\s*(?<pages>.+?)\s*$/,
 	)
@@ -62,6 +61,7 @@ export function parseGadgetDefinition(definition: string): { name: string; meta:
 
 	const gadgetPages = groups.pages!.split(/\s*\|\s*/g)
 	const meta = {
+		name: gadgetName,
 		pages: gadgetPages.map((page) => ({
 			type: 'existing',
 			name: page,
@@ -96,9 +96,9 @@ export function parseGadgetDefinition(definition: string): { name: string; meta:
 		})(),
 		topLoaded: parseFlag('topLoaded'),
 		requiresES6: parseFlag('requiresES6'),
-	} satisfies GadgetMeta
+	} satisfies ParsedGadgetMeta
 	deleteUndefinedOrEmptyObject(meta)
-	return { name: gadgetName, meta }
+	return meta
 }
 
 function deleteUndefinedOrEmptyObject(o: object) {
@@ -131,7 +131,7 @@ export function parseGadgetsDefinition(content: string): GadgetsDefinition {
 
 			if (line.startsWith('*')) {
 				// 定义行
-				return { type: 'gadget', ...parseGadgetDefinition(line) }
+				return { type: 'gadget', meta: parseGadgetDefinition(line) }
 			}
 
 			const match = line.match(/^==\s*(.+?)\s*==\s*$/)

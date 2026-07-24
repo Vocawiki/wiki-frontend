@@ -5,10 +5,11 @@ import type { Simplify } from 'type-fest'
 import type { GadgetMeta } from '@/tools/gadget'
 
 import { getGadgetSourceFileInfo } from './file-info'
+import type { ParsedGadgetMeta } from './types'
 
 export type GadgetsDefinitionNode =
 	| { type: 'h2'; text: string }
-	| { type: 'gadget'; name: string; meta: GadgetMeta }
+	| { type: 'gadget'; meta: ParsedGadgetMeta }
 export type GadgetsDefinition = GadgetsDefinitionNode[]
 
 type FilerByValueType<T, V> = {
@@ -23,8 +24,8 @@ type GadgetMetaOnlyRootSingleValues = Simplify<
 	FilerByValueType<GadgetMeta, string | undefined> & Pick<GadgetMeta, 'supportsUrlLoad'>
 >
 
-export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string {
-	assert.match(gadgetName, /^[A-Za-z][A-Za-z0-9\-_.]*$/, `gadget名不合法：${gadgetName}`)
+export function toGadgetDefinition(meta: ParsedGadgetMeta): string {
+	assert.match(meta.name, /^[A-Za-z][A-Za-z0-9\-_.]*$/, `gadget名不合法：${meta.name}`)
 
 	const pages = meta.pages.flatMap((page) => {
 		switch (page.type) {
@@ -43,7 +44,7 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 			}
 		}
 	})
-	assert(pages.length > 0, `gadget “${gadgetName}” 必须有至少一个页面`)
+	assert(pages.length > 0, `gadget “${meta.name}” 必须有至少一个页面`)
 
 	const options: string[] = []
 
@@ -69,7 +70,7 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 		if (values.length === 0) return
 		const list = values.map((v) => {
 			const str = String(v)
-			assert.doesNotMatch(str, /^\s*$/, `${gadgetName}的meta中，${name}字段出现了空白字符串`)
+			assert.doesNotMatch(str, /^\s*$/, `${meta.name}的meta中，${name}字段出现了空白字符串`)
 			return str
 		})
 
@@ -85,7 +86,7 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 		if (value === undefined) return
 
 		const str = String(value)
-		assert.doesNotMatch(str, /^\s*$/, `${gadgetName}的meta中，${name}字段出现了空白字符串`)
+		assert.doesNotMatch(str, /^\s*$/, `${meta.name}的meta中，${name}字段出现了空白字符串`)
 		options.push(`${name}=${value}`)
 	}
 
@@ -109,5 +110,5 @@ export function toGadgetDefinition(gadgetName: string, meta: GadgetMeta): string
 	value('supportsUrlLoad')
 	// 被移除的选项就不加了，除非我们还想支持旧版 MediaWiki
 
-	return `* ${gadgetName} [${options.join('|')}] | ${pages.join(' | ')}`
+	return `* ${meta.name} [${options.join('|')}] | ${pages.join(' | ')}`
 }
