@@ -182,7 +182,7 @@ function PageCard({
 					)}
 					style={{ height: '2lh' }}
 				>
-					{summary ? cleanSummary(summary) : '暂无摘要'}
+					{summary === undefined ? '加载中…' : summary === '' ? '暂无摘要' : cleanSummary(summary)}
 				</p>
 			</div>
 		</WikiInternalLink>

@@ -40,7 +40,7 @@ export class MwApiCall<
 > {
 	protected api: mw.Api
 	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-	lastContinue: {} | undefined = undefined
+	lastContinue: {} = {}
 	finished = false
 	titles: string[]
 	params: Params
@@ -83,6 +83,7 @@ export class MwApiCall<
 
 		const data = (await this.api.get({
 			...solvedParams,
+			...this.lastContinue,
 			action: 'query',
 			format: 'json',
 			formatversion: '2',
@@ -96,16 +97,18 @@ export class MwApiCall<
 			}
 		}
 
-		if (data.continue) {
-			this.lastContinue = data.continue
-			yield* this.query()
-		} else {
-			yield data.query.pages as ({
-				pageid: number
-				ns: number
-				title: string
-			} & T)[]
+		yield data.query.pages as ({
+			pageid: number
+			ns: number
+			title: string
+		} & T)[]
+
+		if (!data.continue) {
 			this.finished = true
+			return
 		}
+
+		this.lastContinue = data.continue
+		yield* this.query()
 	}
 }
