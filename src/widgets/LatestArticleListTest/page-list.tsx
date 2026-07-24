@@ -130,7 +130,7 @@ function PageCard({
 					),
 				})
 			})
-	}, [])
+	}, [imgRef.current])
 
 	return (
 		<WikiInternalLink
