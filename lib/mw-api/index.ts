@@ -67,6 +67,7 @@ export class MwApiCall<
 				continue
 			}
 
+			props.push(prop)
 			const prefix = mwApiQueryProps[prop as MwQueryProp].prefix
 
 			for (const [k, v] of Object.entries(unprefixedParams)) {
