@@ -9,7 +9,7 @@ import { WikiInternalLink } from '@/src/components/wiki-link'
 
 import type { PartialPageInfo } from './types'
 
-const THUMB_WIDTH = 160
+const THUMB_WIDTH = 160 // 与Citizen搜索框的预览图大小相同，如遇相同条目可节省流量
 
 export default function LatestArticleList({ pages }: { pages: PartialPageInfo[] }) {
 	const [fetchedPages, setFetchedPages] = useState(pages)
@@ -71,20 +71,23 @@ export default function LatestArticleList({ pages }: { pages: PartialPageInfo[] 
 	}, [pages])
 
 	return (
-		<div className="preflight main-2xs:ignore-article-max-width">
-			<div className="mx-auto max-w-480">
-				<PageList pages={fetchedPages} />
-			</div>
+		<div className="main-2xs:ignore-article-max-width">
+			<PageList pages={fetchedPages} className="mx-auto max-w-480" />
 		</div>
 	)
 }
 
-function PageList({ pages }: { pages: PartialPageInfo[] }) {
+function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: string }) {
 	const facRef = useRef<FastAverageColor | null>(null)
 	const shownPagesNumber = pages.length > 23 ? pages.length - 3 : Math.min(pages.length, 20)
 
 	return (
-		<ul className="grid auto-rows-fr gap-2 *:contents main-xs:grid-cols-2 main-md:grid-cols-[repeat(auto-fill,minmax(19rem,1fr))]">
+		<ul
+			className={cn(
+				'grid auto-rows-fr gap-2 *:contents main-xs:grid-cols-2 main-md:grid-cols-[repeat(auto-fill,minmax(19rem,1fr))]',
+				className,
+			)}
+		>
 			{pages.slice(0, shownPagesNumber).map((page) => (
 				<li key={page.href}>
 					<PageCard {...page} facRef={facRef} />
@@ -137,7 +140,7 @@ function PageCard({
 			href={href}
 			title={title}
 			className={cn(
-				'PageCard flex overflow-hidden rounded-md shadow-sm auto-interact-fx transition-colors duration-1000 ease-linear',
+				'flex overflow-hidden rounded-md shadow-sm auto-interact-fx transition-colors duration-1000 ease-linear',
 				themeColor
 					? themeColor.supportsOklch
 						? 'bg-(--bg-color-light) text-(--text-color-light) shadow-(color:--text-color-light)/14 dark:bg-(--bg-color-dark) dark:text-(--text-color-dark)'

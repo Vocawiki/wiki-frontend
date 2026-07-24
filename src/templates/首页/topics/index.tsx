@@ -47,7 +47,7 @@ import { TopicPortal, TopicSeeMore } from './portal'
  */
 export function Topics() {
 	return (
-		<>
+		<div className="leading-none">
 			<h2 className="visually-hidden">专题推荐</h2>
 			<div className="space-y-8">
 				<Section>
@@ -166,13 +166,10 @@ export function Topics() {
 					</div>
 				</Section>
 			</div>
-		</>
+		</div>
 	)
 }
-/*
 
-
-*/
 function Section({ children }: { children: ReactNode }) {
 	return (
 		<div className="grid auto-rows-fr grid-cols-2 gap-2 main-2xs:grid-cols-[repeat(auto-fit,minmax(9rem,1fr))]">
