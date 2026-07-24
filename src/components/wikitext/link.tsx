@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
 
+import { WikiInternalLink } from '../wiki-link'
+
 export interface WikitextInternalLinkPropsSimple {
 	page?: undefined
 	children: string
@@ -58,9 +60,9 @@ function WikitextInternalLink({ page, children }: WikitextInternalLinkProps) {
 
 	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) {
 		return (
-			<a href={`/${link}`} title={link}>
+			<WikiInternalLink href={`/${link}`} title={link}>
 				{children}
-			</a>
+			</WikiInternalLink>
 		)
 	}
 
