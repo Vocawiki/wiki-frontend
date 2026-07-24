@@ -20,6 +20,9 @@ importers:
       tailwind-merge:
         specifier: ^3.5.0
         version: 3.5.0
+      ts-extras:
+        specifier: ^1.3.0
+        version: 1.3.0
       ts-md5:
         specifier: ^2.0.1
         version: 2.0.1
@@ -1237,6 +1240,10 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
+  ts-extras@1.3.0:
+    resolution: {integrity: sha512-2o31AwfP5q7Sa0RN/KaSNBFkw0jRnWsqUY4W4SwBWrxbge9J6t9YBvJIRX2ZyVhpGj4zE5UYwNzTTBnIHeaDew==}
+    engines: {node: '>=20'}
+
   ts-md5@2.0.1:
     resolution: {integrity: sha512-yF35FCoEOFBzOclSkMNEUbFQZuv89KEQ+5Xz03HrMSGUGB1+r+El+JiGOFwsP4p9RFNzwlrydYoTLvPOuICl9w==}
     engines: {node: '>=18'}
@@ -2339,6 +2346,10 @@ snapshots:
   ts-api-utils@2.4.0(typescript@5.9.3):
     dependencies:
       typescript: 5.9.3
+
+  ts-extras@1.3.0:
+    dependencies:
+      type-fest: 5.5.0
 
   ts-md5@2.0.1: {}
 

@@ -1,4 +1,4 @@
-onlyBuiltDependencies:
-  - bun
+allowBuilds:
+  bun: true
 publicHoistPattern:
   - '@types/oojs-ui'

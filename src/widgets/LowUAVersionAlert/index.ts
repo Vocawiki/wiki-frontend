@@ -100,26 +100,30 @@ const componentHTML = `<div
  * - Safari 16.4
  *   https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes
  */
-const doesUAMeetMinimumVersion = ((cssSupports): boolean => {
-	if (cssSupports('width', '1lh')) {
-		// Chrome >= 109, Safari >= 16.4, Firefox >= 120
-		return true
-	}
+const doesUAMeetMinimumVersion = ((): boolean => {
+	try {
+		if (CSS.supports('width', '1lh')) {
+			// Chrome >= 109, Safari >= 16.4, Firefox >= 120
+			return true
+		}
 
-	if (!cssSupports('animation-composition', 'add')) {
-		// Chrome < 112, Safari < 16.0, Firefox < 115
+		if (!CSS.supports('animation-composition', 'add')) {
+			// Chrome < 112, Safari < 16.0, Firefox < 115
+			return false
+		}
+		// 16.0 <= Safari < 16.4, 115 <= Firefox < 120
+
+		if (CSS.supports('selector(:dir(ltr))')) {
+			// Firefox >= 115
+			return true
+		}
+	} catch {
 		return false
-	}
-	// 16.0 <= Safari < 16.4, 115 <= Firefox < 120
-
-	if (cssSupports('selector(:dir(ltr))')) {
-		// Firefox >= 115
-		return true
 	}
 
 	// 16.0 <= Safari < 16.4
 	return false
-})(CSS.supports)
+})()
 
 if (!doesUAMeetMinimumVersion) {
 	document.body.insertAdjacentHTML('beforeend', componentHTML)

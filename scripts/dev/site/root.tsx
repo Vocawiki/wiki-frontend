@@ -45,7 +45,7 @@ export function Root(props: { url: URL }) {
 										aria-details="citizen-preferences-dropdown__card"
 									>
 										<span className="citizen-ui-icon mw-ui-icon-wikimedia-configure">
-											<span style={{ position: 'absolute', inset: 0 }}>⚙️</span>
+											<span className="fill">⚙️</span>
 										</span>
 										<span>打开/关闭外观设置菜单</span>
 									</summary>

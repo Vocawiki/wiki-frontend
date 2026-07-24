@@ -24,6 +24,17 @@ export default defineConfig({
 		},
 	},
 
+	server: {
+		proxy: {
+			'/vocawiki': {
+				target: 'https://voca.wiki',
+				changeOrigin: true,
+				followRedirects: true,
+				rewrite: (path) => path.replace(/^\/vocawiki/, ''),
+			},
+		},
+	},
+
 	// specify entry point for each environment.
 	// (currently the plugin assumes `rollupOptions.input.index` for some features.)
 	environments: {

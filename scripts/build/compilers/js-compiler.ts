@@ -8,6 +8,8 @@ import {
 	type RolldownBuild,
 } from 'rolldown'
 
+import { IS_PRODUCTION } from '@/lib/config'
+
 import { JS_BROWSER_TARGETS, type BrowserTargetVersion, type BrowserType } from '../browser-target'
 
 const rolldownOptions: RolldownInputOptions = {
@@ -31,7 +33,7 @@ export async function compileJS(
 	try {
 		bundle = await rolldown({ ...rolldownOptions, input })
 
-		const outputOptions: RolldownOutputOptions = { minify: true, ...options }
+		const outputOptions: RolldownOutputOptions = { minify: IS_PRODUCTION, ...options }
 		const { output } = await bundle.generate(outputOptions)
 		assert.equal(output.length, 1, '应当只有一个chunk生成')
 		const code = output[0].code
