@@ -189,7 +189,7 @@
 
 @utility ignore-article-inline-padding {
 	@container article-container (width > 0) {
-		:where(body.skin-citizen) & {
+		:where(body.skin-citizen:not(.citizen-toc-enabled)) & {
 			margin-inline: calc(50% - 50cqi - var(--padding-page));
 		}
 	}
@@ -213,7 +213,7 @@
 
 @utility ignore-article-max-width {
 	@container article-container (width > 0) {
-		:where(body.skin-citizen) & {
+		:where(body.skin-citizen:not(.citizen-toc-enabled)) & {
 			margin-inline: calc(50% - 50cqi);
 		}
 	}
