@@ -1,7 +1,6 @@
 import type { GadgetMeta } from '@/tools/gadget'
 
 export default {
-	pages: [{ type: 'existing', name: 'site-lib.js' }],
 	withResourceLoader: true,
 	defaultEnabled: false,
 	dependencies: ['mediawiki.util'],
