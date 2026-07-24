@@ -70,11 +70,7 @@ export default function LatestArticleList({ pages }: { pages: PartialPageInfo[] 
 		})()
 	}, [pages])
 
-	return (
-		<div className="main-2xs:ignore-article-max-width">
-			<PageList pages={fetchedPages} className="mx-auto max-w-480" />
-		</div>
-	)
+	return <PageList pages={fetchedPages} className="mx-auto max-w-480" />
 }
 
 function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: string }) {
@@ -82,7 +78,7 @@ function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: 
 	const shownPagesNumber = pages.length > 23 ? pages.length - 3 : Math.min(pages.length, 20)
 
 	return (
-		<ul
+		<ol
 			className={cn(
 				'grid auto-cols-80 grid-flow-col grid-rows-4 gap-2 overflow-x-auto py-2 *:contents',
 				className,
@@ -96,7 +92,7 @@ function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: 
 			<li>
 				<SeeMoreButton pages={pages.slice(shownPagesNumber)} />
 			</li>
-		</ul>
+		</ol>
 	)
 }
 

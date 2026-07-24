@@ -3,8 +3,8 @@ export function LatestArticles() {
 		<div>
 			<h2 className="text-center">最新条目</h2>
 			{'{{#widget:LatestArticleList}}'}
-			<div id="latest-article-list" className="preflight">
-				{/* @ts-expect-error 临时措施 */}
+			<div id="latest-article-list" className="preflight ignore-article-max-width">
+				{/* @ts-expect-error MW标签 */}
 				<dynamicpagelist>
 					{`
 namespace = 0
@@ -15,7 +15,7 @@ count = 30
 mode = ordered
 redirects = exclude
 `}
-					{/* @ts-expect-error 临时措施 */}
+					{/* @ts-expect-error MW标签 */}
 				</dynamicpagelist>
 			</div>
 		</div>
