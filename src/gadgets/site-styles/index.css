@@ -143,6 +143,25 @@
 @custom-variant main-not-xl (&:where(body:not(.main-xl) *));
 @custom-variant main-not-2xl (&:where(body:not(.main-2xl) *));
 
+@utility text-left {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-right {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-justify {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-start {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-end {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-center {
+	text-spacing-trim: var(--text-spacing-trim-centered);
+}
+
 @utility fill {
 	position: absolute;
 	inset: 0;
@@ -199,6 +218,8 @@
 		--color-botedit: #ab7167;
 	}
 
+	--text-spacing-trim-default: normal;
+	--text-spacing-trim-centered: normal;
 	font-feature-settings: var(--default-font-feature-settings);
 }
 

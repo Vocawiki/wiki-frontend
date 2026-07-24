@@ -1,3 +1,7 @@
+body {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+
 pre,
 code,
 kbd,

@@ -27,7 +27,7 @@ export function TopicPortal({
 		<div
 			className={cn(
 				'group/portal relative grid rounded-lg dark:text-white',
-				'[&>a]:absolute [&>a]:inset-0 [&>a]:block [&>a]:overflow-hidden [&>a]:rounded-lg [&>a]:border [&>a]:border-gray-300 [&>a]:bg-white [&>a]:shadow-xs [&>a]:transition',
+				'[&>a]:fill [&>a]:block [&>a]:overflow-hidden [&>a]:rounded-lg [&>a]:border [&>a]:border-gray-300 [&>a]:bg-white [&>a]:shadow-xs [&>a]:transition',
 				'[&>a]:hover:border-slate-300 [&>a]:hover:shadow-md [&>a]:active:shadow-none',
 				'dark:[&>a]:border-gray-600 dark:[&>a]:hover:border-white dark:[&>a]:hover:shadow-[0_0_4px_#fff,0_0_12px_#fff]',
 				className,

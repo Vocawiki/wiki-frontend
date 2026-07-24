@@ -1,0 +1,6 @@
+:root {
+	--text-spacing-trim-default: trim-start;
+	@supports (text-spacing-trim: trim-both) {
+		--text-spacing-trim-default: trim-both;
+	}
+}
