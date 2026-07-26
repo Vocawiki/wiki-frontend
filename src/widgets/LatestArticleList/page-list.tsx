@@ -91,11 +91,12 @@ export function HorizontalScrollablePageList({ pages }: { pages: PartialPageInfo
 				</ScrollArea.Content>
 			</ScrollArea.Viewport>
 			<ScrollArea.Scrollbar
-				className="pointer-events-none relative flex h-5 max-w-(--width-layout) items-center rounded-max bg-transparent transition-colors data-hovering:pointer-events-auto data-hovering:bg-(--background-color-neutral-subtle) data-scrolling:pointer-events-auto data-scrolling:bg-(--background-color-neutral-subtle) data-scrolling:duration-0"
+				className="pointer-events-none relative flex h-5 max-w-(--width-layout) items-center rounded-max bg-transparent transition-colors active:*:ease-out data-hovering:pointer-events-auto data-hovering:bg-(--background-color-neutral-subtle) data-scrolling:pointer-events-auto data-scrolling:bg-(--background-color-neutral-subtle) data-scrolling:duration-0"
 				orientation="horizontal"
 			>
-				<ScrollArea.Thumb className="pointer-events-auto relative h-full w-full opacity-80 transition-opacity hover:opacity-100 hover:*:inset-1 active:opacity-100 active:*:inset-1.5 active:*:ring-8 active:*:duration-75">
-					<div className="absolute inset-1.75 rounded-max bg-(--background-color-progressive) ring-(--background-color-progressive)/15 transition-[inset,box-shadow]" />
+				<ScrollArea.Thumb className="group/thumb pointer-events-auto relative h-full w-full">
+					<div className="absolute inset-1.5 rounded-max bg-(--background-color-progressive)/15 transition-[inset] group-active/thumb:-inset-1" />
+					<div className="absolute inset-1.75 rounded-max bg-(--background-color-progressive) opacity-80 transition-[opacity,inset,box-shadow] group-hover/thumb:inset-1 group-hover/thumb:opacity-100 group-active/thumb:inset-1.5 group-active/thumb:opacity-100 group-active/thumb:duration-75" />
 				</ScrollArea.Thumb>
 			</ScrollArea.Scrollbar>
 		</ScrollArea.Root>
@@ -108,9 +109,9 @@ export function PageList({ pages, className }: { pages: PartialPageInfo[]; class
 
 	return (
 		<ol className={cn('grid auto-cols-80 grid-flow-col grid-rows-4 gap-2 *:contents', className)}>
-			{pages.slice(0, shownPagesNumber).map((page) => (
+			{pages.slice(0, shownPagesNumber).map((page, i) => (
 				<li key={page.href}>
-					<PageCard {...page} facRef={facRef} />
+					<PageCard {...page} facRef={facRef} index={i} />
 				</li>
 			))}
 			<li>
@@ -126,7 +127,12 @@ function PageCard({
 	image,
 	summary,
 	facRef,
-}: { title: string; facRef: React.RefObject<FastAverageColor | null> } & PartialPageInfo) {
+	index,
+}: {
+	title: string
+	facRef: React.RefObject<FastAverageColor | null>
+	index: number
+} & PartialPageInfo) {
 	const imgRef = useRef<HTMLImageElement | null>(null)
 	const [themeColor, setThemeColor] = useState<
 		{ color: string; isDark: boolean; supportsOklch: boolean } | undefined
@@ -160,15 +166,16 @@ function PageCard({
 			href={href}
 			title={title}
 			className={cn(
-				'flex overflow-hidden rounded-md border shadow-xs auto-interact-fx transition-colors duration-1000 ease-linear',
+				'flex origin-bottom-right overflow-hidden rounded-md border shadow-xs auto-interact-fx transition-[color,border-color,background-color,scale,opacity] duration-[1s,1s,1s,.4s,.4s] ease-[linear,linear,linear,ease-out,ease-out] starting:scale-80 starting:opacity-0',
 				themeColor
 					? themeColor.supportsOklch
 						? 'border-(--text-color-light)/15 bg-(--bg-color-light) text-(--text-color-light) shadow-(color:--text-color-light)/14 dark:border-(--text-color-dark)/15 dark:bg-(--bg-color-dark) dark:text-(--text-color-dark)'
 						: ['bg-(--theme-color)', themeColor.isDark ? 'text-white' : 'text-black']
 					: 'border-(--color-base)/15 bg-(--background-color-interactive-subtle)',
 			)}
-			style={
-				themeColor
+			style={{
+				transitionDelay: `${Math.floor(index / 4) * 75 + (index % 4) * 75}ms`,
+				...(themeColor
 					? ({
 							'--theme-color': themeColor.color,
 							'--bg-color-light': `oklch(from var(--theme-color) max(0.92, l) calc((c + min(c, 0.15) * 2 + min(c, 0.05) * 3) / 6) h)`,
@@ -176,8 +183,8 @@ function PageCard({
 							'--text-color-light': `oklch(from var(--theme-color) min(0.3, l) max(c, 0.15) h)`,
 							'--text-color-dark': `oklch(from var(--theme-color) clamp(0.85, l, 0.94) min(c, 0.1) h)`,
 						} as CSSProperties)
-					: undefined
-			}
+					: undefined),
+			}}
 		>
 			<div className="relative w-22 shrink-0 mask-r-from-12 main-md:w-26">
 				{image === undefined ? null : image === null ? (
