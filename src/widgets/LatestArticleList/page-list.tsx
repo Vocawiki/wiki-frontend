@@ -91,11 +91,11 @@ export function HorizontalScrollablePageList({ pages }: { pages: PartialPageInfo
 				</ScrollArea.Content>
 			</ScrollArea.Viewport>
 			<ScrollArea.Scrollbar
-				className="pointer-events-none relative flex h-6 max-w-(--width-layout) items-center rounded-max bg-transparent transition-colors data-hovering:pointer-events-auto data-hovering:bg-(--background-color-neutral-subtle) data-scrolling:pointer-events-auto data-scrolling:bg-(--background-color-neutral-subtle) data-scrolling:duration-0"
+				className="pointer-events-none relative flex h-5 max-w-(--width-layout) items-center rounded-max bg-transparent transition-colors data-hovering:pointer-events-auto data-hovering:bg-(--background-color-neutral-subtle) data-scrolling:pointer-events-auto data-scrolling:bg-(--background-color-neutral-subtle) data-scrolling:duration-0"
 				orientation="horizontal"
 			>
-				<ScrollArea.Thumb className="pointer-events-auto relative h-full w-full opacity-80 transition-opacity hover:opacity-100 hover:*:inset-1.5 active:opacity-100 active:*:inset-2 active:*:ring-8 active:*:duration-75">
-					<div className="absolute inset-2.25 rounded-max bg-(--background-color-progressive) ring-(--background-color-progressive)/20 transition-[inset,box-shadow]" />
+				<ScrollArea.Thumb className="pointer-events-auto relative h-full w-full opacity-80 transition-opacity hover:opacity-100 hover:*:inset-1 active:opacity-100 active:*:inset-1.5 active:*:ring-8 active:*:duration-75">
+					<div className="absolute inset-1.75 rounded-max bg-(--background-color-progressive) ring-(--background-color-progressive)/20 transition-[inset,box-shadow]" />
 				</ScrollArea.Thumb>
 			</ScrollArea.Scrollbar>
 		</ScrollArea.Root>
