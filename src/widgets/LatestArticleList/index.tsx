@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 
 import { depend } from '~/snippets/rlq'
 
-import LatestArticleList from './page-list'
+import { LatestArticleList } from './page-list'
 
 interface RawLink {
 	href: string

@@ -11,7 +11,7 @@ import type { PartialPageInfo } from './types'
 
 const THUMB_WIDTH = 160 // 与Citizen搜索框的预览图大小相同，如遇相同条目可节省流量
 
-export default function LatestArticleList({ pages }: { pages: PartialPageInfo[] }) {
+export function LatestArticleList({ pages }: { pages: PartialPageInfo[] }) {
 	const [fetchedPages, setFetchedPages] = useState(pages)
 
 	useEffect(() => {
@@ -70,10 +70,15 @@ export default function LatestArticleList({ pages }: { pages: PartialPageInfo[] 
 		})()
 	}, [pages])
 
-	return <PageList pages={fetchedPages} className="mx-auto max-w-480" />
+	return (
+		<PageList
+			pages={fetchedPages}
+			className="mx-auto max-w-480 px-[calc((100%-var(--width-layout))/2)]"
+		/>
+	)
 }
 
-function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: string }) {
+export function PageList({ pages, className }: { pages: PartialPageInfo[]; className?: string }) {
 	const facRef = useRef<FastAverageColor | null>(null)
 	const shownPagesNumber = pages.length > 23 ? pages.length - 3 : Math.min(pages.length, 20)
 
