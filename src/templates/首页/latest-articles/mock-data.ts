@@ -1,10 +1,11 @@
-import type { PartialPageInfo } from '~/widgets/LatestArticleList/types'
+import type { PageInfo } from '~/widgets/LatestArticleList/types'
 
-const mockData: PartialPageInfo[] = [
+const mockData: PageInfo[] = [
 	{
 		summary: '',
 		title: 'Mon,mon,honey',
 		href: '/Mon,mon,honey',
+		image: null,
 	},
 	{
 		summary:
@@ -129,6 +130,7 @@ const mockData: PartialPageInfo[] = [
 			'《光》是由水野あつ于2026年7月17日投稿至niconico和YouTube的VOCALOID日语原创歌曲，由初音未来演唱。\n本曲是为游戏《世界计划 缤纷舞台！ feat. 初音未来》中的组合25点…',
 		title: '光(水野Atsu)',
 		href: '/%E5%85%89(%E6%B0%B4%E9%87%8EAtsu)',
+		image: null,
 	},
 	{
 		summary: '',
@@ -238,6 +240,7 @@ const mockData: PartialPageInfo[] = [
 		summary: 'Billboard JAPAN在2026年07月22日发布了NICONICO VOCALOID SONGS TOP20 第177期。',
 		title: 'NICONICO VOCALOID SONGS TOP20/第177期',
 		href: '/NICONICO_VOCALOID_SONGS_TOP20/%E7%AC%AC177%E6%9C%9F',
+		image: null,
 	},
 	{
 		summary:

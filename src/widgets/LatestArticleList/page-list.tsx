@@ -62,7 +62,7 @@ export function LatestArticleList({ pages }: { pages: PartialPageInfo[] }) {
 			}
 			setFetchedPages(
 				Array.from(titleToInfoMap.values(), (page) => ({
-					thumbnail: null,
+					image: null,
 					summary: '',
 					...page,
 				})),
@@ -161,21 +161,21 @@ function PageCard({
 			}
 		>
 			<div className="relative w-22 shrink-0 mask-r-from-12 main-md:w-26">
-				{image ? (
+				{image === undefined ? null : image === null ? (
+					<div
+						aria-hidden
+						className="absolute top-1/2 left-[46%] -translate-1/2 text-[4rem] font-bold text-(--color-disabled) transition-opacity duration-1000 select-none starting:opacity-0"
+					>
+						{firstCharacter(title)}
+					</div>
+				) : (
 					<img
 						ref={imgRef}
 						src={image.source}
 						loading="lazy"
 						alt=""
-						className="absolute size-full object-cover object-[65%]"
+						className="absolute size-full object-cover object-[65%] transition-opacity duration-1000 starting:opacity-0"
 					/>
-				) : (
-					<div
-						aria-hidden
-						className="absolute top-1/2 left-[46%] -translate-1/2 text-[4rem] font-bold text-(--color-disabled) select-none"
-					>
-						{firstCharacter(title)}
-					</div>
 				)}
 			</div>
 			<div className="relative flex flex-col py-2.5 pr-2 pl-0">
