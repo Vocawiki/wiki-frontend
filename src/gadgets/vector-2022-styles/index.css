@@ -30,6 +30,10 @@ body {
 	text-autospace: normal;
 }
 
+#mw-content-text > * {
+	--article-body-inline-size: 100cqw;
+}
+
 pre, code, tt, kbd, samp, .mw-code,
 /* 编辑差异 */
 .diff-editfont-monospace .diff-addedline,

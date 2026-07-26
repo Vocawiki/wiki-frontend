@@ -92,6 +92,10 @@ body {
 .citizen-body-container {
 	/* 用于utility ignore-article-inline-padding */
 	container: article-container / inline-size;
+
+	> * {
+		--article-container-inline-size: calc(100cqi + var(--padding-page) * 2);
+	}
 }
 
 .mw-body-content kbd {

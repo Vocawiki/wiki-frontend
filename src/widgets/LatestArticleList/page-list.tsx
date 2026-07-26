@@ -1,5 +1,6 @@
 'use client'
 
+import { ScrollArea } from '@base-ui/react/scroll-area'
 import { FastAverageColor } from 'fast-average-color'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
@@ -70,11 +71,34 @@ export function LatestArticleList({ pages }: { pages: PartialPageInfo[] }) {
 		})()
 	}, [pages])
 
+	return <HorizontalScrollablePageList pages={fetchedPages} />
+}
+
+export function HorizontalScrollablePageList({ pages }: { pages: PartialPageInfo[] }) {
 	return (
-		<PageList
-			pages={fetchedPages}
-			className="mx-auto max-w-480 px-[calc((100%-var(--width-layout))/2)]"
-		/>
+		<ScrollArea.Root className="">
+			<ScrollArea.Viewport
+				className="-mx-(--bleed) mask-[linear-gradient(90deg,transparent_0,black_min(var(--fade),var(--scroll-area-overflow-x-start)),black_calc(100%-min(var(--fade),var(--scroll-area-overflow-x-end,var(--fade)))),transparent_100%)] px-(--bleed) pb-7 [--fade:3rem] main-sm:[--fade:5rem]"
+				style={
+					{
+						'--bleed':
+							'clamp(0px, (var(--article-container-inline-size) - var(--article-body-inline-size)) / 2, 5rem)',
+					} as CSSProperties
+				}
+			>
+				<ScrollArea.Content>
+					<PageList pages={pages} />
+				</ScrollArea.Content>
+			</ScrollArea.Viewport>
+			<ScrollArea.Scrollbar
+				className="pointer-events-none relative flex h-6 max-w-(--width-layout) items-center rounded-max bg-transparent transition-colors data-hovering:pointer-events-auto data-hovering:bg-(--background-color-neutral-subtle) data-scrolling:pointer-events-auto data-scrolling:bg-(--background-color-neutral-subtle) data-scrolling:duration-0"
+				orientation="horizontal"
+			>
+				<ScrollArea.Thumb className="pointer-events-auto relative h-full w-full opacity-80 transition-opacity hover:opacity-100 hover:*:inset-1.5 active:opacity-100 active:*:inset-2 active:*:ring-8 active:*:duration-75">
+					<div className="absolute inset-2.25 rounded-max bg-(--background-color-progressive) ring-(--background-color-progressive)/20 transition-[inset,box-shadow]" />
+				</ScrollArea.Thumb>
+			</ScrollArea.Scrollbar>
+		</ScrollArea.Root>
 	)
 }
 
@@ -83,12 +107,7 @@ export function PageList({ pages, className }: { pages: PartialPageInfo[]; class
 	const shownPagesNumber = pages.length > 23 ? pages.length - 3 : Math.min(pages.length, 20)
 
 	return (
-		<ol
-			className={cn(
-				'grid auto-cols-80 grid-flow-col grid-rows-4 gap-2 overflow-x-auto py-2 *:contents',
-				className,
-			)}
-		>
+		<ol className={cn('grid auto-cols-80 grid-flow-col grid-rows-4 gap-2 *:contents', className)}>
 			{pages.slice(0, shownPagesNumber).map((page) => (
 				<li key={page.href}>
 					<PageCard {...page} facRef={facRef} />

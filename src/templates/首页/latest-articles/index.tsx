@@ -1,5 +1,5 @@
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
-import { PageList } from '@/src/widgets/LatestArticleList/page-list'
+import { HorizontalScrollablePageList } from '@/src/widgets/LatestArticleList/page-list'
 
 import mockData from './mock-data'
 
@@ -18,13 +18,7 @@ function Wikitext() {
 			{'{{#widget:LatestArticleList}}'}
 			<div
 				id="latest-article-list"
-				className="preflight ignore-article-max-width"
-				style={{
-					WebkitMaskImage:
-						'-webkit-linear-gradient(left, transparent, black calc(50cqw - var(--width-layout) / 2), black calc(50cqw + var(--width-layout) / 2), transparent)',
-					maskImage:
-						'linear-gradient(to right, transparent, black calc(50cqw - var(--width-layout) / 2), black calc(50cqw + var(--width-layout) / 2), transparent)',
-				}}
+				className="preflight"
 				dangerouslySetInnerHTML={{
 					__html: `<DynamicPageList>
 namespace = 0
@@ -43,20 +37,8 @@ redirects = exclude
 
 function Preview() {
 	return (
-		<div
-			id="latest-article-list"
-			className="preflight ignore-article-max-width"
-			style={{
-				WebkitMaskImage:
-					'-webkit-linear-gradient(left, transparent, black calc(50cqw - var(--width-layout) / 2), black calc(50cqw + var(--width-layout) / 2), transparent)',
-				maskImage:
-					'linear-gradient(to right, transparent, black calc(50cqw - var(--width-layout) / 2), black calc(50cqw + var(--width-layout) / 2), transparent)',
-			}}
-		>
-			<PageList
-				pages={mockData}
-				className="mx-auto max-w-480 px-[calc((100%-var(--width-layout))/2)]"
-			/>
+		<div id="latest-article-list" className="preflight">
+			<HorizontalScrollablePageList pages={mockData} />
 		</div>
 	)
 }

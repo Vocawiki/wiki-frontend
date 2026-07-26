@@ -190,7 +190,9 @@
 @utility ignore-article-inline-padding {
 	@container article-container (width > 0) {
 		:where(body.skin-citizen:not(.citizen-toc-enabled)) & {
-			margin-inline: calc(50% - 50cqi - var(--padding-page));
+			margin-inline: calc(
+				(var(--article-body-inline-size) - var(--article-container-inline-size)) / 2
+			);
 		}
 	}
 
@@ -201,22 +203,26 @@
 			).vector-feature-page-tools-pinned-disabled.vector-feature-appearance-pinned-clientpref-0
 		)
 		& {
-		margin-inline: calc(50% - 50vw);
+		margin-inline: calc(var(--article-body-inline-size) / 2 - 50vw);
 	}
 
 	@media (width < 1120px) {
 		:where(body.skin-vector-2022) & {
-			margin-inline: calc(50% - 50vw);
+			margin-inline: calc(var(--article-body-inline-size) / 2 - 50vw);
 		}
 	}
 }
 
-@utility ignore-article-max-width {
-	@container article-container (width > 0) {
-		:where(body.skin-citizen:not(.citizen-toc-enabled)) & {
-			margin-inline: calc(50% - 50cqi);
-		}
-	}
+@property --article-container-inline-size {
+	syntax: "<length>";
+	initial-value: 100svi;
+	inherits: true;
+}
+
+@property --article-body-inline-size {
+	syntax: "<length>";
+	initial-value: 100svi;
+	inherits: true;
 }
 
 :root {
@@ -229,6 +235,14 @@
 	--text-spacing-trim-default: normal;
 	--text-spacing-trim-centered: normal;
 	font-feature-settings: var(--default-font-feature-settings);
+}
+
+#mw-content-text {
+	container: article-body / inline-size;
+
+	> * {
+		--article-body-inline-size: 100cqw;
+	}
 }
 
 @import "./typography.css";

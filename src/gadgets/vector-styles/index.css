@@ -181,6 +181,10 @@ body {
 	text-autospace: normal;
 }
 
+#mw-content-text > * {
+	--article-body-inline-size: 100cqw;
+}
+
 html,
 body,
 #firstHeading {
