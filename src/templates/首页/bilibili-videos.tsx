@@ -68,7 +68,7 @@ export function BilibiliVideos() {
 					<Wiki.Link href={accountURL}>关注我们的官方账号</Wiki.Link>
 				</div>
 			</div>
-			<ul className="grid grid-cols-2 gap-1.5 not-main-2xs:ignore-article-inline-padding not-main-2xs:pr-[max(6px,env(safe-area-inset-right))] not-main-2xs:pl-[max(6px,env(safe-area-inset-left))] main-2xs:gap-2 main-sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] main-sm:gap-3">
+			<ul className="grid grid-cols-2 gap-1.5 not-main-2xs:ignore-article-inline-padding not-main-2xs:pr-[max(6px,env(safe-area-inset-right))] not-main-2xs:pl-[max(6px,env(safe-area-inset-left))] main-2xs:gap-2 main-sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))]">
 				{videos
 					.toSorted((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
 					.map((video) => (
@@ -91,7 +91,7 @@ function VideoCard({
 }: BilibiliVideo) {
 	return (
 		<li
-			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-sm *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm main-2xs:*:rounded-md [&_img]:w-full"
+			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-md *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm [&_img]:w-full"
 			style={{ '--bg-color': bgColor, '--fg-color': fgColor } as CSSProperties}
 		>
 			<Wiki.Link href={`https://www.bilibili.com/video/${videoId}`}>

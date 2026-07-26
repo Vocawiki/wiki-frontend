@@ -78,7 +78,7 @@ export function HorizontalScrollablePageList({ pages }: { pages: PartialPageInfo
 	return (
 		<ScrollArea.Root className="">
 			<ScrollArea.Viewport
-				className="-mx-(--bleed) mask-[linear-gradient(90deg,transparent_0,black_min(var(--fade),var(--scroll-area-overflow-x-start)),black_calc(100%-min(var(--fade),var(--scroll-area-overflow-x-end,var(--fade)))),transparent_100%)] px-(--bleed) pb-7 [--fade:3rem] main-sm:[--fade:5rem]"
+				className="-mx-(--bleed) mask-[linear-gradient(90deg,transparent_0,black_min(var(--fade),var(--scroll-area-overflow-x-start)),black_calc(100%-min(var(--fade),var(--scroll-area-overflow-x-end,var(--fade)))),transparent_100%)] px-(--bleed) pb-6 [--fade:2rem] main-sm:[--fade:3rem] main-md:[--fade:4rem] main-lg:[--fade:5rem]"
 				style={
 					{
 						'--bleed':
@@ -95,7 +95,7 @@ export function HorizontalScrollablePageList({ pages }: { pages: PartialPageInfo
 				orientation="horizontal"
 			>
 				<ScrollArea.Thumb className="pointer-events-auto relative h-full w-full opacity-80 transition-opacity hover:opacity-100 hover:*:inset-1 active:opacity-100 active:*:inset-1.5 active:*:ring-8 active:*:duration-75">
-					<div className="absolute inset-1.75 rounded-max bg-(--background-color-progressive) ring-(--background-color-progressive)/20 transition-[inset,box-shadow]" />
+					<div className="absolute inset-1.75 rounded-max bg-(--background-color-progressive) ring-(--background-color-progressive)/15 transition-[inset,box-shadow]" />
 				</ScrollArea.Thumb>
 			</ScrollArea.Scrollbar>
 		</ScrollArea.Root>
@@ -160,12 +160,12 @@ function PageCard({
 			href={href}
 			title={title}
 			className={cn(
-				'flex overflow-hidden rounded-md shadow-sm auto-interact-fx transition-colors duration-1000 ease-linear',
+				'flex overflow-hidden rounded-md border shadow-xs auto-interact-fx transition-colors duration-1000 ease-linear',
 				themeColor
 					? themeColor.supportsOklch
-						? 'bg-(--bg-color-light) text-(--text-color-light) shadow-(color:--text-color-light)/14 dark:bg-(--bg-color-dark) dark:text-(--text-color-dark)'
+						? 'border-(--text-color-light)/15 bg-(--bg-color-light) text-(--text-color-light) shadow-(color:--text-color-light)/14 dark:border-(--text-color-dark)/15 dark:bg-(--bg-color-dark) dark:text-(--text-color-dark)'
 						: ['bg-(--theme-color)', themeColor.isDark ? 'text-white' : 'text-black']
-					: 'bg-(--background-color-interactive-subtle)',
+					: 'border-(--color-base)/15 bg-(--background-color-interactive-subtle)',
 			)}
 			style={
 				themeColor
