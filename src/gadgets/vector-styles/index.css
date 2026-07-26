@@ -182,7 +182,7 @@ body {
 }
 
 #mw-content-text > * {
-	--article-body-inline-size: 100cqw;
+	--article-container-inline-size: 100cqw;
 }
 
 html,
