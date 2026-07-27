@@ -44,7 +44,9 @@ async function apiGetRandomSongs() {
 			}
 		}
 	} catch (e) {
-		mw.notify(wgULS('网络连接出错', '網路連接出錯', null, null, '網絡連接出錯'), { type: 'error' })
+		mw.notify(wgULS(undefined, undefined, '网络连接出错', '網路連接出錯', '網絡連接出錯'), {
+			type: 'error',
+		})
 		console.error('网络/API错误:', e)
 	}
 	return null

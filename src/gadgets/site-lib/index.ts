@@ -1,6 +1,52 @@
-type MwLanguage = 'zh' | 'zh-hans' | 'zh-hant' | 'zh-cn' | 'zh-sg' | 'zh-tw' | 'zh-hk' | 'zh-mo'
+export type MwLanguage =
+	| 'zh'
+	| 'zh-hans'
+	| 'zh-hant'
+	| 'zh-cn'
+	| 'zh-sg'
+	| 'zh-tw'
+	| 'zh-hk'
+	| 'zh-mo'
 
-// @ts-expect-error 懒得标记全局类型了，这些函数迟早要被取代掉
+type WgUxs = (
+	wg: MwLanguage,
+	hans?: string,
+	hant?: string,
+	cn?: string,
+	tw?: string,
+	hk?: string,
+	sg?: string,
+	zh?: string,
+	mo?: string,
+	my?: string,
+) => string
+
+type WgUls = (
+	hans?: string,
+	hant?: string,
+	cn?: string,
+	tw?: string,
+	hk?: string,
+	sg?: string,
+	zh?: string,
+	mo?: string,
+	my?: string,
+) => string
+
+type WgUvs = WgUls
+
+declare global {
+	const wgUXS: WgUxs
+	const wgULS: WgUls
+	const wgUVS: WgUvs
+
+	interface Window {
+		wgUXS: WgUxs
+		wgULS: WgUls
+		wgUVS: WgUvs
+	}
+}
+
 window.wgUXS = (
 	wg: MwLanguage,
 	hans?: string,
@@ -23,10 +69,13 @@ window.wgUXS = (
 		'zh-hk': hk || hant || mo || tw,
 		'zh-mo': mo || hant || hk || tw,
 	}
-	return ret[wg] || zh || hans || hant || cn || tw || hk || sg || mo || my! // 保证每一语言都有值
+	const str = ret[wg] || zh || hans || hant || cn || tw || hk || sg || mo || my // 保证每一语言都有值
+	if (str === undefined) {
+		throw new Error('未定义任何语言的字符串')
+	}
+	return str
 }
 
-// @ts-expect-error 懒得标记全局类型了，这些函数迟早要被取代掉
 window.wgULS = (
 	hans?: string,
 	hant?: string,
@@ -38,12 +87,20 @@ window.wgULS = (
 	mo?: string,
 	my?: string,
 ) => {
-	// @ts-expect-error 懒得标记全局类型了，这些函数迟早要被取代掉
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-	return window.wgUXS(mw.config.get('wgUserLanguage'), hans, hant, cn, tw, hk, sg, zh, mo, my)
+	return window.wgUXS(
+		mw.config.get('wgUserLanguage') as MwLanguage,
+		hans,
+		hant,
+		cn,
+		tw,
+		hk,
+		sg,
+		zh,
+		mo,
+		my,
+	)
 }
 
-// @ts-expect-error 懒得标记全局类型了，这些函数迟早要被取代掉
 window.wgUVS = (
 	hans?: string,
 	hant?: string,
@@ -55,7 +112,16 @@ window.wgUVS = (
 	mo?: string,
 	my?: string,
 ) => {
-	// @ts-expect-error 懒得标记全局类型了，这些函数迟早要被取代掉
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-	return window.wgUXS(mw.config.get('wgUserVariant'), hans, hant, cn, tw, hk, sg, zh, mo, my)
+	return window.wgUXS(
+		mw.config.get('wgUserVariant') as MwLanguage,
+		hans,
+		hant,
+		cn,
+		tw,
+		hk,
+		sg,
+		zh,
+		mo,
+		my,
+	)
 }
