@@ -1,6 +1,8 @@
 import type { NonEmptyTuple } from 'type-fest'
 
-import { LocalCache } from './LocalCache'
+import { DAY } from '~/utils/date-time/contants/milliseconds'
+
+import { LocalCache } from './local-cache'
 
 interface ApiQueryRandomResponse {
 	query: {
@@ -17,7 +19,7 @@ interface ApiQueryRandomResponse {
 }
 
 const CACHE_KEY = 'gadget-randomsong-cache'
-const CACHE_TTL = 86400 * 1000 // 缓存1天
+const CACHE_TTL = 1 * DAY
 const RETRY_COUNT = 3
 const SEARCH_COUNT = 30
 
@@ -52,7 +54,7 @@ async function apiGetRandomSongs() {
 	return null
 }
 
-async function getSong(): Promise<string | null> {
+async function prepareSong(): Promise<(() => string) | null> {
 	let songs = LocalCache.get<NonEmptyTuple<string>>(CACHE_KEY)
 	if (!songs) {
 		songs = await apiGetRandomSongs()
@@ -60,24 +62,27 @@ async function getSong(): Promise<string | null> {
 		if (!songs) return null
 	}
 
-	const [song, ...remainSongs] = songs
-	if (remainSongs.length === 0) {
-		LocalCache.remove(CACHE_KEY)
-	} else {
-		LocalCache.set(CACHE_KEY, remainSongs, CACHE_TTL)
+	return () => {
+		const [song, ...remainSongs] = songs
+		if (remainSongs.length === 0) {
+			LocalCache.remove(CACHE_KEY)
+		} else {
+			LocalCache.set(CACHE_KEY, remainSongs, CACHE_TTL)
+		}
+		return song
 	}
-
-	return song
 }
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-$(async () => {
-	const $link = $('#n-sidebar-random-song a')
+export function hookRandomSongLinkClick() {
+	// eslint-disable-next-line @typescript-eslint/no-misused-promises
+	$(async () => {
+		const $link = $('#n-sidebar-random-song a')
 
-	const song = await getSong()
-	if (song === null) return
+		const getSong = await prepareSong()
+		if (!getSong) return
 
-	$link.on('mousedown', () => {
-		$link.attr('href', mw.util.getUrl(song))
+		$link.on('mousedown', () => {
+			$link.attr('href', mw.util.getUrl(getSong()))
+		})
 	})
-})
+}

@@ -4,7 +4,7 @@ export default {
 	pages: [{ type: 'source', entry: 'site-js.ts' }],
 	withResourceLoader: true,
 	defaultEnabled: true,
-	dependencies: ['ext.gadget.libOOUIDialog', 'user', 'mediawiki.api'],
+	dependencies: ['ext.gadget.libOOUIDialog', 'user', 'ext.gadget.site-lib', 'mediawiki.api'],
 	hidden: true,
 	type: 'general',
 } satisfies GadgetMeta
