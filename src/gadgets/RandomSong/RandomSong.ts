@@ -1,50 +1,46 @@
+import type { NonEmptyTuple } from 'type-fest'
+
 import { LocalCache } from './LocalCache'
 
 interface ApiQueryRandomResponse {
 	query: {
-		pages: {
-			[key: string]: {
+		pages: Record<
+			string,
+			{
 				title: string
 				categories: {
 					title: string
 				}[]
 			}
-		}
+		>
 	}
 }
 
-type NonEmptyArray<T> = [T, ...T[]]
-
-declare global {
-	interface Window {
-		gadgetRandomSongCache: NonEmptyArray<string> | undefined
-	}
-}
 const CACHE_KEY = 'gadget-randomsong-cache'
 const CACHE_TTL = 86400 * 1000 // 缓存1天
+const RETRY_COUNT = 3
+const SEARCH_COUNT = 30
 
 async function apiGetRandomSongs() {
-	const retryCount = 3
-	const searchCount = 30
 	const api = new mw.Api()
 
-	let rCount = retryCount
+	let rCount = RETRY_COUNT
 	try {
 		while (rCount--) {
 			const result = (await api.get({
 				action: 'query',
 				generator: 'random',
 				grnnamespace: 0,
-				grnlimit: searchCount,
+				grnlimit: SEARCH_COUNT,
 				prop: 'categories',
 				cllimit: 'max',
 			})) as ApiQueryRandomResponse
 
 			const pages = Object.values(result.query.pages).filter((page) =>
-				page.categories.some((cat) => cat.title.endsWith('歌曲')),
+				page.categories.some(({ title }) => title.endsWith('歌曲')),
 			)
 			if (pages.length > 0) {
-				return pages.map((page) => page.title) as NonEmptyArray<string>
+				return pages.map((page) => page.title) as readonly string[] as NonEmptyTuple<string>
 			}
 		}
 	} catch (e) {
@@ -54,35 +50,32 @@ async function apiGetRandomSongs() {
 	return null
 }
 
-async function updateCache() {
-	// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-	const songs = LocalCache.get<NonEmptyArray<string>>(CACHE_KEY) || (await apiGetRandomSongs())
-	if (songs) {
+async function getSong(): Promise<string | null> {
+	let songs = LocalCache.get<NonEmptyTuple<string>>(CACHE_KEY)
+	if (!songs) {
+		songs = await apiGetRandomSongs()
 		LocalCache.set(CACHE_KEY, songs, CACHE_TTL)
-		window.gadgetRandomSongCache = songs
-		return true
+		if (!songs) return null
 	}
-	return false
-}
 
-function getSong(): string {
-	const songs = window.gadgetRandomSongCache!
-	const song = songs.pop()!
-	if (songs.length === 0) {
+	const [song, ...remainSongs] = songs
+	if (remainSongs.length === 0) {
 		LocalCache.remove(CACHE_KEY)
-		void updateCache()
 	} else {
-		LocalCache.set(CACHE_KEY, songs, CACHE_TTL)
+		LocalCache.set(CACHE_KEY, remainSongs, CACHE_TTL)
 	}
+
 	return song
 }
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 $(async () => {
 	const $link = $('#n-sidebar-random-song a')
-	if (await updateCache()) {
-		$link.on('mousedown', () => {
-			$link.attr('href', mw.util.getUrl(getSong()))
-		})
-	}
+
+	const song = await getSong()
+	if (song === null) return
+
+	$link.on('mousedown', () => {
+		$link.attr('href', mw.util.getUrl(song))
+	})
 })
