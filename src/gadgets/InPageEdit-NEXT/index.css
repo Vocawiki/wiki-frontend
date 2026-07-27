@@ -1,7 +1,7 @@
 /* 加入仓库前的贡献者参见：https://voca.wiki/index.php?title=MediaWiki:Gadget-InPageEdit-NEXT.css&action=history */
 
 /* 工具箱 */
-@media (max-width: 1119px) {
+@media not (min-width: 1120px) {
 	.skin-citizen #ipe-edit-toolbox {
 		right: 8px !important;
 		bottom: 118px !important;

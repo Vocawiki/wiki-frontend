@@ -1,7 +1,6 @@
 import type { GadgetMeta } from '@/tools/gadget'
 
 export default {
-	pages: [{ type: 'source', entry: 'colorLinks.css' }],
-	withResourceLoader: true,
+	withResourceLoader: false,
 	defaultEnabled: false,
 } satisfies GadgetMeta

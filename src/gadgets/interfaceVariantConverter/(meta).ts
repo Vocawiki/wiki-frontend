@@ -1,7 +1,6 @@
 import type { GadgetMeta } from '@/tools/gadget'
 
 export default {
-	pages: [{ type: 'source', entry: 'interfaceVariantConverter.js' }],
 	withResourceLoader: true,
 	defaultEnabled: true,
 	dependencies: ['mediawiki.api', 'mediawiki.ForeignApi', 'oojs-ui', 'ext.gadget.libCachedCode'],
