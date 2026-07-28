@@ -166,7 +166,7 @@ function PageCard({
 			href={href}
 			title={title}
 			className={cn(
-				'flex origin-bottom-right overflow-hidden rounded-md border shadow-xs auto-interact-fx transition-[color,border-color,background-color,scale,opacity] duration-[1s,1s,1s,.4s,.4s] ease-[linear,linear,linear,ease-out,ease-out] starting:scale-80 starting:opacity-0',
+				'group flex origin-bottom-right overflow-hidden rounded-md border shadow-xs auto-interact-fx transition-[color,border-color,background-color,scale,opacity] duration-[1s,1s,1s,.4s,.4s] ease-[linear,linear,linear,ease-out,ease-out] starting:scale-80 starting:opacity-0',
 				themeColor
 					? themeColor.supportsOklch
 						? 'border-(--text-color-light)/15 bg-(--bg-color-light) text-(--text-color-light) shadow-(color:--text-color-light)/14 dark:border-(--text-color-dark)/15 dark:bg-(--bg-color-dark) dark:text-(--text-color-dark)'
@@ -186,11 +186,11 @@ function PageCard({
 					: undefined),
 			}}
 		>
-			<div className="relative w-22 shrink-0 mask-r-from-12 main-md:w-26">
+			<div className="relative w-22 shrink-0 mask-r-from-12 *:transition-[opacity,scale] *:duration-[1s,var(--default-transition-duration)] *:group-hover:scale-120 main-md:w-26">
 				{image === undefined ? null : image === null ? (
 					<div
 						aria-hidden
-						className="absolute top-1/2 left-[46%] -translate-1/2 text-[4rem] font-bold text-(--color-disabled) transition-opacity duration-1000 select-none starting:opacity-0"
+						className="absolute top-1/2 left-[46%] -translate-1/2 text-[4rem] font-bold text-(--color-disabled) select-none starting:opacity-0"
 					>
 						{firstCharacter(title)}
 					</div>
@@ -200,7 +200,7 @@ function PageCard({
 						src={image.source}
 						loading="lazy"
 						alt=""
-						className="absolute size-full object-cover object-[65%] transition-opacity duration-1000 starting:opacity-0"
+						className="absolute size-full object-cover object-[65%] starting:opacity-0"
 					/>
 				)}
 			</div>

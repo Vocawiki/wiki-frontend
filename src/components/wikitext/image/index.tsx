@@ -1,6 +1,6 @@
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
 
-import { WikitextImageDevPreview } from './image-dev-preview'
+import { WikitextImageDevPreview } from './dev-preview'
 
 export interface WikitextImageProps {
 	file: string

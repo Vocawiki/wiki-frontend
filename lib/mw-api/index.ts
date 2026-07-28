@@ -1,35 +1,56 @@
+import { shake } from 'radashi'
+
+type OneOrMoreValue<T> = T | [T, ...T[]]
+
 const mwApiQueryProps = {
-	pageimages: {
-		prefix: 'pi',
+	imageinfo: {
+		prefix: 'ii',
 	},
 	extracts: {
 		prefix: 'ex',
+	},
+	pageimages: {
+		prefix: 'pi',
 	},
 } as const
 
 type MwQueryProp = keyof typeof mwApiQueryProps
 interface MwQueryPropParams {
-	pageimages: {
-		prop: 'thumbnail'
-		thumbsize?: number
-		license?: 'any'
-		limit?: 'max'
-	}
 	extracts: {
 		chars?: number
 		intro?: boolean
 		plaintext?: boolean
 		limit?: 'max'
 	}
+	imageinfo: {
+		prop?: OneOrMoreValue<'dimensions' | 'url'>
+		urlwidth?: number
+		urlheight?: number
+	}
+	pageimages: {
+		prop: OneOrMoreValue<'thumbnail'>
+		thumbsize?: number
+		license?: 'any'
+		limit?: 'max'
+	}
 }
 
 function solveApiValue(value: unknown): string | undefined {
+	// 不要把这个双等号改成三等号
+	if (value == null) {
+		return undefined
+	}
+
 	if (Array.isArray(value)) {
 		return value.map((x) => solveApiValue(x)).join('|')
 	}
 	if (typeof value === 'boolean') {
 		return value ? '1' : undefined
 	}
+	if (typeof value === 'object') {
+		throw new Error('MwApiCall参数不应出现对象')
+	}
+	// eslint-disable-next-line @typescript-eslint/no-base-to-string
 	return String(value)
 }
 
@@ -38,7 +59,6 @@ export class MwApiCall<
 		[Prop in MwQueryProp]?: MwQueryPropParams[Prop]
 	},
 > {
-	protected api: mw.Api
 	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 	lastContinue: {} = {}
 	finished = false
@@ -46,7 +66,6 @@ export class MwApiCall<
 	params: Params
 
 	constructor(params: { titles: string[] } & Params) {
-		this.api = new mw.Api()
 		this.titles = params.titles
 		this.params = params
 	}
@@ -81,15 +100,22 @@ export class MwApiCall<
 			}
 		}
 
-		const data = (await this.api.get({
-			...solvedParams,
-			...this.lastContinue,
-			action: 'query',
-			format: 'json',
-			formatversion: '2',
-			titles: this.titles,
-			prop: props,
-		})) as unknown as {
+		const data = (await (
+			await fetch(
+				'https://voca.wiki/api.php?' +
+					new URLSearchParams(
+						shake({
+							...solvedParams,
+							...this.lastContinue,
+							action: 'query',
+							format: 'json',
+							formatversion: '2',
+							titles: solveApiValue(this.titles),
+							prop: solveApiValue(props),
+						}),
+					).toString(),
+			)
+		).json()) as {
 			batchcomplete?: boolean
 			continue?: unknown
 			query: {

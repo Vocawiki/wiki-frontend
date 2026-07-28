@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 
+import { WikiImageServerOnly } from '@/src/components/wiki-image/server'
 import * as Wiki from '~/components/wikitext'
 
 interface BilibiliVideo {
@@ -91,12 +92,16 @@ function VideoCard({
 }: BilibiliVideo) {
 	return (
 		<li
-			className="contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-md *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm [&_img]:w-full"
+			className="group contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-md *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm"
 			style={{ '--bg-color': bgColor, '--fg-color': fgColor } as CSSProperties}
 		>
 			<Wiki.Link href={`https://www.bilibili.com/video/${videoId}`}>
-				<Wiki.Image file={coverFile} link={false} width={360} />
-				<div className="space-y-1 p-2">
+				<WikiImageServerOnly
+					file={coverFile}
+					width={360}
+					className="w-full transition-transform group-hover:scale-110"
+				/>
+				<div className="relative space-y-1 bg-(--bg-color) p-2">
 					<div className="line-clamp-2 h-[2lh] text-sm leading-tight font-medium main-sm:text-sm">
 						{title}
 					</div>
