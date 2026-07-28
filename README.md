@@ -90,7 +90,7 @@
     - `(meta).ts`：定义了所有可用的gadget的分组、顺序，将部署到\[\[[MediaWiki:Gadgets-definition](https://voca.wiki/MediaWiki:Gadgets-definition)\]\]。
     - `<gadget名>/`
       - `(meta).ts`：定义了该gadget的信息，用于\[\[[MediaWiki:Gadgets-definition](https://voca.wiki/MediaWiki:Gadgets-definition)\]\]中属于该Gadget的一行。参见[GadgetMeta](tools\gadget\types.ts)的类型定义，文档注释写得很详细。
-      - `<源代码文件>`：目前可以是Tailwind CSS/JS/TS文件，入口文件需要在`./(meta).ts`中指定。
+      - `<源代码文件>`：目前可以是TS/JS/Tailwind CSS文件，一般命名为`index.<后缀>`，构建后将部署到\[\[MediaWiki:Gadgets-`<gadget名>`.js/css\]\]；若需其他名字，则需要在`./(meta).ts`中指定入口文件。
   - `widgets/`：
     - `<widget名>/`：将部署到\[\[Widget:`<widget名>`\]\]。
       - `(meta).ts`：定义了该widget的信息。
