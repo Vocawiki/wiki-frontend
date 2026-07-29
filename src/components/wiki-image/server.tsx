@@ -67,7 +67,7 @@ interface ImageThumbQueryResult {
 	thumbWidth: number
 	thumbHeight: number
 	thumbUrl: string
-	responsiveUrls?: ResponsiveUrls
+	responsiveUrls: ResponsiveUrls | undefined
 }
 type ResponsiveUrls = Record<`${number}`, string>
 
@@ -145,11 +145,18 @@ async function query(
 			if (!imageinfo) return
 
 			const [
-				{ width, height, thumbwidth: thumbWidth, thumbheight: thumbHeight, thumburl: thumbUrl },
+				{
+					width,
+					height,
+					thumbwidth: thumbWidth,
+					thumbheight: thumbHeight,
+					thumburl: thumbUrl,
+					responsiveUrls,
+				},
 			] = imageinfo
 			const resolve = resolvers.get(title)
 			assert(resolve, `未找到对${title}的resolver`)
-			resolve({ width, height, thumbWidth, thumbHeight, thumbUrl })
+			resolve({ width, height, thumbWidth, thumbHeight, thumbUrl, responsiveUrls })
 			resolvers.delete(title)
 		})
 	}
