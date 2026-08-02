@@ -3,6 +3,7 @@ import '@/lib/server-only'
 import assert from 'node:assert/strict'
 
 import PQueue from 'p-queue'
+import { sleep } from 'radashi'
 
 import { MwApiCall } from '@/lib/mw-api'
 import { normalizeWikiTitle } from '@/lib/wiki'
@@ -18,13 +19,16 @@ export async function WikiImageServerOnly(props: WikiImageProps) {
 	referenceFile(normalizedName)
 
 	const { width, height } = props
-	if (props.originalWidth || (width === undefined && height === undefined))
+	if (props.originalWidth || (width === undefined && height === undefined)) {
 		return <WikiImage {...props} />
+	}
 
-	const { src, srcSet, originalWidth, originalHeight } = await getWikiImageProps(normalizedName, {
-		width,
-		height,
-	} as WidthAndOrHeight)
+	const result = await Promise.race([
+		getWikiImageProps(normalizedName, { width, height } as WidthAndOrHeight),
+		sleep(10_000),
+	])
+	if (!result) throw new Error(`${props.file}超时。${JSON.stringify(props)}`)
+	const { src, srcSet, originalWidth, originalHeight } = result
 
 	return (
 		<WikiImage
@@ -71,18 +75,22 @@ interface ImageThumbQueryResult {
 	responsiveUrls: ResponsiveUrls | undefined
 }
 type ResponsiveUrls = Record<`${number}`, string>
+interface ImagePromiseAndResolver {
+	promise: Promise<ImageThumbQueryResult>
+	resolve: (result: ImageThumbQueryResult) => void
+}
 
 /** 键是缩略图宽度，值是标题集合 */
 const willQueryTasks = new Map<
 	`${'w' | 'h'}${number}`,
 	{
-		/** 键是文件标题，值是Promise的resolve */
-		resolvers: Map<string, (result: ImageThumbQueryResult) => void>
+		/** 键是文件标题，值是promise和该promise的resolve */
+		images: Map<string, ImagePromiseAndResolver>
 		willQueryTimeoutKey: ReturnType<typeof setTimeout>
 	}
 >()
 
-const queryQueue = new PQueue({ concurrency: 1 })
+const queryQueue = new PQueue({ concurrency: 1, timeout: 10_000 })
 
 function getThumb(
 	title: string,
@@ -90,40 +98,42 @@ function getThumb(
 ): Promise<ImageThumbQueryResult> {
 	const taskKey: `${'w' | 'h'}${number}` = width !== undefined ? `w${width}` : `h${height!}`
 	const task = willQueryTasks.getOrInsertComputed(taskKey, () => {
-		const resolvers = new Map<string, (result: ImageThumbQueryResult) => void>()
+		const images = new Map<string, ImagePromiseAndResolver>()
 		return {
-			resolvers,
+			images,
 			willQueryTimeoutKey: setTimeout(() => {
 				willQueryTasks.delete(taskKey)
 				void queryQueue.add(() =>
 					query(
 						// 与taskKey一致
 						width !== undefined ? { width } : { height: height! },
-						resolvers,
+						images,
 					),
 				)
 			}, THROTTLE_INTERVAL_MS),
 		}
 	})
 
-	let resolve: (result: ImageThumbQueryResult) => void
-	const promise = new Promise<ImageThumbQueryResult>((res) => {
-		resolve = res
+	const getThumbPromiseAndResolver = task.images.getOrInsertComputed(title, () => {
+		let resolve: (result: ImageThumbQueryResult) => void
+		const promise = new Promise<ImageThumbQueryResult>((res) => {
+			resolve = res
+		})
+		// @ts-expect-error resolve已赋值，并非赋值前使用变量
+		return { promise, resolve }
 	})
-	// @ts-expect-error resolve已赋值，并非赋值前使用变量
-	task.resolvers.set(title, resolve)
 
-	return promise
+	return getThumbPromiseAndResolver.promise
 }
 
 async function query(
 	{ width, height }: WidthAndOrHeight,
-	resolvers: Map<string, (result: ImageThumbQueryResult) => void>,
+	resolvers: Map<string, ImagePromiseAndResolver>,
 ) {
 	const titles = [...resolvers.keys()]
 	const call = new MwApiCall({
 		titles,
-		imageinfo: { prop: ['dimensions', 'url'], urlwidth: width, urlheight: height },
+		imageinfo: { prop: ['dimensions', 'url'], limit: 1, urlwidth: width, urlheight: height },
 	})
 
 	for await (const chunk of call.query<{
@@ -141,7 +151,7 @@ async function query(
 				descriptionshorturl: string
 			},
 		]
-	}>()) {
+	}>({ ignoreContinue: ['imageinfo'] })) {
 		chunk.forEach(({ title, imageinfo }) => {
 			if (!imageinfo) return
 
@@ -155,7 +165,7 @@ async function query(
 					responsiveUrls,
 				},
 			] = imageinfo
-			const resolve = resolvers.get(title)
+			const resolve = resolvers.get(title)?.resolve
 			assert(resolve, `未找到对${title}的resolver`)
 			resolve({ width, height, thumbWidth, thumbHeight, thumbUrl, responsiveUrls })
 			resolvers.delete(title)

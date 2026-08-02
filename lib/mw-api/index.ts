@@ -15,6 +15,13 @@ const mwApiQueryProps = {
 } as const
 
 type MwQueryProp = keyof typeof mwApiQueryProps
+
+const prefixToProp: Record<string, MwQueryProp> = Object.fromEntries(
+	Object.entries(mwApiQueryProps).map(
+		([propName, { prefix }]) => [prefix, propName] as [string, MwQueryProp],
+	),
+)
+
 interface MwQueryPropParams {
 	extracts: {
 		chars?: number
@@ -24,6 +31,7 @@ interface MwQueryPropParams {
 	}
 	imageinfo: {
 		prop?: OneOrMoreValue<'dimensions' | 'url'>
+		limit?: number | 'max'
 		urlwidth?: number
 		urlheight?: number
 	}
@@ -71,7 +79,9 @@ export class MwApiCall<
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-	async *query<T extends {} = {}>(): AsyncGenerator<
+	async *query<T extends {} = {}>(
+		options: { ignoreContinue?: MwQueryProp[] } = {},
+	): AsyncGenerator<
 		({
 			pageid: number
 			ns: number
@@ -117,7 +127,10 @@ export class MwApiCall<
 			)
 		).json()) as {
 			batchcomplete?: boolean
-			continue?: unknown
+			continue?: {
+				continue: string
+				[key: string]: unknown
+			}
 			query: {
 				pages: { pageid: number; ns: number; title: string }[]
 			}
@@ -129,12 +142,33 @@ export class MwApiCall<
 			title: string
 		} & T)[]
 
-		if (!data.continue) {
+		const continueObj = data.continue
+		if (!continueObj) {
 			this.finished = true
 			return
 		}
 
-		this.lastContinue = data.continue
+		const { ignoreContinue = [] } = options
+		const ignoredContinueProp: string[] = []
+		const filteredContinueObj: { continue: string; [key: string]: unknown } = {
+			continue: continueObj.continue,
+		}
+		let unremovedKeysCount = 0
+		Object.keys(continueObj).forEach((key) => {
+			if (key === 'continue') return
+			const prefix = key.slice(0, 2)
+			const prop = prefixToProp[prefix]!
+			if (ignoreContinue.includes(prop)) {
+				ignoredContinueProp.push(prop)
+				return
+			}
+			filteredContinueObj[key] = continueObj[key]
+			unremovedKeysCount++
+		})
+		filteredContinueObj.continue += ignoredContinueProp.join('|')
+		if (unremovedKeysCount === 0) return
+
+		this.lastContinue = filteredContinueObj
 		yield* this.query()
 	}
 }
