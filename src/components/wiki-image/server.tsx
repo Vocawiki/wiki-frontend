@@ -6,6 +6,7 @@ import PQueue from 'p-queue'
 
 import { MwApiCall } from '@/lib/mw-api'
 import { normalizeWikiTitle } from '@/lib/wiki'
+import { referenceFile } from '@/tools/file-usage'
 
 import { WikiImage, type WikiImageProps } from '.'
 
@@ -13,11 +14,14 @@ type WidthAndOrHeight = { width: number; height?: number } | { width?: number; h
 
 // TODO: 通过机器人将图片标记为正在使用
 export async function WikiImageServerOnly(props: WikiImageProps) {
+	const normalizedName = normalizeWikiTitle(props.file)
+	referenceFile(normalizedName)
+
 	const { width, height } = props
 	if (props.originalWidth || (width === undefined && height === undefined))
 		return <WikiImage {...props} />
 
-	const { src, srcSet, originalWidth, originalHeight } = await getWikiImageProps(props.file, {
+	const { src, srcSet, originalWidth, originalHeight } = await getWikiImageProps(normalizedName, {
 		width,
 		height,
 	} as WidthAndOrHeight)
@@ -36,13 +40,10 @@ export async function WikiImageServerOnly(props: WikiImageProps) {
 }
 
 async function getWikiImageProps(
-	fileName: string,
+	normalizedName: string,
 	size: WidthAndOrHeight,
 ): Promise<{ src: string; srcSet?: string; originalWidth: number; originalHeight: number }> {
-	const { thumbUrl, responsiveUrls, width, height } = await getThumb(
-		`File:${normalizeWikiTitle(fileName)}`,
-		size,
-	)
+	const { thumbUrl, responsiveUrls, width, height } = await getThumb(`File:${normalizedName}`, size)
 	return {
 		src: thumbUrl,
 		srcSet: responsiveUrls && getSrcSet(responsiveUrls),

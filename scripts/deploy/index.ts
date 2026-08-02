@@ -3,13 +3,32 @@ import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
 
-import { MediaWikiApi, type FexiosFinalContext, type MwApiResponse } from 'wiki-saikou'
+import PQueue from 'p-queue'
+import type { MediaWikiApi } from 'wiki-saikou'
 
-import { REPO_NAME, WIKI_API_URL } from '../config'
+import { getReferencedFiles } from '@/tools/file-usage'
+
 import { getPageTitleFromFileName } from '../utils/page'
-import { deploymentStateSchema } from './types'
+import {
+	deletePage,
+	deployPage,
+	getApi,
+	getDeployState,
+	lockDeploymentState,
+	unlockDeploymentState,
+} from './api'
+import { DEPLOYMENT_STATE_PAGE_TITLE } from './config'
+import { deploymentSpecifier } from './message'
+import { compareTitle } from './sorter'
+import {
+	deploymentStateSchemaV2,
+	type DeploymentContext,
+	type DeploymentStateV2,
+	type DeploymentTrash,
+	type Page,
+} from './types'
 
-const DEPLOYMENT_STATE_PAGE_TITLE = 'MediaWiki:Deployment.json'
+const Instant = Temporal.Instant
 
 const { values: args } = parseArgs({
 	args: Bun.argv,
@@ -36,112 +55,134 @@ if (args.help) {
 	console.log('      --commit-sha <val>  commit SHA')
 	console.log('  -h, --help              显示帮助')
 } else {
-	const commitSHA = args['commit-sha'] ?? process.env.GITHUB_SHA
-	assert(commitSHA, '必须提供 commit SHA')
+	const commitSha = args['commit-sha'] ?? process.env.GITHUB_SHA
+	assert(commitSha, '必须提供 commit SHA')
 
-	await deployPages(await getBuiltPages(), { ...args, commitSHA, runId: process.env.GITHUB_RUN_ID })
+	await deploy(await getBuiltPages(), { ...args, commitSha, runId: process.env.GITHUB_RUN_ID })
 }
-interface Page {
-	title: string
-	content: string
-	sha1: string
-}
-async function deployPages(
-	pages: Page[],
-	{ summary, commitSHA, runId }: { summary: string; commitSHA: string; runId?: string },
-) {
-	const deployStartedAt = new Date()
-	const api = await getAPI()
 
-	// 获取[[MediaWiki:Deployment.json]]的内容
-	const result: FexiosFinalContext<
-		MwApiResponse<{
-			query: {
-				pages: [
-					{
-						pageid: number
-						ns: 8
-						title: typeof DEPLOYMENT_STATE_PAGE_TITLE
-						revisions: [
-							{
-								slots: {
-									main: {
-										contentmodel: 'json'
-										contentformat: 'application/json'
-										content: string
-									}
-								}
-							},
-						]
-					},
-				]
-			}
-		}>
-	> = await api.get({
-		action: 'query',
-		format: 'json',
-		formatversion: 2,
-		prop: 'revisions',
-		titles: DEPLOYMENT_STATE_PAGE_TITLE,
-		rvprop: 'content',
-		rvslots: 'main',
-		rvlimit: 1,
-	}) // WikiSaikou的泛型坏了，`api.get`的泛型是`T`，返回值里不知道哪来的`T_1`
-	const deploymentState = deploymentStateSchema.parse(
-		JSON.parse(result.data.query.pages[0].revisions[0].slots.main.content),
-	)
-	const deployedPages = deploymentState.pages
-
-	for (const page of pages) {
-		if (page.sha1 === deployedPages[page.title]) {
-			continue
-		}
-		await deployPage(api, page, summary)
+async function deploy(pages: Page[], ctx: DeploymentContext) {
+	const deployStartedAt = Temporal.Now.instant()
+	const api = await getApi()
+	const previousDeploymentState = await getDeployState(api)
+	if (previousDeploymentState.lockedBy !== undefined) {
+		throw new Error('有进程正在部署')
 	}
 
-	const deployFinishedAt = new Date()
-	// eslint-disable-next-line @typescript-eslint/unbound-method
-	const compareTitle = new Intl.Collator('en', { numeric: true }).compare
-	const newDeploymentState = deploymentStateSchema.encode({
-		version: 1,
-		pages: Object.fromEntries(
-			pages
-				.map((page) => [page.title, page.sha1] as const)
-				.toSorted(([titleA], [titleB]) => compareTitle(titleA, titleB)),
-		),
-		commitSHA,
-		runId,
-		deployStartedAt,
+	await lockDeploymentState(api, ctx, previousDeploymentState)
+
+	try {
+		await deployPages(api, ctx, previousDeploymentState, pages)
+		const deployFinishedAt = Temporal.Now.instant()
+
+		const newTrashState = await cleanTrash(
+			api,
+			ctx,
+			previousDeploymentState,
+			pages,
+			deployFinishedAt,
+		)
+		const cleanFinishedAt = Temporal.Now.instant()
+
+		const newDeploymentState = deploymentStateSchemaV2.encode({
+			version: 2,
+			pages: Object.fromEntries(
+				pages
+					.map((page) => [page.title, page.sha1] as const)
+					.toSorted(([titleA], [titleB]) => compareTitle(titleA, titleB)),
+			),
+			referencedFiles: getReferencedFiles(),
+			trash: newTrashState,
+			commitSha: ctx.commitSha,
+			runId: ctx.runId,
+			deployStartedAt,
+			deployFinishedAt,
+			cleanFinishedAt,
+		})
+
+		await api.postWithEditToken({
+			action: 'edit',
+			title: DEPLOYMENT_STATE_PAGE_TITLE,
+			text: JSON.stringify(newDeploymentState, null, 2),
+			summary: '部署完成' + deploymentSpecifier(ctx),
+			tags: 'Bot',
+			notminor: true,
+			bot: true,
+		})
+	} catch (err) {
+		await unlockDeploymentState(api, ctx, previousDeploymentState)
+		throw err
+	}
+}
+
+async function deployPages(
+	api: MediaWikiApi,
+	ctx: DeploymentContext,
+	previousDeploymentState: DeploymentStateV2,
+	pages: Page[],
+) {
+	const previousPages = previousDeploymentState.pages
+	const deployQueue = new PQueue({ concurrency: 2 })
+	await deployQueue.addAll(
+		pages
+			.filter(({ title, sha1 }) => sha1 !== previousPages[title])
+			.map((page) => () => deployPage(api, ctx, page)),
+	)
+}
+
+async function cleanTrash(
+	api: MediaWikiApi,
+	ctx: DeploymentContext,
+	previousDeploymentState: DeploymentStateV2,
+	pages: Page[],
+	deployFinishedAt: Temporal.Instant,
+): Promise<DeploymentTrash> {
+	const { newTrashState, pagesToDelete } = toNewTrashState(previousDeploymentState.trash, {
+		previousTitles: Object.keys(previousDeploymentState.pages),
+		currentTitles: pages.map(({ title }) => title),
 		deployFinishedAt,
 	})
+	const cleanQueue = new PQueue({ concurrency: 1 })
+	await cleanQueue.addAll(pagesToDelete.map((title) => () => deletePage(api, ctx, title)))
 
-	await api.postWithEditToken({
-		action: 'edit',
-		title: 'MediaWiki:Deployment.json',
-		text: JSON.stringify(newDeploymentState, null, 2),
-		summary: `更新部署状态（版本：[[git:${REPO_NAME}/commit/${commitSHA}|${commitSHA.slice(0, 7)}]]${
-			runId ? `；本次任务：[[git:${REPO_NAME}/actions/runs/${runId}|${runId}]]` : ''
-		}）`,
-		tags: 'Bot',
-		notminor: true,
-		bot: true,
-	})
+	return newTrashState
 }
 
-async function getAPI() {
-	const { DEPLOY_USERNAME: username, DEPLOY_PASSWORD: password } = process.env
-	assert(username && password, '环境变量中需要有用户名和密码')
+function toNewTrashState(
+	previousState: DeploymentTrash,
+	{
+		previousTitles,
+		currentTitles,
+		deployFinishedAt,
+	}: {
+		previousTitles: string[]
+		currentTitles: string[]
+		deployFinishedAt: Temporal.Instant
+	},
+): {
+	newTrashState: DeploymentTrash
+	pagesToDelete: string[]
+} {
+	const trash = new Map(previousState)
+	previousTitles.forEach((title) => trash.set(title, deployFinishedAt))
+	currentTitles.forEach((title) => trash.delete(title))
+	const earliestInstantToPreserve = Temporal.Now.instant().add({ days: -7 }) // 清理超过7天的垃圾
+	const pagesToDelete = []
+	for (const [title, dateAdded] of trash.entries()) {
+		if (Instant.compare(dateAdded, earliestInstantToPreserve) > 0) {
+			break
+		}
+		pagesToDelete.push(title)
+		trash.delete(title)
+	}
 
-	const api = new MediaWikiApi({
-		baseURL: WIKI_API_URL,
-		defaultParams: { action: 'query', format: 'json', formatversion: 2 },
-		throwOnApiError: true,
-	})
-	await api.login(username, password)
-	return api
+	return {
+		newTrashState: trash,
+		pagesToDelete,
+	}
 }
 
-async function getPageContentSHA1(content: string): Promise<string> {
+async function getPageContentSha1(content: string): Promise<string> {
 	const encoder = new TextEncoder()
 	const data = encoder.encode(content)
 	const hashBuffer = await crypto.subtle.digest('SHA-1', data)
@@ -161,20 +202,8 @@ async function getBuiltPages(): Promise<Page[]> {
 			return {
 				title: pageTitle,
 				content: pageContent,
-				sha1: await getPageContentSHA1(pageContent),
+				sha1: await getPageContentSha1(pageContent),
 			}
 		}),
 	)
-}
-
-async function deployPage(api: MediaWikiApi, page: Page, summary: string) {
-	await api.postWithEditToken({
-		action: 'edit',
-		title: page.title,
-		text: page.content,
-		summary,
-		tags: 'Bot',
-		notminor: true,
-		bot: true,
-	})
 }
