@@ -168,7 +168,7 @@ function toNewTrashState(
 	const trash = new Map(previousState)
 	previousTitles.forEach((title) => trash.set(title, deployFinishedAt))
 	currentTitles.forEach((title) => trash.delete(title))
-	const earliestInstantToPreserve = Temporal.Now.instant().add({ days: -7 }) // 清理超过7天的垃圾
+	const earliestInstantToPreserve = Temporal.Now.instant().add({ hours: -7 * 24 }) // 清理超过7天的垃圾
 	const pagesToDelete = []
 	for (const [title, dateAdded] of trash.entries()) {
 		if (Instant.compare(dateAdded, earliestInstantToPreserve) > 0) {
