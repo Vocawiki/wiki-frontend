@@ -8,7 +8,7 @@ import { parseArgs } from 'node:util'
 import PQueue from 'p-queue'
 import type { MediaWikiApi } from 'wiki-saikou'
 
-import { getReferencedFiles } from '@/tools/file-usage'
+import { loadReferencedFiles } from '@/tools/file-usage'
 
 import { getPageTitleFromFileName } from '../utils/page'
 import {
@@ -93,7 +93,7 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 					.map((page) => [page.title, page.sha1] as const)
 					.toSorted(([titleA], [titleB]) => compareTitle(titleA, titleB)),
 			),
-			referencedFiles: getReferencedFiles(),
+			referencedFiles: await loadReferencedFiles(),
 			trash: newTrashState,
 			commitSha: ctx.commitSha,
 			runId: ctx.runId,
