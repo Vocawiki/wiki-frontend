@@ -14,11 +14,19 @@ interface BilibiliVideo {
 
 const videos: BilibiliVideo[] = [
 	{
+		title: 'bilibili外语术力口最慢10w TOP25，谁才是真正的区王？',
+		videoId: 'BV1pR396sEiH',
+		uploadedAt: new Date('2026-08-02T20:00:00+0800'),
+		coverFile: 'Bilibili外语术力口最慢10wTOP25.jpg',
+		bgColor: '#075ec7',
+		fgColor: '#fff',
+	},
+	{
 		title: '三站争霸！一口气看完B站/Niconico/YouTube 最速千万术曲',
 		videoId: 'BV17h9xBiEJv',
 		uploadedAt: new Date('2026-04-30T18:30:00+0800'),
 		coverFile: '三站争霸！一口气看完B站_Niconico_YouTube_最速千万术曲.jpg',
-		bgColor: '#744B34',
+		bgColor: '#744b34',
 		fgColor: '#fff',
 	},
 	{
@@ -95,7 +103,7 @@ function VideoCard({
 			className="group contents *:grid *:grid-rows-[1fr_auto] *:overflow-hidden *:rounded-md *:bg-(--bg-color)! *:text-(--fg-color) *:shadow-sm"
 			style={{ '--bg-color': bgColor, '--fg-color': fgColor } as CSSProperties}
 		>
-			<Wiki.Link href={`https://www.bilibili.com/video/${videoId}`}>
+			<Wiki.Link href={`https://www.bilibili.com/video/${videoId}/`}>
 				<WikiImageServerOnly
 					file={coverFile}
 					width={360}
