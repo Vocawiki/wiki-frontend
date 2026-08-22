@@ -80,4 +80,5 @@ const notify = (message: string, options?: mw.notification.NotificationOptions) 
 }
 
 export const notifyError = (msg: string) => notify(msg, { type: 'error', autoHideSeconds: 'long' })
-export const notifySuccess = (msg: string) => notify(msg, { type: 'success', autoHideSeconds: 'short' })
+export const notifySuccess = (msg: string) =>
+	notify(msg, { type: 'success', autoHideSeconds: 'short' })

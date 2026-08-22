@@ -1,6 +1,8 @@
 import type * as VueTypes from 'vue'
 
+import { useDestFileCheck } from './dest-file-check'
 import { msg } from './i18n'
+import { useLicensePreview } from './license-preview'
 import { SITE } from './site-config'
 import type { ApiQueryResponse, Chip, UploadResponse } from './types'
 import {
@@ -16,8 +18,6 @@ import {
 	trimChip,
 } from './utils'
 import { buildWikitext } from './wikitext'
-import { useLicensePreview } from './license-preview'
-import { useDestFileCheck } from './dest-file-check'
 
 interface UploadComponentContext {
 	Vue: typeof VueTypes
@@ -142,7 +142,9 @@ export const createUploadComponent = ({
 			const missingCharacterText = computed(() =>
 				missingCharacterChips.value.map((c) => c.value).join('、'),
 			)
-			const missingAuthorText = computed(() => missingAuthorChips.value.map((a) => a.value).join('、'))
+			const missingAuthorText = computed(() =>
+				missingAuthorChips.value.map((a) => a.value).join('、'),
+			)
 			const generatedWikitext = computed(() =>
 				buildWikitext(
 					{
@@ -225,7 +227,9 @@ export const createUploadComponent = ({
 						changed = true
 						const value = stripCategory(redirectMap[full])
 						if (characterSelected.value.includes(c.value)) {
-							characterSelected.value = characterSelected.value.map((s) => (s === c.value ? value : s))
+							characterSelected.value = characterSelected.value.map((s) =>
+								s === c.value ? value : s,
+							)
 						}
 						delete characterMissing.value[c.value]
 						delete characterMissing.value[value]
@@ -394,7 +398,9 @@ export const createUploadComponent = ({
 					results.forEach((data) => {
 						;(data.query?.pages ?? []).forEach((p) => {
 							const name = stripCategory(p.title)
-							if ((p.categories ?? []).some((c) => c.title === 'Category:' + SITE.containerCategory)) {
+							if (
+								(p.categories ?? []).some((c) => c.title === 'Category:' + SITE.containerCategory)
+							) {
 								containerSet[name] = true
 							}
 							subcatsMap[name] = p.categoryinfo?.subcats ?? 0
@@ -625,7 +631,9 @@ export const createUploadComponent = ({
 				// 同时避免每敲一个字都同步重算建议。
 				clearTimeout(characterFilterTimer)
 				characterFilterTimer = setTimeout(() => {
-					characterQuery.value = String(v || '').trim().toLowerCase()
+					characterQuery.value = String(v || '')
+						.trim()
+						.toLowerCase()
 				}, 100)
 			})
 			watch(authorInput, (v) => {

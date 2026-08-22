@@ -1,6 +1,6 @@
 import type * as CodexTypes from '@wikimedia/codex'
-import type * as VueTypes from 'vue'
 import { cdxIconReload, cdxIconUpload } from '@wikimedia/codex-icons'
+import type * as VueTypes from 'vue'
 
 import { createApi } from './api'
 import { createUploadComponent } from './component'

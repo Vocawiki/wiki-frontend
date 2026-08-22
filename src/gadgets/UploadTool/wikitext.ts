@@ -15,7 +15,10 @@ export interface WikitextInput {
 }
 
 /** 去掉作者名末尾的消歧义后缀。 */
-export function formatAuthorSummaryName(name: string | undefined, disambigTitles: string[]): string {
+export function formatAuthorSummaryName(
+	name: string | undefined,
+	disambigTitles: string[],
+): string {
 	name = String(name ?? '')
 	const base = name.replace(/[（(][^（）()]*[)）]$/, '')
 	return base !== name && disambigTitles.includes('Category:作者:' + base) ? base : name
