@@ -21,6 +21,7 @@ export default [
 	'text-spacing-trim',
 	'userpagecat',
 	{ type: 'h2', text: 'edit' },
+	'UploadTool',
 	'moesync',
 	'Cat-a-lot',
 	'HotCat',
