@@ -56,6 +56,10 @@ const MESSAGES_HANS = {
 	'desc-preview-section': '描述预览',
 	'preview-edited': '已手动编辑，表单变化不再自动覆盖。',
 	'btn-reset-preview': '重置为自动生成',
+	'ai-generated-label': '由AI生成',
+	'uploadtext-title': '上传说明',
+	'btn-back-to-native': '返回旧版',
+	'btn-batch-upload': '批量上传',
 	'note-section': '备注',
 	'placeholder-note': '编辑摘要',
 	'options-section': '上传选项',
@@ -120,6 +124,10 @@ const MESSAGES_HANT = {
 	'desc-preview-section': '描述預覽',
 	'preview-edited': '已手動編輯，表單變更不再自動覆蓋。',
 	'btn-reset-preview': '重設為自動產生',
+	'ai-generated-label': '由AI生成',
+	'uploadtext-title': '上傳說明',
+	'btn-back-to-native': '返回舊版',
+	'btn-batch-upload': '批次上傳',
 	'note-section': '備註',
 	'placeholder-note': '編輯摘要',
 	'options-section': '上傳選項',
@@ -137,6 +145,7 @@ const MESSAGES_HK: Partial<Record<MessageKey, string>> = {
 	'success-uploaded': '上載成功',
 	'btn-submitting': '正在上載……',
 	'btn-submit': '上載檔案',
+	'btn-batch-upload': '批次上載',
 }
 
 const HANT_VARIANTS = new Set(['zh-hant', 'zh-tw'])

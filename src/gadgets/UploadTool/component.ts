@@ -1,3 +1,4 @@
+import type { Icon } from '@wikimedia/codex-icons'
 import type * as VueTypes from 'vue'
 
 import { useDestFileCheck } from './dest-file-check'
@@ -19,6 +20,8 @@ import {
 } from './utils'
 import { buildWikitext } from './wikitext'
 
+const BATCH_UPLOAD_PAGE = 'Special:BatchUpload'
+
 interface UploadComponentContext {
 	Vue: typeof VueTypes
 	api: mw.Api
@@ -29,6 +32,10 @@ interface UploadComponentContext {
 	isReupload: boolean
 	uploadIcon: string
 	restartIcon: string
+	backIcon: Icon
+	batchIcon: Icon
+	helpIcon: Icon
+	uploadTextHtml: string
 }
 
 export const createUploadComponent = ({
@@ -41,6 +48,10 @@ export const createUploadComponent = ({
 	isReupload,
 	uploadIcon,
 	restartIcon,
+	backIcon,
+	batchIcon,
+	helpIcon,
+	uploadTextHtml,
 }: UploadComponentContext) => {
 	const { ref, computed, watch, onMounted, onUnmounted, defineComponent } = Vue
 
@@ -77,9 +88,11 @@ export const createUploadComponent = ({
 			const note = ref('')
 			const disambigTitles = ref<string[]>([])
 			const trademark = ref(false)
+			const aiGenerated = ref(false)
 			const watchFile = ref(true)
 			const ignoreWarnings = ref(false)
 			const submitting = ref(false)
+			const helpOpen = ref(false)
 
 			/** 非响应式状态（计时器与竞态序号） */
 			let authorSearchTimer: ReturnType<typeof setTimeout> | undefined
@@ -155,6 +168,7 @@ export const createUploadComponent = ({
 						licenseTpl: licenseState.license.value,
 						licenseParams: licenseState.licenseParams.value,
 						trademark: trademark.value,
+						aiGenerated: aiGenerated.value,
 						disambigTitles: disambigTitles.value,
 					},
 					msg,
@@ -179,6 +193,27 @@ export const createUploadComponent = ({
 				if (f) {
 					f.click()
 				}
+			}
+			// 返回原生表单：隐藏本工具、恢复原生字段集与提交按钮。
+			function returnToNativeForm() {
+				const mount = document.getElementById('ut-app')
+				if (mount) {
+					mount.style.display = 'none'
+				}
+				form.querySelectorAll<HTMLElement>('fieldset').forEach((f) => {
+					f.style.display = ''
+				})
+				const uploadText = document.getElementById('uploadtext')
+				if (uploadText) {
+					uploadText.style.display = ''
+				}
+				const nativeSubmit = form.querySelector<HTMLInputElement>('input[name=wpUpload]')
+				if (nativeSubmit) {
+					nativeSubmit.style.display = ''
+				}
+			}
+			function goToBatchUpload() {
+				location.href = mw.util.getUrl(BATCH_UPLOAD_PAGE)
 			}
 			function scheduleChipCheck() {
 				clearTimeout(chipCheckTimer)
@@ -755,9 +790,11 @@ export const createUploadComponent = ({
 				note,
 				...licenseState,
 				trademark,
+				aiGenerated,
 				watchFile,
 				ignoreWarnings,
 				submitting,
+				helpOpen,
 				allowedTypesHint,
 				existingDesc: hasExisting,
 				isReupload,
@@ -769,6 +806,8 @@ export const createUploadComponent = ({
 				missingCharacterText,
 				missingAuthorText,
 				chooseFile,
+				returnToNativeForm,
+				goToBatchUpload,
 				ensureFunctionOptions,
 				commitFunctionInput,
 				commitCharacterInput,
@@ -781,11 +820,29 @@ export const createUploadComponent = ({
 				submit,
 				uploadIcon,
 				restartIcon,
+				backIcon,
+				batchIcon,
+				helpIcon,
+				uploadTextHtml,
 				msg,
 			}
 		},
 		template: `
 <div class="ut-root">
+	<div class="ut-toolbar ut-gap">
+		<cdx-button type="button" @click="returnToNativeForm">
+			<cdx-icon :icon="backIcon"></cdx-icon>
+			{{ msg('btn-back-to-native') }}
+		</cdx-button>
+		<cdx-button type="button" @click="goToBatchUpload">
+			<cdx-icon :icon="batchIcon"></cdx-icon>
+			{{ msg('btn-batch-upload') }}
+		</cdx-button>
+		<cdx-button v-if="uploadTextHtml" type="button" weight="quiet" :aria-label="msg('uploadtext-title')" @click="helpOpen = true">
+			<cdx-icon :icon="helpIcon"></cdx-icon>
+		</cdx-button>
+	</div>
+
 	<cdx-message v-if="existingDesc && !isReupload" type="warning" inline class="ut-gap">
 		{{ msg('notice-existing-desc') }}
 	</cdx-message>
@@ -824,7 +881,7 @@ export const createUploadComponent = ({
 			</div>
 			<template v-else>
 				<div class="ut-row2">
-					<cdx-text-input v-model="fileUrl" :placeholder="msg('placeholder-file-url')" class="ut-full"></cdx-text-input>
+					<cdx-text-input name="ut-file-url" v-model="fileUrl" :placeholder="msg('placeholder-file-url')" class="ut-full"></cdx-text-input>
 				</div>
 				<div v-if="filePreview" class="ut-file-preview ut-gap">
 					<img :src="filePreview" alt="" />
@@ -837,7 +894,7 @@ export const createUploadComponent = ({
 
 		<div class="ut-section">
 			<h2 class="ut-title">{{ msg('dest-section') }}</h2>
-			<cdx-text-input v-model="destFile" :disabled="isReupload" :placeholder="msg('placeholder-dest')" class="ut-full"></cdx-text-input>
+			<cdx-text-input name="ut-dest-file" v-model="destFile" :disabled="isReupload" :placeholder="msg('placeholder-dest')" class="ut-full"></cdx-text-input>
 			<div v-if="destFileExists && !isReupload" class="ut-destfile-warning">
 				<cdx-message type="warning" inline>
 					<span v-text="msg('dest-exists-prefix')"></span>
@@ -852,13 +909,13 @@ export const createUploadComponent = ({
 
 			<div class="ut-field-row">
 				<div class="ut-sublabel">{{ msg('source-page-label') }}</div>
-				<cdx-text-input v-model="sourcePage" :placeholder="msg('placeholder-source-page')" class="ut-full"></cdx-text-input>
+				<cdx-text-input name="ut-source-page" v-model="sourcePage" :placeholder="msg('placeholder-source-page')" class="ut-full"></cdx-text-input>
 			</div>
 
 			<div class="ut-field-row">
 				<div class="ut-sublabel">{{ msg('character-label') }}</div>
 				<div @keydown.capture="onCharacterLookupKeydown">
-					<cdx-multiselect-lookup
+					<cdx-multiselect-lookup name="ut-character"
 						v-model:input-chips="characterChips"
 						v-model:selected="characterSelected"
 						v-model:input-value="characterInput"
@@ -878,7 +935,7 @@ export const createUploadComponent = ({
 			<div class="ut-field-row">
 				<div class="ut-sublabel">{{ msg('author-label') }}</div>
 				<div @keydown.capture="onAuthorLookupKeydown">
-					<cdx-multiselect-lookup
+					<cdx-multiselect-lookup name="ut-author"
 						v-model:input-chips="authorChips"
 						v-model:selected="authorSelected"
 						v-model:input-value="authorInput"
@@ -897,7 +954,7 @@ export const createUploadComponent = ({
 			<div class="ut-field-row">
 				<div class="ut-sublabel">{{ msg('function-label') }}</div>
 				<div @keydown.capture="onFunctionLookupKeydown">
-					<cdx-multiselect-lookup
+					<cdx-multiselect-lookup name="ut-function"
 						v-model:input-chips="functionChips"
 						v-model:selected="functionSelected"
 						v-model:input-value="functionInput"
@@ -910,27 +967,28 @@ export const createUploadComponent = ({
 					</cdx-multiselect-lookup>
 				</div>
 			</div>
+			<cdx-checkbox name="ut-ai-generated" v-model="aiGenerated" class="ut-gap">{{ msg('ai-generated-label') }}</cdx-checkbox>
 		</div>
 
 		<div class="ut-section" v-if="!isReupload">
 			<h2 class="ut-title">{{ msg('license-section') }}</h2>
-			<cdx-select v-model:selected="license" :menu-items="licenseOptions" :default-label="msg('license-default-label')" class="ut-full"></cdx-select>
+			<cdx-select name="ut-license" v-model:selected="license" :menu-items="licenseOptions" :default-label="msg('license-default-label')" class="ut-full"></cdx-select>
 			<cdx-message v-if="licenseHint" type="error" inline class="ut-gap">
 				<span v-text="licenseHint"></span>
 			</cdx-message>
 			<div v-for="f in currentLicenseFields" :key="f.key" class="ut-field-row">
 				<div class="ut-sublabel" v-text="f.label"></div>
-				<cdx-text-input v-if="f.type === 'text'" v-model="licenseFieldValues[f.key]" :placeholder="f.placeholder" class="ut-full"></cdx-text-input>
-				<cdx-select v-else v-model:selected="licenseFieldValues[f.key]" :menu-items="f.menuItems" class="ut-full"></cdx-select>
+				<cdx-text-input name="ut-license-field" v-if="f.type === 'text'" v-model="licenseFieldValues[f.key]" :placeholder="f.placeholder" class="ut-full"></cdx-text-input>
+				<cdx-select name="ut-license-field" v-else v-model:selected="licenseFieldValues[f.key]" :menu-items="f.menuItems" class="ut-full"></cdx-select>
 			</div>
-			<cdx-checkbox v-model="trademark" class="ut-gap">{{ msg('trademark-label') }}</cdx-checkbox>
+			<cdx-checkbox name="ut-trademark" v-model="trademark" class="ut-gap">{{ msg('trademark-label') }}</cdx-checkbox>
 			<div v-if="licensePreviewHtml" class="ut-license-preview" v-html="licensePreviewHtml"></div>
 			<div v-else-if="licensePreviewLoading" class="ut-license-preview ut-license-loading">{{ msg('license-loading') }}</div>
 		</div>
 
 		<div class="ut-section" v-if="!isReupload">
 			<h2 class="ut-title">{{ msg('desc-preview-section') }}</h2>
-			<textarea v-model="previewText" class="ut-preview ut-preview-edit" @input="onPreviewInput"></textarea>
+			<textarea id="ut-description-preview" name="ut-description-preview" v-model="previewText" class="ut-preview ut-preview-edit" @input="onPreviewInput"></textarea>
 			<div v-if="previewEdited" class="ut-row2">
 				<cdx-message type="notice" inline>{{ msg('preview-edited') }}</cdx-message>
 				<cdx-button type="button" @click="resetPreview">{{ msg('btn-reset-preview') }}</cdx-button>
@@ -943,12 +1001,12 @@ export const createUploadComponent = ({
 			<div class="ut-side-inner">
 				<div class="ut-section">
 					<h2 class="ut-title">{{ msg('note-section') }}</h2>
-					<cdx-text-input v-model="note" :placeholder="msg('placeholder-note')" class="ut-full"></cdx-text-input>
+					<cdx-text-input name="ut-note" v-model="note" :placeholder="msg('placeholder-note')" class="ut-full"></cdx-text-input>
 				</div>
 				<div class="ut-section">
 					<h2 class="ut-title">{{ msg('options-section') }}</h2>
-					<cdx-checkbox v-model="watchFile">{{ msg('watch-label') }}</cdx-checkbox>
-					<cdx-checkbox v-model="ignoreWarnings">{{ msg('ignore-warnings-label') }}</cdx-checkbox>
+					<cdx-checkbox name="ut-watch" v-model="watchFile">{{ msg('watch-label') }}</cdx-checkbox>
+					<cdx-checkbox name="ut-ignore-warnings" v-model="ignoreWarnings">{{ msg('ignore-warnings-label') }}</cdx-checkbox>
 				</div>
 				<div class="ut-actions">
 					<cdx-button type="button" action="progressive" weight="primary" :disabled="submitting" @click="submit">{{ submitting ? msg('btn-submitting') : msg('btn-submit') }}</cdx-button>
@@ -956,6 +1014,10 @@ export const createUploadComponent = ({
 			</div>
 		</aside>
 	</div>
+
+	<cdx-dialog v-model:open="helpOpen" :title="msg('uploadtext-title')" use-close-button>
+		<div class="ut-help-content" v-html="uploadTextHtml"></div>
+	</cdx-dialog>
 </div>
 `,
 	})

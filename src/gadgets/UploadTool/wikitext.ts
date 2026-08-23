@@ -11,6 +11,7 @@ export interface WikitextInput {
 	licenseTpl: string
 	licenseParams: string
 	trademark: boolean
+	aiGenerated: boolean
 	disambigTitles: string[]
 }
 
@@ -26,7 +27,11 @@ export function formatAuthorSummaryName(
 
 /** 生成文件描述wikitext。*/
 export function buildWikitext(input: WikitextInput, msg: MsgFn): string {
-	const lines = [msg('wikitext-summary')]
+	const lines: string[] = []
+	if (input.aiGenerated) {
+		lines.push('{{AI生成}}')
+	}
+	lines.push(msg('wikitext-summary'))
 	const src = (input.sourcePage || '').trim()
 	if (src) {
 		lines.push(msg('wikitext-source') + src)

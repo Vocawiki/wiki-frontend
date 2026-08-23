@@ -238,3 +238,15 @@ body.main-lg .ut-preview-mobile {
 .ut-license-loading {
 	color: var(--color-subtle);
 }
+
+.ut-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
+}
+
+.ut-help-content {
+	font-size: var(--text-sm, 0.875rem);
+	line-height: 1.6;
+}

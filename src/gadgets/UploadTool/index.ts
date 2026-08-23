@@ -1,5 +1,12 @@
 import type * as CodexTypes from '@wikimedia/codex'
-import { cdxIconReload, cdxIconUpload } from '@wikimedia/codex-icons'
+import type { Icon } from '@wikimedia/codex-icons'
+import {
+	cdxIconArrowPrevious,
+	cdxIconFolderPlaceholder,
+	cdxIconHelp,
+	cdxIconReload,
+	cdxIconUpload,
+} from '@wikimedia/codex-icons'
 import type * as VueTypes from 'vue'
 
 import { createApi } from './api'
@@ -7,6 +14,9 @@ import { createUploadComponent } from './component'
 
 const UPLOAD_ICON: string = cdxIconUpload
 const RESTART_ICON: string = cdxIconReload
+const BACK_ICON: Icon = cdxIconArrowPrevious
+const BATCH_ICON: Icon = cdxIconFolderPlaceholder
+const HELP_ICON: Icon = cdxIconHelp
 
 declare global {
 	interface Window {
@@ -42,6 +52,7 @@ function init(): void {
 		f.style.display = 'none'
 	})
 	const uploadText = document.getElementById('uploadtext')
+	const uploadTextHtml = uploadText?.innerHTML ?? ''
 	if (uploadText) {
 		uploadText.style.display = 'none'
 	}
@@ -75,6 +86,10 @@ function init(): void {
 			isReupload,
 			uploadIcon: UPLOAD_ICON,
 			restartIcon: RESTART_ICON,
+			backIcon: BACK_ICON,
+			batchIcon: BATCH_ICON,
+			helpIcon: HELP_ICON,
+			uploadTextHtml,
 		})
 		Vue.createMwApp(app)
 			.component('cdx-message', Codex.CdxMessage)
@@ -87,6 +102,7 @@ function init(): void {
 			.component('cdx-chip-input', Codex.CdxChipInput)
 			.component('cdx-multiselect-lookup', Codex.CdxMultiselectLookup)
 			.component('cdx-icon', Codex.CdxIcon)
+			.component('cdx-dialog', Codex.CdxDialog)
 			.mount(mount)
 	})
 }
