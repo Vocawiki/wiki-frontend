@@ -163,7 +163,7 @@ export const pickMessage = (variant: string, key: MessageKey): string => {
 }
 
 const pick = (key: MessageKey): string =>
-	pickMessage(mw.config.get('wgUserVariant')! || 'zh-hans', key)
+	pickMessage(mw.config.get('wgUserLanguage') || 'zh-hans', key)
 
 export const msg = (key: MessageKey, ...params: string[]): string => {
 	const template = pick(key)
