@@ -59,8 +59,6 @@ export function useLicensePreview(
 		licenseHint.value = o?.missing ? msg('license-missing-tpl') : ''
 	}
 
-	// 许可预览通过 action=parse 渲染，其输出 HTML 已由解析器消毒，
-	// 再经 v-html 注入。模板名来自白名单 LICENSES，字段值经 escapeTemplateParam 转义。
 	function fetchLicensePreview() {
 		const o = currentLicense.value
 		if (!o) {

@@ -1,10 +1,11 @@
 import type { Icon } from '@wikimedia/codex-icons'
 import type * as VueTypes from 'vue'
 
+import { useCategoryOptions } from './category-options'
 import { useDestFileCheck } from './dest-file-check'
 import { msg } from './i18n'
 import { useLicensePreview } from './license-preview'
-import { SITE } from './site-config'
+import { TEMPLATE } from './template'
 import type { ApiQueryResponse, Chip, UploadResponse } from './types'
 import {
 	chunk,
@@ -25,7 +26,6 @@ const BATCH_UPLOAD_PAGE = 'Special:BatchUpload'
 interface UploadComponentContext {
 	Vue: typeof VueTypes
 	api: mw.Api
-	jquery: JQueryStatic
 	form: HTMLElement
 	presetSource: string
 	hasExisting: boolean
@@ -41,7 +41,6 @@ interface UploadComponentContext {
 export const createUploadComponent = ({
 	Vue,
 	api,
-	jquery: $,
 	form,
 	presetSource,
 	hasExisting,
@@ -69,24 +68,16 @@ export const createUploadComponent = ({
 			const characterSelected = ref<string[]>([])
 			const characterQuery = ref('')
 			const characterMissing = ref<Record<string, boolean>>({})
-			const objectOptions = ref<Chip[]>([])
-			const objectLoaded = ref(false)
-			const objectLoading = ref(false)
 			const authorInput = ref('')
 			const authorChips = ref<Chip[]>([])
 			const authorSelected = ref<string[]>([])
 			const authorMissing = ref<Record<string, boolean>>({})
-			const authorOptions = ref<Chip[]>([])
 			const functionChips = ref<Chip[]>([])
 			const functionInput = ref('')
 			const functionSelected = ref<string[]>([])
-			const functionLeafOptions = ref<Chip[]>([])
-			const functionLoaded = ref(false)
-			const functionLoading = ref(false)
 			const previewText = ref('')
 			const previewEdited = ref(false)
 			const note = ref('')
-			const disambigTitles = ref<string[]>([])
 			const trademark = ref(false)
 			const aiGenerated = ref(false)
 			const watchFile = ref(true)
@@ -95,13 +86,12 @@ export const createUploadComponent = ({
 			const helpOpen = ref(false)
 
 			/** 非响应式状态（计时器与竞态序号） */
-			let authorSearchTimer: ReturnType<typeof setTimeout> | undefined
-			let authorSeq: number | undefined
 			let chipCheckTimer: ReturnType<typeof setTimeout> | undefined
 			let characterFilterTimer: ReturnType<typeof setTimeout> | undefined
 
 			const destState = useDestFileCheck(Vue, api, isReupload)
 			const licenseState = useLicensePreview(Vue, api, trademark)
+			const categoryState = useCategoryOptions(Vue, api)
 			const allowedExtensions = mw.config.get('wgFileExtensions') ?? []
 			const maxUploadSize = mw.config.get('wgMaxUploadSize')
 			const maxUploadBytes = maxUploadSize ? (maxUploadSize.file ?? maxUploadSize['*']) : 0
@@ -119,7 +109,7 @@ export const createUploadComponent = ({
 					return []
 				}
 				const added = new Set(characterChips.value.map((c) => c.value))
-				return objectOptions.value
+				return categoryState.objectOptions.value
 					.filter((o) => o.value.toLowerCase().includes(q) && !added.has(o.value))
 					.slice(0, 20)
 					.map((o) => ({
@@ -130,7 +120,7 @@ export const createUploadComponent = ({
 			})
 			const authorMenuItems = computed(() => {
 				const added = new Set(authorChips.value.map((a) => a.value))
-				return authorOptions.value
+				return categoryState.authorOptions.value
 					.filter((o) => !added.has(o.value))
 					.slice(0, 20)
 					.map((o) => ({
@@ -142,9 +132,11 @@ export const createUploadComponent = ({
 			const functionMenuItems = computed(() => {
 				const q = (functionInput.value || '').trim().toLowerCase()
 				if (!q) {
-					return functionLeafOptions.value
+					return categoryState.functionLeafOptions.value
 				}
-				return functionLeafOptions.value.filter((o) => o.value.toLowerCase().includes(q))
+				return categoryState.functionLeafOptions.value.filter((o) =>
+					o.value.toLowerCase().includes(q),
+				)
 			})
 			const missingCharacterChips = computed(() =>
 				characterChips.value.filter((c) => characterMissing.value[c.value]),
@@ -169,7 +161,7 @@ export const createUploadComponent = ({
 						licenseParams: licenseState.licenseParams.value,
 						trademark: trademark.value,
 						aiGenerated: aiGenerated.value,
-						disambigTitles: disambigTitles.value,
+						disambigTitles: categoryState.disambigTitles.value,
 					},
 					msg,
 				),
@@ -301,98 +293,7 @@ export const createUploadComponent = ({
 					authorChips.value = dedupChips(nextAuthorChips)
 				}
 			}
-			function fetchSubcats(title: string) {
-				const page = async (acc: string[], token: string | null): Promise<string[]> => {
-					const params: Record<string, string | number> = {
-						action: 'query',
-						list: 'categorymembers',
-						cmtitle: 'Category:' + title,
-						cmlimit: 500,
-						cmnamespace: 14,
-					}
-					if (token) {
-						params.cmcontinue = token
-					}
-					const data = (await api.get(params)) as ApiQueryResponse
-					;(data.query?.categorymembers ?? []).forEach((x) => acc.push(stripCategory(x.title)))
-					if (data.continue?.cmcontinue) {
-						return page(acc, data.continue.cmcontinue)
-					}
-					return acc
-				}
-				return page([], null)
-			}
-			async function searchAuthors(query: string) {
-				query = String(query || '').trim()
-				if (!query) {
-					authorOptions.value = []
-					return
-				}
-				const seq = (authorSeq = (authorSeq ?? 0) + 1)
-				try {
-					const data = (await api.get({
-						action: 'query',
-						list: 'prefixsearch',
-						pssearch: '作者:' + query,
-						psnamespace: 14,
-						pslimit: 20,
-					})) as ApiQueryResponse
-					if (seq !== authorSeq) {
-						return // 已有更新的搜索，丢弃过期结果
-					}
-					authorOptions.value = (data.query?.prefixsearch ?? []).map((p) => {
-						const name = stripAuthorCategory(p.title)
-						return { value: name, label: name }
-					})
-					flagDisambig()
-				} catch {
-					if (seq === authorSeq) {
-						authorOptions.value = []
-					}
-				}
-			}
-			async function ensureObjectOptions() {
-				if (objectLoaded.value || objectLoading.value) {
-					return
-				}
-				objectLoading.value = true
-				try {
-					const groups = await Promise.all(SITE.objectRoots.map((title) => fetchSubcats(title)))
-					const names = new Set(groups.flat())
-					const titles = [...names].map((n) => 'Category:' + n)
-					const results = await Promise.all(
-						chunk(titles, 50).map(
-							async (c) =>
-								(await api.get({
-									action: 'query',
-									prop: 'categoryinfo',
-									titles: c.join('|'),
-									formatversion: 2,
-								})) as ApiQueryResponse,
-						),
-					)
-					const parents: string[] = []
-					results.forEach((data) => {
-						;(data.query?.pages ?? []).forEach((p) => {
-							if ((p.categoryinfo?.subcats ?? 0) > 0) {
-								parents.push(stripCategory(p.title))
-							}
-						})
-					})
-					// 分批拉取孙分类，避免父分类过多时瞬间并发大量请求
-					for (const batch of chunk(parents, 10)) {
-						const grandchildren = await Promise.all(batch.map((n) => fetchSubcats(n)))
-						grandchildren.forEach((g) => g.forEach((n) => names.add(n)))
-					}
-					objectOptions.value = [...names].map((n) => ({ value: n, label: n }))
-					objectLoaded.value = true
-					flagDisambig()
-				} catch {
-					// 忽略，保留空列表
-				} finally {
-					objectLoading.value = false
-				}
-			}
+
 			function commitFunctionInput() {
 				commitChip(functionInput, functionChips, functionSelected)
 			}
@@ -405,122 +306,7 @@ export const createUploadComponent = ({
 			const onCharacterLookupKeydown = lookupEnterHandler(commitCharacterInput)
 			const onAuthorLookupKeydown = lookupEnterHandler(commitAuthorInput)
 			const onFunctionLookupKeydown = lookupEnterHandler(commitFunctionInput)
-			async function ensureFunctionOptions() {
-				if (functionLoaded.value || functionLoading.value) {
-					return
-				}
-				functionLoading.value = true
-				try {
-					const roots = SITE.functionRoots
-					const [tech = [], intro = []] = await Promise.all(roots.map((r) => fetchSubcats(r)))
-					const allLeaves = tech.concat(intro)
-					const allNames = [...roots, ...allLeaves]
-					const titles = allNames.map((n) => 'Category:' + n)
-					const results = await Promise.all(
-						chunk(titles, 50).map(
-							async (c) =>
-								(await api.get({
-									action: 'query',
-									prop: 'categories|categoryinfo',
-									cllimit: 'max',
-									titles: c.join('|'),
-									formatversion: 2,
-								})) as ApiQueryResponse,
-						),
-					)
-					const containerSet: Record<string, boolean> = {}
-					const subcatsMap: Record<string, number> = {}
-					results.forEach((data) => {
-						;(data.query?.pages ?? []).forEach((p) => {
-							const name = stripCategory(p.title)
-							if (
-								(p.categories ?? []).some((c) => c.title === 'Category:' + SITE.containerCategory)
-							) {
-								containerSet[name] = true
-							}
-							subcatsMap[name] = p.categoryinfo?.subcats ?? 0
-						})
-					})
-					// 只为确实含有孙分类的子类再查成员
-					const parentsWithChildren = allLeaves.filter((n) => (subcatsMap[n] ?? 0) > 0)
-					// 分批拉取子分类成员，避免瞬间并发大量请求
-					const entries: { n: string; s: string[] }[] = []
-					for (const batch of chunk(parentsWithChildren, 10)) {
-						entries.push(
-							...(await Promise.all(batch.map(async (n) => ({ n, s: await fetchSubcats(n) })))),
-						)
-					}
-					const childrenMap: Record<string, string[]> = {}
-					childrenMap[roots[0]] = tech
-					childrenMap[roots[1]] = intro
-					entries.forEach((e) => {
-						childrenMap[e.n] = e.s
-					})
-					const functionLeaf: Chip[] = []
-					roots.forEach((root) => {
-						if (!containerSet[root]) {
-							functionLeaf.push({ value: root, label: root })
-						}
-						;(childrenMap[root] ?? []).forEach((child) => {
-							if (!containerSet[child]) {
-								functionLeaf.push({ value: child, label: '　' + child })
-							}
-							;(childrenMap[child] ?? []).forEach((gc) => {
-								functionLeaf.push({ value: gc, label: '　　' + gc })
-							})
-						})
-					})
-					// 同名分类可能出现在多个层级/子树，按value去重（保留最先出现的层级）
-					const seen = new Set<string>()
-					functionLeafOptions.value = functionLeaf.filter((o) => {
-						if (seen.has(o.value)) {
-							return false
-						}
-						seen.add(o.value)
-						return true
-					})
-					functionLoaded.value = true
-				} catch {
-					functionLeafOptions.value = []
-				} finally {
-					functionLoading.value = false
-				}
-			}
-			async function fetchDisambigTitles() {
-				// 只拉消歧义分类成员名单，本地判断基础名是否在名单里
-				try {
-					const titles: string[] = []
-					let cmcontinue: string | undefined
-					do {
-						const params: Record<string, string | number> = {
-							action: 'query',
-							list: 'categorymembers',
-							cmtitle: 'Category:' + SITE.disambigCategory,
-							cmlimit: 500,
-							cmnamespace: 14,
-						}
-						if (cmcontinue) {
-							params.cmcontinue = cmcontinue
-						}
-						const data = (await api.get(params)) as ApiQueryResponse
-						;(data.query?.categorymembers ?? []).forEach((m) => titles.push(m.title))
-						cmcontinue = data.continue?.cmcontinue
-					} while (cmcontinue)
-					disambigTitles.value = titles
-					flagDisambig()
-				} catch {
-					disambigTitles.value = []
-				}
-			}
-			function flagDisambig() {
-				const titles = disambigTitles.value
-				objectOptions.value.forEach((o) => {
-					o.disambig = titles.includes('Category:' + o.value)
-				})
-				authorOptions.value.forEach((a) => {
-					a.disambig = titles.includes('Category:作者:' + a.value)
-				})
-			}
+
 			function submit() {
 				if (submitting.value) {
 					return
@@ -660,7 +446,7 @@ export const createUploadComponent = ({
 			})
 			watch(characterInput, (v) => {
 				if (v && String(v).trim()) {
-					void ensureObjectOptions()
+					void categoryState.ensureObjectOptions()
 				}
 				// 稍作防抖：让组件的pending标志先置位，菜单才能在输入时打开；
 				// 同时避免每敲一个字都同步重算建议。
@@ -672,17 +458,7 @@ export const createUploadComponent = ({
 				}, 100)
 			})
 			watch(authorInput, (v) => {
-				clearTimeout(authorSearchTimer)
-				const q = String(v || '').trim()
-				if (!q) {
-					// 让仍在途的搜索请求失效，避免清空后旧结果回填
-					authorSeq = (authorSeq ?? 0) + 1
-					authorOptions.value = []
-					return
-				}
-				authorSearchTimer = setTimeout(() => {
-					void searchAuthors(q)
-				}, 300)
+				categoryState.scheduleAuthorSearch(String(v || ''))
 			})
 			watch(generatedWikitext, () => {
 				syncPreview()
@@ -753,15 +529,14 @@ export const createUploadComponent = ({
 				})
 				licenseState.updateLicenseHint()
 				if (!isReupload) {
-					void fetchDisambigTitles()
-					void ensureFunctionOptions()
+					void categoryState.fetchDisambigTitles()
+					void categoryState.ensureFunctionOptions()
 					previewText.value = generatedWikitext.value
 					licenseState.fetchLicensePreview()
 				}
 			})
 			onUnmounted(() => {
 				// 组件卸载时清理所有在途定时器，避免回调触发已销毁实例
-				clearTimeout(authorSearchTimer)
 				clearTimeout(chipCheckTimer)
 				clearTimeout(characterFilterTimer)
 			})
@@ -773,18 +548,17 @@ export const createUploadComponent = ({
 				fileMeta,
 				fileUrl,
 				...destState,
+				...categoryState,
 				sourcePage,
 				characterInput,
 				characterChips,
 				characterSelected,
-				objectLoading,
 				authorInput,
 				authorChips,
 				authorSelected,
 				functionChips,
 				functionInput,
 				functionSelected,
-				functionLoading,
 				previewText,
 				previewEdited,
 				note,
@@ -808,7 +582,6 @@ export const createUploadComponent = ({
 				chooseFile,
 				returnToNativeForm,
 				goToBatchUpload,
-				ensureFunctionOptions,
 				commitFunctionInput,
 				commitCharacterInput,
 				commitAuthorInput,
@@ -827,198 +600,6 @@ export const createUploadComponent = ({
 				msg,
 			}
 		},
-		template: `
-<div class="ut-root">
-	<div class="ut-toolbar ut-gap">
-		<cdx-button type="button" @click="returnToNativeForm">
-			<cdx-icon :icon="backIcon"></cdx-icon>
-			{{ msg('btn-back-to-native') }}
-		</cdx-button>
-		<cdx-button type="button" @click="goToBatchUpload">
-			<cdx-icon :icon="batchIcon"></cdx-icon>
-			{{ msg('btn-batch-upload') }}
-		</cdx-button>
-		<cdx-button v-if="uploadTextHtml" type="button" weight="quiet" :aria-label="msg('uploadtext-title')" @click="helpOpen = true">
-			<cdx-icon :icon="helpIcon"></cdx-icon>
-		</cdx-button>
-	</div>
-
-	<cdx-message v-if="existingDesc && !isReupload" type="warning" inline class="ut-gap">
-		{{ msg('notice-existing-desc') }}
-	</cdx-message>
-
-	<div class="ut-layout">
-		<div class="ut-main">
-		<div class="ut-section">
-			<h2 class="ut-title">{{ msg('source-section') }}</h2>
-			<div class="ut-radio-row">
-				<cdx-radio v-model="sourceType" input-value="File" name="ut-source">{{ msg('source-local') }}</cdx-radio>
-				<cdx-radio v-model="sourceType" input-value="url" name="ut-source">{{ msg('source-url') }}</cdx-radio>
-			</div>
-			<div v-if="sourceType === 'File'" class="ut-drop">
-				<div
-					class="ut-drop__area"
-					role="button"
-					tabindex="0"
-					@click="chooseFile"
-					@keydown.enter="chooseFile"
-					@keydown.space.prevent="chooseFile"
-				>
-					<template v-if="filePreview">
-						<img class="ut-drop__preview" :src="filePreview" :alt="fileName" />
-						<span class="ut-drop__hint" v-text="fileName + (fileMeta ? ' · ' + fileMeta : '')"></span>
-						<cdx-button type="button">
-							<cdx-icon :icon="restartIcon"></cdx-icon>
-							{{ msg('btn-rechoose-file') }}
-						</cdx-button>
-					</template>
-					<template v-else>
-						<cdx-icon class="ut-drop__icon" :icon="uploadIcon"></cdx-icon>
-						<cdx-button type="button">{{ msg('btn-choose-file') }}</cdx-button>
-						<span class="ut-drop__hint" v-text="msg('preview-file-empty')"></span>
-					</template>
-				</div>
-			</div>
-			<template v-else>
-				<div class="ut-row2">
-					<cdx-text-input name="ut-file-url" v-model="fileUrl" :placeholder="msg('placeholder-file-url')" class="ut-full"></cdx-text-input>
-				</div>
-				<div v-if="filePreview" class="ut-file-preview ut-gap">
-					<img :src="filePreview" alt="" />
-				</div>
-			</template>
-			<cdx-message v-if="allowedTypesHint" type="notice" inline class="ut-gap">
-				{{ allowedTypesHint }}
-			</cdx-message>
-		</div>
-
-		<div class="ut-section">
-			<h2 class="ut-title">{{ msg('dest-section') }}</h2>
-			<cdx-text-input name="ut-dest-file" v-model="destFile" :disabled="isReupload" :placeholder="msg('placeholder-dest')" class="ut-full"></cdx-text-input>
-			<div v-if="destFileExists && !isReupload" class="ut-destfile-warning">
-				<cdx-message type="warning" inline>
-					<span v-text="msg('dest-exists-prefix')"></span>
-					<a :href="destFileUrl" target="_blank" v-text="'File:' + destFile"></a>
-				</cdx-message>
-				<img v-if="destFileThumb" :src="destFileThumb" :alt="destFile" class="ut-destfile-thumb" />
-			</div>
-		</div>
-
-		<div class="ut-section" v-if="!isReupload">
-			<h2 class="ut-title">{{ msg('desc-section') }}</h2>
-
-			<div class="ut-field-row">
-				<div class="ut-sublabel">{{ msg('source-page-label') }}</div>
-				<cdx-text-input name="ut-source-page" v-model="sourcePage" :placeholder="msg('placeholder-source-page')" class="ut-full"></cdx-text-input>
-			</div>
-
-			<div class="ut-field-row">
-				<div class="ut-sublabel">{{ msg('character-label') }}</div>
-				<div @keydown.capture="onCharacterLookupKeydown">
-					<cdx-multiselect-lookup name="ut-character"
-						v-model:input-chips="characterChips"
-						v-model:selected="characterSelected"
-						v-model:input-value="characterInput"
-						:menu-items="characterMenuItems"
-						:placeholder="msg('placeholder-character')"
-						@focus="ensureObjectOptions"
-						@blur="commitCharacterInput"
-					>
-						<template #no-results>{{ msg('no-results-hint') }}</template>
-					</cdx-multiselect-lookup>
-				</div>
-				<cdx-message v-if="missingCharacterChips.length" type="warning" inline class="ut-gap">
-					<span v-text="msg('missing-character-prefix') + missingCharacterText"></span>
-				</cdx-message>
-			</div>
-
-			<div class="ut-field-row">
-				<div class="ut-sublabel">{{ msg('author-label') }}</div>
-				<div @keydown.capture="onAuthorLookupKeydown">
-					<cdx-multiselect-lookup name="ut-author"
-						v-model:input-chips="authorChips"
-						v-model:selected="authorSelected"
-						v-model:input-value="authorInput"
-						:menu-items="authorMenuItems"
-						:placeholder="msg('placeholder-author')"
-						@blur="commitAuthorInput"
-					>
-						<template #no-results>{{ msg('no-results-hint') }}</template>
-					</cdx-multiselect-lookup>
-				</div>
-				<cdx-message v-if="missingAuthorChips.length" type="warning" inline class="ut-gap">
-					<span v-text="msg('missing-author-prefix') + missingAuthorText"></span>
-				</cdx-message>
-			</div>
-
-			<div class="ut-field-row">
-				<div class="ut-sublabel">{{ msg('function-label') }}</div>
-				<div @keydown.capture="onFunctionLookupKeydown">
-					<cdx-multiselect-lookup name="ut-function"
-						v-model:input-chips="functionChips"
-						v-model:selected="functionSelected"
-						v-model:input-value="functionInput"
-						:menu-items="functionMenuItems"
-						:placeholder="msg('placeholder-function')"
-						@focus="ensureFunctionOptions"
-						@blur="commitFunctionInput"
-					>
-						<template #no-results>{{ msg('no-results-hint') }}</template>
-					</cdx-multiselect-lookup>
-				</div>
-			</div>
-			<cdx-checkbox name="ut-ai-generated" v-model="aiGenerated" class="ut-gap">{{ msg('ai-generated-label') }}</cdx-checkbox>
-		</div>
-
-		<div class="ut-section" v-if="!isReupload">
-			<h2 class="ut-title">{{ msg('license-section') }}</h2>
-			<cdx-select name="ut-license" v-model:selected="license" :menu-items="licenseOptions" :default-label="msg('license-default-label')" class="ut-full"></cdx-select>
-			<cdx-message v-if="licenseHint" type="error" inline class="ut-gap">
-				<span v-text="licenseHint"></span>
-			</cdx-message>
-			<div v-for="f in currentLicenseFields" :key="f.key" class="ut-field-row">
-				<div class="ut-sublabel" v-text="f.label"></div>
-				<cdx-text-input name="ut-license-field" v-if="f.type === 'text'" v-model="licenseFieldValues[f.key]" :placeholder="f.placeholder" class="ut-full"></cdx-text-input>
-				<cdx-select name="ut-license-field" v-else v-model:selected="licenseFieldValues[f.key]" :menu-items="f.menuItems" class="ut-full"></cdx-select>
-			</div>
-			<cdx-checkbox name="ut-trademark" v-model="trademark" class="ut-gap">{{ msg('trademark-label') }}</cdx-checkbox>
-			<div v-if="licensePreviewHtml" class="ut-license-preview" v-html="licensePreviewHtml"></div>
-			<div v-else-if="licensePreviewLoading" class="ut-license-preview ut-license-loading">{{ msg('license-loading') }}</div>
-		</div>
-
-		<div class="ut-section" v-if="!isReupload">
-			<h2 class="ut-title">{{ msg('desc-preview-section') }}</h2>
-			<textarea id="ut-description-preview" name="ut-description-preview" v-model="previewText" class="ut-preview ut-preview-edit" @input="onPreviewInput"></textarea>
-			<div v-if="previewEdited" class="ut-row2">
-				<cdx-message type="notice" inline>{{ msg('preview-edited') }}</cdx-message>
-				<cdx-button type="button" @click="resetPreview">{{ msg('btn-reset-preview') }}</cdx-button>
-			</div>
-		</div>
-
-		</div>
-
-		<aside class="ut-side">
-			<div class="ut-side-inner">
-				<div class="ut-section">
-					<h2 class="ut-title">{{ msg('note-section') }}</h2>
-					<cdx-text-input name="ut-note" v-model="note" :placeholder="msg('placeholder-note')" class="ut-full"></cdx-text-input>
-				</div>
-				<div class="ut-section">
-					<h2 class="ut-title">{{ msg('options-section') }}</h2>
-					<cdx-checkbox name="ut-watch" v-model="watchFile">{{ msg('watch-label') }}</cdx-checkbox>
-					<cdx-checkbox name="ut-ignore-warnings" v-model="ignoreWarnings">{{ msg('ignore-warnings-label') }}</cdx-checkbox>
-				</div>
-				<div class="ut-actions">
-					<cdx-button type="button" action="progressive" weight="primary" :disabled="submitting" @click="submit">{{ submitting ? msg('btn-submitting') : msg('btn-submit') }}</cdx-button>
-				</div>
-			</div>
-		</aside>
-	</div>
-
-	<cdx-dialog v-model:open="helpOpen" :title="msg('uploadtext-title')" use-close-button>
-		<div class="ut-help-content" v-html="uploadTextHtml"></div>
-	</cdx-dialog>
-</div>
-`,
+		template: TEMPLATE,
 	})
 }

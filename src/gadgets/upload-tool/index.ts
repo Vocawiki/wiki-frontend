@@ -74,12 +74,10 @@ function init(): void {
 	mw.loader.using(['vue', '@wikimedia/codex', 'mediawiki.api', 'jquery']).then((require) => {
 		const Vue = require('vue') as typeof VueTypes
 		const Codex = require('@wikimedia/codex') as typeof CodexTypes
-		const $ = require('jquery') as JQueryStatic
 
 		const app = createUploadComponent({
 			Vue,
 			api: createApi(),
-			jquery: $,
 			form,
 			presetSource,
 			hasExisting,

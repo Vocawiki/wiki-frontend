@@ -44,7 +44,7 @@ export const LICENSES: LicenseGroup[] = [
 			},
 			{
 				tpl: 'CC BY-NC-SA',
-				label: 'CC BY-NC-SA（署名-非商业-相同方式共享）',
+				label: 'CC BY-NC-SA（署名-非商业性使用-相同方式共享）',
 				fields: ccFields(),
 				build: ccBuild,
 			},
