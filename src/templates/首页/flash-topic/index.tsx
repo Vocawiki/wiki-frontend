@@ -12,7 +12,7 @@ export function FlashTopic() {
 			className="preflight relative flow-root"
 			style={{ '--primary': '#6049d4', '--secondary': '#473dc1' } as CSSProperties}
 		>
-			<div className="fill ignore-article-inline-padding bg-[image:url(/images/5/57/The_VOCALOID_Collection_2026_Summer_KV.webp)] bg-size-[100%_100%] bg-fixed bg-center" />
+			<div className="fill ignore-article-inline-padding bg-[#cfd4ff] bg-[image:url(/images/5/57/The_VOCALOID_Collection_2026_Summer_KV.webp)] bg-size-[100%_100%] bg-fixed bg-center" />
 			<div className="relative my-4 flex flex-col">
 				<Title />
 
