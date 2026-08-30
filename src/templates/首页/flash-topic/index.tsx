@@ -15,7 +15,7 @@ export function FlashTopic() {
 		>
 			<div className="fill ignore-article-inline-padding">
 				<WikiImageServerOnly
-					file="The VOCALOID Collection 2026 Summer KV.png"
+					file="The VOCALOID Collection 2026 Summer KV.webp"
 					className="size-full object-cover select-none"
 					alt=""
 				/>
