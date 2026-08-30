@@ -26,11 +26,10 @@ export default defineConfig({
 
 	server: {
 		proxy: {
-			'/vocawiki': {
+			'/images': {
 				target: 'https://voca.wiki',
 				changeOrigin: true,
 				followRedirects: true,
-				rewrite: (path) => path.replace(/^\/vocawiki/, ''),
 			},
 		},
 	},

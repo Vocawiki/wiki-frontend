@@ -14,7 +14,7 @@ const mockData: PageInfo[] = [
 		href: '/%E8%B4%9D%E5%A3%B3%E4%B9%8B%E6%B3%AA',
 		image: {
 			source:
-				'/vocawiki/images/thumb/3/3f/%E8%B2%9D%E6%AE%BB%E3%81%AE%E6%B6%99.jpg/160px-%E8%B2%9D%E6%AE%BB%E3%81%AE%E6%B6%99.jpg',
+				'/images/thumb/3/3f/%E8%B2%9D%E6%AE%BB%E3%81%AE%E6%B6%99.jpg/160px-%E8%B2%9D%E6%AE%BB%E3%81%AE%E6%B6%99.jpg',
 			width: 160,
 			height: 120,
 		},
@@ -26,7 +26,7 @@ const mockData: PageInfo[] = [
 		href: '/%EF%BC%8A%EF%BC%8A%EF%BC%8A%EF%BC%8A%E7%B1%BB%E5%86%85%E5%AE%B9',
 		image: {
 			source:
-				'/vocawiki/images/thumb/2/2b/%EF%BC%8A%EF%BC%8A%EF%BC%8A%EF%BC%8A%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%84.jpg/160px-%EF%BC%8A%EF%BC%8A%EF%BC%8A%EF%BC%8A%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%84.jpg',
+				'/images/thumb/2/2b/%EF%BC%8A%EF%BC%8A%EF%BC%8A%EF%BC%8A%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%84.jpg/160px-%EF%BC%8A%EF%BC%8A%EF%BC%8A%EF%BC%8A%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%84.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -38,7 +38,7 @@ const mockData: PageInfo[] = [
 		href: '/%E8%B4%9D%E5%A3%B3%E4%B9%8B%E6%AD%8C',
 		image: {
 			source:
-				'/vocawiki/images/thumb/c/c9/%E8%B2%9D%E6%AE%BB%E3%81%AE%E5%94%84.jpg/160px-%E8%B2%9D%E6%AE%BB%E3%81%AE%E5%94%84.jpg',
+				'/images/thumb/c/c9/%E8%B2%9D%E6%AE%BB%E3%81%AE%E5%94%84.jpg/160px-%E8%B2%9D%E6%AE%BB%E3%81%AE%E5%94%84.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -50,7 +50,7 @@ const mockData: PageInfo[] = [
 		href: '/%E8%89%B2%E5%BD%A9%E7%94%B5%E6%B0%94',
 		image: {
 			source:
-				'/vocawiki/images/thumb/5/55/%E8%89%B2%E5%BD%A9%E7%94%B5%E6%B0%94.jpg/160px-%E8%89%B2%E5%BD%A9%E7%94%B5%E6%B0%94.jpg',
+				'/images/thumb/5/55/%E8%89%B2%E5%BD%A9%E7%94%B5%E6%B0%94.jpg/160px-%E8%89%B2%E5%BD%A9%E7%94%B5%E6%B0%94.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -62,7 +62,7 @@ const mockData: PageInfo[] = [
 		href: '/%E5%A4%A9%E7%9C%9F%E7%83%82%E6%BC%AB%E9%AB%98%E8%A5%9F%E5%A7%AC',
 		image: {
 			source:
-				'/vocawiki/images/thumb/f/f6/%E5%A4%A9%E7%9C%9F%E7%88%9B%E6%BC%AB%E9%AB%98%E8%A5%9F%E5%A7%AB.jpg/160px-%E5%A4%A9%E7%9C%9F%E7%88%9B%E6%BC%AB%E9%AB%98%E8%A5%9F%E5%A7%AB.jpg',
+				'/images/thumb/f/f6/%E5%A4%A9%E7%9C%9F%E7%88%9B%E6%BC%AB%E9%AB%98%E8%A5%9F%E5%A7%AB.jpg/160px-%E5%A4%A9%E7%9C%9F%E7%88%9B%E6%BC%AB%E9%AB%98%E8%A5%9F%E5%A7%AB.jpg',
 			width: 160,
 			height: 91,
 		},
@@ -74,7 +74,7 @@ const mockData: PageInfo[] = [
 		href: '/%E5%A4%A9%E6%B6%AF%E4%B9%8B%E8%8A%B1',
 		image: {
 			source:
-				'/vocawiki/images/thumb/a/a6/%E5%A4%A9%E6%B6%AF%E4%B9%8B%E8%8A%B1.jpg/160px-%E5%A4%A9%E6%B6%AF%E4%B9%8B%E8%8A%B1.jpg',
+				'/images/thumb/a/a6/%E5%A4%A9%E6%B6%AF%E4%B9%8B%E8%8A%B1.jpg/160px-%E5%A4%A9%E6%B6%AF%E4%B9%8B%E8%8A%B1.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -85,7 +85,7 @@ const mockData: PageInfo[] = [
 		title: '青鸟',
 		href: '/%E9%9D%92%E9%B8%9F',
 		image: {
-			source: '/vocawiki/images/thumb/c/c0/Bluebird.jpg/160px-Bluebird.jpg',
+			source: '/images/thumb/c/c0/Bluebird.jpg/160px-Bluebird.jpg',
 			width: 160,
 			height: 117,
 		},
@@ -97,7 +97,7 @@ const mockData: PageInfo[] = [
 		href: '/%E5%A5%BD%E7%97%9B',
 		image: {
 			source:
-				'/vocawiki/images/thumb/f/fc/%E6%97%A0%E8%89%B2%E9%80%8F%E5%90%8D%E7%A5%AD3LOGO.jpg/160px-%E6%97%A0%E8%89%B2%E9%80%8F%E5%90%8D%E7%A5%AD3LOGO.jpg',
+				'/images/thumb/f/fc/%E6%97%A0%E8%89%B2%E9%80%8F%E5%90%8D%E7%A5%AD3LOGO.jpg/160px-%E6%97%A0%E8%89%B2%E9%80%8F%E5%90%8D%E7%A5%AD3LOGO.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -108,7 +108,7 @@ const mockData: PageInfo[] = [
 		title: 'Wonderport Display',
 		href: '/Wonderport_Display',
 		image: {
-			source: '/vocawiki/images/thumb/f/ff/Wonderport_Display.jpg/160px-Wonderport_Display.jpg',
+			source: '/images/thumb/f/ff/Wonderport_Display.jpg/160px-Wonderport_Display.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -120,7 +120,7 @@ const mockData: PageInfo[] = [
 		href: '/%E6%A8%B1%E8%8A%B1%E7%83%82%E6%BC%AB%E6%81%8B%E8%AF%AD',
 		image: {
 			source:
-				'/vocawiki/images/thumb/7/7f/%E6%A1%9C%E8%8A%B1%E7%88%9B%E6%BC%AB%E6%81%8B%E8%AA%9E.jpg/160px-%E6%A1%9C%E8%8A%B1%E7%88%9B%E6%BC%AB%E6%81%8B%E8%AA%9E.jpg',
+				'/images/thumb/7/7f/%E6%A1%9C%E8%8A%B1%E7%88%9B%E6%BC%AB%E6%81%8B%E8%AA%9E.jpg/160px-%E6%A1%9C%E8%8A%B1%E7%88%9B%E6%BC%AB%E6%81%8B%E8%AA%9E.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -138,7 +138,7 @@ const mockData: PageInfo[] = [
 		href: '/%E9%9C%93%E8%99%B9%E7%81%AF%E9%B1%BC',
 		image: {
 			source:
-				'/vocawiki/images/thumb/0/05/%E3%83%8D%E3%82%AA%E3%83%B3%E3%83%86%E3%83%88%E3%83%A9%E5%B0%81%E9%9D%A2.jpg/160px-%E3%83%8D%E3%82%AA%E3%83%B3%E3%83%86%E3%83%88%E3%83%A9%E5%B0%81%E9%9D%A2.jpg',
+				'/images/thumb/0/05/%E3%83%8D%E3%82%AA%E3%83%B3%E3%83%86%E3%83%88%E3%83%A9%E5%B0%81%E9%9D%A2.jpg/160px-%E3%83%8D%E3%82%AA%E3%83%B3%E3%83%86%E3%83%88%E3%83%A9%E5%B0%81%E9%9D%A2.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -150,7 +150,7 @@ const mockData: PageInfo[] = [
 		href: '/%E5%AE%B5%E6%9C%88%E8%88%9E%E6%AD%8C',
 		image: {
 			source:
-				'/vocawiki/images/thumb/4/42/%E5%AE%B5%E6%9C%88%E8%88%9E%E5%94%84.webp/160px-%E5%AE%B5%E6%9C%88%E8%88%9E%E5%94%84.webp.png',
+				'/images/thumb/4/42/%E5%AE%B5%E6%9C%88%E8%88%9E%E5%94%84.webp/160px-%E5%AE%B5%E6%9C%88%E8%88%9E%E5%94%84.webp.png',
 			width: 160,
 			height: 90,
 		},
@@ -161,7 +161,7 @@ const mockData: PageInfo[] = [
 		title: '星之摇篮曲',
 		href: '/%E6%98%9F%E4%B9%8B%E6%91%87%E7%AF%AE%E6%9B%B2',
 		image: {
-			source: '/vocawiki/images/thumb/e/e6/Komoriuta.jpg/160px-Komoriuta.jpg',
+			source: '/images/thumb/e/e6/Komoriuta.jpg/160px-Komoriuta.jpg',
 			width: 160,
 			height: 120,
 		},
@@ -173,7 +173,7 @@ const mockData: PageInfo[] = [
 		href: '/%E5%8F%AA%E8%BA%AB%E4%B8%80%E4%BA%BA',
 		image: {
 			source:
-				'/vocawiki/images/thumb/8/86/%E5%8F%AA%E8%BA%AB%E4%B8%80%E4%BA%BA.jpg/160px-%E5%8F%AA%E8%BA%AB%E4%B8%80%E4%BA%BA.jpg',
+				'/images/thumb/8/86/%E5%8F%AA%E8%BA%AB%E4%B8%80%E4%BA%BA.jpg/160px-%E5%8F%AA%E8%BA%AB%E4%B8%80%E4%BA%BA.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -185,7 +185,7 @@ const mockData: PageInfo[] = [
 		href: '/%E6%9C%AC%E6%9D%A5%E6%98%AF%E7%BB%9D%E5%AF%B9%E7%9A%84%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81',
 		image: {
 			source:
-				'/vocawiki/images/thumb/b/ba/%E6%9C%AC%E6%9D%A5%E6%98%AF%E7%BB%9D%E5%AF%B9%E7%9A%84.jpg/160px-%E6%9C%AC%E6%9D%A5%E6%98%AF%E7%BB%9D%E5%AF%B9%E7%9A%84.jpg',
+				'/images/thumb/b/ba/%E6%9C%AC%E6%9D%A5%E6%98%AF%E7%BB%9D%E5%AF%B9%E7%9A%84.jpg/160px-%E6%9C%AC%E6%9D%A5%E6%98%AF%E7%BB%9D%E5%AF%B9%E7%9A%84.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -196,7 +196,7 @@ const mockData: PageInfo[] = [
 		title: 'Stella Notes',
 		href: '/Stella_Notes',
 		image: {
-			source: '/vocawiki/images/thumb/9/9c/Stella_Notes.jpg/160px-Stella_Notes.jpg',
+			source: '/images/thumb/9/9c/Stella_Notes.jpg/160px-Stella_Notes.jpg',
 			width: 160,
 			height: 66,
 		},
@@ -208,7 +208,7 @@ const mockData: PageInfo[] = [
 		href: '/Biliboard%E6%9C%AF%E5%8A%9B%E5%8F%A3%E5%91%A8%E6%A6%9C/%E7%AC%AC111%E6%9C%9F',
 		image: {
 			source:
-				'/vocawiki/images/thumb/0/07/Biliboard%E6%9C%AF%E5%8A%9B%E5%8F%A3%E5%91%A8%E6%A6%9C%E7%AC%AC111%E6%9C%9F.png/160px-Biliboard%E6%9C%AF%E5%8A%9B%E5%8F%A3%E5%91%A8%E6%A6%9C%E7%AC%AC111%E6%9C%9F.png',
+				'/images/thumb/0/07/Biliboard%E6%9C%AF%E5%8A%9B%E5%8F%A3%E5%91%A8%E6%A6%9C%E7%AC%AC111%E6%9C%9F.png/160px-Biliboard%E6%9C%AF%E5%8A%9B%E5%8F%A3%E5%91%A8%E6%A6%9C%E7%AC%AC111%E6%9C%9F.png',
 			width: 160,
 			height: 90,
 		},
@@ -220,7 +220,7 @@ const mockData: PageInfo[] = [
 		href: '/%E6%A8%B1%E8%8A%B1%E7%82%B9%E7%9D%9B%E4%B9%B1%E5%B0%84',
 		image: {
 			source:
-				'/vocawiki/images/thumb/8/85/%E3%82%B5%E3%82%AF%E3%83%A9%E7%82%B9%E7%9D%9B%E4%B9%B1%E3%82%8C%E6%92%83%E3%81%A1.jpg/160px-%E3%82%B5%E3%82%AF%E3%83%A9%E7%82%B9%E7%9D%9B%E4%B9%B1%E3%82%8C%E6%92%83%E3%81%A1.jpg',
+				'/images/thumb/8/85/%E3%82%B5%E3%82%AF%E3%83%A9%E7%82%B9%E7%9D%9B%E4%B9%B1%E3%82%8C%E6%92%83%E3%81%A1.jpg/160px-%E3%82%B5%E3%82%AF%E3%83%A9%E7%82%B9%E7%9D%9B%E4%B9%B1%E3%82%8C%E6%92%83%E3%81%A1.jpg',
 			width: 160,
 			height: 120,
 		},
@@ -231,7 +231,7 @@ const mockData: PageInfo[] = [
 		title: 'AGAINSTAR',
 		href: '/AGAINSTAR',
 		image: {
-			source: '/vocawiki/images/thumb/7/79/AGAINSTAR.jpg/160px-AGAINSTAR.jpg',
+			source: '/images/thumb/7/79/AGAINSTAR.jpg/160px-AGAINSTAR.jpg',
 			width: 160,
 			height: 116,
 		},
@@ -248,7 +248,7 @@ const mockData: PageInfo[] = [
 		title: 'SING',
 		href: '/SING',
 		image: {
-			source: '/vocawiki/images/thumb/4/49/SING.jpg/160px-SING.jpg',
+			source: '/images/thumb/4/49/SING.jpg/160px-SING.jpg',
 			width: 160,
 			height: 119,
 		},
@@ -260,7 +260,7 @@ const mockData: PageInfo[] = [
 		href: '/%E8%89%B2%E8%B0%B1%E7%BB%98%E5%BD%B1',
 		image: {
 			source:
-				'/vocawiki/images/thumb/6/63/%E8%89%B2%E8%B0%B1%E7%BB%98%E5%BD%B1.jpg/160px-%E8%89%B2%E8%B0%B1%E7%BB%98%E5%BD%B1.jpg',
+				'/images/thumb/6/63/%E8%89%B2%E8%B0%B1%E7%BB%98%E5%BD%B1.jpg/160px-%E8%89%B2%E8%B0%B1%E7%BB%98%E5%BD%B1.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -271,7 +271,7 @@ const mockData: PageInfo[] = [
 		title: '1121',
 		href: '/1121',
 		image: {
-			source: '/vocawiki/images/thumb/2/23/1121.jpg/160px-1121.jpg',
+			source: '/images/thumb/2/23/1121.jpg/160px-1121.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -283,7 +283,7 @@ const mockData: PageInfo[] = [
 		href: '/%E9%A9%B1%E8%BD%A6%E7%96%BE%E8%A1%8C_%E6%BA%BA%E5%9D%A0%E8%80%8C%E4%BA%A1',
 		image: {
 			source:
-				'/vocawiki/images/thumb/5/5e/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%A4%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4.jpg/160px-%E3%83%89%E3%83%A9%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%A4%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4.jpg',
+				'/images/thumb/5/5e/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%A4%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4.jpg/160px-%E3%83%89%E3%83%A9%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%A4%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4%E3%83%93%E3%83%B3%E3%82%B0%E3%83%80%E3%82%A4.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -295,7 +295,7 @@ const mockData: PageInfo[] = [
 		href: '/%E2%88%9E%E8%BD%AC%E8%BF%87%E2%88%9E',
 		image: {
 			source:
-				'/vocawiki/images/thumb/f/f0/%E9%A9%AC%E6%B4%BC%E8%B7%AF.jpg/160px-%E9%A9%AC%E6%B4%BC%E8%B7%AF.jpg',
+				'/images/thumb/f/f0/%E9%A9%AC%E6%B4%BC%E8%B7%AF.jpg/160px-%E9%A9%AC%E6%B4%BC%E8%B7%AF.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -306,7 +306,7 @@ const mockData: PageInfo[] = [
 		title: 'Restart Refine',
 		href: '/Restart_Refine',
 		image: {
-			source: '/vocawiki/images/thumb/e/e1/Restart_Refine.jpg/160px-Restart_Refine.jpg',
+			source: '/images/thumb/e/e1/Restart_Refine.jpg/160px-Restart_Refine.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -317,7 +317,7 @@ const mockData: PageInfo[] = [
 		href: '/%E5%91%A8%E5%88%8A%E8%99%9A%E6%8B%9F%E6%AD%8C%E6%89%8B%E5%A4%96%E8%AF%AD%E6%8E%92%E8%A1%8C%E6%A6%9C98',
 		image: {
 			source:
-				'/vocawiki/images/thumb/b/b2/%E5%91%A8%E5%88%8A%E8%99%9A%E6%8B%9F%E6%AD%8C%E6%89%8B%E5%A4%96%E8%AF%AD%E6%8E%92%E8%A1%8C%E6%A6%9C-98.jpg/160px-%E5%91%A8%E5%88%8A%E8%99%9A%E6%8B%9F%E6%AD%8C%E6%89%8B%E5%A4%96%E8%AF%AD%E6%8E%92%E8%A1%8C%E6%A6%9C-98.jpg',
+				'/images/thumb/b/b2/%E5%91%A8%E5%88%8A%E8%99%9A%E6%8B%9F%E6%AD%8C%E6%89%8B%E5%A4%96%E8%AF%AD%E6%8E%92%E8%A1%8C%E6%A6%9C-98.jpg/160px-%E5%91%A8%E5%88%8A%E8%99%9A%E6%8B%9F%E6%AD%8C%E6%89%8B%E5%A4%96%E8%AF%AD%E6%8E%92%E8%A1%8C%E6%A6%9C-98.jpg',
 			width: 160,
 			height: 90,
 		},
@@ -329,7 +329,7 @@ const mockData: PageInfo[] = [
 		href: '/%E5%B9%BB%E5%BD%B1(%E5%92%B3%E6%82%9F%E9%A5%AD)',
 		image: {
 			source:
-				'/vocawiki/images/thumb/1/1f/%E5%B9%BB%E5%BD%B1%28%E5%92%B3%E5%97%BD%E9%A5%AD%29.jpg/160px-%E5%B9%BB%E5%BD%B1%28%E5%92%B3%E5%97%BD%E9%A5%AD%29.jpg',
+				'/images/thumb/1/1f/%E5%B9%BB%E5%BD%B1%28%E5%92%B3%E5%97%BD%E9%A5%AD%29.jpg/160px-%E5%B9%BB%E5%BD%B1%28%E5%92%B3%E5%97%BD%E9%A5%AD%29.jpg',
 			width: 160,
 			height: 90,
 		},
