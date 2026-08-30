@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
+import { WikiImageServerOnly } from '@/src/components/wiki-image/server'
 import * as Wiki from '~/components/wikitext'
 
 export function Contents() {
@@ -71,7 +72,7 @@ function News() {
 	return (
 		<li className="contents *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow-sm">
 			<Wiki.Link href="https://www.bilibili.com/video/BV1Ex4X6nERS">
-				<Wiki.Image file="VCCL2026夏：除名退赛歌曲排行榜.jpg" width={200} />
+				<WikiImageServerOnly file="VCCL2026夏：除名退赛歌曲排行榜.jpg" width={192} height={108} />
 				<div className="flex grow flex-col gap-2 px-2 pt-2">
 					<div className="my-[-0.1em] text-justify leading-[1.2] font-semibold">
 						这些术曲都犯规了？VCCL
@@ -111,7 +112,7 @@ function Section({
 			>
 				{title}
 			</div>
-			<ul className="flex w-50 grow flex-col gap-2 text-sm leading-none">{children}</ul>
+			<ul className="flex w-48 grow flex-col gap-2 text-sm leading-none">{children}</ul>
 		</div>
 	)
 }
@@ -130,9 +131,9 @@ function Top1Video({
 	className?: string
 }) {
 	return (
-		<li className={cn('*:flex *:flex-col *:overflow-hidden *:rounded-md *:shadow-sm', className)}>
+		<li className={cn('*:block *:overflow-hidden *:rounded-md *:shadow-sm', className)}>
 			<Wiki.Link page={translatedTitle}>
-				<Wiki.Image file={image} width={200} />
+				<WikiImageServerOnly file={image} width={192} height={108} />
 				<div className="flex items-center gap-2 p-2">
 					<div
 						className="flex-center size-7 shrink-0 rounded-full text-xl leading-none font-bold"
@@ -167,7 +168,7 @@ function TopVideo({
 	className?: string
 }) {
 	return (
-		<li className={cn('*:flex *:flex-col *:overflow-hidden *:rounded-md *:shadow-sm', className)}>
+		<li className={cn('*:block *:overflow-hidden *:rounded-md *:shadow-sm', className)}>
 			<Wiki.Link page={translatedTitle}>
 				<div className="flex items-center gap-2 p-2">
 					<div
