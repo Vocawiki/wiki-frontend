@@ -88,7 +88,7 @@ function Information() {
 				</Wiki.Link>
 				<div className="mr-3 ml-2.25 flex gap-1">
 					<div className="w-1 rounded-max bg-[#eae6ff]" />
-					<p className="text-justify">
+					<p className="text-justify font-normal">
 						由DWANGO举办的线上VOCALOID歌曲投稿节，每年两届。国内粉丝将其简称为VCCL。
 					</p>
 				</div>
@@ -113,7 +113,7 @@ function Information() {
 				</div>
 				<div className="grid grid-cols-3 justify-between gap-4">
 					<SubmitNumber category="TOP100" value={2368} bg="#f1ad29" />
-					<SubmitNumber category="新人" value={3270} bg="#288bd2" />
+					<SubmitNumber category="ROOKIE" value={3270} bg="#288bd2" />
 					<SubmitNumber category="REMIX" value={671} bg="#349d4b" />
 				</div>
 			</div>

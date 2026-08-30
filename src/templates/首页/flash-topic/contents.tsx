@@ -9,7 +9,7 @@ export function Contents() {
 		<div className="min-w-0 overflow-hidden rounded-container border border-[#e4e4e7] bg-white/80 shadow">
 			<div className="h-full overflow-x-auto mask-[linear-gradient(90deg,transparent,black_8px,black_calc(100%-8px),transparent)] p-2.25">
 				<div className="flex w-max gap-2">
-					<Section title="TOP100" titleClassName="bg-[#f1ad29]" className="[&_a]:bg-[#fef7ea]">
+					<Section title="TOP100结果" titleClassName="bg-[#f1ad29]" className="[&_a]:bg-[#fef7ea]">
 						<Top1Video
 							originalTitle="音楽はつづく"
 							translatedTitle="音乐还会继续"
@@ -24,7 +24,7 @@ export function Contents() {
 							author="GYARI（ココアシガレットP）"
 						/>
 					</Section>
-					<Section title="新人" titleClassName="bg-[#288bd2]" className="[&_a]:bg-[#eaf3fb]">
+					<Section title="ROOKIE结果" titleClassName="bg-[#288bd2]" className="[&_a]:bg-[#eaf3fb]">
 						<Top1Video
 							originalTitle="あなたの記憶"
 							translatedTitle="你的记忆"
@@ -39,7 +39,7 @@ export function Contents() {
 						/>
 						<TopVideo rank={3} originalTitle="Kommune" translatedTitle="Kommune" author="吉田楓" />
 					</Section>
-					<Section title="REMIX" titleClassName="bg-[#349d4b]" className="[&_a]:bg-[#ebf5ed]">
+					<Section title="REMIX结果" titleClassName="bg-[#349d4b]" className="[&_a]:bg-[#ebf5ed]">
 						<Top1Video
 							originalTitle="デロスサントス - namigroove remix -"
 							translatedTitle="德罗斯桑托斯/Namigroove"
@@ -59,9 +59,7 @@ export function Contents() {
 							author="Theas"
 						/>
 					</Section>
-					<Section title="资讯" titleClassName="bg-(--primary)">
-						<News />
-					</Section>
+					<News />
 				</div>
 			</div>
 		</div>
@@ -70,24 +68,67 @@ export function Contents() {
 
 function News() {
 	return (
-		<li className="contents *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow-sm">
-			<Wiki.Link href="https://www.bilibili.com/video/BV1Ex4X6nERS">
-				<WikiImageServerOnly file="VCCL2026夏：除名退赛歌曲排行榜.jpg" width={192} height={108} />
-				<div className="flex grow flex-col gap-2 px-2 pt-2">
-					<div className="my-[-0.1em] text-justify leading-[1.2] font-semibold">
-						这些术曲都犯规了？VCCL
-						<wbr />
-						2026夏：除名/退赛歌曲排行榜
-					</div>
-					<div className="line-clamp-1 text-xs leading-none">@术力口百科姬</div>
-					<div className="relative grow overflow-hidden mask-b-from-50%">
-						<p className="absolute top-0 right-0 left-0 my-[-0.1em] text-justify text-xs leading-[1.2] opacity-80">
-							活动期间，多首参赛歌曲因为MV里出现3DS、Switch、面包超人、混入大量外部素材等各种理由被移出排行榜，也有P主自行退出排名竞争——风波闹到最后，官方虽然在8月24日发了长文道歉，却没有给被除名的作品任何恢复排名的补救措施……
-						</p>
-					</div>
-				</div>
-			</Wiki.Link>
-		</li>
+		<>
+			<Section
+				title={
+					<>
+						资讯 <span className="font-normal">| 术力口百科姬</span>
+					</>
+				}
+				titleClassName="bg-(--primary)"
+			>
+				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow-sm">
+					<Wiki.Link href="https://www.bilibili.com/video/BV1Ex4X6nERS">
+						<WikiImageServerOnly
+							file="VCCL2026夏：除名退赛歌曲排行榜.jpg"
+							width={192}
+							height={108}
+						/>
+						<div className="absolute top-1 right-1 rounded-full bg-white/80 px-2 py-1 text-xs leading-none font-medium">
+							视频
+						</div>
+						<div className="flex grow flex-col gap-2 px-2 pt-2">
+							<div className="-my-px text-justify leading-[calc(1em+2px)] font-semibold">
+								这些术曲都犯规了？VCCL 2026夏：除名/退赛歌曲排行榜
+							</div>
+							<div className="relative grow overflow-hidden mask-b-from-50%">
+								<p className="absolute top-0 right-0 left-0 my-[-0.1em] text-justify text-xs leading-[1.2] opacity-80">
+									活动期间，多首参赛歌曲因MV出现3DS、Switch、面包超人或混入大量外部素材等理由被移出榜单，也有P主自行退出。本视频将这些歌曲按投稿部门整理成榜，各部分内按统计时点的播放量从低到高排列……
+								</p>
+							</div>
+						</div>
+					</Wiki.Link>
+				</li>
+			</Section>
+			<Section
+				title={
+					<>
+						资讯 <span className="font-normal">| 术力口百科姬</span>
+					</>
+				}
+				titleClassName="bg-(--primary)"
+			>
+				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow-sm">
+					<Wiki.Link href="https://www.bilibili.com/opus/1240497721756876835">
+						<WikiImageServerOnly file="VCCL2026夏风波.png" width={192} height={108} />
+						<div className="absolute top-1 right-1 rounded-full bg-white/80 px-2 py-1 text-xs leading-none font-medium">
+							图文
+						</div>
+						<div className="flex grow flex-col gap-2 px-2 pt-2">
+							<div className="-my-px text-justify leading-[calc(1em+2px)] font-semibold">
+								<span lang="ja">ボカコレ</span>2026夏风波：一首歌因为在MV出现了3DS，被移出排行榜
+							</div>
+							<div className="relative grow overflow-hidden mask-b-from-50%">
+								<p className="absolute top-0 right-0 left-0 my-[-0.1em] text-justify text-xs leading-[1.2] opacity-80">
+									P主 奏-Kanade- 向TOP100组投稿了《<span lang="ja">ツァイトガイスト</span>
+									》（时代精神），此曲反响不错，多次冲进小时榜前20。8月22日，奏发现自己这首歌被移出了排行榜，并且他事先未收到任何通知……
+								</p>
+							</div>
+						</div>
+					</Wiki.Link>
+				</li>
+			</Section>
+		</>
 	)
 }
 
@@ -97,7 +138,7 @@ function Section({
 	className,
 	children,
 }: {
-	title: string
+	title: ReactNode
 	titleClassName: string
 	className?: string
 	children: ReactNode
@@ -106,7 +147,7 @@ function Section({
 		<div className={cn('flex flex-col', className)}>
 			<div
 				className={cn(
-					'mb-2 rounded-md p-1 text-center text-lg leading-none font-bold text-white',
+					'mb-2 rounded-md p-1 text-center text-base leading-none font-semibold text-white',
 					titleClassName,
 				)}
 			>
