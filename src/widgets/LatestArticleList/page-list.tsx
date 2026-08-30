@@ -1,11 +1,11 @@
 'use client'
 
-import { ScrollArea } from '@base-ui/react/scroll-area'
 import { FastAverageColor } from 'fast-average-color'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
 import { MwApiCall } from '@/lib/mw-api'
 import { cn } from '@/lib/utils'
+import { HorizontalScrollArea } from '@/src/components/ui/scroll-area'
 import { WikiInternalLink } from '@/src/components/wiki-link'
 
 import type { PartialPageInfo } from './types'
@@ -76,30 +76,18 @@ export function LatestArticleList({ pages }: { pages: PartialPageInfo[] }) {
 
 export function HorizontalScrollablePageList({ pages }: { pages: PartialPageInfo[] }) {
 	return (
-		<ScrollArea.Root className="">
-			<ScrollArea.Viewport
-				className="-mx-(--bleed) mask-[linear-gradient(90deg,transparent_0,black_min(var(--fade),var(--scroll-area-overflow-x-start)),black_calc(100%-min(var(--fade),var(--scroll-area-overflow-x-end,var(--fade)))),transparent_100%)] px-(--bleed) pb-6 [--fade:2rem] main-sm:[--fade:3rem] main-md:[--fade:4rem] main-lg:[--fade:5rem]"
-				style={
-					{
-						'--bleed':
-							'clamp(0px, (var(--article-container-inline-size) - var(--article-body-inline-size)) / 2, 5rem)',
-					} as CSSProperties
-				}
-			>
-				<ScrollArea.Content>
-					<PageList pages={pages} />
-				</ScrollArea.Content>
-			</ScrollArea.Viewport>
-			<ScrollArea.Scrollbar
-				className="pointer-events-none relative flex h-5 max-w-(--width-layout) items-center rounded-max bg-transparent transition-colors data-hovering:pointer-events-auto data-hovering:bg-(--background-color-neutral-subtle) data-scrolling:pointer-events-auto data-scrolling:bg-(--background-color-neutral-subtle)"
-				orientation="horizontal"
-			>
-				<ScrollArea.Thumb className="group/thumb pointer-events-auto relative h-full w-full [--inset:7px] hover:[--inset:4px] active:[--inset:6px] active:*:ease-out">
-					<div className="absolute inset-(--inset) rounded-max bg-(--background-color-progressive)/15 transition-[inset] group-active/thumb:-inset-1 group-active/thumb:duration-100" />
-					<div className="absolute inset-(--inset) rounded-max bg-(--background-color-progressive) opacity-80 transition-[opacity,inset,box-shadow] group-hover/thumb:opacity-100 group-active/thumb:opacity-100 group-active/thumb:duration-75" />
-				</ScrollArea.Thumb>
-			</ScrollArea.Scrollbar>
-		</ScrollArea.Root>
+		<HorizontalScrollArea
+			viewport={{
+				className:
+					'-mx-(--bleed) mask-[linear-gradient(90deg,transparent,black_min(var(--fade),var(--scroll-area-overflow-x-start)),black_calc(100%-min(var(--fade),var(--scroll-area-overflow-x-end,var(--fade)))),transparent)] px-(--bleed) pb-6 [--fade:2rem] main-sm:[--fade:3rem] main-md:[--fade:4rem] main-lg:[--fade:5rem]',
+				style: {
+					'--bleed':
+						'clamp(0px, (var(--article-container-inline-size) - var(--article-body-inline-size)) / 2, 5rem)',
+				} as CSSProperties,
+			}}
+		>
+			<PageList pages={pages} />
+		</HorizontalScrollArea>
 	)
 }
 
