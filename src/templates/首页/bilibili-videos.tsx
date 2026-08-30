@@ -14,6 +14,30 @@ interface BilibiliVideo {
 
 const videos: BilibiliVideo[] = [
 	{
+		title: '这些术曲都犯规了？VCCL2026夏：除名/退赛歌曲排行榜',
+		videoId: 'BV1Ex4X6nERS',
+		uploadedAt: new Date('2026-08-30T17:30:00+0800'),
+		coverFile: 'VCCL2026夏：除名退赛歌曲排行榜.jpg',
+		bgColor: '#43349e',
+		fgColor: '#fff',
+	},
+	{
+		title: '【新曲速递】每周术力口佳作整理｜ボカコレ（VCCL）特别刊',
+		videoId: 'BV1w6hG6pE2B',
+		uploadedAt: new Date('2026-08-25T19:00:00+0800'),
+		coverFile: '【新曲速递】每周术力口佳作整理｜ボカコレ(VCCL)特别刊.jpg',
+		bgColor: '#44889c',
+		fgColor: '#fff',
+	},
+	{
+		title: 'bilibili外语术力口最慢100w排行，谁才是真正的区王？',
+		videoId: 'BV1xSbh63E1S',
+		uploadedAt: new Date('2026-08-17T12:00:00+0800'),
+		coverFile: 'BiliBili外语术力口最慢100w排行.jpg',
+		bgColor: '#e08d28',
+		fgColor: '#fff',
+	},
+	{
 		title: 'bilibili外语术力口最慢10w TOP25，谁才是真正的区王？',
 		videoId: 'BV1pR396sEiH',
 		uploadedAt: new Date('2026-08-02T20:00:00+0800'),
