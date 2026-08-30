@@ -92,7 +92,7 @@ function News() {
 								这些术曲都犯规了？VCCL 2026夏：除名/退赛歌曲排行榜
 							</div>
 							<div className="relative grow overflow-hidden mask-b-from-50%">
-								<p className="absolute top-0 right-0 left-0 my-[-0.1em] text-justify text-xs leading-[1.2] opacity-80">
+								<p className="absolute top-0 right-0 left-0 -my-px text-justify text-xs leading-[calc(1em+2px)]">
 									活动期间，多首参赛歌曲因MV出现3DS、Switch、面包超人或混入大量外部素材等理由被移出榜单，也有P主自行退出。本视频将这些歌曲按投稿部门整理成榜，各部分内按统计时点的播放量从低到高排列……
 								</p>
 							</div>
@@ -119,7 +119,7 @@ function News() {
 								<span lang="ja">ボカコレ</span>2026夏风波：一首歌因为在MV出现了3DS，被移出排行榜
 							</div>
 							<div className="relative grow overflow-hidden mask-b-from-50%">
-								<p className="absolute top-0 right-0 left-0 my-[-0.1em] text-justify text-xs leading-[1.2] opacity-80">
+								<p className="absolute top-0 right-0 left-0 -my-px text-justify text-xs leading-[calc(1em+2px)]">
 									P主 奏-Kanade- 向TOP100组投稿了《<span lang="ja">ツァイトガイスト</span>
 									》（时代精神），此曲反响不错，多次冲进小时榜前20。8月22日，奏发现自己这首歌被移出了排行榜，并且他事先未收到任何通知……
 								</p>
