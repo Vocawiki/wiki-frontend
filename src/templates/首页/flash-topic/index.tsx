@@ -101,7 +101,7 @@ function Information() {
 				</div>
 			</div>
 			<div className="space-y-2 rounded-container border border-[#e4e4e7] bg-white/90 p-2.25 shadow">
-				<div className="flex items-center gap-2 rounded-md bg-[#eae6ff] py-3 pr-4">
+				<div className="flex items-center gap-2 rounded-md bg-[#eae6ff] py-2 pr-4">
 					<div className="grow space-y-1 text-center font-bold">
 						<div className="text-sm leading-none font-medium">本届</div>
 						<div className="text-xl leading-none text-(--primary)">2026夏</div>
