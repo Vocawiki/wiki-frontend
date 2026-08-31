@@ -89,6 +89,15 @@ body {
 	font-variation-settings: normal;
 }
 
+:where(.mw-parser-output) {
+	*,
+	::after,
+	::before {
+		box-sizing: border-box;
+		/* border: 0 solid; (皮肤本身已定义) */
+	}
+}
+
 .citizen-body-container {
 	/* 用于utility ignore-article-inline-padding */
 	container: article-container / inline-size;

@@ -181,6 +181,15 @@ body {
 	text-autospace: normal;
 }
 
+:where(.mw-parser-output) {
+	*,
+	::after,
+	::before {
+		box-sizing: border-box;
+		border: 0 solid;
+	}
+}
+
 #mw-content-text > * {
 	--article-container-inline-size: 100cqw;
 }
