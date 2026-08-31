@@ -12,7 +12,7 @@ export function FlashTopic() {
 			className="preflight relative flow-root"
 			style={{ '--primary': '#6049d4', '--secondary': '#473dc1' } as CSSProperties}
 		>
-			<div className="fill ignore-article-inline-padding bg-[#cfd4ff] bg-[image:url(/images/5/57/The_VOCALOID_Collection_2026_Summer_KV.webp)] bg-cover bg-fixed bg-center" />
+			<div className="fill ignore-article-inline-padding bg-[#cfd4ff] bg-[image:url(/images/5/57/The_VOCALOID_Collection_2026_Summer_KV.webp)] bg-cover bg-fixed bg-center contrast-80" />
 			<div className="relative my-4 flex flex-col">
 				<Title />
 
@@ -82,7 +82,7 @@ function TitleContent({ subColor }: { subColor?: string }) {
 function Information() {
 	return (
 		<div className="flex flex-col gap-2">
-			<div className="space-y-1 rounded-container border border-[#e4e4e7] bg-white/90 py-2 text-sm leading-tight font-medium shadow [&_a]:ml-3 [&_a]:block [&_a]:font-semibold [&_a]:text-(--primary)">
+			<div className="space-y-1 rounded-container border border-[#e4e4e7] bg-white/85 py-2 text-sm leading-tight font-medium shadow backdrop-brightness-200 backdrop-saturate-150 [&_a]:ml-3 [&_a]:block [&_a]:font-semibold [&_a]:text-(--primary)">
 				<Wiki.Link page="The VOCALOID Collection">
 					The VOCALOID Collection（<span lang="ja">ボカコレ</span>）
 				</Wiki.Link>
@@ -93,7 +93,7 @@ function Information() {
 					</p>
 				</div>
 			</div>
-			<div className="space-y-2 rounded-container border border-[#e4e4e7] bg-white/90 p-2.25 shadow">
+			<div className="space-y-2 rounded-container border border-[#e4e4e7] bg-white/85 p-2.25 shadow backdrop-brightness-200 backdrop-saturate-150">
 				<div className="flex items-center gap-2 rounded-md bg-[#eae6ff] py-2 pr-4">
 					<div className="grow space-y-1 text-center font-bold">
 						<div className="text-sm leading-none font-medium">本届</div>

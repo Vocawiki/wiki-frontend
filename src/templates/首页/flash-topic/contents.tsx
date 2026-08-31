@@ -6,10 +6,10 @@ import * as Wiki from '~/components/wikitext'
 
 export function Contents() {
 	return (
-		<div className="min-w-0 overflow-hidden rounded-container border border-[#e4e4e7] bg-white/80 shadow">
+		<div className="min-w-0 overflow-hidden rounded-container border border-[#e4e4e7] bg-white/85 shadow backdrop-brightness-200 backdrop-saturate-150">
 			<div className="h-full overflow-x-auto mask-[linear-gradient(90deg,transparent,black_8px,black_calc(100%-8px),transparent)] p-2.25">
 				<div className="flex w-max gap-2">
-					<Section title="TOP100结果" titleClassName="bg-[#f1ad29]" className="[&_a]:bg-[#fef7ea]">
+					<Section title="TOP100排行" titleClassName="bg-[#f1ad29]" className="[&_a]:bg-[#fef7ea]">
 						<Top1Video
 							originalTitle="音楽はつづく"
 							translatedTitle="音乐还会继续"
@@ -24,7 +24,7 @@ export function Contents() {
 							author="GYARI（ココアシガレットP）"
 						/>
 					</Section>
-					<Section title="ROOKIE结果" titleClassName="bg-[#288bd2]" className="[&_a]:bg-[#eaf3fb]">
+					<Section title="ROOKIE排行" titleClassName="bg-[#288bd2]" className="[&_a]:bg-[#eaf3fb]">
 						<Top1Video
 							originalTitle="あなたの記憶"
 							translatedTitle="你的记忆"
@@ -39,7 +39,7 @@ export function Contents() {
 						/>
 						<TopVideo rank={3} originalTitle="Kommune" translatedTitle="Kommune" author="吉田楓" />
 					</Section>
-					<Section title="REMIX结果" titleClassName="bg-[#349d4b]" className="[&_a]:bg-[#ebf5ed]">
+					<Section title="REMIX排行" titleClassName="bg-[#349d4b]" className="[&_a]:bg-[#ebf5ed]">
 						<Top1Video
 							originalTitle="デロスサントス - namigroove remix -"
 							translatedTitle="德罗斯桑托斯/Namigroove"
@@ -77,7 +77,7 @@ function News() {
 				}
 				titleClassName="bg-(--primary)"
 			>
-				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow-sm">
+				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow">
 					<Wiki.Link href="https://www.bilibili.com/video/BV1Ex4X6nERS">
 						<WikiImageServerOnly
 							file="VCCL2026夏：除名退赛歌曲排行榜.jpg"
@@ -108,7 +108,7 @@ function News() {
 				}
 				titleClassName="bg-(--primary)"
 			>
-				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow-sm">
+				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow">
 					<Wiki.Link href="https://www.bilibili.com/opus/1240497721756876835">
 						<WikiImageServerOnly file="VCCL2026夏风波.png" width={192} height={108} />
 						<div className="absolute top-1 right-1 rounded-full bg-white/80 px-2 py-1 text-xs leading-none font-medium">
@@ -172,7 +172,7 @@ function Top1Video({
 	className?: string
 }) {
 	return (
-		<li className={cn('*:block *:overflow-hidden *:rounded-md *:shadow-sm', className)}>
+		<li className={cn('*:block *:overflow-hidden *:rounded-md *:shadow', className)}>
 			<Wiki.Link page={translatedTitle}>
 				<WikiImageServerOnly file={image} width={192} height={108} />
 				<div className="flex items-center gap-2 p-2">
@@ -209,7 +209,7 @@ function TopVideo({
 	className?: string
 }) {
 	return (
-		<li className={cn('*:block *:overflow-hidden *:rounded-md *:shadow-sm', className)}>
+		<li className={cn('*:block *:overflow-hidden *:rounded-md *:shadow', className)}>
 			<Wiki.Link page={translatedTitle}>
 				<div className="flex items-center gap-2 p-2">
 					<div
