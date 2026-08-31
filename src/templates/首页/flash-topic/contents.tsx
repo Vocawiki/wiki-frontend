@@ -77,7 +77,7 @@ function News() {
 				}
 				titleClassName="bg-(--primary)"
 			>
-				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow">
+				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff]! *:shadow">
 					<Wiki.Link href="https://www.bilibili.com/video/BV1Ex4X6nERS">
 						<WikiImageServerOnly
 							file="VCCL2026夏：除名退赛歌曲排行榜.jpg"
@@ -108,7 +108,7 @@ function News() {
 				}
 				titleClassName="bg-(--primary)"
 			>
-				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff] *:shadow">
+				<li className="contents *:relative *:flex *:grow *:flex-col *:overflow-hidden *:rounded-md *:bg-[#eae6ff]! *:shadow">
 					<Wiki.Link href="https://www.bilibili.com/opus/1240497721756876835">
 						<WikiImageServerOnly file="VCCL2026夏风波.png" width={192} height={108} />
 						<div className="absolute top-1 right-1 rounded-full bg-white/80 px-2 py-1 text-xs leading-none font-medium">

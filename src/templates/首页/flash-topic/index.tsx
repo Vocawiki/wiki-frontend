@@ -132,7 +132,7 @@ function Information() {
 						</span>
 					</Wiki.Link>
 				</li>
-				<li className="*:bg-[#252525]">
+				<li className="*:bg-[#252525]!">
 					<Wiki.Link href="https://vocaloid-collection.jp/">活动官网</Wiki.Link>
 				</li>
 			</ul>
