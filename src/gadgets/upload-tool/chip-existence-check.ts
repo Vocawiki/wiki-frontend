@@ -1,7 +1,8 @@
+import { cluster } from 'radashi'
 import type * as VueTypes from 'vue'
 
 import type { ApiQueryResponse, Chip } from './types'
-import { chunk, dedupChips, stripAuthorCategory, stripCategory } from './utils'
+import { dedupChips, stripAuthorCategory, stripCategory } from './utils'
 
 interface ChipExistenceDeps {
 	characterChips: VueTypes.Ref<Chip[]>
@@ -26,18 +27,18 @@ export function useChipExistenceCheck(
 		clearTimeout(chipCheckTimer)
 		chipCheckTimer = setTimeout(() => {
 			void checkChipExistence()
-		}, 250)
+		}, 300)
 	}
 
 	async function checkChipExistence() {
-		const titles: string[] = []
-		deps.characterChips.value.forEach((c) => titles.push('Category:' + c.value))
-		deps.authorChips.value.forEach((a) => titles.push('Category:作者:' + a.value))
-		if (!titles.length) {
-			return
-		}
+		const titles = [
+			...deps.characterChips.value.map((c) => 'Category:' + c.value),
+			...deps.authorChips.value.map((a) => 'Category:作者:' + a.value),
+		]
+		if (titles.length === 0) return
+
 		const results = await Promise.all(
-			chunk(titles, 50).map(async (chunkTitles): Promise<ApiQueryResponse | null> => {
+			cluster(titles, 50).map(async (chunkTitles): Promise<ApiQueryResponse | null> => {
 				try {
 					return await api.get({
 						action: 'query',

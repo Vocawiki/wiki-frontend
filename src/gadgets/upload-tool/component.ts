@@ -261,7 +261,7 @@ export const createUploadComponent = ({
 					characterQuery.value = String(v || '')
 						.trim()
 						.toLowerCase()
-				}, 100)
+				}, 300)
 			})
 			watch(authorInput, (v) => {
 				categoryState.scheduleAuthorSearch(String(v || ''))

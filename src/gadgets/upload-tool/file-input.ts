@@ -22,9 +22,8 @@ export function useFileInput(Vue: typeof VueTypes, deps: FileInputDeps) {
 
 	onMounted(() => {
 		const fileEl = document.getElementById('wpUploadFile') as HTMLInputElement | null
-		if (!fileEl) {
-			return
-		}
+		if (!fileEl) return
+
 		fileEl.addEventListener('change', () => {
 			const f = fileEl.files?.[0]
 			deps.fileName.value = f ? f.name : ''
@@ -47,9 +46,8 @@ export function useFileInput(Vue: typeof VueTypes, deps: FileInputDeps) {
 			}
 			setTimeout(() => {
 				const d = document.getElementById('wpDestFile') as HTMLInputElement | null
-				if (d) {
-					deps.destFile.value = d.value
-				}
+				if (!d) return
+				deps.destFile.value = d.value
 			}, 0)
 		})
 	})

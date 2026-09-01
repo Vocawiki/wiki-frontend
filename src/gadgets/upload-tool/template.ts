@@ -52,7 +52,7 @@ export const TEMPLATE = `
 			</div>
 			<template v-else>
 				<div class="ut-row2">
-					<cdx-text-input name="ut-file-url" v-model="fileUrl" :placeholder="msg('placeholder-file-url')" class="ut-full"></cdx-text-input>
+					<cdx-text-input name="ut-file-url" v-model="fileUrl" :placeholder="msg('placeholder-file-url')" class="w-full"></cdx-text-input>
 				</div>
 				<div v-if="filePreview" class="ut-file-preview ut-gap">
 					<img :src="filePreview" alt="" />

@@ -1,8 +1,9 @@
+import { cluster } from 'radashi'
 import type * as VueTypes from 'vue'
 
 import { SITE } from './site-config'
 import type { ApiQueryResponse, Chip } from './types'
-import { chunk, stripAuthorCategory, stripCategory } from './utils'
+import { stripAuthorCategory, stripCategory } from './utils'
 
 /** 分类树选项的加载与作者搜索。 */
 export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
@@ -106,7 +107,7 @@ export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
 			const names = new Set(groups.flat())
 			const titles = [...names].map((n) => 'Category:' + n)
 			const results = await Promise.all(
-				chunk(titles, 50).map(
+				cluster(titles, 50).map(
 					async (c) =>
 						(await api.get({
 							action: 'query',
@@ -125,7 +126,7 @@ export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
 				})
 			})
 			// 分批拉取孙分类，避免父分类过多时瞬间并发大量请求
-			for (const batch of chunk(parents, 10)) {
+			for (const batch of cluster(parents, 10)) {
 				const grandchildren = await Promise.all(batch.map((n) => fetchSubcats(n)))
 				grandchildren.forEach((g) => g.forEach((n) => names.add(n)))
 			}
@@ -151,7 +152,7 @@ export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
 			const allNames = [...roots, ...allLeaves]
 			const titles = allNames.map((n) => 'Category:' + n)
 			const results = await Promise.all(
-				chunk(titles, 50).map(
+				cluster(titles, 50).map(
 					async (c) =>
 						(await api.get({
 							action: 'query',
@@ -177,7 +178,7 @@ export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
 			const parentsWithChildren = allLeaves.filter((n) => (subcatsMap[n] ?? 0) > 0)
 			// 分批拉取子分类成员，避免瞬间并发大量请求
 			const entries: { n: string; s: string[] }[] = []
-			for (const batch of chunk(parentsWithChildren, 10)) {
+			for (const batch of cluster(parentsWithChildren, 10)) {
 				entries.push(
 					...(await Promise.all(batch.map(async (n) => ({ n, s: await fetchSubcats(n) })))),
 				)
