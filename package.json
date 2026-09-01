@@ -23,6 +23,8 @@
 		"@typescript/native": "npm:typescript@^7.0.2",
 		"@vitejs/plugin-react": "^6.0.4",
 		"@vitejs/plugin-rsc": "^0.5.29",
+		"@wikimedia/codex": "^2.6.2",
+		"@wikimedia/codex-icons": "^2.6.2",
 		"bun": "^1.3.14",
 		"eslint": "^10.7.0",
 		"eslint-plugin-react": "^7.37.5",
@@ -42,6 +44,7 @@
 		"typescript": "npm:@typescript/typescript6@^6.0.2",
 		"typescript-eslint": "^8.65.0",
 		"vite": "8.1.5",
+		"vue": "^3.5.41",
 		"wiki-saikou": "^7.6.0",
 		"zod": "^4.4.3"
 	},

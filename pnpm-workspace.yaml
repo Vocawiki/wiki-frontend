@@ -1,4 +1,5 @@
 allowBuilds:
   bun: true
+  vue-demi: true
 publicHoistPattern:
   - '@types/oojs-ui'
