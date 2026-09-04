@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-import { isoDatetimeToDate, isoDatetimeToInstant } from '@/lib/zod'
+import { isoDatetimeToInstant } from '@/lib/zod'
 
 import { compareTitle } from './sorter'
 
@@ -48,15 +48,6 @@ export const deploymentTrashSchema = z
 	.meta({ description: '从chunk名到最后使用时间' })
 export type DeploymentTrash = z.infer<typeof deploymentTrashSchema>
 
-export const deploymentStateSchemaV1 = z.object({
-	version: z.literal(1),
-	pages: deploymentPagesSchema,
-	commitSHA: commitShaSchema,
-	runId: runIdSchema,
-	deployStartedAt: isoDatetimeToDate,
-	deployFinishedAt: isoDatetimeToDate,
-})
-
 const referencedFilesSchema = z.codec(z.array(z.string()), z.set(z.string()), {
 	decode: (array) => new Set(array),
 	encode: (set) => [...set].toSorted(compareTitle),
@@ -75,7 +66,5 @@ export const deploymentStateSchemaV2 = z.object({
 	cleanFinishedAt: isoDatetimeToInstant,
 })
 
-export type DeploymentStateStorageV1 = z.input<typeof deploymentStateSchemaV1>
 export type DeploymentStateStorageV2 = z.input<typeof deploymentStateSchemaV2>
-export type DeploymentStateV1 = z.output<typeof deploymentStateSchemaV1>
 export type DeploymentStateV2 = z.output<typeof deploymentStateSchemaV2>

@@ -5,13 +5,11 @@ import { MediaWikiApi, type FexiosFinalContext, type MwApiResponse } from 'wiki-
 import { REPO_NAME, WIKI_API_URL } from '../config'
 import { DEPLOYMENT_STATE_PAGE_TITLE } from './config'
 import { deploymentSpecifier } from './message'
-import { migrateFromV1ToV2 } from './migrate'
 import {
 	type Page,
 	type DeploymentContext,
 	deploymentStateSchemaV2,
 	type DeploymentStateV2,
-	type DeploymentStateStorageV1,
 	type DeploymentStateStorageV2,
 } from './types'
 
@@ -66,12 +64,12 @@ export async function getDeployState(api: MediaWikiApi) {
 		rvslots: 'main',
 		rvlimit: 1,
 	})
-	let raw = JSON.parse(result.data.query.pages[0].revisions[0].slots.main.content) as
-		| DeploymentStateStorageV1
-		| DeploymentStateStorageV2
-	if (raw.version === 1) {
-		raw = migrateFromV1ToV2(raw)
-	}
+	const raw = JSON.parse(
+		result.data.query.pages[0].revisions[0].slots.main.content,
+	) as DeploymentStateStorageV2 // | DeploymentStateStorageV1
+	// if (raw.version === 1) {
+	// 	raw = migrateFromV1ToV2(raw)
+	// }
 
 	return deploymentStateSchemaV2.parse(raw)
 }

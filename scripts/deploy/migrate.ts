@@ -1,3 +1,5 @@
+throw new Error('暂无迁移逻辑')
+/*
 import type { DeploymentStateStorageV1, DeploymentStateStorageV2 } from './types'
 
 export function migrateFromV1ToV2(v1: DeploymentStateStorageV1): DeploymentStateStorageV2 {
@@ -13,3 +15,4 @@ export function migrateFromV1ToV2(v1: DeploymentStateStorageV1): DeploymentState
 		cleanFinishedAt: v1.deployFinishedAt,
 	}
 }
+*/

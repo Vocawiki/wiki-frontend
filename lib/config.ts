@@ -5,6 +5,5 @@ export const SHOULD_CONVERT_WIKITEXT_TO_HTML = Boolean(process.env.SHOULD_CONVER
 
 export const BASE_URL = IS_DEVELOPMENT ? 'https://voca.wiki' : ''
 
-const oneHour = 60 * 60 * 1000
 /** 开发预览时，站点样式的缓存时长 */
-export const WIKI_STYLES_CACHE_TTL = 12 * oneHour
+export const WIKI_STYLES_CACHE_TTL = Temporal.Duration.from({ hours: 12 })

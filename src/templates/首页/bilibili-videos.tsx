@@ -6,17 +6,20 @@ import * as Wiki from '~/components/wikitext'
 interface BilibiliVideo {
 	title: string
 	videoId: string
-	uploadedAt: Date
+	uploadedAt: Temporal.Instant
 	coverFile?: string
 	bgColor: string
 	fgColor: string
 }
 
+const Instant = Temporal.Instant
+const instant = Instant.from.bind(Temporal.Instant)
+
 const videos: BilibiliVideo[] = [
 	{
 		title: '这些术曲都犯规了？VCCL 2026夏：除名/退赛歌曲排行榜',
 		videoId: 'BV1Ex4X6nERS',
-		uploadedAt: new Date('2026-08-30T17:30:00+0800'),
+		uploadedAt: instant('2026-08-30T17:30:00+08:00'),
 		coverFile: 'VCCL2026夏：除名退赛歌曲排行榜.jpg',
 		bgColor: '#6150b4',
 		fgColor: '#fff',
@@ -24,7 +27,7 @@ const videos: BilibiliVideo[] = [
 	{
 		title: '【新曲速递】每周术力口佳作整理｜ボカコレ（VCCL）特别刊',
 		videoId: 'BV1w6hG6pE2B',
-		uploadedAt: new Date('2026-08-25T19:00:00+0800'),
+		uploadedAt: instant('2026-08-25T19:00:00+08:00'),
 		coverFile: '【新曲速递】每周术力口佳作整理｜ボカコレ(VCCL)特别刊.jpg',
 		bgColor: '#00857a',
 		fgColor: '#fff',
@@ -32,7 +35,7 @@ const videos: BilibiliVideo[] = [
 	{
 		title: 'bilibili外语术力口最慢100w排行，谁才是真正的区王？',
 		videoId: 'BV1xSbh63E1S',
-		uploadedAt: new Date('2026-08-17T12:00:00+0800'),
+		uploadedAt: instant('2026-08-17T12:00:00+08:00'),
 		coverFile: 'BiliBili外语术力口最慢100w排行.jpg',
 		bgColor: '#a77206',
 		fgColor: '#fff',
@@ -40,7 +43,7 @@ const videos: BilibiliVideo[] = [
 	{
 		title: 'bilibili外语术力口最慢10w TOP25，谁才是真正的区王？',
 		videoId: 'BV1pR396sEiH',
-		uploadedAt: new Date('2026-08-02T20:00:00+0800'),
+		uploadedAt: instant('2026-08-02T20:00:00+08:00'),
 		coverFile: 'Bilibili外语术力口最慢10wTOP25.jpg',
 		bgColor: '#135eb9',
 		fgColor: '#fff',
@@ -48,7 +51,7 @@ const videos: BilibiliVideo[] = [
 	{
 		title: '三站争霸！一口气看完B站/niconico/YouTube最速千万术曲',
 		videoId: 'BV17h9xBiEJv',
-		uploadedAt: new Date('2026-04-30T18:30:00+0800'),
+		uploadedAt: instant('2026-04-30T18:30:00+08:00'),
 		coverFile: '三站争霸！一口气看完B站_Niconico_YouTube_最速千万术曲.jpg',
 		bgColor: '#744b34',
 		fgColor: '#fff',
@@ -56,21 +59,21 @@ const videos: BilibiliVideo[] = [
 	{
 		title: '高手云集！历届VCCL REMIX榜首回顾',
 		videoId: 'BV1sBAnzZE2e',
-		uploadedAt: new Date('2026-03-20T17:30:00+0800'),
+		uploadedAt: instant('2026-03-20T17:30:00+08:00'),
 		bgColor: '#468801',
 		fgColor: '#fff',
 	},
 	{
 		title: '历届VCCL新人榜榜首速览——有你推的P主吗？',
 		videoId: 'BV1PZA6z2Egu',
-		uploadedAt: new Date('2026-02-26T18:16:23+0800'),
+		uploadedAt: instant('2026-02-26T18:16:23+08:00'),
 		bgColor: '#6b50a4',
 		fgColor: '#fff',
 	},
 	{
 		title: '26冬结果揭晓！VCCL历届冠军回顾',
 		videoId: 'BV1EefBBDE5E',
-		uploadedAt: new Date('2026-02-23T22:26:30+0800'),
+		uploadedAt: instant('2026-02-23T22:26:30+08:00'),
 		bgColor: '#00868c',
 		fgColor: '#fff',
 	},
@@ -103,7 +106,7 @@ export function BilibiliVideos() {
 			</div>
 			<ul className="grid grid-cols-2 gap-1.5 not-main-2xs:ignore-article-inline-padding not-main-2xs:pr-[max(6px,env(safe-area-inset-right))] not-main-2xs:pl-[max(6px,env(safe-area-inset-left))] main-2xs:gap-2 main-sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))]">
 				{videos
-					.toSorted((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
+					.toSorted((a, b) => Instant.compare(b.uploadedAt, a.uploadedAt))
 					.map((video) => (
 						<VideoCard key={video.videoId} {...video} />
 					))}

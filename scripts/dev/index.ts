@@ -4,7 +4,7 @@ import * as z from 'zod'
 
 import { WIKI_STYLES_CACHE_TTL } from '@/lib/config'
 import { withBaseURL } from '@/lib/wiki'
-import { isoDatetimeToDate } from '@/lib/zod'
+import { isoDatetimeToInstant } from '@/lib/zod'
 
 const softwareStylesURL = withBaseURL(
 	'/load.php?lang=zh-cn&modules=skins.citizen.codex.styles%7Cskins.citizen.icons%2Cstyles%2Ctokens&only=styles&skin=citizen',
@@ -13,7 +13,7 @@ const softwareStylesURL = withBaseURL(
 
 const cacheMetaSchema = z.object({
 	version: z.literal(1),
-	fetchedAt: isoDatetimeToDate,
+	fetchedAt: isoDatetimeToInstant,
 })
 
 type CacheMeta = z.output<typeof cacheMetaSchema>
@@ -24,9 +24,9 @@ const cacheMetaFile = Bun.file(join(cacheDir, 'meta.json'))
 
 const cacheMeta = await getCacheMeta()
 if (!cacheMeta) {
-	await fetchStyles({ isRefresh: false })
+	await fetchStyles({ isRefreshing: false })
 } else if (isCacheStale(cacheMeta)) {
-	await fetchStyles({ isRefresh: true })
+	await fetchStyles({ isRefreshing: true })
 } else {
 	console.log('使用缓存中的网站样式')
 }
@@ -41,31 +41,29 @@ async function getCacheMeta(): Promise<CacheMeta | null> {
 		const meta = await cacheMetaSchema.parseAsync(rawMeta)
 		return meta
 	} catch (e) {
-		console.error('解析cache meta时发生错误:')
-		console.error(e)
+		console.error('解析cache meta时发生错误：', e)
 		await cacheMetaFile.delete()
 		return null
 	}
 }
 
 function isCacheStale(cacheMeta: CacheMeta): boolean {
-	const now = new Date()
-	return now.getTime() - cacheMeta.fetchedAt.getTime() > WIKI_STYLES_CACHE_TTL
+	const now = Temporal.Now.instant()
+	return Temporal.Duration.compare(now.since(cacheMeta.fetchedAt), WIKI_STYLES_CACHE_TTL) > 0
 }
 
-async function fetchStyles({ isRefresh }: { isRefresh: boolean }) {
-	console.log(`正在${isRefresh ? '重新' : ''}下载网站样式……`)
-	const now = new Date()
+async function fetchStyles({ isRefreshing }: { isRefreshing: boolean }) {
+	console.log(`正在${isRefreshing ? '重新' : ''}下载网站样式……`)
+	const now = Temporal.Now.instant()
 	try {
 		const response = await fetch(softwareStylesURL)
 		const css = await response.text()
 		await Bun.file(join(cacheDir, 'software.css')).write(css)
 		const meta = JSON.stringify(await cacheMetaSchema.encodeAsync({ version: 1, fetchedAt: now }))
 		await cacheMetaFile.write(meta)
-		console.log(`网站样式已${isRefresh ? '更新' : '下载'}`)
+		console.log(`网站样式已${isRefreshing ? '更新' : '下载'}`)
 	} catch (e) {
-		if (!isRefresh) throw e
-		console.error('网站样式下载失败，使用缓存中的样式。错误如下:')
-		console.error(e)
+		if (!isRefreshing) throw e
+		console.error('网站样式下载失败，使用缓存中的样式。错误如下：', e)
 	}
 }
