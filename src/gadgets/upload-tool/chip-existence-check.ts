@@ -22,8 +22,21 @@ export function useChipExistenceCheck(
 	const { watch, onUnmounted } = Vue
 
 	let chipCheckTimer: ReturnType<typeof setTimeout> | undefined
+	let lastCheckedKey: string | null = null
+
+	function currentKey(): string {
+		return [
+			...deps.characterChips.value.map((c) => 'C:' + c.value),
+			...deps.authorChips.value.map((a) => 'A:' + a.value),
+		]
+			.sort()
+			.join('|')
+	}
 
 	function scheduleChipCheck() {
+		if (currentKey() === lastCheckedKey) {
+			return
+		}
 		clearTimeout(chipCheckTimer)
 		chipCheckTimer = setTimeout(() => {
 			void checkChipExistence()
@@ -35,7 +48,10 @@ export function useChipExistenceCheck(
 			...deps.characterChips.value.map((c) => 'Category:' + c.value),
 			...deps.authorChips.value.map((a) => 'Category:作者:' + a.value),
 		]
-		if (titles.length === 0) return
+		if (titles.length === 0) {
+			lastCheckedKey = currentKey()
+			return
+		}
 
 		const results = await Promise.all(
 			cluster(titles, 50).map(async (chunkTitles): Promise<ApiQueryResponse | null> => {
@@ -111,6 +127,7 @@ export function useChipExistenceCheck(
 			deps.characterChips.value = dedupChips(nextCharacterChips)
 			deps.authorChips.value = dedupChips(nextAuthorChips)
 		}
+		lastCheckedKey = currentKey()
 	}
 
 	watch(

@@ -8,6 +8,7 @@ const MESSAGES = {
 	'err-no-file': tr('请选择要上传的文件。', '請選擇要上傳的檔案。', '請選擇要上載的檔案。'),
 	'err-no-url': tr('请填写文件网址。', '請填寫檔案網址。'),
 	'err-no-dest': tr('请填写目标文件名。', '請填寫目標檔案名。'),
+	'err-file-too-large': tr('文件过大（最大 $1）。', '檔案過大（最大 $1）。'),
 	'err-exists': tr(
 		'目标文件已存在，如需覆盖请勾选“忽略所有警告”。',
 		'目標檔案已存在，如需覆蓋請勾選「忽略所有警告」。',
@@ -43,7 +44,7 @@ const MESSAGES = {
 	),
 	'notice-types': tr('允许类型：$1', '允許類型：$1'),
 	'notice-max-size': tr('最大 $1', '最大 $1'),
-	'preview-file-empty': tr('尚未选择文件', '尚未選擇檔案'),
+	'preview-file-empty': tr('或拖拽文件到此处', '或拖曳檔案到此處'),
 	'dest-section': tr('目标文件名', '目標檔案名'),
 	'placeholder-dest': tr('留空则使用原文件名', '留空則使用原檔案名'),
 	'dest-exists-prefix': tr(

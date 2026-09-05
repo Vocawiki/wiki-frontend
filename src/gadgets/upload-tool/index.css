@@ -72,7 +72,6 @@ body.main-lg .ut-side {
 }
 
 .ut-drop__area {
-	appearance: none;
 	font: inherit;
 	color: inherit;
 	box-sizing: border-box;
@@ -96,7 +95,13 @@ body.main-lg .ut-side {
 	background-color: var(--background-color-button-quiet--active, rgba(0, 24, 73, 0.082));
 }
 
-.ut-drop__icon {
+.ut-drop__area--drag {
+	border-color: var(--color-progressive, #36c);
+	border-style: solid;
+	background-color: var(--background-color-progressive-subtle, rgba(51, 102, 204, 0.08));
+}
+
+.ut-drop__area .ut-drop__icon {
 	width: 2rem;
 	height: 2rem;
 	min-width: 2rem;
@@ -127,7 +132,7 @@ body.main-lg .ut-side {
 	margin-top: 4px;
 }
 
-.ut-preview {
+#ut-app .ut-preview {
 	margin: 0;
 	padding: 10px 12px;
 	background: var(--background-color-neutral-subtle);
@@ -138,7 +143,7 @@ body.main-lg .ut-side {
 	word-break: break-all;
 }
 
-.ut-preview-edit {
+#ut-app .ut-preview-edit {
 	width: 100%;
 	min-height: 180px;
 	resize: vertical;

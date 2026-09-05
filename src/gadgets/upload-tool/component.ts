@@ -20,6 +20,7 @@ interface UploadComponentContext {
 	api: mw.Api
 	form: HTMLElement
 	presetSource: string
+	initialDesc: string
 	hasExisting: boolean
 	isReupload: boolean
 	uploadIcon: string
@@ -35,6 +36,7 @@ export const createUploadComponent = ({
 	api,
 	form,
 	presetSource,
+	initialDesc,
 	hasExisting,
 	isReupload,
 	uploadIcon,
@@ -75,18 +77,27 @@ export const createUploadComponent = ({
 			const watchFile = ref(true)
 			const ignoreWarnings = ref(false)
 			const helpOpen = ref(false)
+			const dragging = ref(false)
+			const fileError = ref('')
 
-			/** 非响应式状态（计时器） */
+			/** 非响应式状态（计时器与拖拽计数） */
 			let characterFilterTimer: ReturnType<typeof setTimeout> | undefined
+			let dragCounter = 0
 
 			const destState = useDestFileCheck(Vue, api, isReupload)
 			const licenseState = useLicensePreview(Vue, api, trademark)
 			const categoryState = useCategoryOptions(Vue, api)
+			const allowedExtensions = mw.config.get('wgFileExtensions') ?? []
+			const maxUploadSize = mw.config.get('wgMaxUploadSize')
+			const maxUploadBytes = maxUploadSize ? (maxUploadSize.file ?? maxUploadSize['*']) : 0
 			const { chooseFile } = useFileInput(Vue, {
 				fileName,
 				filePreview,
 				fileMeta,
+				fileError,
 				destFile: destState.destFile,
+				isReupload,
+				maxUploadBytes,
 			})
 			useChipExistenceCheck(Vue, api, {
 				characterChips,
@@ -111,9 +122,6 @@ export const createUploadComponent = ({
 				currentLicense: licenseState.currentLicense,
 				licenseFieldValues: licenseState.licenseFieldValues,
 			})
-			const allowedExtensions = mw.config.get('wgFileExtensions') ?? []
-			const maxUploadSize = mw.config.get('wgMaxUploadSize')
-			const maxUploadBytes = maxUploadSize ? (maxUploadSize.file ?? maxUploadSize['*']) : 0
 			const allowedTypesHint = [
 				allowedExtensions.length ? msg('notice-types', allowedExtensions.join('、')) : '',
 				maxUploadBytes > 0 ? msg('notice-max-size', formatBytes(maxUploadBytes)) : '',
@@ -233,6 +241,35 @@ export const createUploadComponent = ({
 			const onAuthorLookupKeydown = lookupEnterHandler(commitAuthorInput)
 			const onFunctionLookupKeydown = lookupEnterHandler(commitFunctionInput)
 
+			/** 拖拽上传：把拖入的文件写入隐藏的#wpUploadFile再派发change，复用既有逻辑 */
+			function onDragEnter() {
+				dragCounter++
+				dragging.value = true
+			}
+			function onDragLeave() {
+				dragCounter = Math.max(0, dragCounter - 1)
+				if (dragCounter === 0) {
+					dragging.value = false
+				}
+			}
+			function onDrop(e: DragEvent) {
+				dragCounter = 0
+				dragging.value = false
+				const f = e.dataTransfer?.files?.[0]
+				if (!f) return
+				const fileEl = document.getElementById('wpUploadFile') as HTMLInputElement | null
+				if (!fileEl) return
+				// 直接给 input.files 赋值在多数现代浏览器可用，旧浏览器静默放弃
+				try {
+					const dt = new DataTransfer()
+					dt.items.add(f)
+					fileEl.files = dt.files
+				} catch {
+					return
+				}
+				fileEl.dispatchEvent(new Event('change', { bubbles: true }))
+			}
+
 			/** watch */
 			watch(sourceType, () => {
 				if (sourceType.value === 'url') {
@@ -248,6 +285,15 @@ export const createUploadComponent = ({
 			watch(fileUrl, (v) => {
 				if (sourceType.value === 'url') {
 					filePreview.value = (v || '').trim()
+					// 仅当用户尚未手填目标名时，从URL末段推导一个默认名
+					if (!destState.destFile.value.trim()) {
+						try {
+							const base = new URL(v).pathname.split('/').pop() || ''
+							if (base) destState.destFile.value = decodeURIComponent(base)
+						} catch {
+							/* URL还没拼完整，忽略 */
+						}
+					}
 				}
 			})
 			watch(characterInput, (v) => {
@@ -274,32 +320,41 @@ export const createUploadComponent = ({
 				(chips) => {
 					chips.forEach(trimChip)
 				},
-				{ deep: true },
+				{ deep: true, flush: 'sync' },
 			)
 			/** lifecycle */
+			// 防止在文本框里回车意外提交原生表单
+			function onFormKeydown(e: KeyboardEvent) {
+				const target = e.target as HTMLInputElement | null
+				if (e.key === 'Enter' && target?.tagName === 'INPUT' && target.type !== 'submit') {
+					e.preventDefault()
+				}
+			}
 			onMounted(() => {
 				const dest = document.getElementById('wpDestFile') as HTMLInputElement | null
 				if (dest) {
 					destState.destFile.value = dest.value || ''
 				}
-				// 防止在文本框里回车意外提交表单
-				form.addEventListener('keydown', (e) => {
-					const target = e.target as HTMLInputElement | null
-					if (e.key === 'Enter' && target?.tagName === 'INPUT' && target.type !== 'submit') {
-						e.preventDefault()
-					}
-				})
+				form.addEventListener('keydown', onFormKeydown)
 				licenseState.updateLicenseHint()
 				if (!isReupload) {
 					void categoryState.fetchDisambigTitles()
 					void categoryState.ensureFunctionOptions()
-					previewText.value = generatedWikitext.value
+					// 已有描述时回填原文进入手编模式，让用户清楚要被覆盖的内容；
+					// 否则用自动生成的wikitext。「重置为自动生成」可随时切回。
+					if (hasExisting) {
+						previewText.value = initialDesc
+						previewEdited.value = true
+					} else {
+						previewText.value = generatedWikitext.value
+					}
 					licenseState.fetchLicensePreview()
 				}
 			})
 			onUnmounted(() => {
-				// 组件卸载时清理在途定时器，避免回调触发已销毁实例
+				// 组件卸载时清理在途定时器与事件监听，避免回调触发已销毁实例
 				clearTimeout(characterFilterTimer)
+				form.removeEventListener('keydown', onFormKeydown)
 			})
 
 			return {
@@ -330,6 +385,8 @@ export const createUploadComponent = ({
 				ignoreWarnings,
 				submitting,
 				helpOpen,
+				dragging,
+				fileError,
 				allowedTypesHint,
 				existingDesc: hasExisting,
 				isReupload,
@@ -349,6 +406,9 @@ export const createUploadComponent = ({
 				onCharacterLookupKeydown,
 				onAuthorLookupKeydown,
 				onFunctionLookupKeydown,
+				onDragEnter,
+				onDragLeave,
+				onDrop,
 				onPreviewInput,
 				resetPreview,
 				submit,

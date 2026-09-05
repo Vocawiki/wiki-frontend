@@ -57,6 +57,7 @@ export interface ApiParseResponse {
 export interface UploadResponse {
 	upload?: {
 		result?: string
+		filename?: string
 		warnings?: Record<string, string>
 	}
 	errors?: { '*'?: string }[]

@@ -100,12 +100,13 @@ export function useLicensePreview(
 
 	watch(license, () => {
 		const o = currentLicense.value
+		const next: Record<string, string> = {}
 		if (o) {
 			;(o.fields ?? []).forEach((f) => {
-				const key = o.tpl + '|' + f.key
-				licenseFieldValues.value[key] ??= f.def || ''
+				next[o.tpl + '|' + f.key] = f.def || ''
 			})
 		}
+		licenseFieldValues.value = next
 		updateLicenseHint()
 		fetchLicensePreview()
 	})

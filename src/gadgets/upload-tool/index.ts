@@ -80,6 +80,7 @@ function init(): void {
 			api: createApi(),
 			form,
 			presetSource,
+			initialDesc,
 			hasExisting,
 			isReupload,
 			uploadIcon: UPLOAD_ICON,

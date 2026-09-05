@@ -225,7 +225,11 @@ export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
 		try {
 			const titles: string[] = []
 			let cmcontinue: string | undefined
+			let pages = 0
 			do {
+				if (++pages > 50) {
+					break
+				}
 				const params: Record<string, string | number> = {
 					action: 'query',
 					list: 'categorymembers',

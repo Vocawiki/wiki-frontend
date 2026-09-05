@@ -16,9 +16,15 @@ function trimUnicodeWhitespace(s: string): string {
 }
 
 export function trimChip(c: Chip): void {
-	c.value = trimUnicodeWhitespace(c.value)
+	const v = trimUnicodeWhitespace(c.value)
+	if (v !== c.value) {
+		c.value = v
+	}
 	if (typeof c.label === 'string') {
-		c.label = trimUnicodeWhitespace(c.label)
+		const l = trimUnicodeWhitespace(c.label)
+		if (l !== c.label) {
+			c.label = l
+		}
 	}
 }
 

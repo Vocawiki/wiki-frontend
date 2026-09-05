@@ -29,26 +29,30 @@ export const TEMPLATE = `
 			<div v-if="sourceType === 'File'" class="ut-drop">
 				<div
 					class="ut-drop__area"
-					role="button"
-					tabindex="0"
+					:class="{ 'ut-drop__area--drag': dragging }"
 					@click="chooseFile"
-					@keydown.enter="chooseFile"
-					@keydown.space.prevent="chooseFile"
+					@dragenter.prevent="onDragEnter"
+					@dragover.prevent
+					@dragleave.prevent="onDragLeave"
+					@drop.prevent="onDrop"
 				>
 					<template v-if="filePreview">
 						<img class="ut-drop__preview" :src="filePreview" :alt="fileName" />
 						<span class="ut-drop__hint" v-text="fileName + (fileMeta ? ' · ' + fileMeta : '')"></span>
-						<cdx-button type="button">
+						<cdx-button type="button" @click.stop="chooseFile">
 							<cdx-icon :icon="restartIcon"></cdx-icon>
 							{{ msg('btn-rechoose-file') }}
 						</cdx-button>
 					</template>
 					<template v-else>
 						<cdx-icon class="ut-drop__icon" :icon="uploadIcon"></cdx-icon>
-						<cdx-button type="button">{{ msg('btn-choose-file') }}</cdx-button>
+						<cdx-button type="button" @click.stop="chooseFile">{{ msg('btn-choose-file') }}</cdx-button>
 						<span class="ut-drop__hint" v-text="msg('preview-file-empty')"></span>
 					</template>
 				</div>
+				<cdx-message v-if="fileError" type="error" inline class="ut-gap">
+					<span v-text="fileError"></span>
+				</cdx-message>
 			</div>
 			<template v-else>
 				<div class="ut-row2">
@@ -84,6 +88,25 @@ export const TEMPLATE = `
 			</div>
 
 			<div class="ut-field-row">
+				<div class="ut-sublabel">{{ msg('author-label') }}</div>
+				<div @keydown.capture="onAuthorLookupKeydown">
+					<cdx-multiselect-lookup name="ut-author"
+						v-model:input-chips="authorChips"
+						v-model:selected="authorSelected"
+						v-model:input-value="authorInput"
+						:menu-items="authorMenuItems"
+						:placeholder="msg('placeholder-author')"
+						@blur="commitAuthorInput"
+					>
+						<template #no-results>{{ msg('no-results-hint') }}</template>
+					</cdx-multiselect-lookup>
+				</div>
+				<cdx-message v-if="missingAuthorChips.length" type="warning" inline class="ut-gap">
+					<span v-text="msg('missing-author-prefix') + missingAuthorText"></span>
+				</cdx-message>
+			</div>
+
+			<div class="ut-field-row">
 				<div class="ut-sublabel">{{ msg('character-label') }}</div>
 				<div @keydown.capture="onCharacterLookupKeydown">
 					<cdx-multiselect-lookup name="ut-character"
@@ -100,25 +123,6 @@ export const TEMPLATE = `
 				</div>
 				<cdx-message v-if="missingCharacterChips.length" type="warning" inline class="ut-gap">
 					<span v-text="msg('missing-character-prefix') + missingCharacterText"></span>
-				</cdx-message>
-			</div>
-
-			<div class="ut-field-row">
-				<div class="ut-sublabel">{{ msg('author-label') }}</div>
-				<div @keydown.capture="onAuthorLookupKeydown">
-					<cdx-multiselect-lookup name="ut-author"
-						v-model:input-chips="authorChips"
-						v-model:selected="authorSelected"
-						v-model:input-value="authorInput"
-						:menu-items="authorMenuItems"
-						:placeholder="msg('placeholder-author')"
-						@blur="commitAuthorInput"
-					>
-						<template #no-results>{{ msg('no-results-hint') }}</template>
-					</cdx-multiselect-lookup>
-				</div>
-				<cdx-message v-if="missingAuthorChips.length" type="warning" inline class="ut-gap">
-					<span v-text="msg('missing-author-prefix') + missingAuthorText"></span>
 				</cdx-message>
 			</div>
 

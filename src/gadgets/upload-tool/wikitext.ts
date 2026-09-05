@@ -43,14 +43,14 @@ export function buildWikitext(input: WikitextInput, msg: MsgFn): string {
 	if (authors.length) {
 		lines.push(msg('wikitext-author') + authors.join('、'))
 	}
-	input.characterChips.forEach((c) => {
-		if (c.value) {
-			lines.push(msg('wikitext-category', c.value))
-		}
-	})
 	input.authorChips.forEach((a) => {
 		if (a.value) {
 			lines.push(msg('wikitext-author-category', a.value))
+		}
+	})
+	input.characterChips.forEach((c) => {
+		if (c.value) {
+			lines.push(msg('wikitext-category', c.value))
 		}
 	})
 	input.functionChips.forEach((c) => {

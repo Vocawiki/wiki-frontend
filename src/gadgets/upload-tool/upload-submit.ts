@@ -110,7 +110,8 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 				fail(null, result)
 				return
 			}
-			finishUpload(filename)
+			const finalName = result?.upload?.filename || filename
+			finishUpload(finalName)
 		} catch (e) {
 			// 文件上传遇警告会reject({code, result})，走fail()解析
 			const err = e as { code?: string; result?: UploadResponse }
