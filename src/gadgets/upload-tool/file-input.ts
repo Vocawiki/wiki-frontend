@@ -68,8 +68,8 @@ export function useFileInput(Vue: typeof VueTypes, deps: FileInputDeps) {
 				img.src = objectUrl
 			}
 			// 直接用文件名填充目标名，避免依赖MW原生fillDestFile的时序。
-			// 重新上传时目标名已由页面预填且禁用，不要覆盖。
-			if (!deps.isReupload) {
+			// 仅当目标名为空时才填：保留URL预填的wpDestFile、用户手填或reupload预填。
+			if (!deps.isReupload && !deps.destFile.value.trim()) {
 				deps.destFile.value = f.name
 			}
 		}
