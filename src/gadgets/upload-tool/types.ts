@@ -58,7 +58,7 @@ export interface UploadResponse {
 	upload?: {
 		result?: string
 		filename?: string
-		warnings?: Record<string, string>
+		warnings?: Record<string, string | string[]>
 	}
 	errors?: { '*'?: string }[]
 	error?: { info?: string }
