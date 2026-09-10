@@ -115,7 +115,11 @@ export function BilibiliVideos() {
 	)
 }
 
-const dateFormatter = Intl.DateTimeFormat('zh-Hans-CN')
+const dateFormatter = Intl.DateTimeFormat('zh-Hans-CN', {
+	year: 'numeric',
+	month: 'numeric',
+	day: 'numeric',
+})
 
 function VideoCard({
 	title,
