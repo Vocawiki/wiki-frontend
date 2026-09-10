@@ -1,6 +1,6 @@
+import { cn } from 'cn'
 import type { CSSProperties, ReactNode } from 'react'
 
-import { cn } from '@/lib/utils'
 import { LangSpan } from '@/src/components/wiki-templates/lang'
 import * as Wiki from '~/components/wikitext'
 

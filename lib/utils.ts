@@ -1,10 +1,3 @@
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
-export function cn(...inputs: ClassValue[]): string {
-	return twMerge(clsx(inputs))
-}
-
 export class TokenList implements Pick<DOMTokenList, 'length' | 'add' | 'toString'> {
 	private tokens: Set<string>
 

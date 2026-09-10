@@ -1,6 +1,6 @@
+import { cn } from 'cn'
 import type { ReactNode } from 'react'
 
-import { cn } from '@/lib/utils'
 import { WikiImageServerOnly } from '@/src/components/wiki-image/server'
 import * as Wiki from '~/components/wikitext'
 

@@ -1,6 +1,6 @@
+import { cn } from 'cn'
 import type { ReactNode } from 'react'
 
-import { cn } from '@/lib/utils'
 import * as Wiki from '~/components/wikitext'
 
 import { TopicPortal, TopicSeeMore } from './portal'

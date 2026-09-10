@@ -27,7 +27,7 @@ export function getFilesWillBeObsoleteAfterDeploy(
 	activeFilePaths: Iterable<string>,
 ): ({ path: string } & AssetsState['obsolete'][any])[] {
 	const now = Temporal.Now.instant()
-	const earliestAllowedInstant = now.subtract({ hours: 30 * 24 })
+	const earliestAllowedInstant = now.subtract({ hours: 7 * 24 })
 	const obsoleteFiles = new Map<string, { path: string } & AssetsState['obsolete'][any]>()
 
 	Object.entries(previousState.obsolete).forEach(([path, value]) => {

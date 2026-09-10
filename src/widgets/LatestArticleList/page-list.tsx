@@ -1,10 +1,10 @@
 'use client'
 
+import { cn } from 'cn'
 import { FastAverageColor } from 'fast-average-color'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
 import { MwApiCall } from '@/lib/mw-api'
-import { cn } from '@/lib/utils'
 import { HorizontalScrollArea } from '@/src/components/ui/scroll-area'
 import { WikiInternalLink } from '@/src/components/wiki-link'
 

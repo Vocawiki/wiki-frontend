@@ -4,14 +4,13 @@
  */
 
 void (async () => {
-	const { sleep } = await import('radashi')
 	await $.ready
 
 	const sidebarSelector = 'html > body'
 
 	let $sidebar = $(sidebarSelector)
 	while ($sidebar.length === 0) {
-		await sleep(100)
+		await new Promise((r) => setTimeout(r, 100))
 		$sidebar = $(sidebarSelector)
 	}
 	console.info('Widget:SideBarPic pre-init-check', $sidebar)

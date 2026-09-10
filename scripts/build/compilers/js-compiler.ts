@@ -158,7 +158,9 @@ export async function buildJsEntries(
 			}
 			return `${ASSETS_DIR_IN_OUTPUT_DIR}/[name]-[hash].js`
 		},
-		chunkFileNames: `${ASSETS_DIR_IN_OUTPUT_DIR}/[name]-[hash].js`,
+		chunkFileNames: IS_PRODUCTION
+			? `${ASSETS_DIR_IN_OUTPUT_DIR}/chunk-[hash].js`
+			: `${ASSETS_DIR_IN_OUTPUT_DIR}/[name]-[hash].js`,
 		// 发生名称过滤时输出一条警告
 		sanitizeFileName: (name) => {
 			// 遵循默认行为：https://github.com/rolldown/rolldown/blob/bba03da85ecbf2a4d954b95ddce80a4c6dd88a7d/crates/rolldown_utils/src/sanitize_filename.rs
@@ -170,22 +172,19 @@ export async function buildJsEntries(
 			return sanitized
 		},
 		codeSplitting: {
+			minSize: 50_000,
+			maxSize: 500_000,
 			groups: [
 				{
 					name: 'react',
-					test: /node_modules[/\\]react/,
-					priority: 20,
+					test: /node_modules[/\\]react(?:-dom)?[/\\]/,
+					maxSize: Infinity,
 				},
 				{
 					name: 'lib',
-					test: /node_modules/,
-					priority: 10,
-				},
-				{
-					name: 'common',
-					minShareCount: 2,
-					minSize: 10000,
-					priority: 5,
+					test: /node_modules[/\\]/,
+					entriesAware: true,
+					entriesAwareMergeThreshold: 50_000,
 				},
 			],
 		},
