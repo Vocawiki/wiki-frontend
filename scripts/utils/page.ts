@@ -45,7 +45,7 @@ export function escapePageTitle(title: string): string {
 }
 
 function unescapePageTitle(str: string): string {
-	return str.replace(/#(.)/g, (_, char: string) => {
+	return str.replace(/_(.)/g, (_, char: string) => {
 		const unescaped = unescapeMap.get(char)
 		assert(unescaped !== undefined, `页面标题包含未知转义序列: #${char}，标题: ${str}`)
 		return unescaped

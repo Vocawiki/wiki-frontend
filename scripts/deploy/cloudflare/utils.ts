@@ -1,6 +1,6 @@
 import type { Base64String } from '@/lib/string'
 
-import { ASSETS_URL } from '../config'
+import { ASSETS_BASE_URL_WITHOUT_ROUTE_PATH } from '../../config'
 import type { AssetsState } from '../types'
 
 export async function getCfFileHash(
@@ -52,7 +52,7 @@ export function getFilesWillBeObsoleteAfterDeploy(
 export async function fetchObsoleteFile(
 	path: string,
 ): Promise<{ base64: Base64String; mime?: string }> {
-	const url = `${ASSETS_URL}${path}`
+	const url = `${ASSETS_BASE_URL_WITHOUT_ROUTE_PATH}${path}`
 	const resp = await fetch(url)
 	if (!resp.ok) {
 		throw new Error(`请求 ${url} 失败，状态码：${resp.status}`)
@@ -64,10 +64,22 @@ export async function fetchObsoleteFile(
 const extensionToMime: Record<string, string> = {
 	// 按MIME排序
 	json: 'application/json',
+	map: 'application/json',
+	apng: 'image/apng',
+	avif: 'image/avif',
+	gif: 'image/gif',
+	jpeg: 'image/jpeg',
+	jpg: 'image/jpeg',
+	png: 'image/png',
 	svg: 'image/svg+xml',
+	webp: 'image/webp',
 	css: 'text/css',
+	html: 'text/html',
 	js: 'text/javascript',
 	mjs: 'text/javascript',
+	md: 'text/markdown',
+	txt: 'text/plain',
+	woff2: 'font/woff2',
 }
 
 /**

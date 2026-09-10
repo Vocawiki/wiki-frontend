@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import { parseArgs } from 'node:util'
 
 import { convertPathToPattern, globby } from 'globby'
@@ -206,7 +205,7 @@ async function getBuiltPages(): Promise<Page[]> {
 	const entries = await globby([`${directory}/*`, `!${directory}/*.map`], { stats: true })
 	return pMap(entries, async (entry) => {
 		const title = getPageTitleFromFileName(entry.name)
-		const contentWithSourceMapComment = await readFile(join(entry.path, entry.name), 'utf-8')
+		const contentWithSourceMapComment = await readFile(entry.path, 'utf-8')
 		const content = contentWithSourceMapComment
 			.replace(/\n\/\/# sourceMappingURL=.+/, '')
 			.replaceAll(`../${ASSETS_DIR_IN_OUTPUT_DIR}`, ASSETS_BASE_URL)

@@ -137,7 +137,9 @@ export async function buildJsEntries(
 						const handler = postBuildHandlers.get(name)
 						if (!handler) return
 						void postBuildQueue.add(async () => {
-							await handler(`${ASSETS_BASE_URL}/${chunk.fileName}`)
+							await handler(
+								`${ASSETS_BASE_URL}/${chunk.fileName.slice(ASSETS_DIR_IN_OUTPUT_DIR.length + 1)}`,
+							)
 							calledPostBuildHandlers.add(name)
 						})
 					})

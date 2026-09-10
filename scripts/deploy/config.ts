@@ -15,7 +15,6 @@ export const cfDeployConfig = cfWorkerDeployConfigSchema.parse({
 	accountId: env.CF_ACCOUNT_ID,
 	apiToken: env.CF_API_TOKEN,
 	workerName: env.CF_WORKER_NAME ?? 'assets',
-	compatibilityDate: env.CF_WORKER_COMPATIBILITY_DATE ?? '2026-09-04',
-	subdomain: env.CF_WORKER_SUBDOMAIN ?? 'vocawiki',
+	compatibilityDate: env.CF_WORKER_COMPATIBILITY_DATE ?? '2026-09-09',
+	subdomain: env.CF_WORKER_SUBDOMAIN ?? undefined,
 })
-export const ASSETS_URL = `https://${cfDeployConfig.workerName}.${cfDeployConfig.subdomain}.workers.dev`

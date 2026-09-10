@@ -15,9 +15,9 @@ import { objectify, pick } from 'radashi'
 
 import type { Base64String } from '@/lib/string'
 
-import { ASSETS_DIR } from '../../config'
+import { ASSETS_DIR, ASSETS_ROUT_PATH } from '../../config'
 import { cfDeployConfig as config } from '../config'
-import { assetsStateSchema, type AssetsState } from '../types'
+import type { AssetsState } from '../types'
 import * as headerFile from './header-file'
 import type { CfAssetManifest, CfManifestFileInfo, CfUploadPayload } from './types'
 import {
@@ -101,6 +101,13 @@ export async function deployWorker({
 	const version = await client.workers.beta.workers.versions.create(worker.id, {
 		account_id: config.accountId,
 		compatibility_date: config.compatibilityDate,
+		modules: [
+			{
+				name: '_headers',
+				content_type: 'text/plain',
+				content_base64: headerFile.base64,
+			},
+		],
 		assets: {
 			jwt: completionJwt,
 		},
@@ -134,7 +141,7 @@ function errorMessage(error: unknown): string {
 type HashToFileInfoMapValue =
 	| { type: 'active'; localPath: string; mime: string }
 	| { type: 'obsolete'; path: string }
-	| { type: '_headers'; base64: string }
+
 type HashToFileInfoMap = Map<string, HashToFileInfoMapValue>
 
 /**
@@ -159,7 +166,7 @@ async function createCfManifest(
 	}
 
 	const hashToFileInfo = new Map<string, HashToFileInfoMapValue>()
-	hashToFileInfo.set(headerFile.hash, { type: '_headers', base64: headerFile.base64 })
+	// hashToFileInfo.set(headerFile.hash, { type: '_headers', base64: headerFile.base64 })
 
 	// 正在使用的文件
 	const activeFiles = await pMap(
@@ -173,7 +180,7 @@ async function createCfManifest(
 
 			hashToFileInfo.set(hash, { type: 'active', localPath, mime })
 			return {
-				path: `/${relativePath}`,
+				path: `${ASSETS_ROUT_PATH}/${relativePath}`,
 				hash,
 				size: content.length,
 				localPath,
@@ -199,7 +206,7 @@ async function createCfManifest(
 		[
 			...obsoleteAssets,
 			...activeFiles,
-			{ path: headerFile.path, hash: headerFile.hash, size: headerFile.size },
+			// { path: headerFile.path, hash: headerFile.hash, size: headerFile.size },
 		],
 		getPath,
 		(x) => pick(x, ['hash', 'size']),
@@ -208,8 +215,8 @@ async function createCfManifest(
 	{
 		const activeFileCount = activeFiles.length
 		const obsoleteFileCount = obsoleteAssets.length
-		const headerFileCount = 1
-		const supposedTotalCount = activeFileCount + obsoleteFileCount + headerFileCount
+		// const headerFileCount = 1
+		const supposedTotalCount = activeFileCount + obsoleteFileCount // + headerFileCount
 		assert.equal(
 			Object.keys(cfManifest).length,
 			supposedTotalCount,
@@ -220,10 +227,10 @@ async function createCfManifest(
 		)
 	}
 
-	const newAssetsState: AssetsState = assetsStateSchema.parse({
+	const newAssetsState: AssetsState = {
 		active: objectify(activeFiles, getPath),
 		obsolete: objectify(obsoleteAssets, getPath),
-	})
+	}
 
 	return { cfManifest, hashToFileInfo, newAssetsState }
 }
@@ -252,9 +259,6 @@ async function generateUploadPayload(
 				const calculatedHash = await getCfFileHash(base64, path.extname(info.path).slice(1))
 				assert(calculatedHash === hash, `远程 ${info.path} 的hash与记载的不一致`)
 				return new File([base64], path.basename(info.path), { type: mime })
-			}
-			case '_headers': {
-				return new File([info.base64], '_headers')
 			}
 		}
 	}

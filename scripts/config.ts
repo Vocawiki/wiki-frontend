@@ -10,6 +10,8 @@ export const PAGES_DIR = `${OUTPUT_DIR}/${PAGES_DIR_IN_OUTPUT_DIR}`
 
 export const ASSETS_DIR_IN_OUTPUT_DIR = 'assets'
 export const ASSETS_DIR = `${OUTPUT_DIR}/${ASSETS_DIR_IN_OUTPUT_DIR}`
-export const ASSETS_BASE_URL = 'https://assets.vocawiki.workers.dev'
+export const ASSETS_BASE_URL_WITHOUT_ROUTE_PATH = `https://voca.wiki`
+export const ASSETS_ROUT_PATH = `/${ASSETS_DIR_IN_OUTPUT_DIR}`
+export const ASSETS_BASE_URL = `${ASSETS_BASE_URL_WITHOUT_ROUTE_PATH}${ASSETS_ROUT_PATH}`
 
 export const REFERENCED_FILES_PATH = `${OUTPUT_DIR}/referenced-files.txt`
