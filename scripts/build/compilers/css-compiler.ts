@@ -19,7 +19,7 @@ import { IS_PRODUCTION } from '../../../lib/config' // 由于vite.config.ts也�
 import { CSS_BROWSER_TARGETS } from '../browser-target'
 
 const postcssInstance = postcss(
-	postcssInsertImportTailwindConfig('src/gadgets/site-styles/index.css'),
+	postcssInsertImportTailwindConfig('src/gadgets/(appearance)/(skin)/site-styles/index.css'),
 	tailwindcss({
 		base: 'src',
 		optimize: false,

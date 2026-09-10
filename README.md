@@ -27,7 +27,7 @@
       		"*.css.txt": "css",
       		"*.js.txt": "javascript",
       	},
-      	"tailwindCSS.experimental.configFile": "src/gadgets/site-styles/index.css",
+      	"tailwindCSS.experimental.configFile": "src/gadgets/(appearance)/(skin)/site-styles/index.css",
       	"[html]": {
       		"editor.defaultFormatter": "oxc.oxc-vscode",
       	},

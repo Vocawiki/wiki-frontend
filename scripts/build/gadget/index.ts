@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { extname } from 'node:path'
 
-import { globby } from 'globby'
+import { globby, convertPathToPattern } from 'globby'
 import type PQueue from 'p-queue'
 import type { NonEmptyTuple } from 'type-fest'
 
@@ -152,24 +152,24 @@ async function collectGadgetsInDir(): Promise<ParsedGadgetMeta[]> {
 			const pages =
 				rawMeta.pages ??
 				(await (async () => {
-					const pages = (await globby(`${gadgetDir}/index.*`, { stats: true })).map(
-						(entry): GadgetMetaPage => {
-							const extension = extname(entry.name).slice(1)
-							const builtExtension = srcDistExtensionMap[
-								extension as keyof typeof srcDistExtensionMap
-							] as string | undefined
-							if (!builtExtension) {
-								throw new Error(`${gadgetDir}/${entry.name}的扩展名不受支持`)
-							}
-							return {
-								type: 'source',
-								entry: entry.name as `${string}.${GadgetSourceFileExtension}`,
-								outputName: `${gadgetName}.${builtExtension}`,
-							}
-						},
-					)
+					const pages = (
+						await globby(`${convertPathToPattern(gadgetDir)}/index.*`, { stats: true })
+					).map((entry): GadgetMetaPage => {
+						const extension = extname(entry.name).slice(1)
+						const builtExtension = srcDistExtensionMap[
+							extension as keyof typeof srcDistExtensionMap
+						] as string | undefined
+						if (!builtExtension) {
+							throw new Error(`${gadgetDir}/${entry.name}的扩展名不受支持`)
+						}
+						return {
+							type: 'source',
+							entry: entry.name as `${string}.${GadgetSourceFileExtension}`,
+							outputName: `${gadgetName}.${builtExtension}`,
+						}
+					})
 					if (pages.length === 0) {
-						throw new Error(`${gadgetDir}没有index文件，也没有在meta中指定pages`)
+						throw new Error(`${gadgetDir}既没有index文件，也没有在meta中指定pages`)
 					}
 					return pages as unknown as NonEmptyTuple<GadgetMetaPage>
 				})())

@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
 
-import { globby } from 'globby'
+import { convertPathToPattern, globby } from 'globby'
 import pMap from 'p-map'
 import PQueue from 'p-queue'
 import type { MediaWikiApi } from 'wiki-saikou'
@@ -202,7 +202,8 @@ async function getPageContentSha1(content: string): Promise<string> {
 }
 
 async function getBuiltPages(): Promise<Page[]> {
-	const entries = await globby([`${PAGES_DIR}/*`, `!${PAGES_DIR}/*.map`], { stats: true })
+	const directory = convertPathToPattern(PAGES_DIR)
+	const entries = await globby([`${directory}/*`, `!${directory}/*.map`], { stats: true })
 	return pMap(entries, async (entry) => {
 		const title = getPageTitleFromFileName(entry.name)
 		const contentWithSourceMapComment = await readFile(join(entry.path, entry.name), 'utf-8')
