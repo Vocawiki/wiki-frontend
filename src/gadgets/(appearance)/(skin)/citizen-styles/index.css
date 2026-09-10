@@ -33,41 +33,42 @@
 	}
 }
 
+@layer citizen-tokens {
+	:root {
+		/** 覆盖Citizen token */
+		/* 调整主题色色相为青蓝色 */
+		--color-progressive-oklch__h: 215;
+		/* 调亮背景 */
+		--color-surface-0-oklch__l: 99.62%;
+		/* 较亮的颜色需要的饱和度比较暗的颜色更低，由于我们调亮了背景，故此处调低饱和度 */
+		--color-surface-0-oklch__c: 0.0053;
+		--color-surface-1-oklch__c: 0.013;
+		/* 对于青蓝色来说，皮肤计算色超出sRGB色域，导致色域缩窄后的对比度偏低，故重设 */
+		--color-link: #006cad;
+		/* 皮肤默认访问过的链接颜色与未访问时一致，此处重设 */
+		--color-visited: #6a60b0;
+
+		/* 对不支持oklch的浏览器 */
+		--color-progressive-hsl__h: 188;
+		--color-progressive-hsl__s: 100%;
+		--color-progressive-hsl__l: 33%;
+		--color-surface-0-hsl__s: 100%;
+		--color-surface-0-hsl__l: 99%;
+		--color-surface-1-hsl__s: 79%;
+		--color-surface-1-hsl__l: 96%;
+		--color-surface-2-hsl__s: 66%;
+		--color-surface-2-hsl__l: 93%;
+
+		@variant dark {
+			/* 恢复皮肤默认值 */
+			--color-surface-0-oklch__c: 0.01;
+			--color-surface-1-oklch__c: 0.015;
+		}
+	}
+}
 :root {
-	/**
-	 * 覆盖Citizen token
-	 */
-	/* 调整主题色色相为青蓝色 */
-	--color-progressive-oklch__h: 215;
-	/* 调亮背景 */
-	--color-surface-0-oklch__l: 99.62%;
-	/* 较亮的颜色需要的饱和度比较暗的颜色更低，由于我们调亮了背景，故此处调低饱和度 */
-	--color-surface-0-oklch__c: 0.0053;
-	--color-surface-1-oklch__c: 0.013;
-	/* 对于青蓝色来说，皮肤计算色超出sRGB色域，导致色域缩窄后的对比度偏低，故重设 */
-	--color-link: #006cad;
-	/* 皮肤默认访问过的链接颜色与未访问时一致，此处重设 */
-	--color-visited: #6a60b0;
-
-	/* 对不支持oklch的浏览器 */
-	--color-progressive-hsl__h: 188;
-	--color-progressive-hsl__s: 100%;
-	--color-progressive-hsl__l: 33%;
-	--color-surface-0-hsl__s: 100%;
-	--color-surface-0-hsl__l: 99%;
-	--color-surface-1-hsl__s: 79%;
-	--color-surface-1-hsl__l: 96%;
-	--color-surface-2-hsl__s: 66%;
-	--color-surface-2-hsl__l: 93%;
-
 	--font-family-base: var(--font-main);
 	--font-family-monospace: var(--font-mono);
-
-	@variant dark {
-		/* 恢复皮肤默认值 */
-		--color-surface-0-oklch__c: 0.01;
-		--color-surface-1-oklch__c: 0.015;
-	}
 }
 
 .citizen-body {
