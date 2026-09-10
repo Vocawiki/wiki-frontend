@@ -51,7 +51,7 @@
 	--default-font-family: var(--font-main);
 	--default-font-feature-settings: "locl";
 
-	--color-subtle: var(--color-subtle);
+	--color-subtle: var(--skin-specific);
 
 	/* https://doc.wikimedia.org/codex/latest/design-tokens/breakpoint.html */
 	--breakpoint-codex-mobile: 320px;
