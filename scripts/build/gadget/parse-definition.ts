@@ -62,6 +62,7 @@ export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 	const gadgetPages = groups.pages!.split(/\s*\|\s*/g)
 	const meta = {
 		name: gadgetName,
+		dir: `src/gadgets/${gadgetName}`,
 		pages: gadgetPages.map((page) => ({
 			type: 'existing',
 			name: page,

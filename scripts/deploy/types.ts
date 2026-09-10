@@ -48,23 +48,42 @@ export const deploymentTrashSchema = z
 	.meta({ description: '从chunk名到最后使用时间' })
 export type DeploymentTrash = z.infer<typeof deploymentTrashSchema>
 
+const pathSchema = z.string().startsWith('/')
+const hashAndSize = {
+	hash: z.string().meta({ title: '文件hash' }),
+	size: z.number().int().nonnegative().meta({ title: '文件大小' }),
+} as const
+
+export const assetsStateSchema = z.object({
+	active: z.record(pathSchema.meta({ title: '文件路径' }), z.object(hashAndSize)),
+	obsolete: z.record(
+		pathSchema.meta({ title: '文件路径' }),
+		z.object({
+			...hashAndSize,
+			lastUsed: isoDatetimeToInstant.meta({ title: '最后使用时间' }),
+		}),
+	),
+})
+export type AssetsState = z.output<typeof assetsStateSchema>
+
 const referencedFilesSchema = z.codec(z.array(z.string()), z.set(z.string()), {
 	decode: (array) => new Set(array),
 	encode: (set) => [...set].toSorted(compareTitle),
 })
 
-export const deploymentStateSchemaV2 = z.object({
-	version: z.literal(2),
+export const deploymentStateSchema = z.object({
+	version: z.literal(3),
 	lockedBy: z.string().min(1).optional().meta({ title: '占用者', description: '一般是Run ID' }),
 	pages: deploymentPagesSchema,
+	assets: assetsStateSchema,
 	referencedFiles: referencedFilesSchema,
 	trash: deploymentTrashSchema,
 	commitSha: commitShaSchema,
 	runId: runIdSchema,
 	deployStartedAt: isoDatetimeToInstant,
+	workerDeployFinishedAt: isoDatetimeToInstant,
 	deployFinishedAt: isoDatetimeToInstant,
 	cleanFinishedAt: isoDatetimeToInstant,
 })
 
-export type DeploymentStateStorageV2 = z.input<typeof deploymentStateSchemaV2>
-export type DeploymentStateV2 = z.output<typeof deploymentStateSchemaV2>
+export type DeploymentState = z.output<typeof deploymentStateSchema>

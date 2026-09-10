@@ -1,15 +1,17 @@
-import 'temporal-polyfill/global'
-
 import assert from 'node:assert/strict'
-import { readdir } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
 
+import { globby } from 'globby'
+import pMap from 'p-map'
 import PQueue from 'p-queue'
 import type { MediaWikiApi } from 'wiki-saikou'
 
+import { toSorted } from '@/lib/record'
 import { loadReferencedFiles } from '@/tools/file-usage'
 
+import { ASSETS_BASE_URL, ASSETS_DIR_IN_OUTPUT_DIR, PAGES_DIR } from '../config'
 import { getPageTitleFromFileName } from '../utils/page'
 import {
 	deletePage,
@@ -19,13 +21,14 @@ import {
 	lockDeploymentState,
 	unlockDeploymentState,
 } from './api'
+import { deployCloudflareWorker } from './cloudflare'
 import { DEPLOYMENT_STATE_PAGE_TITLE } from './config'
 import { deploymentSpecifier } from './message'
-import { compareTitle } from './sorter'
+import { comparePath, compareTitle } from './sorter'
 import {
-	deploymentStateSchemaV2,
+	deploymentStateSchema,
 	type DeploymentContext,
-	type DeploymentStateV2,
+	type DeploymentState,
 	type DeploymentTrash,
 	type Page,
 } from './types'
@@ -68,13 +71,15 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 	const api = await getApi()
 	const previousDeploymentState = await getDeployState(api)
 	if (previousDeploymentState.lockedBy !== undefined) {
-		throw new Error('有进程正在部署')
+		throw new Error(`有进程正在部署，上锁者：${previousDeploymentState.lockedBy}`)
 	}
 
 	await lockDeploymentState(api, ctx, previousDeploymentState)
 
 	try {
-		await deployPages(api, ctx, previousDeploymentState, pages)
+		const assetsState = await deployCloudflareWorker(ctx, previousDeploymentState)
+		const workerDeployFinishedAt = Temporal.Now.instant()
+		await deployWikiPages(api, ctx, previousDeploymentState, pages)
 		const deployFinishedAt = Temporal.Now.instant()
 
 		const newTrashState = await cleanTrash(
@@ -86,13 +91,18 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 		)
 		const cleanFinishedAt = Temporal.Now.instant()
 
-		const newDeploymentState = deploymentStateSchemaV2.encode({
-			version: 2,
+		const newDeploymentState = deploymentStateSchema.encode({
+			version: 3,
 			pages: Object.fromEntries(
 				pages
 					.map((page) => [page.title, page.sha1] as const)
 					.toSorted(([titleA], [titleB]) => compareTitle(titleA, titleB)),
 			),
+			assets: {
+				active: toSorted(assetsState.active, ([pathA], [pathB]) => comparePath(pathA, pathB)),
+				obsolete: toSorted(assetsState.obsolete, ([pathA], [pathB]) => comparePath(pathA, pathB)),
+			},
+			workerDeployFinishedAt,
 			referencedFiles: await loadReferencedFiles(),
 			trash: newTrashState,
 			commitSha: ctx.commitSha,
@@ -105,7 +115,7 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 		await api.postWithEditToken({
 			action: 'edit',
 			title: DEPLOYMENT_STATE_PAGE_TITLE,
-			text: JSON.stringify(newDeploymentState, null, 2),
+			text: JSON.stringify(newDeploymentState, null, '\t'),
 			summary: '部署完成' + deploymentSpecifier(ctx),
 			tags: 'Bot',
 			notminor: true,
@@ -117,10 +127,10 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 	}
 }
 
-async function deployPages(
+async function deployWikiPages(
 	api: MediaWikiApi,
 	ctx: DeploymentContext,
-	previousDeploymentState: DeploymentStateV2,
+	previousDeploymentState: DeploymentState,
 	pages: Page[],
 ) {
 	const previousPages = previousDeploymentState.pages
@@ -135,7 +145,7 @@ async function deployPages(
 async function cleanTrash(
 	api: MediaWikiApi,
 	ctx: DeploymentContext,
-	previousDeploymentState: DeploymentStateV2,
+	previousDeploymentState: DeploymentState,
 	pages: Page[],
 	deployFinishedAt: Temporal.Instant,
 ): Promise<DeploymentTrash> {
@@ -185,27 +195,24 @@ function toNewTrashState(
 }
 
 async function getPageContentSha1(content: string): Promise<string> {
-	const encoder = new TextEncoder()
-	const data = encoder.encode(content)
-	const hashBuffer = await crypto.subtle.digest('SHA-1', data)
-	const hashArray = Array.from(new Uint8Array(hashBuffer))
-	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+	const bytes = new TextEncoder().encode(content)
+	const hashBuffer = await crypto.subtle.digest('SHA-1', bytes)
+	const hashHex = new Uint8Array(hashBuffer).toHex()
 	return hashHex
 }
 
 async function getBuiltPages(): Promise<Page[]> {
-	const entries = await readdir('out/pages', { withFileTypes: true })
-	return Promise.all(
-		entries.map(async (entry) => {
-			assert(entry.isFile(), 'out/pages出现了不是文件的' + entry.name)
-
-			const pageTitle = getPageTitleFromFileName(entry.name)
-			const pageContent = await Bun.file(join(entry.parentPath, entry.name)).text()
-			return {
-				title: pageTitle,
-				content: pageContent,
-				sha1: await getPageContentSha1(pageContent),
-			}
-		}),
-	)
+	const entries = await globby([`${PAGES_DIR}/*`, `!${PAGES_DIR}/*.map`], { stats: true })
+	return pMap(entries, async (entry) => {
+		const title = getPageTitleFromFileName(entry.name)
+		const contentWithSourceMapComment = await readFile(join(entry.path, entry.name), 'utf-8')
+		const content = contentWithSourceMapComment
+			.replace(/\n\/\/# sourceMappingURL=.+/, '')
+			.replaceAll(`../${ASSETS_DIR_IN_OUTPUT_DIR}`, ASSETS_BASE_URL)
+		return {
+			title,
+			content,
+			sha1: await getPageContentSha1(content),
+		}
+	})
 }

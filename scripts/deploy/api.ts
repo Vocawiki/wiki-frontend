@@ -8,9 +8,8 @@ import { deploymentSpecifier } from './message'
 import {
 	type Page,
 	type DeploymentContext,
-	deploymentStateSchemaV2,
-	type DeploymentStateV2,
-	type DeploymentStateStorageV2,
+	deploymentStateSchema,
+	type DeploymentState,
 } from './types'
 
 function prettyJsonStringify(value: any) {
@@ -64,26 +63,20 @@ export async function getDeployState(api: MediaWikiApi) {
 		rvslots: 'main',
 		rvlimit: 1,
 	})
-	const raw = JSON.parse(
-		result.data.query.pages[0].revisions[0].slots.main.content,
-	) as DeploymentStateStorageV2 // | DeploymentStateStorageV1
-	// if (raw.version === 1) {
-	// 	raw = migrateFromV1ToV2(raw)
-	// }
-
-	return deploymentStateSchemaV2.parse(raw)
+	const raw = JSON.parse(result.data.query.pages[0].revisions[0].slots.main.content) as unknown
+	return deploymentStateSchema.parse(raw)
 }
 
 export async function lockDeploymentState(
 	api: MediaWikiApi,
 	ctx: DeploymentContext,
-	previousState: DeploymentStateV2,
+	previousState: DeploymentState,
 ) {
 	await api.postWithEditToken({
 		action: 'edit',
 		title: DEPLOYMENT_STATE_PAGE_TITLE,
 		text: prettyJsonStringify(
-			deploymentStateSchemaV2.encode({
+			deploymentStateSchema.encode({
 				...previousState,
 				lockedBy: ctx.runId ? `run:${ctx.runId}` : `commit:${ctx.commitSha}`,
 			}),
@@ -98,12 +91,12 @@ export async function lockDeploymentState(
 export async function unlockDeploymentState(
 	api: MediaWikiApi,
 	ctx: DeploymentContext,
-	previousState: DeploymentStateV2,
+	previousState: DeploymentState,
 ) {
 	await api.postWithEditToken({
 		action: 'edit',
 		title: DEPLOYMENT_STATE_PAGE_TITLE,
-		text: prettyJsonStringify(deploymentStateSchemaV2.encode(previousState)),
+		text: prettyJsonStringify(deploymentStateSchema.encode(previousState)),
 		summary: '部署失败，解除锁定' + deploymentSpecifier(ctx),
 		tags: 'Bot',
 		minor: true,

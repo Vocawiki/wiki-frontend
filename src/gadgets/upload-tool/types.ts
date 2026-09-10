@@ -1,3 +1,9 @@
+import type * as _Codex from '@wikimedia/codex'
+import type * as _Vue from 'vue'
+
+export type CodexType = typeof _Codex
+export type VueType = typeof _Vue
+
 export interface Chip {
 	value: string
 	label?: string

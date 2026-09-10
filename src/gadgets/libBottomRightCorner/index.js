@@ -1,4 +1,3 @@
-'use strict'
 $(() => {
 	const body = document.body
 	const bottomRightCorner = $('<div>').attr('id', 'bottomRightCorner')

@@ -3,9 +3,8 @@
  * https://voca.wiki/MediaWiki:Gadget-SideBarPic.js?action=history
  */
 
-import { sleep } from 'radashi'
-
 void (async () => {
+	const { sleep } = await import('radashi')
 	await $.ready
 
 	const sidebarSelector = 'html > body'

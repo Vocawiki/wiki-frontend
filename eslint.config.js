@@ -24,6 +24,7 @@ export default defineConfig(
 			},
 		},
 		rules: {
+			'no-useless-escape': ['error', { allowRegexCharacters: ['-', '['] }],
 			'@typescript-eslint/consistent-type-imports': 'error',
 			'@typescript-eslint/no-inferrable-types': ['error', { ignoreParameters: true }],
 			'@typescript-eslint/no-import-type-side-effects': 'error',

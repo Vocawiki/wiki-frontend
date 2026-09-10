@@ -1,8 +1,23 @@
 import { createRoot } from 'react-dom/client'
 
-import { depend } from '~/snippets/rlq'
+import type {} from '~/@types/rlq'
 
 import { LatestArticleList } from './page-list'
+
+;(window.RLQ ??= []).push(['mediawiki.api', () => replaceDom()])
+
+function replaceDom() {
+	const rawLinks = getRawLinks()
+	if (rawLinks.length === 0) return
+
+	const rootElem = document.getElementById('latest-article-list')
+	if (!rootElem) {
+		console.error('未找到ID为`latest-article-list`的元素')
+		return
+	}
+	const root = createRoot(rootElem)
+	root.render(<LatestArticleList pages={rawLinks} />)
+}
 
 interface RawLink {
 	href: string
@@ -21,18 +36,3 @@ function getRawLinks(): RawLink[] {
 	)
 	return rawLinks
 }
-
-function replaceDom() {
-	const rawLinks = getRawLinks()
-	if (rawLinks.length === 0) return
-
-	const rootElem = document.getElementById('latest-article-list')
-	if (!rootElem) {
-		console.error('未找到ID为`latest-article-list`的元素')
-		return
-	}
-	const root = createRoot(rootElem)
-	root.render(<LatestArticleList pages={rawLinks} />)
-}
-
-depend('mediawiki.api', () => replaceDom())

@@ -2,9 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { depend } from '~/snippets/rlq'
-
-depend('jquery', () => $(() => void main()))
+;(window.RLQ ??= []).push(['jquery', () => $(() => void main())])
 
 async function main() {
 	if (document.body.clientWidth < 550) {

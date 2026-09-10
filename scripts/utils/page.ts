@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict'
 
+import { PAGES_DIR } from '../config'
+
 const invalidCharSymbol = Symbol('invalid character in page title')
 
 const [escapeMap, unescapeMap] = (() => {
@@ -29,14 +31,15 @@ const [escapeMap, unescapeMap] = (() => {
 	]
 })()
 
-function escapePageTitle(title: string): string {
+export function escapePageTitle(title: string): string {
 	return title
 		.split('')
 		.map((char) => {
+			assert.notEqual(char, '_', `转义不支持标题中含有“_”，请将标题中的“_”换成空格。标题：${title}`)
 			const escaped = escapeMap.get(char)
 			if (escaped === undefined) return char
 			assert(escaped !== invalidCharSymbol, `页面标题包含无法使用的字符: ${char}，标题: ${title}`)
-			return '#' + escaped
+			return '_' + escaped
 		})
 		.join('')
 }
@@ -51,7 +54,7 @@ function unescapePageTitle(str: string): string {
 
 export async function writeBuiltPage(title: string, content: string) {
 	const fileName = escapePageTitle(title) + '.txt'
-	await Bun.write(`out/pages/${fileName}`, content)
+	await Bun.write(`${PAGES_DIR}/${fileName}`, content)
 }
 
 export function getPageTitleFromFileName(fileName: string) {

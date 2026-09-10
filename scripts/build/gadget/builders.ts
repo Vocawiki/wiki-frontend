@@ -1,37 +1,15 @@
-import type { GadgetSourceFileExtension } from '@/tools/gadget'
-
-import { compileCSS, compileJS } from '../compilers'
+import { compileCSS } from '../compilers'
 import { noticeForEditors } from '../utils/notice'
 
 export type GadgetBuilder = (ctx: { path: string }) => Promise<{ content: string }>
 
-const buildJSOrTSGadget: GadgetBuilder = async ({ path }) => {
-	// 显式判断文件是否存在，以免填错扩展名时 rolldown 自动处理导致输出的 inputPath 不正确
-	if (!(await Bun.file(path).exists())) {
-		throw new Error(`不存在文件：${path}`)
-	}
-	const code = await compileJS(path, { format: 'iife' })
+export async function buildCss({ path }: { path: string }) {
+	const css = await compileCSS(path)
 	const content = `/**
  * ${noticeForEditors(path).join('\n * ')}
  */
-/* <pre> */
-"use strict";${code}
-/* </pre> */`
-
-	return { content }
-}
-
-export const gadgetBuilders: Record<GadgetSourceFileExtension, GadgetBuilder> = {
-	css: async ({ path }) => {
-		const css = await compileCSS(path)
-		const content = `/**
- * ${noticeForEditors(path).join('\n * ')}
- */
-/* <pre> */
+/* <nowiki> */
 ${css}
-/* </pre> */`
-		return { content }
-	},
-	js: buildJSOrTSGadget,
-	ts: buildJSOrTSGadget,
+/* </nowiki> */`
+	return { content }
 }

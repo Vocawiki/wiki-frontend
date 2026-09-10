@@ -10,5 +10,5 @@
 		},
 		"types": ["bun"]
 	},
-	"include": ["./*", "./lib", "./scripts", "./tools", "./src/**/(meta).ts", "./src/**/*.tsx"]
+	"include": ["*", "lib", "scripts", "tools", "src/**/(meta).ts", "src/**/*.tsx"]
 }

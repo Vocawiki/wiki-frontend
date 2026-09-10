@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readdir } from 'node:fs/promises'
 
+import pMap from 'p-map'
 import type { ReactNode } from 'react'
 
 import { getFileInfo } from '@/scripts/utils/file-info'
@@ -9,78 +10,121 @@ import type { WidgetMeta } from '@/tools/widget'
 
 import { compileComponent } from '../compilers'
 import { compileJS } from '../compilers/js-compiler'
-import { toWidgetWikiContent, toScriptWidgetWikiContent } from './widget-template'
+import type { ScriptBuildEntry } from '../types'
+import { findCodeEntries } from '../utils/code-entry'
+import {
+	toWidgetWikiContent,
+	formatScriptWidgetBanner,
+	SCRIPT_WIDGET_FOOTER,
+} from './widget-template'
 
-export async function buildWidgets() {
+export async function buildWidgets(options: {
+	onScriptEntryFound: (entry: ScriptBuildEntry) => void
+}) {
 	const widgetEntries = await findWidgets('src/widgets')
-	await Promise.all(widgetEntries.map((entity) => buildWidget(entity)))
+	await Promise.all(widgetEntries.map((entity) => buildWidget(entity, options)))
 }
 
 interface WidgetSourceInfo {
-	widgetName: string
-	entryFile: string
+	name: string
+	path: string
+	entryFileName: string
+	meta: WidgetMeta
 }
 
 /**
  * 查找 dir 下的 index.xx 文件
  * @returns 文件名
  */
-async function findIndexFile(underDir: string): Promise<string | null> {
-	for (const x of await readdir(underDir, { withFileTypes: true })) {
+async function findIndexFile(dir: string): Promise<string> {
+	for (const x of await readdir(dir, { withFileTypes: true })) {
 		if (x.isFile() && getFileInfo(x.name).baseName === 'index') {
 			return x.name
 		}
 	}
-	return null
+	throw new Error(`${dir}下不存在入口文件`)
 }
 
 async function findWidgets(dir: string): Promise<WidgetSourceInfo[]> {
-	const tasks = (await readdir(dir, { withFileTypes: true })).map(async (x) => {
-		if (x.isDirectory()) {
-			const dir = `${x.parentPath}/${x.name}`
-			const indexFileName = await findIndexFile(dir)
-			if (indexFileName === null) return null
-			return {
-				widgetName: x.name,
-				entryFile: indexFileName,
-			}
-		}
-		return null
+	const entries = await findCodeEntries(dir)
+	return pMap(entries, async ({ name, path }): Promise<WidgetSourceInfo> => {
+		const [entryFileName, meta] = await Promise.all([
+			findIndexFile(path),
+			import(`@/${path}/(meta)`).then((x) => (x as { default: WidgetMeta }).default),
+		])
+		return { name, path, entryFileName, meta }
 	})
-	return (await Promise.all(tasks)).filter((x) => x !== null)
 }
 
-async function buildWidget({ widgetName, entryFile }: WidgetSourceInfo) {
-	const meta = ((await import(`~/widgets/${widgetName}/(meta)`)) as { default: WidgetMeta }).default
-
-	let widgetContent: string
+async function buildWidget(
+	{ name, path, entryFileName, meta }: WidgetSourceInfo,
+	{ onScriptEntryFound }: { onScriptEntryFound: (entry: ScriptBuildEntry) => void },
+) {
+	const mwPageTitle = `Widget:${name}`
+	const entryPath = `${path}/${entryFileName}`
 
 	switch (meta.type) {
 		case 'script': {
-			assert(isValidScriptWidgetName(widgetName), 'script模式不支持的widget名：' + widgetName)
-			const code = await compileJS(`src/widgets/${widgetName}/${entryFile}`, meta.buildOptions)
-			widgetContent = toScriptWidgetWikiContent({
-				widgetName,
-				script: code,
-				meta,
-			})
-			break
+			assert(isValidScriptWidgetName(name), `script模式不支持的widget名：${name}`)
+			if (meta.scriptType === 'module') {
+				onScriptEntryFound({
+					type: 'asset',
+					name: name,
+					path: entryPath,
+					onBuildSuccess: async (scriptSourceUrl) => {
+						const widgetContent =
+							formatScriptWidgetBanner({
+								widgetName: name,
+								scriptSourceUrl,
+								meta,
+							}) + SCRIPT_WIDGET_FOOTER
+						await writeBuiltPage(mwPageTitle, widgetContent)
+					},
+				})
+				return
+			}
+			if (meta.scriptType === 'module-inline') {
+				onScriptEntryFound({
+					type: 'mw-page',
+					title: mwPageTitle,
+					meta: {
+						path: entryPath,
+						format: 'es',
+						postBanner: () =>
+							formatScriptWidgetBanner({
+								widgetName: name,
+								meta,
+							}),
+						postFooter: SCRIPT_WIDGET_FOOTER,
+						sourceMap: false,
+					},
+				})
+				return
+			}
+			if (meta.scriptType === 'classic-inline-no-chunk') {
+				const code = await compileJS(entryPath, { format: 'iife', strict: true })
+				const widgetContent =
+					formatScriptWidgetBanner({ widgetName: name, meta }) + code + SCRIPT_WIDGET_FOOTER
+				await writeBuiltPage(mwPageTitle, widgetContent)
+				return
+			}
+
+			throw new Error('未知scriptType')
 		}
 		case 'component': {
 			const Component = (
-				(await import(`~/widgets/${widgetName}/${entryFile}`)) as { default: () => ReactNode }
+				(await import(`@/${path}/${entryFileName}`)) as { default: () => ReactNode }
 			).default
 			const html = await compileComponent(Component())
-			widgetContent = toWidgetWikiContent({
-				widgetName,
+			const widgetContent = toWidgetWikiContent({
+				widgetName: name,
 				content: html,
 				meta,
 			})
-			break
+			await writeBuiltPage(mwPageTitle, widgetContent)
+			return
 		}
 	}
-
-	await writeBuiltPage(`Widget:${widgetName}`, widgetContent)
 }
 
 /**
