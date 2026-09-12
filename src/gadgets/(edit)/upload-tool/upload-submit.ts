@@ -87,7 +87,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			const p: Record<string, string | boolean> = {
 				filename: name,
 				comment: (deps.note.value || '').trim(),
-				watchlist: deps.watchFile.value ? 'watch' : 'unwatch',
+				watchlist: deps.watchFile.value ? 'watch' : 'nochange',
 				ignorewarnings: deps.isReupload || forceIgnore || deps.ignoreWarnings.value,
 			}
 			if (!deps.isReupload) {
