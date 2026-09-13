@@ -110,6 +110,7 @@ export function Topics() {
 						image="Ch_img_kaitov3.png"
 						imageAlign="top"
 						imageClip={{ left: '20px', right: '130px' }}
+						withNavigation
 					>
 						KAITO
 					</TopicPortal>
