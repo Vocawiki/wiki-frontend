@@ -4,6 +4,7 @@ import type { Simplify } from 'type-fest'
 
 import type { GadgetMeta } from '@/tools/gadget'
 
+import { comparePath } from '../../utils/sorter'
 import { getGadgetSourceFileInfo } from './file-info'
 import type { ParsedGadgetMeta } from './types'
 
@@ -27,23 +28,25 @@ type GadgetMetaOnlyRootSingleValues = Simplify<
 export function toGadgetDefinition(meta: ParsedGadgetMeta): string {
 	assert.match(meta.name, /^[A-Za-z][A-Za-z0-9\-_.]*$/, `gadget名不合法：${meta.name}`)
 
-	const pages = meta.pages.flatMap((page) => {
-		switch (page.type) {
-			case 'source': {
-				if (page.outputName) {
-					return page.outputName
+	const pages = meta.pages
+		.flatMap((page) => {
+			switch (page.type) {
+				case 'source': {
+					if (page.outputName) {
+						return page.outputName
+					}
+					const { baseName, builtExtension } = getGadgetSourceFileInfo(page.entry)
+					return `${baseName}.${builtExtension}`
 				}
-				const { baseName, builtExtension } = getGadgetSourceFileInfo(page.entry)
-				return `${baseName}.${builtExtension}`
+				case 'existing': {
+					return page.name
+				}
+				case 'custom': {
+					return page.names
+				}
 			}
-			case 'existing': {
-				return page.name
-			}
-			case 'custom': {
-				return page.names
-			}
-		}
-	})
+		})
+		.toSorted(comparePath)
 	assert(pages.length > 0, `gadget “${meta.name}” 必须有至少一个页面`)
 
 	const options: string[] = []
@@ -110,5 +113,5 @@ export function toGadgetDefinition(meta: ParsedGadgetMeta): string {
 	value('supportsUrlLoad')
 	// 被移除的选项就不加了，除非我们还想支持旧版 MediaWiki
 
-	return `* ${meta.name} [${options.join('|')}] | ${pages.join(' | ')}`
+	return `* ${meta.name} [${options.join(' | ')}] | ${pages.join(' | ')}`
 }

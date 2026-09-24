@@ -12,6 +12,7 @@ import { loadReferencedFiles } from '@/tools/file-usage'
 
 import { ASSETS_BASE_URL, ASSETS_DIR_IN_OUTPUT_DIR, PAGES_DIR } from '../config'
 import { getPageTitleFromFileName } from '../utils/page'
+import { comparePath } from '../utils/sorter'
 import {
 	deletePage,
 	deployPage,
@@ -23,7 +24,6 @@ import {
 import { deployCloudflareWorker } from './cloudflare'
 import { DEPLOYMENT_STATE_PAGE_TITLE } from './config'
 import { deploymentSpecifier } from './message'
-import { comparePath, compareTitle } from './sorter'
 import {
 	deploymentStateSchema,
 	type DeploymentContext,
@@ -95,7 +95,7 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 			pages: Object.fromEntries(
 				pages
 					.map((page) => [page.title, page.sha1] as const)
-					.toSorted(([titleA], [titleB]) => compareTitle(titleA, titleB)),
+					.toSorted(([titleA], [titleB]) => comparePath(titleA, titleB)),
 			),
 			assets: {
 				active: toSorted(assetsState.active, ([pathA], [pathB]) => comparePath(pathA, pathB)),

@@ -2,7 +2,7 @@ import * as z from 'zod'
 
 import { isoDatetimeToInstant } from '@/lib/zod'
 
-import { compareTitle } from './sorter'
+import { comparePath } from '../utils/sorter'
 
 export interface DeploymentContext {
 	summary: string
@@ -39,7 +39,7 @@ export const deploymentTrashSchema = z
 					Object.entries(record).toSorted((a, b) => {
 						const diff = Temporal.Instant.compare(a[1], b[1])
 						if (diff !== 0) return diff
-						return compareTitle(a[0], b[0])
+						return comparePath(a[0], b[0])
 					}),
 				),
 			encode: (map) => Object.fromEntries(map.entries()),
@@ -68,7 +68,7 @@ export type AssetsState = z.output<typeof assetsStateSchema>
 
 const referencedFilesSchema = z.codec(z.array(z.string()), z.set(z.string()), {
 	decode: (array) => new Set(array),
-	encode: (set) => [...set].toSorted(compareTitle),
+	encode: (set) => [...set].toSorted(comparePath),
 })
 
 export const deploymentStateSchema = z.object({
