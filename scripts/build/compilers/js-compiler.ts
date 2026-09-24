@@ -76,6 +76,10 @@ export async function buildJsEntries(
 
 	await using bundle = await rolldown({
 		...rolldownPredefinedOptions,
+		checks: {
+			// 我们没有使用RSC，所以打包时即便'use client'被移除也不影响
+			moduleLevelDirective: false,
+		},
 		plugins: [
 			{
 				name: 'mw-pages-should-not-be-imported',
