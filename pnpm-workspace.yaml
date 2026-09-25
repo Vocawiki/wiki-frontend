@@ -3,3 +3,5 @@ allowBuilds:
   vue-demi: true
 publicHoistPattern:
   - '@types/oojs-ui'
+update:
+  githubActions: true
