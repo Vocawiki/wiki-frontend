@@ -47,12 +47,11 @@ export function parseRenderRequest(request: Request): RenderRequest {
 			request: new Request(url, request),
 			url,
 		}
-	} else {
-		return {
-			isRsc: false,
-			isAction,
-			request,
-			url,
-		}
+	}
+	return {
+		isRsc: false,
+		isAction,
+		request,
+		url,
 	}
 }

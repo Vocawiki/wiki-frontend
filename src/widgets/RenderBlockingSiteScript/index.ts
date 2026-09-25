@@ -20,12 +20,15 @@ if (contentContainer) {
 function observeResize(target: Element) {
 	const bodyClassList = document.body.classList
 	const breakpointsAndNames = breakpoints.map(
-		([breakpoint, name]) => [breakpoint, 'main-' + name] as const,
+		([breakpoint, name]) => [breakpoint, `main-${name}`] as const,
 	)
 
 	const resizeObserver = new ResizeObserver((entries) => {
 		const { contentBoxSize, contentRect } = entries[0]!
-		const width = contentBoxSize ? contentBoxSize[0]!.inlineSize : contentRect.width
+		// https://caniuse.com/mdn-api_resizeobserverentry_contentboxsize
+		const width = (contentBoxSize as ResizeObserverSize[] | undefined)
+			? contentBoxSize[0]!.inlineSize
+			: contentRect.width
 
 		let i = breakpointsAndNames.length - 1
 		for (; i >= 0; i--) {
@@ -58,7 +61,7 @@ function observeDOMMutation(target: Node) {
 					return
 				}
 
-				const queriedElem = addedElem.querySelector('#' + mainContainerId)
+				const queriedElem = addedElem.querySelector(`#${mainContainerId}`)
 				if (!queriedElem) continue
 
 				observeResize(queriedElem)

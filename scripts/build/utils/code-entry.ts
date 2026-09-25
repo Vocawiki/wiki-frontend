@@ -22,7 +22,7 @@ export async function findCodeEntries(baseDir: string): Promise<{ name: string; 
 		({ name }): MaybePromise<Arrayable<{ name: string; path: string }>> => {
 			// 为了在构建产物中展示代码仓库中的源代码链接，这里不使用平台的分隔符
 			const subdir = `${baseDir}/${name}`
-			if (/^\(.+\)$/.test(name)) {
+			if (/^\(.+\)$/u.test(name)) {
 				return findCodeEntries(subdir)
 			}
 			return { name, path: subdir }

@@ -16,13 +16,9 @@ export interface WikitextInput {
 }
 
 /** 去掉作者名末尾的消歧义后缀。 */
-export function formatAuthorSummaryName(
-	name: string | undefined,
-	disambigTitles: string[],
-): string {
-	name = String(name ?? '')
-	const base = name.replace(/[（(][^（）()]*[)）]$/, '')
-	return base !== name && disambigTitles.includes('Category:作者:' + base) ? base : name
+export function formatAuthorSummaryName(name: string = '', disambigTitles: string[]): string {
+	const base = name.replace(/[（(][^（）()]*[)）]$/u, '')
+	return base !== name && disambigTitles.includes(`Category:作者:${base}`) ? base : name
 }
 
 /** 生成文件描述wikitext。*/
@@ -37,7 +33,7 @@ export function buildWikitext(input: WikitextInput, msg: MsgFn): string {
 		lines.push(msg('wikitext-source') + src)
 	}
 	const authors = input.authorChips
-		.map((a) => String(a?.value ?? a))
+		.map((a) => a.value)
 		.map((name) => formatAuthorSummaryName(name, input.disambigTitles))
 		.filter(Boolean)
 	if (authors.length) {
@@ -54,7 +50,7 @@ export function buildWikitext(input: WikitextInput, msg: MsgFn): string {
 		}
 	})
 	input.functionChips.forEach((c) => {
-		const name = String(c?.value ?? c).replace(/^[\s\u3000]+|[\s\u3000]+$/g, '')
+		const name = c.value.replace(/^[\s\u3000]+|[\s\u3000]+$/gu, '')
 		if (name) {
 			lines.push(msg('wikitext-category', name))
 		}
@@ -62,7 +58,7 @@ export function buildWikitext(input: WikitextInput, msg: MsgFn): string {
 	lines.push('')
 	lines.push(msg('wikitext-license'))
 	if (input.licenseTpl) {
-		lines.push('{{' + input.licenseTpl + input.licenseParams + '}}')
+		lines.push(`{{${input.licenseTpl}${input.licenseParams}}}`)
 	}
 	if (input.trademark) {
 		lines.push('{{Trademark}}')

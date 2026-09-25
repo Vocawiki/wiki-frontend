@@ -27,6 +27,7 @@ import {
 	getMimeFromExtension,
 } from './utils'
 
+// oxlint-disable-next-line max-lines-per-function
 export async function deployWorker({
 	client,
 	previousAssetsState,
@@ -172,7 +173,6 @@ async function createCfManifest(
 	}
 
 	const hashToFileInfo = new Map<string, HashToFileInfoMapValue>()
-	// hashToFileInfo.set(headerFile.hash, { type: '_headers', base64: headerFile.base64 })
 
 	// 正在使用的文件
 	const activeFiles = await pMap(
@@ -203,7 +203,7 @@ async function createCfManifest(
 	)
 	obsoleteAssets.forEach(({ hash, path }) => hashToFileInfo.set(hash, { type: 'obsolete', path }))
 
-	const getPath = <T extends { path: string }>(x: T) => x.path
+	const getPath = (x: { path: string }) => x.path
 	const cfManifest: CfAssetManifest = objectify<
 		{ path: string; hash: string; size: number },
 		string,
@@ -300,7 +300,7 @@ async function uploadPayload(
 		},
 	)
 
-	if (response?.jwt) {
+	if (response.jwt) {
 		onCompletionJwtReceived(response.jwt)
 	}
 }
@@ -317,6 +317,10 @@ async function uploadAssets(
 	console.log(`Uploading ${totalPayloads} payload(s)...`)
 
 	let completionJwt: string | undefined
+	const setJwt = (value: string) => {
+		completionJwt = value
+	}
+
 	let i = 1
 	for await (const payload of payloads) {
 		console.log(`Uploading payload ${i}/${totalPayloads}...`)
@@ -326,9 +330,7 @@ async function uploadAssets(
 				client,
 				accountId,
 				uploadJwt,
-				onCompletionJwtReceived: (jwt) => {
-					completionJwt = jwt
-				},
+				onCompletionJwtReceived: setJwt,
 			})
 		} catch (error) {
 			throw new Error(`Failed to upload payload ${i + 1}: ${errorMessage(error)}`, { cause: error })

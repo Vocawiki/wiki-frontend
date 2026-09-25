@@ -23,7 +23,7 @@ jobs:
       - name: 安装依赖
         run: pnpm install
       - name: 检查代码
-        run: pnpm run check
+        run: pnpm run lint
       - name: 构建
         env:
           NODE_ENV: production

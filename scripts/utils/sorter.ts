@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/unbound-method
+// oxlint-disable-next-line typescript/unbound-method
 const compareTitle = new Intl.Collator('zh-Hans-CN', { numeric: true }).compare
 
 export function comparePath(pathA: string, pathB: string): number {
@@ -21,5 +21,5 @@ export function comparePath(pathA: string, pathB: string): number {
  * splitPathForCompare('a/b-c.d') === ['a', '/', 'b', '-', 'c', '.', 'd']
  */
 function splitPathForCompare(path: string): string[] {
-	return path.split(/([/\\:\-_.])/g)
+	return path.split(/([/\\:\-_.])/gu)
 }

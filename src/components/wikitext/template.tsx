@@ -13,10 +13,11 @@ export function WikitextTemplate({ title, args }: WikitextTemplateProps) {
 	if (!args) {
 		argsParts = null
 	} else if (Array.isArray(args)) {
+		// oxlint-disable-next-line react/no-array-index-key
 		argsParts = args.map((x, i) => <Fragment key={i}>|{x}</Fragment>)
 	} else {
-		argsParts = Object.entries(args).map(([k, v], i) => (
-			<Fragment key={i}>
+		argsParts = Object.entries(args).map(([k, v]) => (
+			<Fragment key={k}>
 				|{k}={v}
 			</Fragment>
 		))

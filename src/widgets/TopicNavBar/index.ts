@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+// oxlint-disable typescript/no-unsafe-assignment typescript/no-unsafe-member-access typescript/no-unsafe-call
 
 ;(window.RLQ ??= []).push(['jquery', () => $(() => void main())])
 

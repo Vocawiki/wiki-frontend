@@ -26,9 +26,9 @@ const rolldownPredefinedOptions: RolldownInputOptions = {
 		nativeMagicString: true,
 	},
 	transform: {
-		target: objectEntries(JS_BROWSER_TARGETS)
-			.map(([browser, version]) => (version ? `${browser}${version.join('.')}` : undefined))
-			.filter((x) => x !== undefined),
+		target: objectEntries(JS_BROWSER_TARGETS).map(
+			([browser, version]) => `${browser}${version.join('.')}`,
+		),
 	},
 	treeshake: {
 		// import { ... } from 'radashi' 会导致Array.isArray、Number.isInteger被保留
@@ -61,6 +61,7 @@ export interface EntryMeta {
 /** 从Rolldown entry name到meta */
 export type EntriesAdditionalInfo = Map<string, EntryMeta>
 
+// oxlint-disable-next-line max-lines-per-function
 export async function buildJsEntries(
 	input: RolldownInputOption,
 	{
@@ -118,7 +119,7 @@ export async function buildJsEntries(
 						return
 					}
 
-					if (/^await[\s(]]/m.test(code)) {
+					if (/^await[\s(]/mu.test(code)) {
 						throw new Error(`IIFE入口${chunk.name}包含顶层await`)
 					}
 					if (chunk.imports.length > 0) {
@@ -127,7 +128,7 @@ export async function buildJsEntries(
 					if (chunk.exports.length > 0) {
 						throw new Error(`IIFE入口${chunk.name}包含静态导出：\n${chunk.exports.join('\n')}`)
 					}
-					if (/^export[\s{]/m.test(code)) {
+					if (/^export[\s{]/mu.test(code)) {
 						throw new Error(`IIFE入口${chunk.name}包含静态导出语句`)
 					}
 				},
@@ -168,8 +169,8 @@ export async function buildJsEntries(
 		// 发生名称过滤时输出一条警告
 		sanitizeFileName: (name) => {
 			// 遵循默认行为：https://github.com/rolldown/rolldown/blob/bba03da85ecbf2a4d954b95ddce80a4c6dd88a7d/crates/rolldown_utils/src/sanitize_filename.rs
-			// eslint-disable-next-line no-control-regex
-			const sanitized = name.replace(/[\0-\x1f"#$%&*+,:;<=>?\[\]^`{|}\x7f]/g, '_')
+			// oxlint-disable-next-line no-control-regex
+			const sanitized = name.replace(/[\0-\x1f"#$%&*+,:;<=>?\[\]^`{|}\x7f]/gu, '_')
 			if (sanitized !== name) {
 				console.warn(`名称被转换：“${name}” → “${sanitized}”`)
 			}
@@ -181,12 +182,12 @@ export async function buildJsEntries(
 			groups: [
 				{
 					name: 'react',
-					test: /node_modules[/\\]react(?:-dom)?[/\\]/,
+					test: /node_modules[/\\]react(?:-dom)?[/\\]/u,
 					maxSize: Infinity,
 				},
 				{
 					name: 'lib',
-					test: /node_modules[/\\]/,
+					test: /node_modules[/\\]/u,
 					entriesAware: true,
 					entriesAwareMergeThreshold: 50_000,
 				},
@@ -210,7 +211,7 @@ export async function buildJsEntries(
 		},
 		sourcemap: true,
 		sourcemapPathTransform(relativeSourcePath: string) {
-			return relativeSourcePath.replace(/^(?:\.\.[/\\]){2}/, '')
+			return relativeSourcePath.replace(/^(?:\.\.[/\\]){2}/u, '')
 		},
 	}
 

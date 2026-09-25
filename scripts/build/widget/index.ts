@@ -3,7 +3,9 @@ import { readdir } from 'node:fs/promises'
 
 import pMap from 'p-map'
 import type { ReactNode } from 'react'
+import type { IsEqual } from 'type-fest'
 
+import type { Expect } from '@/lib/typing'
 import { getFileInfo } from '@/scripts/utils/file-info'
 import { writeBuiltPage } from '@/scripts/utils/page'
 import type { WidgetMeta } from '@/tools/widget'
@@ -69,7 +71,7 @@ async function buildWidget(
 			if (meta.scriptType === 'module') {
 				onScriptEntryFound({
 					type: 'asset',
-					name: name,
+					name,
 					path: entryPath,
 					onBuildSuccess: async (scriptSourceUrl) => {
 						const widgetContent =
@@ -101,20 +103,19 @@ async function buildWidget(
 				})
 				return
 			}
-			if (meta.scriptType === 'classic-inline-no-chunk') {
-				const code = await compileJS(entryPath, { format: 'iife', strict: true })
-				const widgetContent =
-					formatScriptWidgetBanner({ widgetName: name, meta }) + code + SCRIPT_WIDGET_FOOTER
-				await writeBuiltPage(mwPageTitle, widgetContent)
-				return
-			}
+			type _Check = Expect<IsEqual<typeof meta.scriptType, 'classic-inline-no-chunk'>>
 
-			throw new Error('未知scriptType')
+			const code = await compileJS(entryPath, { format: 'iife', strict: true })
+			const widgetContent =
+				formatScriptWidgetBanner({ widgetName: name, meta }) + code + SCRIPT_WIDGET_FOOTER
+			await writeBuiltPage(mwPageTitle, widgetContent)
+			return
 		}
 		case 'component': {
 			const Component = (
 				(await import(`@/${path}/${entryFileName}`)) as { default: () => ReactNode }
 			).default
+			// oxlint-disable-next-line new-cap
 			const html = await compileComponent(Component())
 			const widgetContent = toWidgetWikiContent({
 				widgetName: name,
@@ -122,7 +123,6 @@ async function buildWidget(
 				meta,
 			})
 			await writeBuiltPage(mwPageTitle, widgetContent)
-			return
 		}
 	}
 }
@@ -132,5 +132,5 @@ async function buildWidget(
  * 我也不知道具体命名限制，懒得试，写保守点免得遇到问题
  */
 function isValidScriptWidgetName(name: string): boolean {
-	return /^[a-zA-Z]\w*$/.test(name)
+	return /^[a-zA-Z]\w*$/u.test(name)
 }

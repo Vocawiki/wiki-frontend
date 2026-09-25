@@ -1,3 +1,4 @@
+// oxlint-disable complexity max-lines-per-function
 import type * as VueTypes from 'vue'
 
 import { msg } from './i18n'
@@ -39,13 +40,17 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		notifySuccess(msg('success-uploaded'))
 		setTimeout(() => {
 			releaseNativeLeaveConfirmation()
-			location.href = mw.util.getUrl('File:' + filename)
+			location.href = mw.util.getUrl(`File:${filename}`)
 		}, 500)
 	}
 
 	function fail(code: string | null, result: UploadResponse): void {
-		const w = result?.upload?.warnings
-		const wstr = (k: string): string => (w?.[k] ? String(w[k]) : '')
+		const w = result.upload?.warnings
+		const wstr = (k: string): string => {
+			const s = w?.[k]
+			if (s === undefined) return ''
+			return typeof s === 'string' ? s : s.join('；')
+		}
 		if (w?.exists) {
 			notifyError(msg('err-exists'))
 		} else if (w?.['was-deleted']) {
@@ -59,13 +64,13 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			notifyError(msg('err-exists-normalized', wstr('exists-normalized')))
 		} else if (w?.duplicate) {
 			// 同内容文件已存在
-			const dup = Array.isArray(w.duplicate) ? (w.duplicate[0] ?? '') : String(w.duplicate)
+			const dup = Array.isArray(w.duplicate) ? (w.duplicate[0] ?? '') : w.duplicate
 			notifyError(msg('err-duplicate', dup))
 		} else if (w?.badfilename) {
 			notifyError(msg('err-badfilename', wstr('badfilename')))
-		} else if (result?.errors?.[0]?.['*']) {
+		} else if (result.errors?.[0]?.['*']) {
 			notifyError(result.errors[0]['*'])
-		} else if (result?.error?.info) {
+		} else if (result.error?.info) {
 			notifyError(result.error.info)
 		} else if (w) {
 			const k = Object.keys(w)[0] ?? ''
@@ -137,15 +142,15 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			// 文件扩展名补全
 			let result = await sendOnce(buildParams(finalFilename, false))
 			// 拿MW给出的改名重传一次
-			if (result?.upload?.result === 'Warning' && result.upload.warnings?.badfilename) {
+			if (result.upload?.result === 'Warning' && result.upload.warnings?.badfilename) {
 				finalFilename = String(result.upload.warnings.badfilename)
 				result = await sendOnce(buildParams(finalFilename, true))
 			}
-			if (result?.upload?.result === 'Warning') {
+			if (result.upload?.result === 'Warning') {
 				fail(null, result)
 				return
 			}
-			finishUpload(result?.upload?.filename || finalFilename)
+			finishUpload(result.upload?.filename || finalFilename)
 		} catch (e) {
 			// 真实失败：缺文件、缺文件名、或重传后撞其它警告
 			const err = e as { code?: string; result?: UploadResponse; message?: string }
@@ -176,8 +181,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		const o = deps.currentLicense.value
 		if (o) {
 			const missing = o.fields.filter(
-				(f) =>
-					f.required && !String(deps.licenseFieldValues.value[o.tpl + '|' + f.key] ?? '').trim(),
+				(f) => f.required && !(deps.licenseFieldValues.value[`${o.tpl}|${f.key}`] ?? '').trim(),
 			)
 			if (missing.length) {
 				notifyError(msg('err-required', missing.map((f) => f.label).join('、')))

@@ -18,39 +18,6 @@ import { mapValues, traverse } from 'radashi'
 import { IS_PRODUCTION } from '../../../lib/config' // 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名@/lib
 import { CSS_BROWSER_TARGETS } from '../browser-target'
 
-const postcssInstance = postcss(
-	postcssInsertImportTailwindConfig('src/gadgets/(appearance)/(skin)/site-styles/index.css'),
-	tailwindcss({
-		base: 'src',
-		optimize: false,
-	}) as Plugin,
-)
-
-export async function compileCSS(path: string): Promise<string> {
-	let css = await Bun.file(path).text()
-
-	css = (
-		await postcssInstance.process(css, {
-			from: path,
-			to: undefined,
-		})
-	).css
-
-	css = cleanTailwindPlaceholders(css)
-
-	const result = transform({
-		...lightningCSSOptions,
-		filename: path,
-		code: Buffer.from(css),
-	})
-
-	for (const warning of result.warnings) {
-		console.warn('Lightning CSS warning:', warning)
-	}
-
-	return result.code.toString()
-}
-
 export const lightningCSSOptions: Omit<
 	TransformOptions<{
 		'tw-utilities': {
@@ -94,11 +61,12 @@ export const lightningCSSOptions: Omit<
 			? (sheet) => {
 					const comments = sheet.licenseComments
 					if (comments.length === 0) return
-					comments[0] = comments[0]!.replace(/(?<=tailwindcss v\d+)\.\d+\.\d+/, '')
+					comments[0] = comments[0]!.replace(/(?<=tailwindcss v\d+)\.\d+\.\d+/u, '')
 
 					// https://github.com/parcel-bundler/lightningcss/issues/1081 TODO: 上游bug修复后移除
 					traverse(sheet, (value, key, parent) => {
 						if (value === null && typeof key === 'string') {
+							// oxlint-disable-next-line typescript/no-dynamic-delete
 							delete parent[key as keyof typeof parent]
 						}
 					})
@@ -122,6 +90,7 @@ export const lightningCSSOptions: Omit<
 					// https://github.com/parcel-bundler/lightningcss/issues/1081 TODO: 上游bug修复后移除
 					traverse(rule.body.value, (value, key, parent) => {
 						if (value === null && typeof key === 'string') {
+							// oxlint-disable-next-line typescript/no-dynamic-delete
 							delete parent[key as keyof typeof parent]
 						}
 					})
@@ -132,6 +101,37 @@ export const lightningCSSOptions: Omit<
 			},
 		},
 	},
+}
+
+const postcssInstance = postcss(
+	postcssInsertImportTailwindConfig('src/gadgets/(appearance)/(skin)/site-styles/index.css'),
+	tailwindcss({
+		base: 'src',
+		optimize: false,
+	}) as Plugin,
+)
+
+export async function compileCSS(path: string): Promise<string> {
+	let css = await Bun.file(path).text()
+	css = (
+		await postcssInstance.process(css, {
+			from: path,
+			to: undefined,
+		})
+	).css
+	css = cleanTailwindPlaceholders(css)
+
+	const result = transform({
+		...lightningCSSOptions,
+		filename: path,
+		code: Buffer.from(css),
+	})
+
+	for (const warning of result.warnings) {
+		console.warn('Lightning CSS warning:', warning)
+	}
+
+	return result.code.toString()
 }
 
 /** `:not(#a#a#b)`，用于增加选择器优先级 */
@@ -201,7 +201,7 @@ function transformLeafSelector(rule: Rule<Declaration, MediaQuery>): boolean {
 		case 'supports':
 		case 'media': {
 			const childRules = rule.value.rules
-			assert(childRules && childRules.length > 0, '必须存在嵌套规则')
+			assert(childRules.length > 0, '必须存在嵌套规则')
 			const isEachChildRulesTransformed = childRules.map((rule) => transformLeafSelector(rule))
 			assert(
 				new Set(isEachChildRulesTransformed).size === 1,
@@ -242,8 +242,9 @@ function transformSelector(selector: Selector) {
 			case 'id':
 			case 'nesting':
 				return true
+			default:
+				return false
 		}
-		return false
 	})
 	assert(lastComponentIndex !== -1, 'selector中不存在可以插入:not()的component')
 	// 在component之后插入 :not(#a#a#b)
@@ -291,6 +292,6 @@ function postcssInsertImportTailwindConfig(referencePath: string): Plugin {
 }
 
 function cleanTailwindPlaceholders(css: string): string {
-	return css.replaceAll(/(?<=;|\{)\s*--[a-z-]+:\s*var\(--skin-specific\);?/gm, '') // 移除“--xxx: var(--skin-specific)”
+	return css.replaceAll(/(?<=;|\{)\s*--[a-z-]+:\s*var\(--skin-specific\);?/gmu, '') // 移除“--xxx: var(--skin-specific)”
 	// .replaceAll(/(?<=\*\/\n):root,\s*:host\s*\{\s*\}\s*/gm, '') // 移除空的 “:root, :host {}”
 }

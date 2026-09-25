@@ -109,8 +109,8 @@ const MESSAGES = {
 export type MessageKey = keyof typeof MESSAGES
 
 export const msg = (key: MessageKey, ...params: string[]): string => {
-	const template = MESSAGES[key] ?? key
+	const template = MESSAGES[key]
 	return params.length
-		? template.replace(/\$(\d+)/g, (_, n) => params[Number(n) - 1] ?? '')
+		? template.replace(/\$(\d+)/gu, (_, n) => params[Number(n) - 1] ?? '')
 		: template
 }

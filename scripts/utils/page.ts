@@ -39,13 +39,13 @@ export function escapePageTitle(title: string): string {
 			const escaped = escapeMap.get(char)
 			if (escaped === undefined) return char
 			assert(escaped !== invalidCharSymbol, `页面标题包含无法使用的字符: ${char}，标题: ${title}`)
-			return '_' + escaped
+			return `_${escaped}`
 		})
 		.join('')
 }
 
 function unescapePageTitle(str: string): string {
-	return str.replace(/_(.)/g, (_, char: string) => {
+	return str.replace(/_(.)/gu, (_, char: string) => {
 		const unescaped = unescapeMap.get(char)
 		assert(unescaped !== undefined, `页面标题包含未知转义序列: #${char}，标题: ${str}`)
 		return unescaped
@@ -53,12 +53,12 @@ function unescapePageTitle(str: string): string {
 }
 
 export async function writeBuiltPage(title: string, content: string) {
-	const fileName = escapePageTitle(title) + '.txt'
+	const fileName = `${escapePageTitle(title)}.txt`
 	await Bun.write(`${PAGES_DIR}/${fileName}`, content)
 }
 
 export function getPageTitleFromFileName(fileName: string) {
-	const match = fileName.match(/^(.*).txt$/)
-	assert(match, '文件名不是以.txt结尾的：' + fileName)
+	const match = fileName.match(/^(.*).txt$/u)
+	assert(match, `文件名不是以.txt结尾的：${fileName}`)
 	return unescapePageTitle(match[1]!)
 }

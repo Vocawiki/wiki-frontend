@@ -13,7 +13,7 @@
    ```
 
 2. 如果你使用VS Code（不使用则可跳过，不认可以下内容也可跳过）：
-   1. 进入工作区后会有通知推荐你安装以下扩展：TypeScript 7、ESLint、Oxc、Tailwind CSS IntelliSense，建议安装。
+   1. 进入工作区后会有通知推荐你安装以下扩展：TypeScript 7、Oxc、Tailwind CSS IntelliSense，建议安装。
 
    2. 将以下内容加入`.vscode/settings.json`（不存在则创建）中：
 
@@ -78,8 +78,8 @@
 
    此命令实际一次性完成了三个任务：
    1. 格式化代码：`pnpm run format`；
-   2. 检查代码问题：`pnpm run check`；
-   3. 构建：`pnpm run build`，构建产物可在`out/pages`查看。
+   2. 检查代码问题：`pnpm run lint`；
+   3. 构建：`pnpm run build`，构建产物可在`out/`查看。
 
 5. 提交、推送代码。提交前须确保完成第4步。
 
@@ -88,6 +88,7 @@
 - `src/`：用于站内的代码。
   - `gadgets/`：
     - `(meta).ts`：定义了所有可用的gadget的分组、顺序，将部署到\[\[[MediaWiki:Gadgets-definition](https://voca.wiki/MediaWiki:Gadgets-definition)\]\]。
+    - `(<类别>)`：用于分组的文件夹，包含了任意个子类别或gadget文件夹。
     - `<gadget名>/`
       - `(meta).ts`：定义了该gadget的信息，用于\[\[[MediaWiki:Gadgets-definition](https://voca.wiki/MediaWiki:Gadgets-definition)\]\]中属于该Gadget的一行。参见[GadgetMeta](tools\gadget\types.ts)的类型定义，文档注释写得很详细。
       - `<源代码文件>`：目前可以是TS/JS/Tailwind CSS文件，一般命名为`index.<后缀>`，构建后将部署到\[\[MediaWiki:Gadgets-`<gadget名>`.js/css\]\]；若需其他名字，则需要在`./(meta).ts`中指定入口文件。
@@ -103,7 +104,7 @@
 
 开发者需要注意`src`文件夹内的代码须满足Vocawiki规定的浏览器兼容性要求，请查阅Vocawiki的[帮助:浏览器兼容性](https://voca.wiki/Help:浏览器兼容性)。
 
-- CSS可以会转译一些新特性，比如嵌套语法，完整特性列表见[Lightning CSS文档](https://lightningcss.dev/transpilation.html)。
+- CSS会转译一些新特性，比如嵌套语法，完整特性列表见[Lightning CSS文档](https://lightningcss.dev/transpilation.html)。
 - JS语法可以使用最新语法，[Rolldown](https://github.com/rolldown/rolldown)会将其转译到兼容的语法。但是，JS API不行，不会自动polyfill。
 
 ## 问答

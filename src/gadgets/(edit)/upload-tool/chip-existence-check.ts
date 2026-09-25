@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function typescript/no-dynamic-delete
 import { cluster } from 'radashi'
 import type * as VueTypes from 'vue'
 
@@ -26,8 +27,8 @@ export function useChipExistenceCheck(
 
 	function currentKey(): string {
 		return [
-			...deps.characterChips.value.map((c) => 'C:' + c.value),
-			...deps.authorChips.value.map((a) => 'A:' + a.value),
+			...deps.characterChips.value.map((c) => `C:${c.value}`),
+			...deps.authorChips.value.map((a) => `A:${a.value}`),
 		]
 			.sort()
 			.join('|')
@@ -45,8 +46,8 @@ export function useChipExistenceCheck(
 
 	async function checkChipExistence() {
 		const titles = [
-			...deps.characterChips.value.map((c) => 'Category:' + c.value),
-			...deps.authorChips.value.map((a) => 'Category:作者:' + a.value),
+			...deps.characterChips.value.map((c) => `Category:${c.value}`),
+			...deps.authorChips.value.map((a) => `Category:作者:${a.value}`),
 		]
 		if (titles.length === 0) {
 			lastCheckedKey = currentKey()
@@ -77,12 +78,12 @@ export function useChipExistenceCheck(
 				redirectMap[r.from] = r.to
 			})
 			;(data.query?.pages ?? []).forEach((p) => {
-				missingMap[p.title] = !!p.missing
+				missingMap[p.title] = Boolean(p.missing)
 			})
 		})
 		let changed = false
 		const nextCharacterChips = deps.characterChips.value.map((c) => {
-			const full = 'Category:' + c.value
+			const full = `Category:${c.value}`
 			if (redirectMap[full]) {
 				changed = true
 				const value = stripCategory(redirectMap[full])
@@ -103,7 +104,7 @@ export function useChipExistenceCheck(
 			return c
 		})
 		const nextAuthorChips = deps.authorChips.value.map((a) => {
-			const full = 'Category:作者:' + a.value
+			const full = `Category:作者:${a.value}`
 			if (redirectMap[full]) {
 				changed = true
 				const value = stripAuthorCategory(redirectMap[full])
@@ -123,6 +124,8 @@ export function useChipExistenceCheck(
 			}
 			return a
 		})
+		// TypeScript bug，这里的changed本应是boolean，却解析为false
+		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		if (changed) {
 			deps.characterChips.value = dedupChips(nextCharacterChips)
 			deps.authorChips.value = dedupChips(nextAuthorChips)

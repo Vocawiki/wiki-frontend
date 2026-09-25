@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+// oxlint-disable max-lines-per-function complexity typescript/no-unsafe-argument typescript/no-unsafe-member-access typescript/no-unsafe-call
 
 // TMD改天给它废掉
 
 export function tabs() {
-	const body = document.body
+	const { body } = document
 	const $body = $(body)
 	const $window = $(window)
 	const defaultStyle: Record<
@@ -147,22 +145,21 @@ export function tabs() {
 					defaultTab: 1,
 				},
 				classList[0] ? (defaultStyle[classList[0]] ?? {}) : {},
-				this.dataset || {},
+				this.dataset,
 			)
 			const styleSheet = {
 				label: {},
 				text: {},
 			}
-			const tabLabel = self.append('<div class="TabLabel"></' + 'div>').children('.TabLabel'),
-				tabDivider = self.append('<div class="TabDivider"></' + 'div>').children('.TabDivider'),
-				tabContent = self.append('<div class="TabContent"></' + 'div>').children('.TabContent'),
-				labelPadding = data.labelPadding,
-				labelColor = data.labelColor,
+			const tabLabel = self.append('<div class="TabLabel"></div>').children('.TabLabel'),
+				tabDivider = self.append('<div class="TabDivider"></div>').children('.TabDivider'),
+				tabContent = self.append('<div class="TabContent"></div>').children('.TabContent'),
+				{ labelPadding, labelColor } = data,
 				labelSide = Reflect.has(sides, data.labelSide as any) ? data.labelSide : 'top',
 				side = sides[labelSide as keyof typeof sides],
 				labelColorSideReverse = truthy.includes(data.labelColorSideReverse as any),
-				dividerSize = parseInt(data.dividerSize as any)
-			let defaultTab = parseInt(data.defaultTab as any)
+				dividerSize = parseInt(data.dividerSize as any, 10)
+			let defaultTab = parseInt(data.defaultTab as any, 10)
 			if (labelSide === 'top') {
 				tabLabel.after(tabDivider)
 				tabDivider.after(tabContent)
@@ -182,8 +179,8 @@ export function tabs() {
 			}
 			self.children('.Tab').each(function () {
 				if (
-					$(this).children('.TabLabelText').text().replace(/\s/g, '').length ||
-					$(this).children('.TabLabelText').children().length
+					$(this).children('.TabLabelText').text().replace(/\s/gu, '').length > 0 ||
+					$(this).children('.TabLabelText').children().length > 0
 				) {
 					$(this).children('.TabLabelText').appendTo(tabLabel)
 					$(this).children('.TabContentText').appendTo(self.children('.TabContent'))

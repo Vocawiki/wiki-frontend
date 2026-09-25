@@ -3,15 +3,15 @@ interface CacheItem<T> {
 	expiry: number
 }
 
-export class LocalCache {
+export const LocalCache = {
 	/**
 	 * 存储带过期时间的数据
 	 * @param key 缓存键
 	 * @param value 要缓存的值（必须可 JSON 序列化）
 	 * @param ttlMs 过期时间（毫秒）
 	 */
-	static set<T>(key: string, value: T, ttlMs: number): void {
-		const item: CacheItem<T> = {
+	set(key: string, value: unknown, ttlMs: number): void {
+		const item: CacheItem<unknown> = {
 			value,
 			expiry: Date.now() + ttlMs,
 		}
@@ -20,14 +20,15 @@ export class LocalCache {
 		} catch (error) {
 			console.warn(`Failed to set cache item "${key}" in localStorage:`, error)
 		}
-	}
+	},
 
 	/**
 	 * 获取缓存数据（自动检查是否过期）
 	 * @param key 缓存键
 	 * @returns 缓存的值，若不存在或已过期则返回 null
 	 */
-	static get<T>(key: string): T | null {
+	// oxlint-disable-next-line typescript/no-unnecessary-type-parameters
+	get<T>(key: string): T | null {
 		const itemStr = localStorage.getItem(key)
 		if (!itemStr) return null
 
@@ -45,12 +46,12 @@ export class LocalCache {
 			localStorage.removeItem(key)
 			return null
 		}
-	}
+	},
 
 	/**
 	 * 删除指定缓存项
 	 */
-	static remove(key: string): void {
+	remove(key: string): void {
 		localStorage.removeItem(key)
-	}
+	},
 }

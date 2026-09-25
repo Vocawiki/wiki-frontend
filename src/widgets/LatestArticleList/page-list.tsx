@@ -5,8 +5,9 @@ import { FastAverageColor } from 'fast-average-color'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
 import { MwApiCall } from '@/lib/mw-api'
-import { HorizontalScrollArea } from '@/src/components/ui/scroll-area'
-import { WikiInternalLink } from '@/src/components/wiki-link'
+import { graphemesOf } from '@/lib/string'
+import { HorizontalScrollArea } from '~/components/ui/scroll-area'
+import { WikiInternalLink } from '~/components/wiki-link'
 
 import type { PartialPageInfo } from './types'
 
@@ -121,17 +122,14 @@ function PageCard({
 	facRef: React.RefObject<FastAverageColor | null>
 	index: number
 } & PartialPageInfo) {
-	const imgRef = useRef<HTMLImageElement | null>(null)
 	const [themeColor, setThemeColor] = useState<
 		{ color: string; isDark: boolean; supportsOklch: boolean } | undefined
 	>(undefined)
 
-	useEffect(() => {
-		if (!imgRef.current) return
-
+	const imgRef = (img: HTMLImageElement) => {
 		facRef.current ??= new FastAverageColor()
 		void facRef.current
-			.getColorAsync(imgRef.current, {
+			.getColorAsync(img, {
 				algorithm: 'dominant',
 				mode: 'speed',
 				left: THUMB_WIDTH * 0.6,
@@ -147,7 +145,7 @@ function PageCard({
 					),
 				})
 			})
-	}, [imgRef.current])
+	}
 
 	return (
 		<WikiInternalLink
@@ -272,21 +270,10 @@ function SeeMoreButton({ pages }: { pages: PartialPageInfo[] }) {
 }
 
 function cleanSummary(summary: string) {
-	return summary.replaceAll(/^\s*《.+?》(?:（.+?）)?是\s*|[。\s]+$/g, '')
+	return summary.replaceAll(/^\s*《.+?》(?:（.+?）)?是\s*|[。\s]+$/gu, '')
 }
 
-const firstCharacter: (str: string) => string = (() => {
-	if (!('Segmenter' in Intl)) {
-		return (str) => {
-			if (str === '') return ''
-			return String.fromCodePoint(str.codePointAt(0)!)
-		}
-	}
-
-	const segmenter = new Intl.Segmenter('zh', { granularity: 'grapheme' })
-	return (str) => {
-		if (!str) return ''
-		const [first] = segmenter.segment(str)
-		return first!.segment
-	}
-})()
+function firstCharacter(str: string): string | undefined {
+	const [char] = graphemesOf(str)
+	return char
+}

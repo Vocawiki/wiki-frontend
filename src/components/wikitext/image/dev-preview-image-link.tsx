@@ -11,13 +11,13 @@ export function DevPreviewImageLink({
 	fileName: string
 	children?: ReactNode
 }) {
-	const normalizedTitle = 'File:' + normalizeWikiTitleForURL(fileName)
+	const normalizedTitle = `File:${normalizeWikiTitleForURL(fileName)}`
 	return (
 		<a
 			href={withBaseURL(`/${normalizedTitle}`)}
 			onClick={(e) => {
 				e.preventDefault()
-				location.hash = '#/media/' + normalizedTitle
+				location.hash = `#/media/${normalizedTitle}`
 			}}
 			className="mw-file-description"
 		>

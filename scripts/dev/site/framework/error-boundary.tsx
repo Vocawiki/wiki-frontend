@@ -61,6 +61,7 @@ function DefaultGlobalErrorPage(props: { error: Error; reset: () => void }) {
 					{import.meta.env.DEV && 'message' in props.error ? props.error.message : '(Unknown)'}
 				</pre>
 				<button
+					type="button"
 					onClick={() => {
 						React.startTransition(() => {
 							props.reset()

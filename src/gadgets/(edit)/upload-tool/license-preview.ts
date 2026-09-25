@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function
 import type * as VueTypes from 'vue'
 
 import { msg } from './i18n'
@@ -30,8 +31,8 @@ export function useLicensePreview(
 		if (!o) {
 			return []
 		}
-		return (o.fields ?? []).map((f) => {
-			const key = o.tpl + '|' + f.key
+		return o.fields.map((f) => {
+			const key = `${o.tpl}|${f.key}`
 			return {
 				key,
 				label: f.label,
@@ -48,8 +49,8 @@ export function useLicensePreview(
 		}
 		const vals: Record<string, string> = {}
 		const lfv = licenseFieldValues.value
-		;(o.fields ?? []).forEach((f) => {
-			vals[f.key] = lfv[o.tpl + '|' + f.key] ?? ''
+		o.fields.forEach((f) => {
+			vals[f.key] = lfv[`${o.tpl}|${f.key}`] ?? ''
 		})
 		return o.build ? o.build(vals) : ''
 	})
@@ -66,9 +67,11 @@ export function useLicensePreview(
 			return
 		}
 		clearTimeout(licensePreviewTimer)
-		const seq = (licenseSeq = (licenseSeq ?? 0) + 1)
+		licenseSeq ??= 0
+		licenseSeq++
+		const seq = licenseSeq
 		licensePreviewTimer = setTimeout(async () => {
-			let text = '{{' + license.value + licenseParams.value + '}}'
+			let text = `{{${license.value}${licenseParams.value}}}`
 			if (trademark.value) {
 				text += '{{Trademark}}'
 			}
@@ -102,8 +105,8 @@ export function useLicensePreview(
 		const o = currentLicense.value
 		const next: Record<string, string> = {}
 		if (o) {
-			;(o.fields ?? []).forEach((f) => {
-				next[o.tpl + '|' + f.key] = f.def || ''
+			o.fields.forEach((f) => {
+				next[`${o.tpl}|${f.key}`] = f.def || ''
 			})
 		}
 		licenseFieldValues.value = next

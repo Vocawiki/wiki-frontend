@@ -6,13 +6,13 @@ import type PQueue from 'p-queue'
 import type { NonEmptyTuple } from 'type-fest'
 
 import { writeBuiltPage } from '@/scripts/utils/page'
-import gadgetListMeta from '@/src/gadgets/(meta)'
 import {
 	srcDistExtensionMap,
 	type GadgetMeta,
 	type GadgetMetaPage,
 	type GadgetSourceFileExtension,
 } from '@/tools/gadget'
+import gadgetListMeta from '~/gadgets/(meta)'
 
 import type { ScriptBuildEntry } from '../types'
 import { findCodeEntries } from '../utils/code-entry'
@@ -187,5 +187,5 @@ async function collectGadgetsInDir(): Promise<ParsedGadgetMeta[]> {
 }
 
 function isValidGadgetName(name: string): boolean {
-	return /^[a-zA-Z](?:[\w\-.]*[a-zA-Z\d])?$/.test(name)
+	return /^[a-zA-Z](?:[\w\-.]*[a-zA-Z\d])?$/u.test(name)
 }

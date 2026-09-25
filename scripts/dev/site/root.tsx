@@ -35,7 +35,7 @@ export function Root(props: { url: URL }) {
 					</div>
 
 					<div className="citizen-header__inner">
-						<div className="citizen-header__start"></div>
+						<div className="citizen-header__start" />
 						<div className="citizen-header__end">
 							<div className="citizen-preferences-dropdown citizen-header__item citizen-dropdown">
 								<details id="citizen-preferences-details" className="citizen-dropdown-details">
@@ -76,7 +76,7 @@ export function Root(props: { url: URL }) {
 						<Router {...props} />
 					</main>
 
-					<footer className="mw-footer citizen-footer" lang="zh-Hans-CN" dir="ltr"></footer>
+					<footer className="mw-footer citizen-footer" lang="zh-Hans-CN" dir="ltr" />
 				</div>
 			</body>
 		</html>

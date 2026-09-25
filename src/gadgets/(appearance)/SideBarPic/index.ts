@@ -10,6 +10,7 @@ void (async () => {
 
 	let $sidebar = $(sidebarSelector)
 	while ($sidebar.length === 0) {
+		// oxlint-disable-next-line no-await-in-loop
 		await new Promise((r) => setTimeout(r, 100))
 		$sidebar = $(sidebarSelector)
 	}

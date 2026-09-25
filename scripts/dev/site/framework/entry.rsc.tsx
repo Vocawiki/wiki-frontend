@@ -1,9 +1,4 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-/* eslint-disable prefer-spread */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/// <reference types="@vitejs/plugin-rsc/types" />
-
+// oxlint-disable typescript/consistent-type-imports prefer-spread typescript/no-unsafe-assignment typescript/no-unnecessary-boolean-literal-compare react/only-export-components
 import {
 	renderToReadableStream,
 	createTemporaryReferenceSet,
@@ -11,16 +6,17 @@ import {
 	loadServerAction,
 	decodeAction,
 	decodeFormState,
-} from '@vitejs/plugin-rsc/rsc'
+} from '@vitejs/plugin-rsc/rsc/server'
+import type {} from '@vitejs/plugin-rsc/types'
 import type { ReactFormState } from 'react-dom/client'
 
 import { Root } from '../root'
-import { parseRenderRequest } from './request.tsx'
+import { parseRenderRequest } from './request'
 
 // The schema of payload which is serialized into RSC stream on rsc environment
 // and deserialized on ssr/client environments.
 export interface RscPayload {
-	// this demo renders/serializes/deserizlies entire root html element
+	// this demo renders/serializes/deserializes the entire root HTML element
 	// but this mechanism can be changed to render/fetch different parts of components
 	// based on your own route conventions.
 	root: React.ReactNode
@@ -30,8 +26,8 @@ export interface RscPayload {
 	formState?: ReactFormState
 }
 
-// the plugin by default assumes `rsc` entry having default export of request handler.
-// however, how server entries are executed can be customized by registering own server handler.
+// The plugin assumes by default that the `rsc` entry has a default export of a request handler.
+// However, server entries can be executed differently by registering your own server handler.
 export default { fetch: handler }
 
 async function handler(request: Request): Promise<Response> {

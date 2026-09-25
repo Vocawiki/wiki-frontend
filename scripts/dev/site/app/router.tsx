@@ -1,7 +1,9 @@
 import type { ComponentType } from 'react'
+import type { IsEqual } from 'type-fest'
 
+import type { Expect } from '@/lib/typing'
 import { withBaseURL } from '@/lib/wiki'
-import { ExternalLink } from '@/src/components/external-link'
+import { ExternalLink } from '~/components/external-link'
 
 import { BackButton } from './back-button'
 import { MainPage } from './main-page'
@@ -9,7 +11,7 @@ import { pages, type PageToPreview } from './pages'
 import { SiteMain } from './site-main'
 
 export async function Router({ url }: { url: URL }) {
-	const pageName = decodeURIComponent(url.pathname.replace(/^\//, ''))
+	const pageName = decodeURIComponent(url.pathname.replace(/^\//u, ''))
 	if (pageName === '') {
 		return <MainPage />
 	}
@@ -41,11 +43,9 @@ export async function Router({ url }: { url: URL }) {
 }
 
 async function getComponent(page: PageToPreview) {
-	if (page.namespace !== 'Template') {
-		throw new Error('未实现')
-	}
-	const folder = 'templates'
+	type _Check = Expect<IsEqual<(typeof page)['namespace'], 'Template'>>
 
+	const folder = 'templates'
 	const module = (await import(`../../../../src/${folder}/${page.pageName}/index.tsx`)) as {
 		default: unknown
 	}

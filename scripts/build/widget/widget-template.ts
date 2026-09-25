@@ -1,5 +1,7 @@
+import type { IsEqual } from 'type-fest'
+
+import type { Expect } from '@/lib/typing'
 import type {
-	ScriptWidgetMeta,
 	ScriptWidgetMeta_ClassicInlineNoChunk,
 	ScriptWidgetMeta_Module,
 	ScriptWidgetMeta_ModuleInline,
@@ -29,24 +31,20 @@ ${noincludeContent}
 </noinclude><includeonly>${content}</includeonly>`
 }
 
-export function formatScriptWidgetBanner(options: {
-	widgetName: string
-	scriptSourceUrl: string
-	meta: ScriptWidgetMeta_Module
-}): string
-export function formatScriptWidgetBanner(options: {
-	widgetName: string
-	meta: ScriptWidgetMeta_ModuleInline | ScriptWidgetMeta_ClassicInlineNoChunk
-}): string
-export function formatScriptWidgetBanner({
-	widgetName,
-	scriptSourceUrl,
-	meta,
-}: {
-	widgetName: string
-	scriptSourceUrl?: string
-	meta: ScriptWidgetMeta
-}): string {
+export function formatScriptWidgetBanner(
+	options:
+		| {
+				widgetName: string
+				scriptSourceUrl: string
+				meta: ScriptWidgetMeta_Module
+		  }
+		| {
+				widgetName: string
+				scriptSourceUrl?: never
+				meta: ScriptWidgetMeta_ModuleInline | ScriptWidgetMeta_ClassicInlineNoChunk
+		  },
+): string {
+	const { widgetName, meta } = options
 	const noincludeContent = [
 		meta.description,
 		noticeForEditors(`src/widgets/${widgetName}`).join(''),
@@ -56,15 +54,13 @@ export function formatScriptWidgetBanner({
 	const identifier = `${widgetName}_called`
 	const scriptAttributes = (() => {
 		if (meta.scriptType === 'module') {
-			return `src="${scriptSourceUrl}" type="module"`
+			return `src="${options.scriptSourceUrl!}" type="module"`
 		}
 		if (meta.scriptType === 'module-inline') {
 			return 'type="module"'
 		}
-		if (meta.scriptType === 'classic-inline-no-chunk') {
-			return ''
-		}
-		throw new Error('未知scriptType')
+		type _Check = Expect<IsEqual<typeof meta.scriptType, 'classic-inline-no-chunk'>>
+		return ''
 	})()
 	return (
 		`<noinclude>\n${noincludeContent}\n</noinclude><includeonly>` +

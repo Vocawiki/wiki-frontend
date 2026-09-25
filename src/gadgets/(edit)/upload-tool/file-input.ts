@@ -50,7 +50,7 @@ export function useFileInput(Vue: typeof VueTypes, deps: FileInputDeps) {
 		if (f) {
 			validateFile(f)
 			deps.fileMeta.value = formatBytes(f.size)
-			if (f.type?.startsWith('image/')) {
+			if (f.type.startsWith('image/')) {
 				const reader = new FileReader()
 				reader.onload = (ev) => {
 					deps.filePreview.value = (ev.target?.result as string) || ''

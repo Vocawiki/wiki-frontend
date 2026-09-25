@@ -45,6 +45,8 @@ import { TopicPortal, TopicSeeMore } from './portal'
 *[[模板:Biliboard术力口周榜榜单|全列表]]
 }}
  */
+
+// oxlint-disable-next-line max-lines-per-function
 export function Topics() {
 	return (
 		<div className="preflight leading-none">

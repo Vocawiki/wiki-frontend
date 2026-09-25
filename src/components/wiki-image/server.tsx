@@ -96,7 +96,7 @@ function getThumb(
 	title: string,
 	{ width, height }: WidthAndOrHeight,
 ): Promise<ImageThumbQueryResult> {
-	const taskKey: `${'w' | 'h'}${number}` = width !== undefined ? `w${width}` : `h${height!}`
+	const taskKey: `${'w' | 'h'}${number}` = width === undefined ? `h${height!}` : `w${width}`
 	const task = willQueryTasks.getOrInsertComputed(taskKey, () => {
 		const images = new Map<string, ImagePromiseAndResolver>()
 		return {
@@ -106,7 +106,7 @@ function getThumb(
 				void queryQueue.add(() =>
 					query(
 						// 与taskKey一致
-						width !== undefined ? { width } : { height: height! },
+						width === undefined ? { height: height! } : { width },
 						images,
 					),
 				)

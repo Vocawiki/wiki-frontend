@@ -1,6 +1,6 @@
 function isValidUUIDv4(uuid: unknown): boolean {
 	if (typeof uuid !== 'string') return false
-	return /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|0{8}-0{4}-0{4}-0{4}-0{12})$/i.test(
+	return /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|0{8}-0{4}-0{4}-0{4}-0{12})$/iu.test(
 		uuid,
 	)
 }

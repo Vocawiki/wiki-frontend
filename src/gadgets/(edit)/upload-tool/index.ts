@@ -1,3 +1,4 @@
+// oxlint-disable no-underscore-dangle
 import type { CodexType, VueType } from './types'
 
 declare global {

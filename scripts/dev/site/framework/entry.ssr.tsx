@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/// <reference types="@vitejs/plugin-rsc/types" />
-
-import { createFromReadableStream } from '@vitejs/plugin-rsc/ssr'
+// oxlint-disable typescript/no-unnecessary-condition typescript/no-unsafe-assignment
+import { createFromReadableStream, getClientEntryUrl } from '@vitejs/plugin-rsc/ssr'
 import React from 'react'
 import type { ReactFormState } from 'react-dom/client'
 import { renderToReadableStream } from 'react-dom/server.edge'
@@ -32,7 +30,7 @@ export async function renderHTML(
 	}
 
 	// render html (traditional SSR)
-	const bootstrapScriptContent = await import.meta.viteRsc.loadBootstrapScriptContent('index')
+	const bootstrapScriptContent = `import(${JSON.stringify(getClientEntryUrl())})`
 	let htmlStream: ReadableStream<Uint8Array>
 	let status: number | undefined
 	try {
@@ -52,8 +50,7 @@ export async function renderHTML(
 				</body>
 			</html>,
 			{
-				bootstrapScriptContent:
-					`self.__NO_HYDRATE=1;` + (options?.debugNojs ? '' : bootstrapScriptContent),
+				bootstrapScriptContent: `self.__NO_HYDRATE=1;${options?.debugNojs ? '' : bootstrapScriptContent}`,
 				nonce: options?.nonce,
 			},
 		)

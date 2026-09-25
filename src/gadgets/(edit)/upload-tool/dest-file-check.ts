@@ -30,13 +30,15 @@ export function useDestFileCheck(Vue: typeof VueTypes, api: mw.Api, isReupload: 
 			destFileUrl.value = ''
 			return
 		}
-		const seq = (destSeq = (destSeq ?? 0) + 1)
+		destSeq ??= 0
+		destSeq++
+		const seq = destSeq
 		destCheckTimer = setTimeout(async () => {
 			try {
 				const data = (await api.get({
 					action: 'query',
 					redirects: 1,
-					titles: 'File:' + name,
+					titles: `File:${name}`,
 					prop: 'imageinfo',
 					iiprop: 'url',
 					iiurlwidth: 300,

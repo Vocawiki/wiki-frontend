@@ -26,7 +26,7 @@ type GadgetMetaOnlyRootSingleValues = Simplify<
 >
 
 export function toGadgetDefinition(meta: ParsedGadgetMeta): string {
-	assert.match(meta.name, /^[A-Za-z][A-Za-z0-9\-_.]*$/, `gadget名不合法：${meta.name}`)
+	assert.match(meta.name, /^[A-Za-z][A-Za-z0-9\-_.]*$/u, `gadget名不合法：${meta.name}`)
 
 	const pages = meta.pages
 		.flatMap((page) => {
@@ -73,7 +73,7 @@ export function toGadgetDefinition(meta: ParsedGadgetMeta): string {
 		if (values.length === 0) return
 		const list = values.map((v) => {
 			const str = String(v)
-			assert.doesNotMatch(str, /^\s*$/, `${meta.name}的meta中，${name}字段出现了空白字符串`)
+			assert.doesNotMatch(str, /^\s*$/u, `${meta.name}的meta中，${name}字段出现了空白字符串`)
 			return str
 		})
 
@@ -89,7 +89,7 @@ export function toGadgetDefinition(meta: ParsedGadgetMeta): string {
 		if (value === undefined) return
 
 		const str = String(value)
-		assert.doesNotMatch(str, /^\s*$/, `${meta.name}的meta中，${name}字段出现了空白字符串`)
+		assert.doesNotMatch(str, /^\s*$/u, `${meta.name}的meta中，${name}字段出现了空白字符串`)
 		options.push(`${name}=${value}`)
 	}
 

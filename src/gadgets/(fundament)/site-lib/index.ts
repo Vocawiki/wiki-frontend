@@ -47,6 +47,7 @@ declare global {
 	}
 }
 
+// oxlint-disable-next-line complexity
 window.wgUXS = (
 	wg: MwLanguage,
 	hans?: string,
@@ -76,52 +77,6 @@ window.wgUXS = (
 	return str
 }
 
-window.wgULS = (
-	hans?: string,
-	hant?: string,
-	cn?: string,
-	tw?: string,
-	hk?: string,
-	sg?: string,
-	zh?: string,
-	mo?: string,
-	my?: string,
-) => {
-	return window.wgUXS(
-		mw.config.get('wgUserLanguage') as MwLanguage,
-		hans,
-		hant,
-		cn,
-		tw,
-		hk,
-		sg,
-		zh,
-		mo,
-		my,
-	)
-}
+window.wgULS = (...args) => window.wgUXS(mw.config.get('wgUserLanguage') as MwLanguage, ...args)
 
-window.wgUVS = (
-	hans?: string,
-	hant?: string,
-	cn?: string,
-	tw?: string,
-	hk?: string,
-	sg?: string,
-	zh?: string,
-	mo?: string,
-	my?: string,
-) => {
-	return window.wgUXS(
-		mw.config.get('wgUserVariant') as MwLanguage,
-		hans,
-		hant,
-		cn,
-		tw,
-		hk,
-		sg,
-		zh,
-		mo,
-		my,
-	)
-}
+window.wgUVS = (...args) => window.wgUXS(mw.config.get('wgUserVariant') as MwLanguage, ...args)

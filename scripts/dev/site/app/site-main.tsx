@@ -20,11 +20,11 @@ export function SiteMain({ title, children }: { title: ReactNode; children?: Rea
 					</div>
 				</div>
 			</header>
-			<div id="citizen-page-header-sticky-sentinel"></div>
+			<div id="citizen-page-header-sticky-sentinel" />
 			<div className="citizen-body-container">
 				<div id="bodyContent" className="citizen-body" aria-labelledby="firstHeading">
 					<div id="contentSub" lang="zh-Hans-CN" dir="ltr">
-						<div id="mw-content-subtitle" lang="zh-Hans-CN" dir="ltr"></div>
+						<div id="mw-content-subtitle" lang="zh-Hans-CN" dir="ltr" />
 					</div>
 
 					<div id="mw-content-text" className="mw-body-content">

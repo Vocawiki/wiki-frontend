@@ -7,5 +7,6 @@ export function modifyLayout(): void {
 	tabs()
 	applyListMargin()
 	clarifyOldRevisionLicense()
+	// oxlint-disable-next-line new-cap
 	使挂删模板位于文件页顶部()
 }

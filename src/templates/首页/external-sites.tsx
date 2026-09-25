@@ -1,16 +1,14 @@
 import { cn } from 'cn'
 import type { CSSProperties, ReactNode } from 'react'
 
-import { LangSpan } from '@/src/components/wiki-templates/lang'
+import { LangSpan } from '~/components/wiki-templates/lang'
 import * as Wiki from '~/components/wikitext'
 
 export function ExternalSites({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				'preflight flex flex-col gap-8',
-				'main-lg:flex-row main-lg:justify-between main-xl:gap-12',
-				'[&_.mw-heading]:contents [&_a]:auto-interact-fx',
+				'preflight flex flex-col gap-8 main-lg:flex-row main-lg:justify-between main-xl:gap-12 [&_.mw-heading]:contents [&_a]:auto-interact-fx',
 				className,
 			)}
 		>
@@ -44,10 +42,7 @@ export function ExternalSites({ className }: { className?: string }) {
 
 			<Section title="其他相关站点">
 				<ul
-					className={cn(
-						'grid auto-rows-fr grid-cols-[repeat(auto-fill,minmax(calc(3rem+11em),1fr))] justify-center gap-2 text-sm',
-						'main-md:mx-auto! main-md:max-w-max main-md:grid-cols-3',
-					)}
+					className="grid auto-rows-fr grid-cols-[repeat(auto-fill,minmax(calc(3rem+11em),1fr))] justify-center gap-2 text-sm main-md:mx-auto! main-md:max-w-max main-md:grid-cols-3"
 					role="list"
 				>
 					<SiteItem

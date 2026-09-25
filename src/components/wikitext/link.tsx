@@ -34,7 +34,7 @@ export function WikitextLink(props: WikitextLinkProps) {
 }
 
 function WikitextExternalLink({ href, children }: WikitextExternalLinkProps) {
-	assert(/^https?:\/\//.test(href), 'href必须以“http(s)://”开头')
+	assert(/^https?:\/\//u.test(href), 'href必须以“http(s)://”开头')
 
 	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) {
 		return (
@@ -54,7 +54,7 @@ function WikitextInternalLink({ page, children }: WikitextInternalLinkProps) {
 	const link = page ?? children
 
 	assert(
-		!/^(?:Category|分[类類]|File|Image|文件|[档檔]案|[图圖][片像]):/i.test(link),
+		!/^(?:Category|分[类類]|File|Image|文件|[档檔]案|[图圖][片像]):/iu.test(link),
 		`[[${link}]]不是一个有效的wikitext链接，是否忘记在开头加冒号？`,
 	)
 

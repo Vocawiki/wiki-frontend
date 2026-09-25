@@ -115,7 +115,7 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 			action: 'edit',
 			title: DEPLOYMENT_STATE_PAGE_TITLE,
 			text: JSON.stringify(newDeploymentState, null, '\t'),
-			summary: '部署完成' + deploymentSpecifier(ctx),
+			summary: `部署完成${deploymentSpecifier(ctx)}`,
 			tags: 'Bot',
 			notminor: true,
 			bot: true,
@@ -207,7 +207,7 @@ async function getBuiltPages(): Promise<Page[]> {
 		const title = getPageTitleFromFileName(entry.name)
 		const contentWithSourceMapComment = await readFile(entry.path, 'utf-8')
 		const content = contentWithSourceMapComment
-			.replace(/\n\/\/# sourceMappingURL=.+/, '')
+			.replace(/\n\/\/# sourceMappingURL=.+/u, '')
 			.replaceAll(`../${ASSETS_DIR_IN_OUTPUT_DIR}`, ASSETS_BASE_URL)
 		return {
 			title,

@@ -1,7 +1,7 @@
 import { cn } from 'cn'
 import type { CSSProperties, ReactNode } from 'react'
 
-import { WikiImageServerOnly } from '@/src/components/wiki-image/server'
+import { WikiImageServerOnly } from '~/components/wiki-image/server'
 import * as Wiki from '~/components/wikitext'
 
 export function TopicPortal({

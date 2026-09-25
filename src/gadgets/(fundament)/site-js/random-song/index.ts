@@ -19,16 +19,17 @@ interface ApiQueryRandomResponse {
 }
 
 const CACHE_KEY = 'gadget-randomsong-cache'
-const CACHE_TTL = 1 * DAY
-const RETRY_COUNT = 3
+const CACHE_TTL = DAY
+const MAX_RETRY_COUNT = 3
 const SEARCH_COUNT = 30
 
 async function apiGetRandomSongs() {
 	const api = new mw.Api()
 
-	let rCount = RETRY_COUNT
 	try {
-		while (rCount--) {
+		let remainRetryCount = MAX_RETRY_COUNT
+		while (remainRetryCount-- > 0) {
+			// oxlint-disable-next-line no-await-in-loop
 			const result = (await api.get({
 				action: 'query',
 				generator: 'random',
@@ -74,7 +75,7 @@ async function prepareSong(): Promise<(() => string) | null> {
 }
 
 export function hookRandomSongLinkClick() {
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises
+	// oxlint-disable-next-line typescript/no-misused-promises
 	$(async () => {
 		const $link = $('#n-sidebar-random-song a')
 

@@ -6,7 +6,7 @@ export const CC_VERSIONS = ['4.0', '3.0', '2.5', '2.0', '1.0']
 const ccFields = (): LicenseField[] => [
 	{ key: 'ver', label: '版本', type: 'select', options: CC_VERSIONS, def: '4.0' },
 ]
-const ccBuild = (v: Record<string, string>) => '|' + (v.ver || '4.0')
+const ccBuild = (v: Record<string, string>) => `|${v.ver || '4.0'}`
 
 const osFields = (): LicenseField[] => [
 	{ key: 'year', label: '年份（选填）', type: 'text', placeholder: '如2007或2013-present' },
@@ -14,20 +14,20 @@ const osFields = (): LicenseField[] => [
 ]
 // 保持位置：年份为空也要占位，否则作者会顶到年份参数
 const osBuild = (v: Record<string, string>) =>
-	'|' + escapeTemplateParam(v.year || '') + '|' + escapeTemplateParam(v.author || '')
+	`|${escapeTemplateParam(v.year || '')}|${escapeTemplateParam(v.author || '')}`
 
 const splitNumbered = (str: string | undefined, name: string, out: string[]) => {
-	String(str || '')
-		.split(/[、,，;；]+/)
+	;(str || '')
+		.split(/[、,，;；]+/u)
 		.filter(Boolean)
-		.forEach((x, i) => out.push(name + (i === 0 ? '' : i + 1) + '=' + escapeTemplateParam(x)))
+		.forEach((x, i) => out.push(`${name + (i === 0 ? '' : i + 1)}=${escapeTemplateParam(x)}`))
 }
 
 const authorizedBuild = (v: Record<string, string>) => {
 	const params: string[] = []
 	splitNumbered(v.authors, '作者名', params)
 	splitNumbered(v.proof, '授权证明', params)
-	return params.length ? '|' + params.join('|') : ''
+	return params.length ? `|${params.join('|')}` : ''
 }
 
 export const LICENSES: LicenseGroup[] = [
@@ -74,7 +74,7 @@ export const LICENSES: LicenseGroup[] = [
 				tpl: 'Copyright',
 				label: '原作者保留权利',
 				fields: [{ key: 'author', label: '著作权人（选填）', type: 'text' }],
-				build: (v) => (v.author ? '|author=' + escapeTemplateParam(v.author) : ''),
+				build: (v) => (v.author ? `|author=${escapeTemplateParam(v.author)}` : ''),
 			},
 			{
 				tpl: 'Authorized',
@@ -89,7 +89,7 @@ export const LICENSES: LicenseGroup[] = [
 				tpl: '可自由使用',
 				label: '可自由使用',
 				fields: [{ key: 'reason', label: '原因（选填）', type: 'text' }],
-				build: (v) => (v.reason ? '|' + escapeTemplateParam(v.reason) : ''),
+				build: (v) => (v.reason ? `|${escapeTemplateParam(v.reason)}` : ''),
 			},
 			{ tpl: 'Vocawiki版权所有', label: 'Vocawiki版权所有', fields: [], missing: true },
 		],

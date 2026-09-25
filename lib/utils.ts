@@ -1,11 +1,11 @@
 export class TokenList implements Pick<DOMTokenList, 'length' | 'add' | 'toString'> {
-	private tokens: Set<string>
+	private readonly tokens: Set<string>
 
 	constructor(...parts: (string | undefined)[]) {
 		this.tokens = new Set(
 			Iterator.from(parts)
 				.filter(Boolean)
-				.flatMap((s) => s!.split(/\s+/g))
+				.flatMap((s) => s!.split(/\s+/gu))
 				.filter(Boolean),
 		)
 	}

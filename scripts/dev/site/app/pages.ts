@@ -13,7 +13,7 @@ const pageList = entries.map((entry): PageToPreview => {
 	return {
 		namespace,
 		pageName,
-		fullPageName: namespace + ':' + pageName,
+		fullPageName: `${namespace}:${pageName}`,
 	}
 })
 

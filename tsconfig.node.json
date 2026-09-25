@@ -5,8 +5,8 @@
 		"module": "esnext",
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"paths": {
-			"@/*": ["./*"],
-			"~/*": ["./src/*"]
+			"~/*": ["./src/*"],
+			"@/*": ["./*"]
 		},
 		"types": ["bun"]
 	},

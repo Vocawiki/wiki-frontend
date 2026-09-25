@@ -2,7 +2,9 @@ import assert from 'node:assert/strict'
 
 import { emptyDir } from 'fs-extra/esm'
 import PQueue from 'p-queue'
+import type { IsEqual } from 'type-fest'
 
+import type { Expect } from '@/lib/typing'
 import { saveReferencedFiles } from '@/tools/file-usage'
 
 import { OUTPUT_DIR, PAGES_DIR_IN_OUTPUT_DIR } from '../config'
@@ -24,11 +26,10 @@ const addToScriptEntries = (entry: ScriptBuildEntry) => {
 	if (entry.type === 'mw-page') {
 		const title = entry.title
 		assert(!mwPageNames.has(title), `出现了重名的MediaWiki页面：${title}`)
-	} else if (entry.type === 'asset') {
+	} else {
+		type _Check = Expect<IsEqual<typeof entry.type, 'asset'>>
 		const name = entry.name
 		assert(!assetNames.has(name), `出现了重名的asset：${name}`)
-	} else {
-		throw new Error('未知分支')
 	}
 	scriptEntries.push(entry)
 }
@@ -59,13 +60,11 @@ async function buildScripts(entries: ScriptBuildEntry[]) {
 			}
 			return
 		}
-		if (entry.type === 'mw-page') {
-			const rolldownEntryName = `${PAGES_DIR_IN_OUTPUT_DIR}/${escapePageTitle(entry.title)}.txt`
-			input[rolldownEntryName] = entry.meta.path
-			entriesAdditionalInfo.set(rolldownEntryName, entry.meta)
-			return
-		}
-		throw new Error('未实现的构建目标')
+		type _Check = Expect<IsEqual<typeof entry.type, 'mw-page'>>
+
+		const rolldownEntryName = `${PAGES_DIR_IN_OUTPUT_DIR}/${escapePageTitle(entry.title)}.txt`
+		input[rolldownEntryName] = entry.meta.path
+		entriesAdditionalInfo.set(rolldownEntryName, entry.meta)
 	})
 
 	console.log('准备使用Rolldown构建：', input)

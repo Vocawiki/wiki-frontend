@@ -4,11 +4,11 @@ import type { Ref } from 'vue'
 import type { Chip } from './types'
 
 export function stripCategory(title: string) {
-	return title.replace(/^Category:/, '')
+	return title.replace(/^Category:/u, '')
 }
 
 export function stripAuthorCategory(title: string) {
-	return title.replace(/^Category:作者:/, '')
+	return title.replace(/^Category:作者:/u, '')
 }
 
 function trimUnicodeWhitespace(s: string): string {
@@ -29,10 +29,10 @@ export function dedupChips(chips: Chip[]): Chip[] {
 
 /** 把输入框内容作为chip提交：去重后追加到chips与selected，并清空输入。 */
 export function commitChip(input: Ref<string>, chips: Ref<Chip[]>, selected: Ref<string[]>): void {
-	const v = String(input.value || '').trim()
+	const v = input.value.trim()
 	if (!v) return
 
-	if (!chips.value.some((c) => String(c?.value ?? c) === v)) {
+	if (!chips.value.some((c) => c.value === v)) {
 		chips.value.push({ value: v, label: v })
 		selected.value.push(v)
 	}
@@ -65,12 +65,12 @@ export function formatBytes(n: number) {
 		v /= 1024
 		i++
 	}
-	return (i === 0 ? v : v.toFixed(v >= 10 ? 0 : 1)) + ' ' + units[i]
+	return `${i === 0 ? v : v.toFixed(v >= 10 ? 0 : 1)} ${units[i]}`
 }
 
 /** 转义模板参数 */
 export function escapeTemplateParam(s: string) {
-	return s.replace(/\|/g, '{{!}}').replace(/=/g, '{{=}}')
+	return s.replace(/\|/gu, '{{!}}').replace(/[=]/gu, '{{=}}')
 }
 
 function notify(message: string, options?: mw.notification.NotificationOptions) {

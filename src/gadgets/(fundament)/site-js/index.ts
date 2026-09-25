@@ -5,7 +5,7 @@ import { hookRandomSongLinkClick } from './random-song'
 
 declare global {
 	var oouiDialog: {
-		alert: (...args: any[]) => void
+		alert: (...args: readonly unknown[]) => void
 		sanitize: (str: string) => string
 	}
 }
@@ -70,7 +70,7 @@ void (async () => {
 		} catch {
 			substHost = ''
 		}
-		const currentHostIsUnofficial = !/(?:^|\.)voca\.wiki\.?$/.test(location.host)
+		const currentHostIsUnofficial = !/(?:^|\.)voca\.wiki\.?$/u.test(location.host)
 		if (top !== window || currentHostIsUnofficial) {
 			const detectedHost = currentHostIsUnofficial ? location.host : substHost
 			oouiDialog.alert(
@@ -88,14 +88,14 @@ void (async () => {
 	// 修复错误嵌套模板
 	mw.hook('wikipage.content').add(templateFix)
 
-	const needHashChange = /[)]$/.test(location.pathname + location.search)
+	const needHashChange = /[)]$/u.test(location.pathname + location.search)
 	if (needHashChange) {
 		const originHash = location.hash
 		location.hash = '%'
 		location.hash = originHash
 	}
 	$window.on('hashchange.hashchange', () => {
-		const hash = decodeURIComponent(location.hash.replace(/^#/, ''))
+		const hash = decodeURIComponent(location.hash.replace(/^#/u, ''))
 		if (hash.length > 0) {
 			const target = document.getElementById(hash)
 			if (target) {
@@ -114,6 +114,8 @@ void (async () => {
 						.eq(tabContentTextUnselected.index())
 						.trigger('click')
 				}
+				// FIXME: 萌娘百科来的，暂时保留，可能是功能开关
+				// oxlint-disable-next-line typescript/no-unnecessary-condition
 				if (needScroll) {
 					setTimeout(() => {
 						$('html, body').scrollTop($target.offset()!.top - window.innerHeight / 8)
@@ -137,6 +139,7 @@ void (async () => {
 		case 'MassEditRegex':
 			$('#wpSummaryLabel').text('摘要：') // 临时修复：批量正则编辑
 			break
+		default:
 	}
 
 	// 快速填写编辑摘要

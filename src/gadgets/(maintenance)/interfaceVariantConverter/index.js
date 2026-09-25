@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function no-await-in-loop typescript/no-unsafe-assignment typescript/no-unsafe-return typescript/no-unsafe-member-access typescript/no-unsafe-call typescript/no-unsafe-argument typescript/no-misused-promises
 /*
  * Originally from https://github.com/MoegirlPediaInterfaceAdmins/MoegirlPediaInterfaceCodes/blob/a157f6/src/gadgets/interfaceVariantConverter/Gadget-interfaceVariantConverter.js
  */
@@ -6,12 +7,6 @@
 // NOTE: 原来有hk变体、改完之后没有的话没法删除
 
 // TODO: Fix MultilineTextInput initial height
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-misused-promises */
 // declare var lrAivc: {
 //     [key: string]: any;
 // };
@@ -27,7 +22,7 @@ $(async () => {
 	])
 	// await mw.loader.using(["mediawiki.api", "oojs-ui"]);
 
-	const basepage = wgPageName.replace(/\/.*?$/, '')
+	const basepage = wgPageName.replace(/\/.*?$/u, '')
 	const api = new mw.Api()
 
 	const lrAivc = $.extend(
@@ -71,23 +66,23 @@ $(async () => {
 		Object.entries(obj)
 			.map(([k, v]) => `${k}=${v}`)
 			.join('|')
-	const variantPage = (variant) => (variant === '(main)' ? `${basepage}` : `${basepage}/${variant}`)
+	const variantPage = (variant) => (variant === '(main)' ? basepage : `${basepage}/${variant}`)
 
 	const REGEXP = {
 		// [\s\S] works with new lines (avoids using dotall flag)
-		lcMarker: /-{([\s\S]*?)}-/g,
-		lcMarkerEsc: /-\\{([\s\S]*?)}\\-/g,
-		nowiki: /<nowiki>([\s\S]*?)<\/nowiki>/g,
-		link: /\[\[([\s\S]*?)(?:#([\s\S]*?))?(\|[\s\S]*?)?\]\]/g,
-		extLink: /([^[])\[([^[]+?)( [\s\S]+?)?\]([^\]])/g,
-		// extLink: /(?<!\[)\[([^[]+?)( [\s\S]+?)?\](?!\])/g,
-		template: /\{\{([\s\S]*?)\}\}/g,
-		htmlEntity: /&([a-zA-Z0-9#]+);/g,
-		noOCC: /<!--noOCC-->([\s\S]*?)<!--\/noOCC-->/gi,
+		lcMarker: /-\{([\s\S]*?)\}-/gu,
+		lcMarkerEsc: /-\\\{([\s\S]*?)\}\\-/gu,
+		nowiki: /<nowiki>([\s\S]*?)<\/nowiki>/gu,
+		link: /\[\[([\s\S]*?)(?:#([\s\S]*?))?(\|[\s\S]*?)?\]\]/gu,
+		extLink: /([^[])\[([^[]+?)( [\s\S]+?)?\]([^\]])/gu,
+		// extLink: /(?<!\[)\[([^[]+?)( [\s\S]+?)?\](?!\])/gu,
+		template: /\{\{([\s\S]*?)\}\}/gu,
+		htmlEntity: /&([a-zA-Z0-9#]+);/gu,
+		noOCC: /<!--noOCC-->([\s\S]*?)<!--\/noOCC-->/giu,
 	}
 	const escapeWikitext = (original) => {
-		const nowikis = [],
-			mappings = []
+		const nowikis = []
+		const mappings = []
 		let replaced = original
 		// Preserve all LC markers (including those within nowiki)
 		replaced = replaced.replace(REGEXP.lcMarker, (_, content) => `-\\{${content}}\\-`)
@@ -310,7 +305,7 @@ $(async () => {
 		getActionProcess(action) {
 			if (action === 'cancel') {
 				return new OO.ui.Process(() => {
-					this.close({ action: action })
+					this.close({ action })
 				}, this)
 			} else if (action === 'continue') {
 				return new OO.ui.Process(
@@ -330,7 +325,7 @@ $(async () => {
 							})
 							if (this.config.main.includes('(main)')) {
 								// FIXME: Expected an error object to be thrown. 我真受不了这屎山了
-								// eslint-disable-next-line @typescript-eslint/only-throw-error
+								// oxlint-disable-next-line typescript/only-throw-error
 								throw new OO.ui.Error(wgULS('主页面不得作为主要变体', '主頁面不得作為主要變体'))
 							}
 							this.config.main.forEach((v) => (this.config.dependentInv[v] = [v]))
@@ -344,7 +339,7 @@ $(async () => {
 									this.config,
 								)
 								// FIXME: Expected an error object to be thrown. 我真受不了这屎山了
-								// eslint-disable-next-line @typescript-eslint/only-throw-error
+								// oxlint-disable-next-line typescript/only-throw-error
 								throw new OO.ui.Error(
 									wgULS('依赖变体格式错误，请检查控制台', '依賴變体格式錯誤，請檢查控制臺'),
 								)
@@ -359,7 +354,7 @@ $(async () => {
 							} catch (e) {
 								console.error('[VariantConverter] Error:', e)
 								// FIXME: Expected an error object to be thrown. 我真受不了这屎山了
-								// eslint-disable-next-line @typescript-eslint/only-throw-error
+								// oxlint-disable-next-line typescript/only-throw-error
 								throw new OO.ui.Error(e)
 							}
 						})(),
@@ -376,7 +371,7 @@ $(async () => {
 						(async () => {
 							try {
 								await this.saveChanges()
-								this.close({ action: action })
+								this.close({ action })
 								mw.notify('保存成功！', {
 									title: wgULS('自动繁简转换工具', '自動繁簡轉換工具'),
 									type: 'success',
@@ -386,7 +381,7 @@ $(async () => {
 							} catch (e) {
 								console.error('[VariantConverter] Error:', e)
 								// FIXME: Expected an error object to be thrown. 我真受不了这屎山了
-								// eslint-disable-next-line @typescript-eslint/only-throw-error
+								// oxlint-disable-next-line typescript/only-throw-error
 								throw new OO.ui.Error(e)
 							}
 						})(),
@@ -408,7 +403,7 @@ $(async () => {
 			})
 			this.textInputs[variant].connect(this, { resize: 'updateSize' })
 			this.confirmPanel.$element.append(field.$element)
-			if (window?.InPageEdit?.quickDiff) {
+			if (window.InPageEdit?.quickDiff) {
 				this.confirmPanel.$element.append(
 					new OO.ui.FieldLayout(
 						new OO.ui.Widget({
@@ -482,8 +477,9 @@ $(async () => {
 
 					const occVariant = variant
 						.replace('hans', 'cn')
-						.replace(/zh-(?:han)?/, '')
+						.replace(/zh-(?:han)?/u, '')
 						.replace('tw', 'twp')
+					// oxlint-disable-next-line new-cap
 					const converter = OpenCC.Converter({ from: occVariant, to: occVariant })
 					converted = converter(converted)
 

@@ -40,7 +40,7 @@ export function mountApp({ Vue, Codex }: { Vue: VueType; Codex: CodexType }) {
 
 	const initialDesc = desc.value
 	const hasExisting = initialDesc.trim() !== ''
-	const srcMatch = initialDesc.match(/^\*\s*来源[：:]\s*(.+)$/m)
+	const srcMatch = initialDesc.match(/^\*\s*来源[：:]\s*(.+)$/mu)
 	const presetSource = srcMatch ? srcMatch[1]!.trim() : ''
 
 	/** 挂载Vue  */

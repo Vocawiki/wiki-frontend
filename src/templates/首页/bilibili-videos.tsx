@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 
-import { WikiImageServerOnly } from '@/src/components/wiki-image/server'
+import { WikiImageServerOnly } from '~/components/wiki-image/server'
 import * as Wiki from '~/components/wikitext'
 
 interface BilibiliVideo {
@@ -115,7 +115,7 @@ export function BilibiliVideos() {
 	)
 }
 
-const dateFormatter = Intl.DateTimeFormat('zh-Hans-CN', {
+const dateFormatter = new Intl.DateTimeFormat('zh-Hans-CN', {
 	year: 'numeric',
 	month: 'numeric',
 	day: 'numeric',

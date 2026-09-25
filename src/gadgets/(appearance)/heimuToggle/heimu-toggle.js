@@ -1,4 +1,5 @@
-/* eslint-disable */
+// oxlint-disable typescript/no-unsafe-call typescript/no-unsafe-member-access typescript/no-unsafe-assignment
+
 $(() => {
 	if (!$('.heimu, .colormu')[0] || $('#heimu_toggle')[0]) {
 		return
@@ -28,14 +29,13 @@ $(() => {
 				$thisColormu.css(
 					'background-color',
 					ele.dataset.backgroundColor
-						.replace(/\brgb\(([^)]+)\)/, 'rgba($1, .17)')
-						.replace(/\brgba\((\d+,\s*\d+,\s*\d+),\s*\d+(?:\.\d+)?\)/, 'rgba($1, .17)'),
+						.replace(/\brgb\(([^)]+)\)/u, 'rgba($1, .17)')
+						.replace(/\brgba\((\d+,\s*\d+,\s*\d+),\s*\d+(?:\.\d+)?\)/u, 'rgba($1, .17)'),
 				)
 			}
 		})
 	})
-	if (+mw.user.options.get('gadget-heimuToggleDefaultOn', 0) === 1) {
+	if (Number(mw.user.options.get('gadget-heimuToggleDefaultOn', 0)) === 1) {
 		btn.trigger('click')
 	}
 })
-/* eslint-enable */

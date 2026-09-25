@@ -58,7 +58,7 @@ function solveApiValue(value: unknown): string | undefined {
 	if (typeof value === 'object') {
 		throw new Error('MwApiCall参数不应出现对象')
 	}
-	// eslint-disable-next-line @typescript-eslint/no-base-to-string
+	// oxlint-disable-next-line typescript/no-base-to-string
 	return String(value)
 }
 
@@ -67,7 +67,7 @@ export class MwApiCall<
 		[Prop in MwQueryProp]?: MwQueryPropParams[Prop]
 	},
 > {
-	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+	// oxlint-disable-next-line typescript/no-empty-object-type
 	lastContinue: {} = {}
 	finished = false
 	titles: string[]
@@ -78,7 +78,7 @@ export class MwApiCall<
 		this.params = params
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+	// oxlint-disable-next-line typescript/no-empty-object-type
 	async *query<T extends {} = {}>(
 		options: { ignoreContinue?: MwQueryProp[] } = {},
 	): AsyncGenerator<
@@ -92,6 +92,7 @@ export class MwApiCall<
 		const solvedParams: Record<string, string> = {}
 
 		for (const [prop, unprefixedParams] of Object.entries(this.params)) {
+			// oxlint-disable-next-line typescript/no-unnecessary-condition
 			if (!(prop in mwApiQueryProps && unprefixedParams !== undefined)) {
 				continue
 			}
@@ -112,18 +113,17 @@ export class MwApiCall<
 
 		const data = (await (
 			await fetch(
-				'https://voca.wiki/api.php?' +
-					new URLSearchParams(
-						shake({
-							...solvedParams,
-							...this.lastContinue,
-							action: 'query',
-							format: 'json',
-							formatversion: '2',
-							titles: solveApiValue(this.titles),
-							prop: solveApiValue(props),
-						}),
-					).toString(),
+				`https://voca.wiki/api.php?${new URLSearchParams(
+					shake({
+						...solvedParams,
+						...this.lastContinue,
+						action: 'query',
+						format: 'json',
+						formatversion: '2',
+						titles: solveApiValue(this.titles),
+						prop: solveApiValue(props),
+					}),
+				).toString()}`,
 			)
 		).json()) as {
 			batchcomplete?: boolean

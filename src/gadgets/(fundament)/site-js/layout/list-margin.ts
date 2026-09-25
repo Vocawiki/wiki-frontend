@@ -5,7 +5,7 @@ export function applyListMargin() {
 function applyListMarginLeftOnce() {
 	$('.mw-parser-output :is(ol, ul):not(.margin-left-set, .preflight *)').each((_, ele) => {
 		const $ele = $(ele)
-		if (/none.+none/i.test($ele.css('list-style')) || $ele.is('.gallery')) {
+		if (/none.+none/iu.test($ele.css('list-style')) || $ele.is('.gallery')) {
 			if ($ele.parent().is('li') && $ele.parent().parent().is('ul, ol')) {
 				$ele.css('margin-left', '1.2em')
 			} else {
@@ -14,11 +14,11 @@ function applyListMarginLeftOnce() {
 		} else if ($ele.is('ol')) {
 			const li = $ele.children('li')
 			const start = $ele.attr('start')
-			let max = /^\d+$/.test(start!) ? +start! : 0
+			let max = /^\d+$/u.test(start!) ? Number(start!) : 0
 			li.each((_, e) => {
 				const value = $(e).attr('value')
-				if (/^\d+$/.test(value!)) {
-					max = Math.max(max, +value!)
+				if (/^\d+$/u.test(value!)) {
+					max = Math.max(max, Number(value!))
 				} else {
 					max++
 				}

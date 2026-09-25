@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+// oxlint-disable typescript/no-unsafe-argument typescript/no-unsafe-assignment
+
 ;(() => {
 	const { wgUserName, wgScriptPath, skin } = mw.config.get(['wgUserName', 'wgScriptPath', 'skin'])
 	const userId = mw.user.id()

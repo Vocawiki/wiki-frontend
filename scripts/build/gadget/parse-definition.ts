@@ -1,9 +1,9 @@
+// oxlint-disable typescript/no-deprecated typescript/no-dynamic-delete typescript/no-unsafe-assignment
 /**
  * 这个脚本最初是为了将站点的[[MediaWiki:Gadgets-definition]]转换为`(meta).ts`，
  * 现在Gadgets-definition由本仓库接管了，这段代码没什么用了。但是留下来以供后人包括其他wiki的人参考。
  */
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* AnyScript，启动！ */
 
 import assert from 'node:assert/strict'
@@ -22,19 +22,18 @@ import type { ParsedGadgetMeta } from './types'
  */
 export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 	const match = definition.match(
-		/^\*\s*(?<name>[A-Za-z][A-Za-z0-9\-_.]*)\s*\[(?<options>.+?)\]\s*\|\s*(?<pages>.+?)\s*$/,
+		/^\*\s*(?<name>[A-Za-z][A-Za-z0-9\-_.]*)\s*\[(?<options>.+?)\]\s*\|\s*(?<pages>.+?)\s*$/u,
 	)
 	assert(match, `无法解析小工具定义：${definition}`)
 	const groups = match.groups!
 	const gadgetName = groups.name!
 	const gadgetOptions = Object.fromEntries(
-		groups.options!.split(/\s*\|\s*/g).map((s) => {
-			const kvMatch = s.match(/^(.+?)\s*=\s*(.+?)$/)
+		groups.options!.split(/\s*\|\s*/gu).map((s) => {
+			const kvMatch = s.match(/^(.+?)\s*=\s*(.+?)$/u)
 			if (kvMatch) {
 				return [kvMatch[1], { type: 'kv', value: kvMatch[2]! }]
-			} else {
-				return [s, { type: 'flag' }]
 			}
+			return [s, { type: 'flag' }]
 		}),
 	) as Record<string, { type: 'flag' } | { type: 'kv'; value: string }>
 
@@ -42,7 +41,7 @@ export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 		const value = gadgetOptions[optionName]
 		if (!value) return undefined
 		assert(value.type === 'kv')
-		return value.value.split(/\s*,\s*/g)
+		return value.value.split(/\s*,\s*/gu)
 	}
 
 	function parseFlag(optionName: string): true | undefined {
@@ -59,7 +58,7 @@ export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 		return value.value
 	}
 
-	const gadgetPages = groups.pages!.split(/\s*\|\s*/g)
+	const gadgetPages = groups.pages!.split(/\s*\|\s*/gu)
 	const meta = {
 		name: gadgetName,
 		dir: `src/gadgets/${gadgetName}`,
@@ -82,7 +81,7 @@ export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 			namespaces: (() => {
 				const strings = parseList('namespaces')
 				if (strings === undefined) return undefined
-				return strings.map((s) => Number.parseInt(s)) as unknown as NonEmptyTuple<number>
+				return strings.map((s) => Number.parseInt(s, 10)) as unknown as NonEmptyTuple<number>
 			})(),
 			contentModels: parseList('contentModels') as any,
 			targets: parseList('targets') as any,
@@ -135,13 +134,13 @@ export function parseGadgetsDefinition(content: string): GadgetsDefinition {
 				return { type: 'gadget', meta: parseGadgetDefinition(line) }
 			}
 
-			const match = line.match(/^==\s*(.+?)\s*==\s*$/)
+			const match = line.match(/^==\s*(.+?)\s*==\s*$/u)
 			if (match) {
 				// 标题行
 				return { type: 'h2', text: match[1]! }
 			}
 
-			throw new Error('无法识别的行：' + line)
+			throw new Error(`无法识别的行：${line}`)
 		})
 		.filter((x) => x !== null)
 }

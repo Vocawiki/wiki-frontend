@@ -34,8 +34,6 @@ function getDescriptionByLanguage(lang: string): string {
 	}
 
 	switch (lang) {
-		default:
-			return '而当前页面的当前版本采用<a class="external" href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh-hans">知识共享 署名-非商业性使用-相同方式共享 3.0中国大陆</a>授权。'
 		case 'zh-hk':
 			return '而當前頁面的當前版本採用<a class="external" href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh-hant">共享創意 姓名標示-非商業性-相同方式分享 3.0 中國大陸</a>授權。'
 		case 'zh-hant':
@@ -43,5 +41,7 @@ function getDescriptionByLanguage(lang: string): string {
 			return '而當前頁面的當前版本採用<a class="external" href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh-hant">創用CC 姓名標示-非商業性-相同方式分享 3.0 中國大陸</a>授權。'
 		case 'en':
 			return ' The current version of the current page is licensed under <a class="external" href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.en">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 China Mainland</a> instead.'
+		default:
+			return '而当前页面的当前版本采用<a class="external" href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh-hans">知识共享 署名-非商业性使用-相同方式共享 3.0中国大陆</a>授权。'
 	}
 }

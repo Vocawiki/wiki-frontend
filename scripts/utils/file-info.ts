@@ -6,7 +6,7 @@ export interface FileInfo {
 }
 
 export function getFileInfo(fileName: string): FileInfo {
-	const match = fileName.match(/^(.*)\.([^.]+)$/)
+	const match = fileName.match(/^(.*)\.([^.]+)$/u)
 	assert(match, `不受支持的文件名：${fileName}`)
 
 	const baseName = match[1]!

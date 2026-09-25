@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-
+// oxlint-disable typescript/no-floating-promises typescript/unbound-method typescript/no-misused-promises react/hook-use-state react/only-export-components typescript/no-unsafe-argument
 import {
 	createFromReadableStream,
 	createFromFetch,

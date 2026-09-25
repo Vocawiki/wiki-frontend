@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function max-statements react-hooks/rules-of-hooks
 import type { Icon } from '@wikimedia/codex-icons'
 import type * as VueTypes from 'vue'
 
@@ -123,7 +124,7 @@ export const createUploadComponent = ({
 				licenseFieldValues: licenseState.licenseFieldValues,
 			})
 			const allowedTypesHint = [
-				allowedExtensions.length ? msg('notice-types', allowedExtensions.join('、')) : '',
+				allowedExtensions.length > 0 ? msg('notice-types', allowedExtensions.join('、')) : '',
 				maxUploadBytes > 0 ? msg('notice-max-size', formatBytes(maxUploadBytes)) : '',
 			]
 				.filter(Boolean)
@@ -255,7 +256,7 @@ export const createUploadComponent = ({
 			function onDrop(e: DragEvent) {
 				dragCounter = 0
 				dragging.value = false
-				const f = e.dataTransfer?.files?.[0]
+				const f = e.dataTransfer?.files[0]
 				if (!f) return
 				const fileEl = document.getElementById('wpUploadFile') as HTMLInputElement | null
 				if (!fileEl) return
@@ -288,7 +289,7 @@ export const createUploadComponent = ({
 					// 仅当用户尚未手填目标名时，从URL末段推导一个默认名
 					if (!destState.destFile.value.trim()) {
 						try {
-							const base = new URL(v).pathname.split('/').pop() || ''
+							const base = new URL(v).pathname.split('/').pop() ?? ''
 							if (base) destState.destFile.value = decodeURIComponent(base)
 						} catch {
 							/* URL还没拼完整，忽略 */
@@ -297,20 +298,18 @@ export const createUploadComponent = ({
 				}
 			})
 			watch(characterInput, (v) => {
-				if (v && String(v).trim()) {
+				if (v.trim()) {
 					void categoryState.ensureObjectOptions()
 				}
 				// 稍作防抖：让组件的pending标志先置位，菜单才能在输入时打开；
 				// 同时避免每敲一个字都同步重算建议。
 				clearTimeout(characterFilterTimer)
 				characterFilterTimer = setTimeout(() => {
-					characterQuery.value = String(v || '')
-						.trim()
-						.toLowerCase()
+					characterQuery.value = v.trim().toLowerCase()
 				}, 300)
 			})
 			watch(authorInput, (v) => {
-				categoryState.scheduleAuthorSearch(String(v || ''))
+				categoryState.scheduleAuthorSearch(v)
 			})
 			watch(generatedWikitext, () => {
 				syncPreview()
