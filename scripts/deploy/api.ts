@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict'
 
-import { MediaWikiApi, type FexiosFinalContext, type MwApiResponse } from 'wiki-saikou'
+import {
+	MediaWikiApi,
+	MediaWikiApiError,
+	type FexiosFinalContext,
+	type MwApiResponse,
+} from 'wiki-saikou'
 
 import { REPO_NAME, WIKI_API_URL } from '../config'
 import { DEPLOYMENT_STATE_PAGE_TITLE } from './config'
@@ -120,9 +125,15 @@ export async function deletePage(api: MediaWikiApi, { runId }: DeploymentContext
 	const reason = `超过7天的无用页面${
 		runId ? `（本次任务：[[git:${REPO_NAME}/actions/runs/${runId}|${runId}]]）` : ''
 	}`
-	await api.postWithEditToken({
-		action: 'delete',
-		title,
-		reason,
-	})
+	try {
+		await api.postWithEditToken({
+			action: 'delete',
+			title,
+			reason,
+		})
+	} catch (e: unknown) {
+		if (!(e instanceof MediaWikiApiError && e.code === 'missingtitle')) {
+			throw e
+		}
+	}
 }
