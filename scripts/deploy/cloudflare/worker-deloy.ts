@@ -41,6 +41,12 @@ export async function deployWorker({
 	const { cfManifest, hashToFileInfo, newAssetsState } = await createCfManifest(ASSETS_DIR, {
 		previousAssetsState,
 	})
+	try {
+		assert.notDeepStrictEqual(newAssetsState, previousAssetsState)
+	} catch {
+		console.log('资产没有变化，跳过Worker部署')
+		return newAssetsState
+	}
 
 	let worker
 	try {
@@ -202,21 +208,12 @@ async function createCfManifest(
 		{ path: string; hash: string; size: number },
 		string,
 		CfManifestFileInfo
-	>(
-		[
-			...obsoleteAssets,
-			...activeFiles,
-			// { path: headerFile.path, hash: headerFile.hash, size: headerFile.size },
-		],
-		getPath,
-		(x) => pick(x, ['hash', 'size']),
-	)
+	>([...obsoleteAssets, ...activeFiles], getPath, (x) => pick(x, ['hash', 'size']))
 	// 检查
 	{
 		const activeFileCount = activeFiles.length
 		const obsoleteFileCount = obsoleteAssets.length
-		// const headerFileCount = 1
-		const supposedTotalCount = activeFileCount + obsoleteFileCount // + headerFileCount
+		const supposedTotalCount = activeFileCount + obsoleteFileCount
 		assert.equal(
 			Object.keys(cfManifest).length,
 			supposedTotalCount,
