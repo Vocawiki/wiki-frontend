@@ -127,7 +127,8 @@ function PageCard({
 	>(undefined)
 
 	const imgRef: React.RefCallback<HTMLImageElement> = (img) => {
-		if (!img) return
+		if (!img || themeColor) return
+
 		void (async () => {
 			facRef.current ??= new FastAverageColor()
 			const color = await facRef.current.getColorAsync(img, {
