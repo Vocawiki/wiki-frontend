@@ -1,5 +1,6 @@
+import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import rsc from '@vitejs/plugin-rsc'
 import { defineConfig } from 'vite'
 
@@ -7,7 +8,14 @@ import { IS_DEVELOPMENT } from '../../../lib/config'
 import { lightningCSSOptions } from '../../build/compilers/css-compiler'
 
 export default defineConfig({
-	plugins: [rsc(), react(), tailwindcss()],
+	plugins: [
+		rsc(),
+		react(),
+		babel({
+			presets: [reactCompilerPreset()],
+		}),
+		tailwindcss(),
+	],
 	resolve: {
 		tsconfigPaths: true,
 	},

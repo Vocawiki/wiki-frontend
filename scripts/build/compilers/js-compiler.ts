@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 
+import babel from '@rolldown/plugin-babel'
 import PQueue from 'p-queue'
 import {
 	rolldown,
@@ -21,6 +22,11 @@ import {
 import { JS_BROWSER_TARGETS } from '../browser-target'
 
 const rolldownPredefinedOptions: RolldownInputOptions = {
+	plugins: [
+		babel({
+			plugins: ['babel-plugin-react-compiler'],
+		}),
+	],
 	experimental: {
 		// chunkImportMap: true,
 		nativeMagicString: true,
