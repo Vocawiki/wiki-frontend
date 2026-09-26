@@ -1,4 +1,3 @@
-// oxlint-disable-next-line typescript/unbound-method
 const compareTitle = new Intl.Collator('zh-Hans-CN', { numeric: true }).compare
 
 export function comparePath(pathA: string, pathB: string): number {
