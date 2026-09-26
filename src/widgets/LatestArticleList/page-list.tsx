@@ -126,25 +126,22 @@ function PageCard({
 		{ color: string; isDark: boolean; supportsOklch: boolean } | undefined
 	>(undefined)
 
-	const imgRef = (img: HTMLImageElement) => {
-		facRef.current ??= new FastAverageColor()
-		void facRef.current
-			.getColorAsync(img, {
+	const imgRef: React.RefCallback<HTMLImageElement> = (img) => {
+		if (!img) return
+		void (async () => {
+			facRef.current ??= new FastAverageColor()
+			const color = await facRef.current.getColorAsync(img, {
 				algorithm: 'dominant',
 				mode: 'speed',
 				left: THUMB_WIDTH * 0.6,
 				width: THUMB_WIDTH * 0.4,
 			})
-			.then((color) => {
-				setThemeColor({
-					color: color.rgb,
-					isDark: color.isDark,
-					supportsOklch: CSS.supports(
-						'color',
-						'oklch(from red clamp(0.85, l, 0.94) min(c, 0.1) h)',
-					),
-				})
+			setThemeColor({
+				color: color.rgb,
+				isDark: color.isDark,
+				supportsOklch: CSS.supports('color', 'oklch(from red clamp(0.85, l, 0.94) min(c, 0.1) h)'),
 			})
+		})()
 	}
 
 	return (
