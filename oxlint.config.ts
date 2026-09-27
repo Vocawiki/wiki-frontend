@@ -1,7 +1,7 @@
 import { defineConfig, type DummyRuleMap } from 'oxlint'
 import type { OmitIndexSignature } from 'type-fest'
 
-type KnowRuleMap = OmitIndexSignature<DummyRuleMap>
+type KnownRuleMap = OmitIndexSignature<DummyRuleMap>
 
 const ERROR = 'error' as const
 const OFF = 'off' as const
@@ -165,7 +165,7 @@ export default defineConfig({
 		'typescript/consistent-indexed-object-style': OFF,
 		'react/jsx-max-depth': OFF,
 		'react/jsx-props-no-spreading': OFF,
-	} satisfies KnowRuleMap,
+	} satisfies KnownRuleMap,
 	overrides: [
 		{
 			files: [
