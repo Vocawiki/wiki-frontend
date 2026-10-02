@@ -5,6 +5,20 @@ import { msg } from './i18n'
 import type { LicenseOption, UploadResponse } from './types'
 import { notifyError, notifySuccess } from './utils'
 
+/** mw.Api在传输层失败时的reject载荷：HTTP错误、断网、超时或响应非JSON。 */
+interface ApiTransportError {
+	xhr?: { responseText?: string }
+	textStatus?: string
+	exception?: string
+}
+
+/** 传输层失败的载荷没有error/errors字段，只能靠xhr识别。 */
+const isTransportError = (result: unknown): result is ApiTransportError =>
+	typeof result === 'object' && result !== null && 'xhr' in result
+
+/** 从MediaWiki的HTML错误页里取出请求编号。 */
+const REQUEST_ID_RE = /\[([\w@.-]{1,64})\]\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/u
+
 interface UploadSubmitDeps {
 	api: mw.Api
 	form: HTMLElement
@@ -44,7 +58,29 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		}, 500)
 	}
 
-	function fail(code: string | null, result: UploadResponse): void {
+	/** 传输层失败：显示mw.Api的文案，并把请求编号带出来供站务排查。 */
+	function reportTransportError(code: string | null, result: ApiTransportError): void {
+		// 完整信息留在控制台，用于分辨是MediaWiki、网关还是网络的问题
+		console.error('上传请求在传输层失败：', code, result.textStatus, result.xhr, result.exception)
+		// 展开成对象字面量：interface没有隐式索引签名，无法直接传给mw.Api#getErrorMessage
+		const message = deps.api.getErrorMessage({ ...result })
+		// 错误页里`[编号]`与时间之间可能夹着标签，先剥掉标签再取编号
+		const responseText = (result.xhr?.responseText ?? '').replace(/<[^>]*>/gu, '')
+		const requestId = REQUEST_ID_RE.exec(responseText)?.[1]
+		if (!requestId) {
+			notifyError(message)
+			return
+		}
+		notifyError($('<div>').append(message, $('<div>').text(msg('err-http-id', requestId))))
+	}
+
+	function fail(code: string | null, result: UploadResponse | ApiTransportError): void {
+		// 传输层失败时mw.Api以('http', { xhr, textStatus, exception })reject，
+		// 载荷里没有error/errors字段，直接交给mw.Api自己的渲染器
+		if (isTransportError(result)) {
+			reportTransportError(code, result)
+			return
+		}
 		const w = result.upload?.warnings
 		const wstr = (k: string): string => {
 			const s = w?.[k]
@@ -106,7 +142,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			new Promise((resolve, reject) => {
 				request
 					.done((data) => resolve(data))
-					.fail((code: string, result: UploadResponse) => {
+					.fail((code: string, result: UploadResponse | ApiTransportError) => {
 						reject(Object.assign(new Error(code || 'upload failed'), { code, result }))
 					})
 			})
@@ -130,9 +166,13 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			try {
 				return await awaitRequest(request)
 			} catch (e) {
-				const err = e as { result?: UploadResponse; message?: string }
-				if (err.result?.upload?.result === 'Warning' || err.result?.upload?.result === 'Success') {
-					return err.result
+				const err = e as { result?: UploadResponse | ApiTransportError; message?: string }
+				const result = err.result
+				if (
+					!isTransportError(result) &&
+					(result?.upload?.result === 'Warning' || result?.upload?.result === 'Success')
+				) {
+					return result
 				}
 				throw e
 			}
@@ -153,7 +193,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			finishUpload(result.upload?.filename || finalFilename)
 		} catch (e) {
 			// 真实失败：缺文件、缺文件名、或重传后撞其它警告
-			const err = e as { code?: string; result?: UploadResponse; message?: string }
+			const err = e as { code?: string; result?: UploadResponse | ApiTransportError; message?: string }
 			if (err.message === msg('err-no-file')) {
 				notifyError(err.message)
 			} else {

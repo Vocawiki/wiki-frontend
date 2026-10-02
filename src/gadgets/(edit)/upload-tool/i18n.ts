@@ -33,6 +33,7 @@ const MESSAGES = {
 	'err-required': tr('请填写必填项：$1', '請填寫必填項：$1'),
 	'err-blocked': tr('上传被阻止：$1', '上傳被阻止：$1', '上載被阻止：$1'),
 	'err-upload-failed': tr('上传失败', '上傳失敗', '上載失敗'),
+	'err-http-id': tr('服务器错误编号：$1，反馈时请附上。', '伺服器錯誤編號：$1，回報時請附上。'),
 	'success-uploaded': tr('上传成功', '上傳成功', '上載成功'),
 	'license-missing-tpl': tr('模板尚未创建。', '模板尚未建立。'),
 
