@@ -1,4 +1,4 @@
-// oxlint-disable complexity max-lines-per-function
+// oxlint-disable max-lines-per-function
 import type * as VueTypes from 'vue'
 
 import { msg } from './i18n'
@@ -18,6 +18,45 @@ const isTransportError = (result: unknown): result is ApiTransportError =>
 
 /** 从MediaWiki的HTML错误页里取出请求编号。 */
 const REQUEST_ID_RE = /\[([\w@.-]{1,64})\]\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/u
+
+/** 从API的error.info里取出异常类名。 */
+const EXCEPTION_RE = /Caught exception of type ([\w\\]+)/u
+
+/**
+ * 这些警告只在`exists`成立时才会一起返回，
+ * 本身不说明任何新情况，单独显示反而会盖掉真正的原因。
+ */
+const SECONDARY_WARNINGS = ['nochange', 'duplicateversions']
+
+/**
+ * 把警告值转成可读文本。MediaWiki的警告值可能是字符串、字符串数组，
+ * 也可能是{fileName,timestamp}对象。
+ */
+const warningText = (value: unknown): string => {
+	if (typeof value === 'string') return value
+	if (Array.isArray(value)) {
+		return value.map((v) => warningText(v)).filter(Boolean).join('、')
+	}
+	if (typeof value === 'object' && value !== null) {
+		const o = value as { fileName?: string; timestamp?: string }
+		return o.fileName ?? o.timestamp ?? ''
+	}
+	return ''
+}
+
+/** 警告码对应的文案；没有列出的走err-warning-unknown。 */
+const WARNING_MESSAGES: Record<string, Parameters<typeof msg>[0]> = {
+	exists: 'err-exists',
+	'page-exists': 'err-page-exists',
+	'bad-prefix': 'err-bad-prefix',
+	'was-deleted': 'err-was-deleted',
+	'duplicate-archive': 'err-duplicate-archive',
+	duplicate: 'err-duplicate',
+	badfilename: 'err-badfilename',
+	'filetype-unwanted-type': 'err-filetype-unwanted-type',
+	'large-file': 'err-large-file',
+	'empty-file': 'err-empty-file',
+}
 
 interface UploadSubmitDeps {
 	api: mw.Api
@@ -58,7 +97,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		}, 500)
 	}
 
-	/** 传输层失败：显示mw.Api的文案，并把请求编号带出来供站务排查。 */
+	/** 传输层失败：显示mw.Api的请求编号与文案。 */
 	function reportTransportError(code: string | null, result: ApiTransportError): void {
 		// 完整信息留在控制台，用于分辨是MediaWiki、网关还是网络的问题
 		console.error('上传请求在传输层失败：', code, result.textStatus, result.xhr, result.exception)
@@ -74,43 +113,45 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		notifyError($('<div>').append(message, $('<div>').text(msg('err-http-id', requestId))))
 	}
 
+	/** 服务器内部错误：MediaWiki只给英文异常名，换成可读文案并保留编号。 */
+	function reportApiError(info: string): void {
+		console.error('上传时服务器内部错误：', info)
+		const name = EXCEPTION_RE.exec(info)?.[1]
+		const requestId = REQUEST_ID_RE.exec(info)?.[1]
+		if (!name) {
+			notifyError(info)
+			return
+		}
+		const message = msg('err-server-error', name)
+		if (!requestId) {
+			notifyError(message)
+			return
+		}
+		notifyError($('<div>').append(message, $('<div>').text(msg('err-http-id', requestId))))
+	}
+
 	function fail(code: string | null, result: UploadResponse | ApiTransportError): void {
-		// 传输层失败时mw.Api以('http', { xhr, textStatus, exception })reject，
-		// 载荷里没有error/errors字段，直接交给mw.Api自己的渲染器
+		// 传输层失败时载荷里没有error/errors字段，直接交给mw.Api自己的渲染器
 		if (isTransportError(result)) {
 			reportTransportError(code, result)
 			return
 		}
 		const w = result.upload?.warnings
-		const wstr = (k: string): string => {
-			const s = w?.[k]
-			if (s === undefined) return ''
-			return typeof s === 'string' ? s : s.join('；')
+		if (w) {
+			// 跳过只起补充作用的次要警告，取第一个真正要说明情况的
+			const key = Object.keys(w).find((k) => !SECONDARY_WARNINGS.includes(k))
+			if (key) {
+				const id = WARNING_MESSAGES[key]
+				const value = warningText(w[key])
+				// 不认识的警告也要把code和内容说出来
+				notifyError(id ? msg(id, value) : msg('err-warning-unknown', key, value))
+				return
+			}
 		}
-		if (w?.exists) {
-			notifyError(msg('err-exists'))
-		} else if (w?.['was-deleted']) {
-			// 同名文件曾被删除
-			notifyError(msg('err-was-deleted', wstr('was-deleted')))
-		} else if (w?.['duplicate-archive']) {
-			// 同名同内容文件曾被删除
-			notifyError(msg('err-duplicate-archive', wstr('duplicate-archive')))
-		} else if (w?.['exists-normalized']) {
-			// 文件名规范化后撞已有文件
-			notifyError(msg('err-exists-normalized', wstr('exists-normalized')))
-		} else if (w?.duplicate) {
-			// 同内容文件已存在
-			const dup = Array.isArray(w.duplicate) ? (w.duplicate[0] ?? '') : w.duplicate
-			notifyError(msg('err-duplicate', dup))
-		} else if (w?.badfilename) {
-			notifyError(msg('err-badfilename', wstr('badfilename')))
-		} else if (result.errors?.[0]?.['*']) {
+		if (result.errors?.[0]?.['*']) {
 			notifyError(result.errors[0]['*'])
 		} else if (result.error?.info) {
-			notifyError(result.error.info)
-		} else if (w) {
-			const k = Object.keys(w)[0] ?? ''
-			notifyError(msg('err-blocked', k))
+			reportApiError(result.error.info)
 		} else {
 			notifyError(code ?? msg('err-upload-failed'))
 		}
