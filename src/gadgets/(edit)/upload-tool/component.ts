@@ -75,7 +75,11 @@ export const createUploadComponent = ({
 			const note = ref('')
 			const trademark = ref(false)
 			const aiGenerated = ref(false)
-			const watchFile = ref(Boolean(mw.user.options.get('watchdefault')))
+			const watchFile = ref(
+				Boolean(mw.user.options.get('watchdefault')) ||
+					Boolean(mw.user.options.get('watchcreations')) ||
+					Boolean(mw.user.options.get('watchuploads')),
+			)
 			const ignoreWarnings = ref(false)
 			const helpOpen = ref(false)
 			const dragging = ref(false)
