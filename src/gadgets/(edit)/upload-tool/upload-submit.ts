@@ -89,12 +89,28 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		$(deps.form).data('origtext', $(deps.form).serialize())
 	}
 
-	function finishUpload(filename: string) {
-		notifySuccess(msg('success-uploaded'))
+	/* 勾选忽略警告时MediaWiki返回的是Success，但warnings仍然挂在响应里。 */
+	function handleSuccessWarnings(warnings: Record<string, unknown> | undefined): string | null {
+		if (!warnings) {
+			return null
+		}
+		if (Object.keys(warnings).some((k) => k !== 'exists')) {
+			console.warn('上传成功，但服务器返回了警告：', warnings)
+		}
+		return warningText(warnings.exists) || null
+	}
+
+	function finishUpload(filename: string, overwrote: string | null = null) {
+		if (overwrote) {
+			// 勾选忽略警告时MediaWiki会覆盖同名文件并返回Success。
+			notifySuccess(msg('success-overwrote', overwrote))
+		} else {
+			notifySuccess(msg('success-uploaded'))
+		}
 		setTimeout(() => {
 			releaseNativeLeaveConfirmation()
 			location.href = mw.util.getUrl(`File:${filename}`)
-		}, 500)
+		}, overwrote ? 3000 : 500)
 	}
 
 	/** 传输层失败：显示mw.Api的请求编号与文案。 */
@@ -231,7 +247,10 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 				fail(null, result)
 				return
 			}
-			finishUpload(result.upload?.filename || finalFilename)
+			finishUpload(
+				result.upload?.filename || finalFilename,
+				handleSuccessWarnings(result.upload?.warnings),
+			)
 		} catch (e) {
 			// 真实失败：缺文件、缺文件名、或重传后撞其它警告
 			const err = e as { code?: string; result?: UploadResponse | ApiTransportError; message?: string }
