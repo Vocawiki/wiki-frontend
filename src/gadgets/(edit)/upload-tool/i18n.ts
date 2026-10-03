@@ -52,6 +52,11 @@ const MESSAGES = {
 	'err-upload-failed': tr('上传失败', '上傳失敗', '上載失敗'),
 	'err-http-id': tr('服务器错误编号：$1，反馈时请附上。', '伺服器錯誤編號：$1，回報時請附上。'),
 	'success-uploaded': tr('上传成功', '上傳成功', '上載成功'),
+	'success-overwrote': tr(
+		'上传成功，已覆盖同名文件：$1',
+		'上傳成功，已覆蓋同名檔案：$1',
+		'上載成功，已覆蓋同名檔案：$1',
+	),
 	'license-missing-tpl': tr('模板尚未创建。', '模板尚未建立。'),
 
 	// wikitext
