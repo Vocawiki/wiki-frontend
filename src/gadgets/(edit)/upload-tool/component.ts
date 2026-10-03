@@ -75,7 +75,11 @@ export const createUploadComponent = ({
 			const note = ref('')
 			const trademark = ref(false)
 			const aiGenerated = ref(false)
-			const watchFile = ref(true)
+			const watchFile = ref(
+				Boolean(mw.user.options.get('watchdefault')) ||
+					Boolean(mw.user.options.get('watchcreations')) ||
+					Boolean(mw.user.options.get('watchuploads')),
+			)
 			const ignoreWarnings = ref(false)
 			const helpOpen = ref(false)
 			const dragging = ref(false)
@@ -92,6 +96,7 @@ export const createUploadComponent = ({
 			const maxUploadSize = mw.config.get('wgMaxUploadSize')
 			const maxUploadBytes = maxUploadSize ? (maxUploadSize.file ?? maxUploadSize['*']) : 0
 			const { chooseFile } = useFileInput(Vue, {
+				form,
 				fileName,
 				filePreview,
 				fileMeta,
@@ -99,6 +104,7 @@ export const createUploadComponent = ({
 				destFile: destState.destFile,
 				isReupload,
 				maxUploadBytes,
+				allowedExtensions,
 			})
 			useChipExistenceCheck(Vue, api, {
 				characterChips,

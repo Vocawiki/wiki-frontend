@@ -16,8 +16,16 @@ async function conditionalInit() {
 	}
 	window._gadgetUploadToolState = 'pending'
 	await $.ready
-	await init()
-	window._gadgetUploadToolState = 'loaded'
+	try {
+		await init()
+		window._gadgetUploadToolState = 'loaded'
+	} catch (e) {
+		window._gadgetUploadToolState = undefined
+		console.error('[upload-tool] 初始化失败', e)
+		void import('./i18n')
+			.then(({ msg }) => mw.notify(msg('err-init-failed'), { type: 'error' }))
+			.catch(() => mw.notify('新版界面加载失败，已回退到原始表单', { type: 'error' }))
+	}
 }
 
 async function init() {
