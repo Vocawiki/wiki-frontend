@@ -92,6 +92,7 @@ export const createUploadComponent = ({
 			const maxUploadSize = mw.config.get('wgMaxUploadSize')
 			const maxUploadBytes = maxUploadSize ? (maxUploadSize.file ?? maxUploadSize['*']) : 0
 			const { chooseFile } = useFileInput(Vue, {
+				form,
 				fileName,
 				filePreview,
 				fileMeta,
@@ -99,6 +100,7 @@ export const createUploadComponent = ({
 				destFile: destState.destFile,
 				isReupload,
 				maxUploadBytes,
+				allowedExtensions,
 			})
 			useChipExistenceCheck(Vue, api, {
 				characterChips,
