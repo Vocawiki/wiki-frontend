@@ -165,12 +165,12 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		}
 		// 文件扩展名补全
 		let finalFilename = filename
-		const buildParams = (name: string, forceIgnore: boolean): Record<string, string | boolean> => {
+		const buildParams = (name: string): Record<string, string | boolean> => {
 			const p: Record<string, string | boolean> = {
 				filename: name,
 				comment: (deps.note.value || '').trim(),
 				watchlist: deps.watchFile.value ? 'watch' : 'nochange',
-				ignorewarnings: deps.isReupload || forceIgnore || deps.ignoreWarnings.value,
+				ignorewarnings: deps.isReupload || deps.ignoreWarnings.value,
 			}
 			if (!deps.isReupload) {
 				p.text = deps.previewText.value
@@ -221,11 +221,11 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		submitting.value = true
 		try {
 			// 文件扩展名补全
-			let result = await sendOnce(buildParams(finalFilename, false))
+			let result = await sendOnce(buildParams(finalFilename))
 			// 拿MW给出的改名重传一次
 			if (result.upload?.result === 'Warning' && result.upload.warnings?.badfilename) {
 				finalFilename = String(result.upload.warnings.badfilename)
-				result = await sendOnce(buildParams(finalFilename, true))
+				result = await sendOnce(buildParams(finalFilename))
 			}
 			if (result.upload?.result === 'Warning') {
 				fail(null, result)
