@@ -61,6 +61,7 @@ const MESSAGES = {
 	'notice-types': tr('允许类型：$1', '允許類型：$1'),
 	'notice-max-size': tr('最大 $1', '最大 $1'),
 	'err-file-type': tr('$1 不是允许的格式', '$1 不是允許的格式'),
+	'err-init-failed': tr('新版界面加载失败，已回退到原始表单', '新版介面載入失敗，已回退到原始表單'),
 	'preview-file-empty': tr('或拖拽文件到此处', '或拖曳檔案到此處'),
 	'dest-section': tr('目标文件名', '目標檔案名'),
 	'placeholder-dest': tr('留空则使用原文件名', '留空則使用原檔案名'),
