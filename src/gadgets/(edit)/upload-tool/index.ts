@@ -22,13 +22,9 @@ async function conditionalInit() {
 	} catch (e) {
 		window._gadgetUploadToolState = undefined
 		console.error('[upload-tool] 初始化失败', e)
-		let text = '新版界面加载失败，已回退到原始表单'
-		try {
-			text = wgULS('新版界面加载失败，已回退到原始表单', '新版介面載入失敗，已回退到原始表單')
-		} catch {
-			// 站点JS未就绪，保留简体文案
-		}
-		mw.notify(text, { type: 'error' })
+		mw.notify(wgULS('新版界面加载失败，已回退到原始表单', '新版介面載入失敗，已回退到原始表單'), {
+			type: 'error',
+		})
 	}
 }
 
