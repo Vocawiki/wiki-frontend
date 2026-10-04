@@ -73,7 +73,10 @@ export function escapeTemplateParam(s: string) {
 	return s.replace(/\|/gu, '{{!}}').replace(/[=]/gu, '{{=}}')
 }
 
-function notify(message: string, options?: mw.notification.NotificationOptions) {
+/** mw.notify同时接受字符串与jQuery对象（mw.Api#getErrorMessage返回后者）。 */
+type NotificationMessage = string | JQuery
+
+function notify(message: NotificationMessage, options?: mw.notification.NotificationOptions) {
 	if (typeof mw.notify !== 'function') {
 		console.warn('mw.notify不可用，回退到console.log')
 		console.log(message, options)
@@ -81,8 +84,8 @@ function notify(message: string, options?: mw.notification.NotificationOptions) 
 	}
 	mw.notify(message, options)
 }
-export function notifyError(msg: string) {
-	return notify(msg, { type: 'error', autoHideSeconds: 'long' })
+export function notifyError(message: NotificationMessage) {
+	return notify(message, { type: 'error', autoHideSeconds: 'long' })
 }
 export function notifySuccess(msg: string) {
 	return notify(msg, { type: 'success', autoHideSeconds: 'short' })
