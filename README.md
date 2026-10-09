@@ -75,7 +75,7 @@
 4. 执行提交前的任务，确保没有报错：
 
    ```sh
-   pnpm run before-commit
+   pnpm run preflight
    ```
 
    此命令实际一次性完成了三个任务：

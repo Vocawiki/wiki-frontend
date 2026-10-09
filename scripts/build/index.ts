@@ -40,7 +40,7 @@ void queue.add(() => buildWikitextPages())
 
 await Promise.race([queue.onError(), queue.onIdle()])
 queue.pause() // Stop processing remaining tasks
-queue.on('add', () => {
+queue.addEventListener('add', () => {
 	throw new Error('不应有新的任务追加')
 })
 

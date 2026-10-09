@@ -225,7 +225,7 @@ export async function buildJsEntries(
 
 	await Promise.race([postBuildQueue.onError(), postBuildQueue.onIdle()])
 	postBuildQueue.pause() // Stop processing remaining tasks
-	postBuildQueue.on('add', () => {
+	postBuildQueue.addEventListener('add', () => {
 		throw new Error('不应有新的任务追加')
 	})
 	assert.equal(calledPostBuildHandlers.size, postBuildHandlers.size, '有postBuildHandler未执行')
