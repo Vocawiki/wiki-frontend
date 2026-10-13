@@ -315,6 +315,14 @@ body:not(.main-lg) .nomobile {
 	width: auto;
 }
 
+/* 解决caption太窄导致文字被分成过多行的问题 https://phabricator.wikimedia.org/T304732 */
+.wikitable caption {
+	width: max-content;
+	max-width: calc(var(--article-body-inline-size) - 2 * var(--border-width-base));
+	position: sticky;
+	inset-inline-start: 0;
+}
+
 /* 编辑工具栏优化 */
 .wikiEditor-ui-toolbar .group .label {
 	white-space: nowrap;

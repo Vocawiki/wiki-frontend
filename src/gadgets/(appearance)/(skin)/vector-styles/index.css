@@ -379,6 +379,12 @@ body.sideBarPic-executed #mw-panel > .mw-portlet:last-of-type {
 	padding-left: 0 !important;
 }
 
+/* 解决caption太窄导致文字被分成过多行的问题 https://phabricator.wikimedia.org/T304732 */
+.wikitable caption {
+	width: max-content;
+	max-width: var(--article-body-inline-size);
+}
+
 /* 相关条目描述 */
 .cdx-card__text__description {
 	@apply line-clamp-1;
