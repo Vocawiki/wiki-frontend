@@ -200,16 +200,9 @@ pre {
 	margin: -1.5em 0 0 2em;
 }
 
-/* wikitable 的 caption */
-.wikitable.mw-collapsible {
-	caption {
-		border: 1px solid rgb(170 170 170 / 37%);
-		border-bottom-width: 0;
-		background-color: rgb(249 249 249);
-	}
-	&.mw-collapsed caption {
-		border-bottom-width: 1px;
-	}
+/* 表格折叠时标题行塌成竖排（T304732） */
+.wikitable.mw-collapsible caption {
+	min-width: max-content;
 }
 
 /* 分类页同组页面不被拆分成两栏 */
