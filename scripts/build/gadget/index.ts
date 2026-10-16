@@ -5,6 +5,7 @@ import { globby, convertPathToPattern } from 'globby'
 import type PQueue from 'p-queue'
 import type { NonEmptyTuple } from 'type-fest'
 
+import { SOURCE_DIR_GADGETS } from '@/scripts/config'
 import { writeBuiltPage } from '@/scripts/utils/page'
 import {
 	srcDistExtensionMap,
@@ -26,7 +27,7 @@ import {
 import { getGadgetSourceFileInfo } from './file-info'
 import type { ParsedGadgetMeta } from './types'
 
-const GADGET_LIST_META_PATH = 'src/gadgets/(meta).ts'
+const GADGET_LIST_META_PATH = `${SOURCE_DIR_GADGETS}/(meta).ts`
 
 export async function buildGadgets({
 	queue,
@@ -140,7 +141,7 @@ async function collectGadgetsDefinition(): Promise<GadgetsDefinition> {
  * 收集所有 `src/gadgets/(group)/.../(group)/<name>/(meta).ts` 定义的 gadget，不包括草稿
  */
 async function collectGadgetsInDir(): Promise<ParsedGadgetMeta[]> {
-	const entries = await findCodeEntries('src/gadgets')
+	const entries = await findCodeEntries(SOURCE_DIR_GADGETS)
 	const tasks = entries.map(
 		async ({ name: gadgetName, path: gadgetDir }): Promise<ParsedGadgetMeta | null> => {
 			assert(isValidGadgetName(gadgetName), `无效的gadget名：${gadgetName}，位于${gadgetDir}`)

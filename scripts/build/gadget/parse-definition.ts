@@ -10,6 +10,8 @@ import assert from 'node:assert/strict'
 
 import type { NonEmptyTuple } from 'type-fest'
 
+import { SOURCE_DIR_GADGETS } from '@/scripts/config'
+
 import type { GadgetsDefinition, GadgetsDefinitionNode } from './definition'
 import type { ParsedGadgetMeta } from './types'
 
@@ -61,7 +63,7 @@ export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 	const gadgetPages = groups.pages!.split(/\s*\|\s*/gu)
 	const meta = {
 		name: gadgetName,
-		dir: `src/gadgets/${gadgetName}`,
+		dir: `${SOURCE_DIR_GADGETS}/${gadgetName}`,
 		pages: gadgetPages.map((page) => ({
 			type: 'existing',
 			name: page,

@@ -2,13 +2,14 @@ import { readdir } from 'node:fs/promises'
 
 import type { ReactNode } from 'react'
 
+import { SOURCE_DIR_TEMPLATES } from '@/scripts/config'
 import { writeBuiltPage } from '@/scripts/utils/page'
 
 import { compileComponent } from '../compilers'
 import { noticeForEditors } from '../utils/notice'
 
 export async function buildWikitextPages() {
-	await buildPagesUnder('src/templates', 'Template')
+	await buildPagesUnder(SOURCE_DIR_TEMPLATES, 'Template')
 }
 
 async function buildPagesUnder(dir: string, namespace: string) {

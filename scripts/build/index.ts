@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 
 import { emptyDir } from 'fs-extra/esm'
 import PQueue from 'p-queue'
@@ -7,18 +8,20 @@ import type { IsEqual } from 'type-fest'
 import type { Expect } from '@/lib/typing'
 import { saveReferencedFiles } from '@/tools/file-usage'
 
-import { OUTPUT_DIR, PAGES_DIR_IN_OUTPUT_DIR } from '../config'
+import { NONDEFAULT_CONTENT_MODELS_PATH, OUTPUT_DIR, PAGES_DIR_IN_OUTPUT_DIR } from '../config'
+import type { ContentModel } from '../types'
 import { escapePageTitle } from '../utils/page'
 import { buildJsEntries, type EntriesAdditionalInfo } from './compilers/js-compiler'
+import { buildEmbeddableHtmlSnippets } from './embeddable-html'
 import { buildGadgets } from './gadget'
 import type { ScriptBuildEntry } from './types'
-import { buildWidgets } from './widget'
 import { buildWikitextPages } from './wikitext'
 
 await emptyDir(OUTPUT_DIR)
 const queue = new PQueue()
 
 const scriptEntries: ScriptBuildEntry[] = []
+const nondefaultContentModels = new Map<string, ContentModel>()
 const mwPageNames = new Set<string>()
 const assetNames = new Set<string>()
 
@@ -35,7 +38,14 @@ const addToScriptEntries = (entry: ScriptBuildEntry) => {
 }
 
 void queue.add(() => buildGadgets({ queue, onScriptEntryFound: addToScriptEntries }))
-void queue.add(() => buildWidgets({ onScriptEntryFound: addToScriptEntries }))
+void queue.add(() =>
+	buildEmbeddableHtmlSnippets({
+		onScriptEntryFound: addToScriptEntries,
+		onNondefaultContentModelFound: (title, contentModel) => {
+			nondefaultContentModels.set(title, contentModel)
+		},
+	}),
+)
 void queue.add(() => buildWikitextPages())
 
 await Promise.race([queue.onError(), queue.onIdle()])
@@ -44,7 +54,11 @@ queue.addEventListener('add', () => {
 	throw new Error('不应有新的任务追加')
 })
 
-await Promise.all([saveReferencedFiles(), buildScripts(scriptEntries)])
+await Promise.all([
+	saveReferencedFiles(),
+	buildScripts(scriptEntries),
+	saveNondefaultContentModels(nondefaultContentModels),
+])
 
 async function buildScripts(entries: ScriptBuildEntry[]) {
 	const input: Record<string, string> = {}
@@ -72,4 +86,9 @@ async function buildScripts(entries: ScriptBuildEntry[]) {
 		entriesAdditionalInfo,
 		postBuildHandlers,
 	})
+}
+
+async function saveNondefaultContentModels(titleToModelMap: Map<string, ContentModel>) {
+	const content = JSON.stringify(Object.fromEntries(titleToModelMap.entries()))
+	await fs.writeFile(NONDEFAULT_CONTENT_MODELS_PATH, content, 'utf-8')
 }

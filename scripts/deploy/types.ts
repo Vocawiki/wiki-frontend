@@ -2,6 +2,7 @@ import * as z from 'zod'
 
 import { isoDatetimeToInstant } from '@/lib/zod'
 
+import { contentModelSchema, type ContentModel } from '../types'
 import { comparePath } from '../utils/sorter'
 
 export interface DeploymentContext {
@@ -13,13 +14,27 @@ export interface DeploymentContext {
 export interface Page {
 	title: string
 	content: string
-	sha1: string
+	hash: string
+	contentModel?: ContentModel
 }
 
-const deploymentPagesSchema = z.record(z.string(), z.string()).meta({
+const deploymentPagesSchemaV3 = z.record(z.string(), z.string()).meta({
 	title: '已部署页面',
 	description: '已部署页面的标题到其对应内容SHA的映射',
 })
+
+const deploymentPagesSchema = z
+	.record(
+		z.string(),
+		z.object({
+			hash: z.string().min(1).meta({ title: '文件hash（SHA-1）' }),
+			contentModel: contentModelSchema.optional(),
+		}),
+	)
+	.meta({
+		title: '已部署页面',
+		description: '已部署页面的标题到其详细信息的映射',
+	})
 
 const commitShaSchema = z.string().min(1)
 
@@ -50,7 +65,7 @@ export type DeploymentTrash = z.infer<typeof deploymentTrashSchema>
 
 const pathSchema = z.string().startsWith('/')
 const hashAndSize = {
-	hash: z.string().meta({ title: '文件hash' }),
+	hash: z.string().min(1).meta({ title: '文件hash' }),
 	size: z.number().int().nonnegative().meta({ title: '文件大小' }),
 } as const
 
@@ -71,8 +86,24 @@ const referencedFilesSchema = z.codec(z.array(z.string()), z.set(z.string()), {
 	encode: (set) => [...set].toSorted(comparePath),
 })
 
-export const deploymentStateSchema = z.object({
+export const deploymentStateSchemaV3 = z.object({
 	version: z.literal(3),
+	lockedBy: z.string().min(1).optional().meta({ title: '占用者', description: '一般是Run ID' }),
+	pages: deploymentPagesSchemaV3,
+	assets: assetsStateSchema,
+	referencedFiles: referencedFilesSchema,
+	trash: deploymentTrashSchema,
+	commitSha: commitShaSchema,
+	runId: runIdSchema,
+	deployStartedAt: isoDatetimeToInstant,
+	workerDeployFinishedAt: isoDatetimeToInstant,
+	deployFinishedAt: isoDatetimeToInstant,
+	cleanFinishedAt: isoDatetimeToInstant,
+})
+export type DeploymentStateV3 = z.output<typeof deploymentStateSchemaV3>
+
+export const deploymentStateSchema = z.object({
+	version: z.literal(4),
 	lockedBy: z.string().min(1).optional().meta({ title: '占用者', description: '一般是Run ID' }),
 	pages: deploymentPagesSchema,
 	assets: assetsStateSchema,
@@ -85,5 +116,4 @@ export const deploymentStateSchema = z.object({
 	deployFinishedAt: isoDatetimeToInstant,
 	cleanFinishedAt: isoDatetimeToInstant,
 })
-
 export type DeploymentState = z.output<typeof deploymentStateSchema>

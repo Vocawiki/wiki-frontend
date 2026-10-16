@@ -134,19 +134,19 @@
 
   - `<源代码文件>`：目前可以是TS/JS/Tailwind CSS文件，一般命名为`index.{ts,js,css}`，构建后将部署到“MediaWiki:Gadgets-`<gadget名>`.{js,css}”；若需其他名字，则需要在`./(meta).ts`中指定入口文件。
 
-#### `src/widgets/`
+#### `src/embeddable-html/`
 
-- `<widget名>/`：将部署到“Widget:`<widget名>`”。
-  - `(meta).ts`：定义了该widget的信息，必须默认导出一个符合`WidgetMeta`的对象，示例内容：
+- `<片段名>/`：将部署到“HTML:`<片段名>`”。
+  - `(meta).ts`：定义了该的信息，必须默认导出一个符合`EmbeddableHtmlMeta`的对象，示例内容：
 
     ```ts
-    import type { WidgetMeta } from '@/tools/widget'
+    import type { EmbeddableHtmlMeta } from '@/tools/embeddable-html'
 
     export default {
     	description: '...',
     	type: 'script',
     	scriptType: 'module',
-    } satisfies WidgetMeta
+    } satisfies EmbeddableHtmlMeta
     ```
 
   - `index.ts`：入口文件。

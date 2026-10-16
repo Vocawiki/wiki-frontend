@@ -1,5 +1,5 @@
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
-import { HorizontalScrollablePageList } from '~/widgets/LatestArticleList/page-list'
+import { HorizontalScrollablePageList } from '~/embeddable-html/LatestArticleList/page-list'
 
 import mockData from './mock-data'
 
@@ -15,7 +15,7 @@ export function LatestArticles() {
 function Wikitext() {
 	return (
 		<>
-			{'{{#widget:LatestArticleList}}'}
+			{'{{#html:LatestArticleList}}'}
 			<div
 				id="latest-article-list"
 				className="preflight"

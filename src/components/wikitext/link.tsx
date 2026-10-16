@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
 
-import { WikiInternalLink } from '../wiki-link'
+import { WikiExternalLink, WikiInternalLink } from '../wiki-link'
 
 export interface WikitextInternalLinkPropsSimple {
 	page?: undefined
@@ -37,11 +37,7 @@ function WikitextExternalLink({ href, children }: WikitextExternalLinkProps) {
 	assert(/^https?:\/\//u.test(href), 'href必须以“http(s)://”开头')
 
 	if (SHOULD_CONVERT_WIKITEXT_TO_HTML) {
-		return (
-			<a target="_blank" rel="noreferrer noopener" className="external text" href={href}>
-				{children}
-			</a>
-		)
+		return <WikiExternalLink href={href}>{children}</WikiExternalLink>
 	}
 	return (
 		<>

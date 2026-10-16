@@ -9,6 +9,7 @@ import {
 
 import { REPO_NAME, WIKI_API_URL } from '../config'
 import { DEPLOYMENT_STATE_PAGE_TITLE } from './config'
+import { parseDeploymentStateString } from './deployment-state'
 import { deploymentSpecifier } from './message'
 import {
 	type Page,
@@ -68,8 +69,8 @@ export async function getDeployState(api: MediaWikiApi) {
 		rvslots: 'main',
 		rvlimit: 1,
 	})
-	const raw = JSON.parse(result.data.query.pages[0].revisions[0].slots.main.content) as unknown
-	return deploymentStateSchema.parse(raw)
+
+	return parseDeploymentStateString(result.data.query.pages[0].revisions[0].slots.main.content)
 }
 
 export async function lockDeploymentState(
@@ -115,6 +116,7 @@ export async function deployPage(api: MediaWikiApi, { summary }: DeploymentConte
 		title: page.title,
 		text: page.content,
 		summary,
+		contentmodel: page.contentModel,
 		tags: 'Bot',
 		notminor: true,
 		bot: true,
@@ -131,8 +133,10 @@ export async function deletePage(api: MediaWikiApi, { runId }: DeploymentContext
 			title,
 			reason,
 		})
-	} catch (e: unknown) {
-		if (!(e instanceof MediaWikiApiError && e.code === 'missingtitle')) {
+	} catch (e) {
+		if (e instanceof MediaWikiApiError && e.code === 'missingtitle') {
+			// ignore error
+		} else {
 			throw e
 		}
 	}

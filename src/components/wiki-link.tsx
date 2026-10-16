@@ -42,3 +42,14 @@ export function WikiInternalLink({
 		</a>
 	)
 }
+
+export function WikiExternalLink({ className, ...props }: React.ComponentProps<'a'>) {
+	return (
+		<a
+			target="_blank"
+			rel="noreferrer noopener"
+			className={cn('external text', className)}
+			{...props}
+		/>
+	)
+}

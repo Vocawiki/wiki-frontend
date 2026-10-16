@@ -13,7 +13,6 @@ import { WikiImage, type WikiImageProps } from '.'
 
 type WidthAndOrHeight = { width: number; height?: number } | { width?: number; height: number }
 
-// TODO: 通过机器人将图片标记为正在使用
 export async function WikiImageServerOnly(props: WikiImageProps) {
 	const normalizedName = normalizeWikiTitle(props.file)
 	referenceFile(normalizedName)
@@ -130,6 +129,7 @@ async function query(
 	{ width, height }: WidthAndOrHeight,
 	resolvers: Map<string, ImagePromiseAndResolver>,
 ) {
+	console.log(`查询缩略图: ${width ?? ''}x${height ?? ''}，数量: ${resolvers.size}`)
 	const titles = [...resolvers.keys()]
 	const call = new MwApiCall({
 		titles,

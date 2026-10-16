@@ -1,4 +1,4 @@
-import type { PageInfo } from '~/widgets/LatestArticleList/types'
+import type { PageInfo } from '~/embeddable-html/LatestArticleList/types'
 
 const mockData: PageInfo[] = [
 	{

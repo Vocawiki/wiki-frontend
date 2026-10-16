@@ -1,16 +1,24 @@
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
+import fs from 'node:fs/promises'
 import { parseArgs } from 'node:util'
 
 import { convertPathToPattern, globby } from 'globby'
 import pMap from 'p-map'
+import pProps from 'p-props'
 import PQueue from 'p-queue'
 import type { MediaWikiApi } from 'wiki-saikou'
 
 import { toSorted } from '@/lib/record'
+import { getWikiTitleInfo, type NamespaceName } from '@/lib/wiki'
 import { loadReferencedFiles } from '@/tools/file-usage'
 
-import { ASSETS_BASE_URL, ASSETS_DIR_IN_OUTPUT_DIR, PAGES_DIR } from '../config'
+import {
+	ASSETS_BASE_URL,
+	ASSETS_DIR_IN_OUTPUT_DIR,
+	PAGES_DIR,
+	NONDEFAULT_CONTENT_MODELS_PATH,
+} from '../config'
+import type { ContentModel } from '../types'
 import { getPageTitleFromFileName } from '../utils/page'
 import { comparePath } from '../utils/sorter'
 import {
@@ -32,7 +40,7 @@ import {
 	type Page,
 } from './types'
 
-const Instant = Temporal.Instant
+const namespacePrecedence: NamespaceName[] = ['HTML', 'MediaWiki', 'Template']
 
 const { values: args } = parseArgs({
 	args: Bun.argv,
@@ -91,10 +99,10 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 		const cleanFinishedAt = Temporal.Now.instant()
 
 		const newDeploymentState = deploymentStateSchema.encode({
-			version: 3,
+			version: 4,
 			pages: Object.fromEntries(
 				pages
-					.map((page) => [page.title, page.sha1] as const)
+					.map((page) => [page.title, { hash: page.hash }] as const)
 					.toSorted(([titleA], [titleB]) => comparePath(titleA, titleB)),
 			),
 			assets: {
@@ -134,9 +142,26 @@ async function deployWikiPages(
 ) {
 	const previousPages = previousDeploymentState.pages
 	const deployQueue = new PQueue({ concurrency: 2 })
+
+	const canSkipDeploy = ({ title, hash, contentModel }: Page) => {
+		const prev = previousPages[title]
+		if (!prev) return false
+		return hash === prev.hash && contentModel === prev.contentModel
+	}
+
 	await deployQueue.addAll(
 		pages
-			.filter(({ title, sha1 }) => sha1 !== previousPages[title])
+			.filter((page) => !canSkipDeploy(page))
+			.toSorted((a, b) => {
+				const nsA = getWikiTitleInfo(a.title).namespace.name
+				const nsB = getWikiTitleInfo(b.title).namespace.name
+				const nsAIndex = namespacePrecedence.indexOf(nsA)
+				const nsBIndex = namespacePrecedence.indexOf(nsB)
+				if (nsAIndex === -1 && nsBIndex === -1) return 0
+				if (nsAIndex === -1) return 1
+				if (nsBIndex === -1) return -1
+				return nsAIndex - nsBIndex
+			})
 			.map((page) => () => deployPage(api, ctx, page)),
 	)
 }
@@ -180,7 +205,7 @@ function toNewTrashState(
 	const earliestInstantToPreserve = Temporal.Now.instant().add({ hours: -7 * 24 }) // 清理超过7天的垃圾
 	const pagesToDelete = []
 	for (const [title, dateAdded] of trash.entries()) {
-		if (Instant.compare(dateAdded, earliestInstantToPreserve) > 0) {
+		if (Temporal.Instant.compare(dateAdded, earliestInstantToPreserve) > 0) {
 			break
 		}
 		pagesToDelete.push(title)
@@ -202,17 +227,23 @@ async function getPageContentSha1(content: string): Promise<string> {
 
 async function getBuiltPages(): Promise<Page[]> {
 	const directory = convertPathToPattern(PAGES_DIR)
-	const entries = await globby([`${directory}/*`, `!${directory}/*.map`], { stats: true })
-	return pMap(entries, async (entry) => {
+	const { entries, nondefaultContentModels } = await pProps({
+		entries: globby([`${directory}/*`, `!${directory}/*.map`], { stats: true }),
+		nondefaultContentModels: fs
+			.readFile(NONDEFAULT_CONTENT_MODELS_PATH, 'utf-8')
+			.then((str) => JSON.parse(str) as Record<string, ContentModel>),
+	})
+	return pMap(entries, async (entry): Promise<Page> => {
 		const title = getPageTitleFromFileName(entry.name)
-		const contentWithSourceMapComment = await readFile(entry.path, 'utf-8')
+		const contentWithSourceMapComment = await fs.readFile(entry.path, 'utf-8')
 		const content = contentWithSourceMapComment
 			.replace(/\n\/\/# sourceMappingURL=.+/u, '')
 			.replaceAll(`../${ASSETS_DIR_IN_OUTPUT_DIR}`, ASSETS_BASE_URL)
 		return {
 			title,
 			content,
-			sha1: await getPageContentSha1(content),
+			hash: await getPageContentSha1(content),
+			contentModel: nondefaultContentModels[title],
 		}
 	})
 }

@@ -13,7 +13,7 @@ export function FlashTopic() {
 			style={{ '--primary': '#6049d4', '--secondary': '#473dc1' } as CSSProperties}
 		>
 			<div className="fill ignore-article-inline-padding bg-[#a3aed4] [clip-path:inset(0)]">
-				<div className="fixed inset-x-0 top-0 h-screen bg-[url(/images/5/57/The_VOCALOID_Collection_2026_Summer_KV.webp)] bg-cover bg-center contrast-80" />
+				<div className="fixed inset-x-0 top-0 h-screen bg-[url(/images/5/57/The_VOCALOID_Collection_2026_Summer_KV.webp)] bg-cover bg-center not-dark:contrast-80 dark:brightness-50" />
 			</div>
 			<div className="relative my-4 flex flex-col">
 				<Title />
