@@ -20,4 +20,4 @@ export const ASSETS_ROUT_PATH = `/${ASSETS_DIR_IN_OUTPUT_DIR}`
 export const ASSETS_BASE_URL = `${ASSETS_BASE_URL_WITHOUT_ROUTE_PATH}${ASSETS_ROUT_PATH}`
 
 export const REFERENCED_FILES_PATH = `${OUTPUT_DIR}/referenced-files.txt`
-export const NONDEFAULT_CONTENT_MODELS_PATH = `${OUTPUT_DIR}/nondefault-contentModels.json`
+export const NONDEFAULT_CONTENT_MODELS_PATH = `${OUTPUT_DIR}/nondefault-content-models.json`
