@@ -1,9 +1,62 @@
-// oxlint-disable complexity max-lines-per-function
+// oxlint-disable max-lines-per-function
 import type * as VueTypes from 'vue'
 
 import { msg } from './i18n'
 import type { LicenseOption, UploadResponse } from './types'
 import { notifyError, notifySuccess } from './utils'
+
+/** mw.Api在传输层失败时的reject载荷：HTTP错误、断网、超时或响应非JSON。 */
+interface ApiTransportError {
+	xhr?: { responseText?: string }
+	textStatus?: string
+	exception?: string
+}
+
+/** 传输层失败的载荷没有error/errors字段，只能靠xhr识别。 */
+const isTransportError = (result: unknown): result is ApiTransportError =>
+	typeof result === 'object' && result !== null && 'xhr' in result
+
+/** 从MediaWiki的HTML错误页里取出请求编号。 */
+const REQUEST_ID_RE = /\[([\w@.-]{1,64})\]\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/u
+
+/** 从API的error.info里取出异常类名。 */
+const EXCEPTION_RE = /Caught exception of type ([\w\\]+)/u
+
+/**
+ * 这些警告只在`exists`成立时才会一起返回，
+ * 本身不说明任何新情况，单独显示反而会盖掉真正的原因。
+ */
+const SECONDARY_WARNINGS = ['nochange', 'duplicateversions']
+
+/**
+ * 把警告值转成可读文本。MediaWiki的警告值可能是字符串、字符串数组，
+ * 也可能是{fileName,timestamp}对象。
+ */
+const warningText = (value: unknown): string => {
+	if (typeof value === 'string') return value
+	if (Array.isArray(value)) {
+		return value.map((v) => warningText(v)).filter(Boolean).join('、')
+	}
+	if (typeof value === 'object' && value !== null) {
+		const o = value as { fileName?: string; timestamp?: string }
+		return o.fileName ?? o.timestamp ?? ''
+	}
+	return ''
+}
+
+/** 警告码对应的文案；没有列出的走err-warning-unknown。 */
+const WARNING_MESSAGES: Record<string, Parameters<typeof msg>[0]> = {
+	exists: 'err-exists',
+	'page-exists': 'err-page-exists',
+	'bad-prefix': 'err-bad-prefix',
+	'was-deleted': 'err-was-deleted',
+	'duplicate-archive': 'err-duplicate-archive',
+	duplicate: 'err-duplicate',
+	badfilename: 'err-badfilename',
+	'filetype-unwanted-type': 'err-filetype-unwanted-type',
+	'large-file': 'err-large-file',
+	'empty-file': 'err-empty-file',
+}
 
 interface UploadSubmitDeps {
 	api: mw.Api
@@ -36,45 +89,85 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		$(deps.form).data('origtext', $(deps.form).serialize())
 	}
 
-	function finishUpload(filename: string) {
-		notifySuccess(msg('success-uploaded'))
+	/* 勾选忽略警告时MediaWiki返回的是Success，但warnings仍然挂在响应里。 */
+	function handleSuccessWarnings(warnings: Record<string, unknown> | undefined): string | null {
+		if (!warnings) {
+			return null
+		}
+		if (Object.keys(warnings).some((k) => k !== 'exists')) {
+			console.warn('上传成功，但服务器返回了警告：', warnings)
+		}
+		return warningText(warnings.exists) || null
+	}
+
+	function finishUpload(filename: string, overwrote: string | null = null) {
+		if (overwrote) {
+			// 勾选忽略警告时MediaWiki会覆盖同名文件并返回Success。
+			notifySuccess(msg('success-overwrote', overwrote))
+		} else {
+			notifySuccess(msg('success-uploaded'))
+		}
 		setTimeout(() => {
 			releaseNativeLeaveConfirmation()
 			location.href = mw.util.getUrl(`File:${filename}`)
-		}, 500)
+		}, overwrote ? 3000 : 500)
 	}
 
-	function fail(code: string | null, result: UploadResponse): void {
-		const w = result.upload?.warnings
-		const wstr = (k: string): string => {
-			const s = w?.[k]
-			if (s === undefined) return ''
-			return typeof s === 'string' ? s : s.join('；')
+	/** 传输层失败：显示mw.Api的请求编号与文案。 */
+	function reportTransportError(code: string | null, result: ApiTransportError): void {
+		// 完整信息留在控制台，用于分辨是MediaWiki、网关还是网络的问题
+		console.error('上传请求在传输层失败：', code, result.textStatus, result.xhr, result.exception)
+		// 展开成对象字面量：interface没有隐式索引签名，无法直接传给mw.Api#getErrorMessage
+		const message = deps.api.getErrorMessage({ ...result })
+		// 错误页里`[编号]`与时间之间可能夹着标签，先剥掉标签再取编号
+		const responseText = (result.xhr?.responseText ?? '').replace(/<[^>]*>/gu, '')
+		const requestId = REQUEST_ID_RE.exec(responseText)?.[1]
+		if (!requestId) {
+			notifyError(message)
+			return
 		}
-		if (w?.exists) {
-			notifyError(msg('err-exists'))
-		} else if (w?.['was-deleted']) {
-			// 同名文件曾被删除
-			notifyError(msg('err-was-deleted', wstr('was-deleted')))
-		} else if (w?.['duplicate-archive']) {
-			// 同名同内容文件曾被删除
-			notifyError(msg('err-duplicate-archive', wstr('duplicate-archive')))
-		} else if (w?.['exists-normalized']) {
-			// 文件名规范化后撞已有文件
-			notifyError(msg('err-exists-normalized', wstr('exists-normalized')))
-		} else if (w?.duplicate) {
-			// 同内容文件已存在
-			const dup = Array.isArray(w.duplicate) ? (w.duplicate[0] ?? '') : w.duplicate
-			notifyError(msg('err-duplicate', dup))
-		} else if (w?.badfilename) {
-			notifyError(msg('err-badfilename', wstr('badfilename')))
-		} else if (result.errors?.[0]?.['*']) {
+		notifyError($('<div>').append(message, $('<div>').text(msg('err-http-id', requestId))))
+	}
+
+	/** 服务器内部错误：MediaWiki只给英文异常名，换成可读文案并保留编号。 */
+	function reportApiError(info: string): void {
+		console.error('上传时服务器内部错误：', info)
+		const name = EXCEPTION_RE.exec(info)?.[1]
+		const requestId = REQUEST_ID_RE.exec(info)?.[1]
+		if (!name) {
+			notifyError(info)
+			return
+		}
+		const message = msg('err-server-error', name)
+		if (!requestId) {
+			notifyError(message)
+			return
+		}
+		notifyError($('<div>').append(message, $('<div>').text(msg('err-http-id', requestId))))
+	}
+
+	function fail(code: string | null, result: UploadResponse | ApiTransportError): void {
+		// 传输层失败时载荷里没有error/errors字段，直接交给mw.Api自己的渲染器
+		if (isTransportError(result)) {
+			reportTransportError(code, result)
+			return
+		}
+		const w = result.upload?.warnings
+		if (w) {
+			// 跳过只起补充作用的次要警告，取第一个真正要说明情况的
+			const key = Object.keys(w).find((k) => !SECONDARY_WARNINGS.includes(k))
+			if (key) {
+				const id = WARNING_MESSAGES[key]
+				const value = warningText(w[key])
+				// 不认识的警告也要把code和内容说出来
+				notifyError(id ? msg(id, value) : msg('err-warning-unknown', key, value))
+				return
+			}
+		}
+		if (result.errors?.[0]?.['*']) {
 			notifyError(result.errors[0]['*'])
 		} else if (result.error?.info) {
-			notifyError(result.error.info)
-		} else if (w) {
-			const k = Object.keys(w)[0] ?? ''
-			notifyError(msg('err-blocked', k))
+			reportApiError(result.error.info)
 		} else {
 			notifyError(code ?? msg('err-upload-failed'))
 		}
@@ -88,12 +181,12 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		}
 		// 文件扩展名补全
 		let finalFilename = filename
-		const buildParams = (name: string, forceIgnore: boolean): Record<string, string | boolean> => {
+		const buildParams = (name: string): Record<string, string | boolean> => {
 			const p: Record<string, string | boolean> = {
 				filename: name,
 				comment: (deps.note.value || '').trim(),
 				watchlist: deps.watchFile.value ? 'watch' : 'nochange',
-				ignorewarnings: deps.isReupload || forceIgnore || deps.ignoreWarnings.value,
+				ignorewarnings: deps.isReupload || deps.ignoreWarnings.value,
 			}
 			if (!deps.isReupload) {
 				p.text = deps.previewText.value
@@ -106,7 +199,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			new Promise((resolve, reject) => {
 				request
 					.done((data) => resolve(data))
-					.fail((code: string, result: UploadResponse) => {
+					.fail((code: string, result: UploadResponse | ApiTransportError) => {
 						reject(Object.assign(new Error(code || 'upload failed'), { code, result }))
 					})
 			})
@@ -130,9 +223,13 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			try {
 				return await awaitRequest(request)
 			} catch (e) {
-				const err = e as { result?: UploadResponse; message?: string }
-				if (err.result?.upload?.result === 'Warning' || err.result?.upload?.result === 'Success') {
-					return err.result
+				const err = e as { result?: UploadResponse | ApiTransportError; message?: string }
+				const result = err.result
+				if (
+					!isTransportError(result) &&
+					(result?.upload?.result === 'Warning' || result?.upload?.result === 'Success')
+				) {
+					return result
 				}
 				throw e
 			}
@@ -140,20 +237,23 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		submitting.value = true
 		try {
 			// 文件扩展名补全
-			let result = await sendOnce(buildParams(finalFilename, false))
+			let result = await sendOnce(buildParams(finalFilename))
 			// 拿MW给出的改名重传一次
 			if (result.upload?.result === 'Warning' && result.upload.warnings?.badfilename) {
 				finalFilename = String(result.upload.warnings.badfilename)
-				result = await sendOnce(buildParams(finalFilename, true))
+				result = await sendOnce(buildParams(finalFilename))
 			}
 			if (result.upload?.result === 'Warning') {
 				fail(null, result)
 				return
 			}
-			finishUpload(result.upload?.filename || finalFilename)
+			finishUpload(
+				result.upload?.filename || finalFilename,
+				handleSuccessWarnings(result.upload?.warnings),
+			)
 		} catch (e) {
 			// 真实失败：缺文件、缺文件名、或重传后撞其它警告
-			const err = e as { code?: string; result?: UploadResponse; message?: string }
+			const err = e as { code?: string; result?: UploadResponse | ApiTransportError; message?: string }
 			if (err.message === msg('err-no-file')) {
 				notifyError(err.message)
 			} else {
