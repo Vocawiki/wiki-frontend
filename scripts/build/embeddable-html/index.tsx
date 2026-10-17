@@ -72,19 +72,19 @@ async function buildEmbeddableHtmlSnippet(
 	const mwPageTitle = normalizeWikiTitle(`HTML:${name}`)
 	const entryPath = `${path}/${entryFileName}`
 
+	switch (meta.position) {
+		case 'in-place':
+			break
+		case 'head':
+			onNondefaultContentModelFound(mwPageTitle, 'headhtml')
+			break
+		case 'body':
+			onNondefaultContentModelFound(mwPageTitle, 'bodyhtml')
+			break
+	}
+
 	switch (meta.type) {
 		case 'script': {
-			switch (meta.position) {
-				case 'in-place':
-					break
-				case 'head':
-					onNondefaultContentModelFound(mwPageTitle, 'headhtml')
-					break
-				case 'body':
-					onNondefaultContentModelFound(mwPageTitle, 'bodyhtml')
-					break
-			}
-
 			if (meta.scriptType === 'module') {
 				onScriptEntryFound({
 					type: 'asset',
