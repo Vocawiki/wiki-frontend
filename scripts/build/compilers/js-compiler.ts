@@ -21,7 +21,7 @@ import {
 
 import { JS_BROWSER_TARGETS } from '../browser-target'
 
-const rolldownPredefinedOptions: RolldownInputOptions = {
+const commonInputOptions: RolldownInputOptions = {
 	plugins: [
 		babel({
 			plugins: ['babel-plugin-react-compiler'],
@@ -42,15 +42,21 @@ const rolldownPredefinedOptions: RolldownInputOptions = {
 	},
 	platform: 'browser',
 }
+const commonOutputOptions: RolldownOutputOptions = {
+	minify: IS_PRODUCTION,
+	generatedCode: { preset: 'es2015' },
+}
 
 export async function compileJS(
-	input: RolldownInputOption,
-	options: RolldownOutputOptions = {},
+	inputOptions: RolldownInputOptions,
+	outputOptions: RolldownOutputOptions = {},
 ): Promise<string> {
-	await using bundle = await rolldown({ ...rolldownPredefinedOptions, input })
+	await using bundle = await rolldown({ ...commonInputOptions, ...inputOptions })
 
-	const outputOptions: RolldownOutputOptions = { minify: IS_PRODUCTION, ...options }
-	const { output } = await bundle.generate(outputOptions)
+	const { output } = await bundle.generate({
+		...commonOutputOptions,
+		...outputOptions,
+	})
 	assert.equal(output.length, 1, '应当只有一个chunk生成')
 	const code = output[0].code
 	return code
@@ -82,7 +88,7 @@ export async function buildJsEntries(
 	const postBuildQueue = new PQueue()
 
 	await using bundle = await rolldown({
-		...rolldownPredefinedOptions,
+		...commonInputOptions,
 		checks: {
 			// 我们没有使用RSC，所以打包时即便'use client'被移除也不影响
 			moduleLevelDirective: false,
@@ -160,9 +166,8 @@ export async function buildJsEntries(
 		input,
 	})
 	const outputOptions: RolldownOutputOptions = {
-		minify: IS_PRODUCTION,
+		...commonOutputOptions,
 		dir: OUTPUT_DIR,
-		generatedCode: { preset: 'es2015' },
 		entryFileNames: ({ name }) => {
 			if (name.startsWith(`${PAGES_DIR_IN_OUTPUT_DIR}/`)) {
 				return name

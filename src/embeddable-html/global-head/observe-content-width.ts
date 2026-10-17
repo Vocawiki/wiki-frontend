@@ -22,15 +22,14 @@ function observeResize(target: Element) {
 	const breakpointsAndNames = breakpoints.map(
 		([breakpoint, name]) => [breakpoint, `main-${name}`] as const,
 	)
+	const maxBreakpointIndex = breakpointsAndNames.length - 1
 
-	const resizeObserver = new ResizeObserver((entries) => {
-		const { contentBoxSize, contentRect } = entries[0]!
+	const resizeObserver = new ResizeObserver(([entry]) => {
 		// https://caniuse.com/mdn-api_resizeobserverentry_contentboxsize
-		const width = (contentBoxSize as ResizeObserverSize[] | undefined)
-			? contentBoxSize[0]!.inlineSize
-			: contentRect.width
+		const width =
+			'contentBoxSize' in entry! ? entry.contentBoxSize[0]!.inlineSize : entry!.contentRect.width
 
-		let i = breakpointsAndNames.length - 1
+		let i = maxBreakpointIndex
 		for (; i >= 0; i--) {
 			const [breakpoint, className] = breakpointsAndNames[i]!
 			if (width < breakpoint) {

@@ -6,6 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import type { IsEqual } from 'type-fest'
 
 import type { Expect } from '@/lib/typing'
+import { normalizeWikiTitle } from '@/lib/wiki'
 import { SOURCE_DIR_EMBEDDABLE_HTML } from '@/scripts/config'
 import { getFileInfo } from '@/scripts/utils/file-info'
 import { writeBuiltPage } from '@/scripts/utils/page'
@@ -68,7 +69,7 @@ async function buildEmbeddableHtmlSnippet(
 		onNondefaultContentModelFound: (title: string, contentModel: ContentModel) => void
 	},
 ) {
-	const mwPageTitle = `HTML:${name}`
+	const mwPageTitle = normalizeWikiTitle(`HTML:${name}`)
 	const entryPath = `${path}/${entryFileName}`
 
 	switch (meta.type) {
@@ -112,7 +113,7 @@ async function buildEmbeddableHtmlSnippet(
 			}
 			type _Check = Expect<IsEqual<typeof meta.scriptType, 'classic-inline-no-import'>>
 
-			const code = await compileJS(entryPath, { format: 'iife', strict: true })
+			const code = await compileJS({ input: entryPath }, { format: 'iife', strict: true })
 			const content = `<script>${code}</script>`
 			await writeBuiltPage(mwPageTitle, content)
 			return

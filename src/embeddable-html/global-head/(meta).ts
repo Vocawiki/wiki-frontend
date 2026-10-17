@@ -1,7 +1,6 @@
 import type { EmbeddableHtmlMeta } from '@/tools/embeddable-html'
 
 export default {
-	type: 'script',
-	scriptType: 'classic-inline-no-import',
+	type: 'static-markup',
 	position: 'head',
 } satisfies EmbeddableHtmlMeta
