@@ -14,7 +14,7 @@ const contentContainer = document.getElementById(mainContainerId)
 if (contentContainer) {
 	observeResize(contentContainer)
 } else {
-	observeDOMMutation(document.body)
+	observeDOMMutation(document)
 }
 
 function observeResize(target: Element) {
