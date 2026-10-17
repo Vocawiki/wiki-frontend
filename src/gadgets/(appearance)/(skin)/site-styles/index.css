@@ -267,6 +267,10 @@
 	padding: 0;
 	border: 0 solid;
 
+	&[hidden]:where(:not([hidden="until-found"])) {
+		display: none !important;
+	}
+
 	:where(:not(img, svg, svg *, video, canvas, audio, iframe, embed, object, math, math *)) {
 		all: revert;
 	}
