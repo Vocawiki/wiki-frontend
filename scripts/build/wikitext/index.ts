@@ -6,10 +6,14 @@ import { SOURCE_DIR_TEMPLATES } from '@/scripts/config'
 import { writeBuiltPage } from '@/scripts/utils/page'
 
 import { compileComponent } from '../compilers'
+import type { BuildContext } from '../stages-and-context'
 import { noticeForEditors } from '../utils/notice'
 
-export async function buildWikitextPages() {
-	await buildPagesUnder(SOURCE_DIR_TEMPLATES, 'Template')
+export function scheduleBuildTasksForWikitextPages(ctx: BuildContext) {
+	ctx.scheduleTask(() => buildPagesUnder(SOURCE_DIR_TEMPLATES, 'Template'), {
+		after: 'start',
+		before: ['saveNondefaultContentModels', 'saveReferencedFiles'],
+	})
 }
 
 async function buildPagesUnder(dir: string, namespace: string) {
@@ -22,7 +26,7 @@ async function buildPagesUnder(dir: string, namespace: string) {
 		const reactNode = render()
 		const wikitext = await compileComponent(reactNode)
 		const notice = noticeForEditors(dir).join('\n\n')
-		const content = `<noinclude>\n${notice}\n</noinclude>${wikitext}`
+		const content = `<noinclude>\n${notice}\n</noinclude><includeonly>${wikitext}</includeonly>`
 		await writeBuiltPage(`${namespace}:${entry.name}`, content)
 	})
 	await Promise.all(tasks)

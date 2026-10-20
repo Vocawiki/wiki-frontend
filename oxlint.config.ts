@@ -75,6 +75,7 @@ export default defineConfig({
 		],
 
 		// suspicious
+		'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
 		'no-shadow': OFF,
 		'typescript/consistent-return': OFF, // 由TypeScript `noImplicitReturns`代替
 		'typescript/no-unnecessary-type-arguments': OFF,
@@ -96,6 +97,7 @@ export default defineConfig({
 		],
 		'typescript/switch-exhaustiveness-check': [ERROR, { considerDefaultExhaustiveForUnions: true }],
 		'array-callback-return': OFF, // 用TypeScript类型检查来弥补
+		'max-classes-per-file': OFF,
 		'no-inline-comments': OFF,
 		'no-promise-executor-return': OFF,
 		'no-warning-comments': OFF,
@@ -112,6 +114,7 @@ export default defineConfig({
 		'no-use-before-define': [ERROR, { classes: false, functions: false }],
 		'typescript/explicit-member-accessibility': [ERROR, { accessibility: 'no-public' }],
 		'react/jsx-filename-extension': [ERROR, { allow: 'as-needed', extensions: ['jsx', 'tsx'] }],
+		'react/only-export-components': [ERROR, { allowExportNames: ['getStaticProps'] }],
 		'default-case': OFF, // 由typescript/switch-exhaustiveness-check处理
 		'no-bitwise': OFF,
 		'no-console': OFF,
@@ -161,6 +164,7 @@ export default defineConfig({
 		'sort-imports': OFF,
 		'sort-keys': OFF,
 		'no-void': OFF,
+		'typescript/parameter-properties': OFF,
 		'typescript/prefer-regexp-exec': OFF,
 		'typescript/consistent-indexed-object-style': OFF,
 		'react/jsx-max-depth': OFF,

@@ -1,3 +1,5 @@
+import type { Promisable } from 'type-fest'
+
 import type { EntryMeta } from './compilers/js-compiler'
 
 export interface ScriptBuildEntryMwPage {
@@ -10,7 +12,7 @@ export interface ScriptBuildEntryAsset {
 	type: 'asset'
 	name: string
 	path: string
-	onBuildSuccess?: (entryUrl: string) => Promise<void>
+	onBuildSuccess?: (entryUrl: string) => Promisable<void>
 }
 
 export type ScriptBuildEntry = ScriptBuildEntryMwPage | ScriptBuildEntryAsset

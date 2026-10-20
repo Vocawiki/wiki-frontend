@@ -10,6 +10,7 @@ import {
 	type AddonFunction,
 } from 'rolldown'
 import { objectEntries } from 'ts-extras'
+import type { Promisable } from 'type-fest'
 
 import { IS_PRODUCTION } from '@/lib/config'
 import {
@@ -81,7 +82,7 @@ export async function buildJsEntries(
 		postBuildHandlers,
 	}: {
 		entriesAdditionalInfo: EntriesAdditionalInfo
-		postBuildHandlers: Map<string, (entryUrl: string) => Promise<void>>
+		postBuildHandlers: Map<string, (entryUrl: string) => Promisable<void>>
 	},
 ): Promise<void> {
 	const calledPostBuildHandlers = new Set<string>()

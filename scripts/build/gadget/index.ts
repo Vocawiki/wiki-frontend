@@ -2,7 +2,6 @@ import assert from 'node:assert/strict'
 import { extname } from 'node:path'
 
 import { globby, convertPathToPattern } from 'globby'
-import type PQueue from 'p-queue'
 import type { NonEmptyTuple } from 'type-fest'
 
 import { SOURCE_DIR_GADGETS } from '@/scripts/config'
@@ -15,7 +14,7 @@ import {
 } from '@/tools/gadget'
 import gadgetListMeta from '~/gadgets/(meta)'
 
-import type { ScriptBuildEntry } from '../types'
+import type { BuildContext } from '../stages-and-context'
 import { findCodeEntries } from '../utils/code-entry'
 import { noticeForEditors } from '../utils/notice'
 import { buildCss } from './builders'
@@ -29,33 +28,33 @@ import type { ParsedGadgetMeta } from './types'
 
 const GADGET_LIST_META_PATH = `${SOURCE_DIR_GADGETS}/(meta).ts`
 
-export async function buildGadgets({
-	queue,
-	onScriptEntryFound,
-}: {
-	queue: PQueue
-	onScriptEntryFound: (entry: ScriptBuildEntry) => void
-}) {
-	const definition = await collectGadgetsDefinition()
-	void queue.add(() => buildGadgetsDefinition(definition))
-	const gadgets = definition.filter((x) => x.type === 'gadget')
+export function scheduleBuildTasksForGadgets(ctx: BuildContext) {
+	ctx.scheduleTask(
+		async () => {
+			const definition = await collectGadgetsDefinition()
 
-	gadgets.forEach(({ meta }) => buildGadget(meta, queue, onScriptEntryFound))
+			ctx.scheduleTask(() => buildGadgetsDefinition(definition))
+
+			const gadgets = definition.filter((x) => x.type === 'gadget')
+
+			gadgets.forEach(({ meta }) => buildGadget(meta, ctx))
+		},
+		{
+			after: 'start',
+			before: ['buildScriptEntries', 'saveReferencedFiles', 'saveNondefaultContentModels'],
+		},
+	)
 }
 
-function buildGadget(
-	meta: ParsedGadgetMeta,
-	queue: PQueue,
-	onScriptEntryFound: (entry: ScriptBuildEntry) => void,
-) {
+function buildGadget(meta: ParsedGadgetMeta, ctx: BuildContext) {
 	meta.pages.forEach((page) => {
 		if (page.type === 'existing') return
 
 		if (page.type === 'custom') {
-			void queue.add(async () => {
+			ctx.scheduleTask(async () => {
 				const pages = Object.entries(await page.getContents({ noticeForEditors }))
 				pages.forEach(([name, content]) => {
-					void queue.add(() => writeBuiltPage(`MediaWiki:Gadget-${name}`, content))
+					ctx.scheduleTask(() => writeBuiltPage(`MediaWiki:Gadget-${name}`, content))
 				})
 			})
 			return
@@ -67,14 +66,14 @@ function buildGadget(
 		const path = `${meta.dir}/${page.entry}`
 
 		if (fileInfo.extension === 'css') {
-			void queue.add(async () => {
+			ctx.scheduleTask(async () => {
 				const { content } = await buildCss({ path })
 				await writeBuiltPage(title, content)
 			})
 			return
 		}
 
-		onScriptEntryFound({
+		ctx.registerScriptEntry({
 			type: 'mw-page',
 			title,
 			meta: {
