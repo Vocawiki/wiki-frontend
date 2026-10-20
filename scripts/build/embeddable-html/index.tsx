@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises'
+import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import pMap from 'p-map'
@@ -46,12 +46,14 @@ export function scheduleBuildTasksForEmbeddableHtml(ctx: BuildContext) {
 
 				if (meta.type === 'script') {
 					scheduleScript(info as EmbeddableHtmlSourceInfo & { meta: { type: 'script' } }, ctx)
-				} else {
-					type _Check = Expect<IsEqual<typeof meta.type, 'static-markup'>>
+				} else if (meta.type === 'static-markup') {
 					scheduleStaticMarkup(
 						info as EmbeddableHtmlSourceInfo & { meta: { type: 'static-markup' } },
 						ctx,
 					)
+				} else {
+					type _Check = Expect<IsEqual<typeof meta.type, 'html'>>
+					scheduleHtml(info as EmbeddableHtmlSourceInfo & { meta: { type: 'html' } }, ctx)
 				}
 			})
 		},
@@ -67,7 +69,7 @@ export function scheduleBuildTasksForEmbeddableHtml(ctx: BuildContext) {
  * @returns 文件名
  */
 async function findIndexFile(dir: string): Promise<string> {
-	for (const x of await readdir(dir, { withFileTypes: true })) {
+	for (const x of await fs.readdir(dir, { withFileTypes: true })) {
 		if (x.isFile() && getFileInfo(x.name).baseName === 'index') {
 			return x.name
 		}
@@ -167,7 +169,8 @@ function scheduleStaticMarkup(
 			const ctxForGetStaticProps: GetStaticPropsContext = {
 				createAssetUrl: (filePath) =>
 					new Promise((resolve) => {
-						const fileBaseName = path.basename(filePath, path.extname(filePath))
+						const extName = path.extname(filePath)
+						const fileBaseName = path.basename(filePath, extName)
 						const scriptEntryName = generateScriptEntryName(fileBaseName, entry.name)
 						ctx.registerScriptEntry({
 							type: 'asset',
@@ -177,16 +180,35 @@ function scheduleStaticMarkup(
 						})
 					}),
 			}
-			ctx.scheduleTask(
-				async () => {
-					const props = await module.getStaticProps(ctxForGetStaticProps)
-					const Component = module.default
-					const html = await compileComponent(<Component {...props} />)
-					await writeBuiltPage(entry.mwTitle, html)
-				},
-				{ after: 'start', before: 'saveReferencedFiles' },
-			)
+			void ctx
+				.scheduleTask(() => module.getStaticProps(ctxForGetStaticProps), {
+					after: 'start',
+					before: ['buildScriptEntries', 'saveReferencedFiles'],
+				})
+				.done.then(({ props }) =>
+					ctx
+						.scheduleTask(
+							async () => {
+								console.log('props', props)
+								const Component = module.default
+								const html = await compileComponent(<Component {...props} />)
+								return html
+							},
+							{ after: 'start', before: 'saveReferencedFiles' },
+						)
+						.done.then((html) => ctx.scheduleTask(() => writeBuiltPage(entry.mwTitle, html))),
+				)
 		},
-		{ after: 'start', before: 'buildScriptEntries' },
+		{ after: 'start', before: ['buildScriptEntries', 'saveReferencedFiles'] },
 	)
+}
+
+function scheduleHtml(
+	entry: EmbeddableHtmlSourceInfo & { meta: { type: 'html' } },
+	ctx: BuildContext,
+) {
+	ctx.scheduleTask(async () => {
+		const html = await fs.readFile(`${entry.path}/index.html`, 'utf-8')
+		await writeBuiltPage(entry.mwTitle, html)
+	})
 }

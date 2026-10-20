@@ -24,8 +24,8 @@ export class BuildContext<const Stages extends BuildStagesBase> {
 
 	constructor(private readonly stages: Stages) {}
 
-	scheduleTask<AfterStage extends keyof Stages>(
-		func: (input: StageOutput<Stages[AfterStage]>) => Promisable<void>,
+	scheduleTask<T, AfterStage extends keyof Stages>(
+		func: (input: StageOutput<Stages[AfterStage]>) => Promisable<T>,
 		timing: {
 			after: AfterStage
 			before: Arrayable<keyof Stages>
@@ -33,7 +33,7 @@ export class BuildContext<const Stages extends BuildStagesBase> {
 			after: 'start' as AfterStage,
 			before: ['end'],
 		},
-	): void {
+	): { done: Promise<T> } {
 		const afterName = timing.after
 		const beforeNames: (keyof Stages)[] = Array.isArray(timing.before) ? timing.before : ['end']
 		const afterStage = this.stages[afterName] as Stages[AfterStage]
@@ -49,6 +49,7 @@ export class BuildContext<const Stages extends BuildStagesBase> {
 
 		const taskPromise = afterStage.promise.then(func)
 		beforeStages.forEach((stage) => stage.registerPredecessorTask(taskPromise))
+		return { done: taskPromise }
 	}
 
 	registerScriptEntry(entry: ScriptBuildEntry): void {

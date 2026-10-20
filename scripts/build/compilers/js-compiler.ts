@@ -49,10 +49,13 @@ const commonOutputOptions: RolldownOutputOptions = {
 }
 
 export async function compileJS(
-	inputOptions: RolldownInputOptions,
+	inputOptions: string | RolldownInputOptions,
 	outputOptions: RolldownOutputOptions = {},
 ): Promise<string> {
-	await using bundle = await rolldown({ ...commonInputOptions, ...inputOptions })
+	await using bundle = await rolldown({
+		...commonInputOptions,
+		...(typeof inputOptions === 'string' ? { input: inputOptions } : inputOptions),
+	})
 
 	const { output } = await bundle.generate({
 		...commonOutputOptions,

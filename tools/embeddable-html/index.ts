@@ -16,7 +16,14 @@ export interface EmbeddableHtmlMeta_Script extends EmbeddableHtmlMetaBase {
 	scriptType: EmbeddableHtmlScriptType
 }
 
-export type EmbeddableHtmlMeta = EmbeddableHtmlMeta_StaticMarkup | EmbeddableHtmlMeta_Script
+export interface EmbeddableHtmlMeta_HTML extends EmbeddableHtmlMetaBase {
+	type: 'html'
+}
+
+export type EmbeddableHtmlMeta =
+	| EmbeddableHtmlMeta_StaticMarkup
+	| EmbeddableHtmlMeta_Script
+	| EmbeddableHtmlMeta_HTML
 
 export type CreateAssetUrl = (filePath: string) => Promise<string>
 export interface GetStaticPropsContext {

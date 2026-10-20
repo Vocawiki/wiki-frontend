@@ -1,7 +1,7 @@
 import type { Promisable } from 'type-fest'
 
 export class Stage<Input, Output> {
-	private readonly predecessorTasks: Promise<void>[] = []
+	private readonly predecessorTasks: Promise<unknown>[] = []
 	private _status: 'pending' | 'running' | 'finished' = 'pending'
 	private readonly promiseWithResolvers = Promise.withResolvers<Output>()
 	readonly promise = this.promiseWithResolvers.promise
@@ -12,7 +12,7 @@ export class Stage<Input, Output> {
 		return this._status
 	}
 
-	registerPredecessorTask(taskPromise: Promise<void>) {
+	registerPredecessorTask(taskPromise: Promise<unknown>) {
 		this.predecessorTasks.push(taskPromise)
 	}
 
