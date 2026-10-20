@@ -7,9 +7,9 @@
  * 支持矩阵（链接中含这些版本的新特性）：
  * - Windows 7最后一个版本：
  *   - Chrome 109
- *     https://developer.chrome.com/blog/new-in-chrome-109
+ *	 https://developer.chrome.com/blog/new-in-chrome-109
  *   - Firefox 115
- *     https://www.firefox.com/en-US/firefox/115.0/releasenotes/
+ *	 https://www.firefox.com/en-US/firefox/115.0/releasenotes/
  * - Safari 16.4
  *   https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes
  */

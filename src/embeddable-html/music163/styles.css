@@ -1,0 +1,36 @@
+.music163 {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-content: flex-start;
+	max-width: 100%;
+}
+.music163 iframe {
+	border: none;
+	margin: 0;
+	max-width: 100%;
+}
+body .music163 .subinfo img {
+	height: 1rem !important;
+	margin-left: 0.25rem;
+	max-width: none !important;
+}
+.music163 .subinfo {
+	margin: 10px;
+}
+.music163.float-left {
+	float: left;
+	padding-right: 33px;
+}
+.music163.float-right {
+	float: right;
+	padding-right: 33px;
+}
+.music163.align-center {
+	justify-content: center;
+}
+.music163.align-right {
+	justify-content: flex-end;
+}
