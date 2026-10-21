@@ -143,9 +143,8 @@
     import type { EmbeddableHtmlMeta } from '@/tools/embeddable-html'
 
     export default {
-    	description: '...',
-    	type: 'script',
-    	scriptType: 'module',
+    	type: 'static-markup',
+    	position: 'in-place',
     } satisfies EmbeddableHtmlMeta
     ```
 
