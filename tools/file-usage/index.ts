@@ -1,4 +1,6 @@
-import fs from 'node:fs/promises'
+import * as fs from 'node:fs/promises'
+
+import { outputFile } from 'fs-extra/esm'
 
 import { REFERENCED_FILES_PATH } from '@/scripts/config'
 
@@ -14,7 +16,7 @@ export function getReferencedFiles(): Set<string> {
 
 export async function saveReferencedFiles(): Promise<void> {
 	const content = [...referencedFiles].join('\n')
-	await fs.writeFile(REFERENCED_FILES_PATH, content, 'utf-8')
+	await outputFile(REFERENCED_FILES_PATH, content, 'utf-8')
 }
 
 export async function loadReferencedFiles(): Promise<Set<string>> {

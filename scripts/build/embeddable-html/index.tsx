@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises'
+import * as fs from 'node:fs/promises'
 import path from 'node:path'
 
 import pMap from 'p-map'
@@ -189,7 +189,6 @@ function scheduleStaticMarkup(
 					ctx
 						.scheduleTask(
 							async () => {
-								console.log('props', props)
 								const Component = module.default
 								const html = await compileComponent(<Component {...props} />)
 								return html

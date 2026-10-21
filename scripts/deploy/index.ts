@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict'
-import fs from 'node:fs/promises'
+import * as fs from 'node:fs/promises'
 import { parseArgs } from 'node:util'
 
+import { readJson } from 'fs-extra/esm'
 import { convertPathToPattern, globby } from 'globby'
 import pMap from 'p-map'
 import pProps from 'p-props'
@@ -43,7 +44,7 @@ import {
 const namespacePrecedence: NamespaceName[] = ['HTML', 'MediaWiki', 'Template']
 
 const { values: args } = parseArgs({
-	args: Bun.argv,
+	args: process.argv,
 	options: {
 		summary: {
 			type: 'string',
@@ -229,9 +230,9 @@ async function getBuiltPages(): Promise<Page[]> {
 	const directory = convertPathToPattern(PAGES_DIR)
 	const { entries, nondefaultContentModels } = await pProps({
 		entries: globby([`${directory}/*`, `!${directory}/*.map`], { stats: true }),
-		nondefaultContentModels: fs
-			.readFile(NONDEFAULT_CONTENT_MODELS_PATH, 'utf-8')
-			.then((str) => JSON.parse(str) as Record<string, ContentModel>),
+		nondefaultContentModels: readJson(NONDEFAULT_CONTENT_MODELS_PATH, 'utf-8') as Promise<
+			Record<string, ContentModel>
+		>,
 	})
 	return pMap(entries, async (entry): Promise<Page> => {
 		const title = getPageTitleFromFileName(entry.name)

@@ -1,6 +1,4 @@
-import fs from 'node:fs/promises'
-
-import { emptyDir } from 'fs-extra/esm'
+import { emptyDir, outputJson } from 'fs-extra/esm'
 import { noop } from 'radashi'
 import type { IsEqual, Promisable } from 'type-fest'
 
@@ -58,8 +56,10 @@ export const buildStages = {
 	saveNondefaultContentModels: new Stage<BuildContextForScheduler<BuildStagesBase>, void>(
 		async (ctx) => {
 			const titleToModelMap = ctx.collectFinialNondefaultContentModels()
-			const content = JSON.stringify(Object.fromEntries(titleToModelMap.entries()))
-			await fs.writeFile(NONDEFAULT_CONTENT_MODELS_PATH, content, 'utf-8')
+			await outputJson(
+				NONDEFAULT_CONTENT_MODELS_PATH,
+				Object.fromEntries(titleToModelMap.entries()),
+			)
 		},
 	),
 

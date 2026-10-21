@@ -1,5 +1,5 @@
 allowBuilds:
-  bun: true
+  esbuild: true
   vue-demi: true
 publicHoistPattern:
   - '@types/oojs-ui'

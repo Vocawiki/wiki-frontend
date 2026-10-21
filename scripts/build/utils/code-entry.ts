@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises'
+import * as fs from 'node:fs/promises'
 
 import pMap, { type MaybePromise } from 'p-map'
 import type { Arrayable } from 'type-fest'
@@ -16,7 +16,7 @@ import type { Arrayable } from 'type-fest'
  * ]
  */
 export async function findCodeEntries(baseDir: string): Promise<{ name: string; path: string }[]> {
-	const entries = await readdir(baseDir, { withFileTypes: true })
+	const entries = await fs.readdir(baseDir, { withFileTypes: true })
 	const result = await pMap(
 		entries.filter((x) => x.isDirectory()),
 		({ name }): MaybePromise<Arrayable<{ name: string; path: string }>> => {

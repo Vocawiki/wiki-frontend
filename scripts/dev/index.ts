@@ -1,5 +1,6 @@
 import { join } from 'node:path'
 
+import { outputFile, pathExists, readJson, remove } from 'fs-extra/esm'
 import * as z from 'zod'
 
 import { WIKI_STYLES_CACHE_TTL } from '@/lib/config'
@@ -20,7 +21,7 @@ type CacheMeta = z.output<typeof cacheMetaSchema>
 
 const thisFileDir = import.meta.dirname
 const cacheDir = join(thisFileDir, 'site', '.cache')
-const cacheMetaFile = Bun.file(join(cacheDir, 'meta.json'))
+const cacheMetaFilePath = join(cacheDir, 'meta.json')
 
 const cacheMeta = await getCacheMeta()
 if (!cacheMeta) {
@@ -34,15 +35,15 @@ if (!cacheMeta) {
 // 后面都是函数了
 
 async function getCacheMeta(): Promise<CacheMeta | null> {
-	if (!(await cacheMetaFile.exists())) return null
+	if (!(await pathExists(cacheMetaFilePath))) return null
 
 	try {
-		const rawMeta = (await cacheMetaFile.json()) as unknown
+		const rawMeta = (await readJson(cacheMetaFilePath)) as unknown
 		const meta = await cacheMetaSchema.parseAsync(rawMeta)
 		return meta
 	} catch (e) {
 		console.error('解析cache meta时发生错误：', e)
-		await cacheMetaFile.delete()
+		await remove(cacheMetaFilePath)
 		return null
 	}
 }
@@ -58,9 +59,9 @@ async function fetchStyles({ isRefreshing }: { isRefreshing: boolean }) {
 	try {
 		const response = await fetch(softwareStylesURL)
 		const css = await response.text()
-		await Bun.file(join(cacheDir, 'software.css')).write(css)
+		await outputFile(join(cacheDir, 'software.css'), css)
 		const meta = JSON.stringify(await cacheMetaSchema.encodeAsync({ version: 1, fetchedAt: now }))
-		await cacheMetaFile.write(meta)
+		await outputFile(cacheMetaFilePath, meta)
 		console.log(`网站样式已${isRefreshing ? '更新' : '下载'}`)
 	} catch (e) {
 		if (!isRefreshing) throw e

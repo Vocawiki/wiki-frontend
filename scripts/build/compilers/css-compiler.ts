@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import * as fs from 'node:fs/promises'
 import { join, relative, resolve } from 'node:path'
 
 import tailwindcss from '@tailwindcss/postcss'
@@ -116,7 +117,7 @@ const postcssInstance = postcss(
 )
 
 export async function compileCSS(path: string): Promise<string> {
-	let css = await Bun.file(path).text()
+	let css = await fs.readFile(path, 'utf-8')
 	css = (
 		await postcssInstance.process(css, {
 			from: path,

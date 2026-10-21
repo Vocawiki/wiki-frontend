@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises'
+import * as fs from 'node:fs/promises'
 
 import type { ReactNode } from 'react'
 
@@ -17,7 +17,7 @@ export function scheduleBuildTasksForWikitextPages(ctx: BuildContext) {
 }
 
 async function buildPagesUnder(dir: string, namespace: string) {
-	const tasks = (await readdir(dir, { withFileTypes: true })).map(async (entry) => {
+	const tasks = (await fs.readdir(dir, { withFileTypes: true })).map(async (entry) => {
 		const dir = `${entry.parentPath}/${entry.name}`
 		if (!entry.isDirectory()) {
 			throw new Error(`${dir}不是目录`)

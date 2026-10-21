@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict'
 
+import { outputFile } from 'fs-extra/esm'
+
 import { PAGES_DIR } from '../config'
 
 const invalidCharSymbol = Symbol('invalid character in page title')
@@ -54,7 +56,7 @@ function unescapePageTitle(str: string): string {
 
 export async function writeBuiltPage(title: string, content: string) {
 	const fileName = `${escapePageTitle(title)}.txt`
-	await Bun.write(`${PAGES_DIR}/${fileName}`, content)
+	await outputFile(`${PAGES_DIR}/${fileName}`, content)
 }
 
 export function getPageTitleFromFileName(fileName: string) {

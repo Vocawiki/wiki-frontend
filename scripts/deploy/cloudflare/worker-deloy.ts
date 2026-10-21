@@ -5,7 +5,7 @@
  * - https://developers.cloudflare.com/workers/static-assets/direct-upload
  */
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
+import * as fs from 'node:fs/promises'
 import path from 'node:path'
 
 import Cloudflare, { type Uploadable } from 'cloudflare'
@@ -179,7 +179,7 @@ async function createCfManifest(
 		relativeFilePaths,
 		async (relativePath) => {
 			const localPath = path.join(rootDir, relativePath)
-			const content = await readFile(localPath)
+			const content = await fs.readFile(localPath)
 			const extension = path.extname(relativePath).slice(1)
 			const hash = await getCfFileHash(content.toBase64() as Base64String, extension)
 			const mime = getMimeFromExtension(extension)
@@ -246,7 +246,7 @@ async function generateUploadPayload(
 		switch (info.type) {
 			case 'active': {
 				console.log(`从本地加载：${info.localPath}`)
-				const fileContent = await readFile(info.localPath)
+				const fileContent = await fs.readFile(info.localPath)
 				const base64 = fileContent.toBase64()
 				return new File([base64], path.basename(info.localPath), { type: info.mime })
 			}
