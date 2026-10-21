@@ -21,8 +21,11 @@ export class BuildContext<const Stages extends BuildStagesBase> {
 	protected hasStoppedCollectingContentModels = false
 	private readonly mwPageNames = new Set<string>()
 	private readonly assetNames = new Set<string>()
+	private readonly stages: Stages
 
-	constructor(private readonly stages: Stages) {}
+	constructor(stages: Stages) {
+		this.stages = stages
+	}
 
 	scheduleTask<T, AfterStage extends keyof Stages>(
 		func: (input: StageOutput<Stages[AfterStage]>) => Promisable<T>,

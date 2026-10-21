@@ -12,6 +12,8 @@
 		"noEmit": true,
 
 		// Best practices
+		"isolatedModules": true,
+		"erasableSyntaxOnly": true,
 		"strict": true,
 		"skipLibCheck": true,
 		"noFallthroughCasesInSwitch": true,

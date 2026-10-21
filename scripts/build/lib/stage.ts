@@ -4,9 +4,12 @@ export class Stage<Input, Output> {
 	private readonly predecessorTasks: Promise<unknown>[] = []
 	private _status: 'pending' | 'running' | 'finished' = 'pending'
 	private readonly promiseWithResolvers = Promise.withResolvers<Output>()
+	private readonly runner
 	readonly promise = this.promiseWithResolvers.promise
 
-	constructor(private readonly runner: (input: Input) => Promisable<Output>) {}
+	constructor(runner: (input: Input) => Promisable<Output>) {
+		this.runner = runner
+	}
 
 	get status() {
 		return this._status

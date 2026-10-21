@@ -164,7 +164,7 @@ export default defineConfig({
 		'sort-imports': OFF,
 		'sort-keys': OFF,
 		'no-void': OFF,
-		'typescript/parameter-properties': OFF,
+		'typescript/parameter-properties': OFF, // tsconfig已设置erasableSyntaxOnly
 		'typescript/prefer-regexp-exec': OFF,
 		'typescript/consistent-indexed-object-style': OFF,
 		'react/jsx-max-depth': OFF,
