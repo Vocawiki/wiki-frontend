@@ -11,5 +11,5 @@
 		"types": ["oojs-ui"]
 	},
 	"include": ["src/**/*"],
-	"exclude": ["**/(meta).ts", "**/*.tsx"]
+	"exclude": ["src/components", "**/(meta).ts", "**/*.tsx"]
 }
