@@ -35,7 +35,10 @@ const SECONDARY_WARNINGS = ['nochange', 'duplicateversions']
 const warningText = (value: unknown): string => {
 	if (typeof value === 'string') return value
 	if (Array.isArray(value)) {
-		return value.map((v) => warningText(v)).filter(Boolean).join('、')
+		return value
+			.map((v) => warningText(v))
+			.filter(Boolean)
+			.join('、')
 	}
 	if (typeof value === 'object' && value !== null) {
 		const o = value as { fileName?: string; timestamp?: string }
@@ -107,10 +110,13 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		} else {
 			notifySuccess(msg('success-uploaded'))
 		}
-		setTimeout(() => {
-			releaseNativeLeaveConfirmation()
-			location.href = mw.util.getUrl(`File:${filename}`)
-		}, overwrote ? 3000 : 500)
+		setTimeout(
+			() => {
+				releaseNativeLeaveConfirmation()
+				location.href = mw.util.getUrl(`File:${filename}`)
+			},
+			overwrote ? 3000 : 500,
+		)
 	}
 
 	/** 传输层失败：显示mw.Api的请求编号与文案。 */
@@ -253,7 +259,11 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			)
 		} catch (e) {
 			// 真实失败：缺文件、缺文件名、或重传后撞其它警告
-			const err = e as { code?: string; result?: UploadResponse | ApiTransportError; message?: string }
+			const err = e as {
+				code?: string
+				result?: UploadResponse | ApiTransportError
+				message?: string
+			}
 			if (err.message === msg('err-no-file')) {
 				notifyError(err.message)
 			} else {

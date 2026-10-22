@@ -1,8 +1,11 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:TracklistSongLengthCalc?action=history
  */
-;(window.RLQ ??= []).push([
-	['mediawiki.base', 'jquery'],
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	async () => {
 		await $.ready
 		for (const element of document.querySelectorAll('.tracklist')) {

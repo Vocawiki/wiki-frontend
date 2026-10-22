@@ -1,10 +1,11 @@
 import { createRoot } from 'react-dom/client'
 
+import type { ResourceLoaderQueue } from '~/@types/rlq'
 import type {} from '~/@types/rlq'
 
 import { LatestArticleList } from './page-list'
 
-;(window.RLQ ??= []).push(['mediawiki.api', () => replaceDom()])
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push(['mediawiki.api', () => replaceDom()])
 
 function replaceDom() {
 	const rawLinks = getRawLinks()

@@ -1,9 +1,11 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:UserName?action=history
  */
-window.RLQ ??= []
-window.RLQ.push([
-	'jquery',
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	() => {
 		const wgUserName = mw.config.get('wgUserName')
 		$('#mw-content-text .userNameInText').each((_, ele) => {

@@ -1,6 +1,7 @@
-window.RLQ ??= []
-window.RLQ.push([
-	['jquery', 'mediawiki.base'],
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	async () => {
 		$(window).on('load', () => {
 			$('.mw-customtoggle > span > a > img').on('click', function () {

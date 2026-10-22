@@ -1,5 +1,7 @@
-;(window.RLQ ??= []).push([
-	['ext.gadget.libBottomRightCorner', 'ext.gadget.libOOUIDialog', 'ext.gadget.site-lib', 'jquery'],
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	['ext.gadget.libBottomRightCorner', 'ext.gadget.libOOUIDialog', 'ext.gadget.site-lib'],
 	() => {
 		$('html')[
 			sessionStorage.getItem('WidgetDeceasedPersonGrayClass') === 'removeClass'

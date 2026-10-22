@@ -2,9 +2,10 @@
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:Akalin?action=history
  */
 
-window.RLQ ??= []
-window.RLQ.push([
-	'jquery',
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	async () => {
 		await $.ready
 		const zero = `<span style="speak:none;visibility:hidden;color:transparent">0</span>`

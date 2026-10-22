@@ -22,11 +22,13 @@ interface ErrorReport {
 	[key: string]: unknown
 }
 /** jQuery 集合在运行时借用了 Array.prototype 的 push，但类型声明里没有 */
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
 type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 
-window.RLQ ??= []
-window.RLQ.push([
-	['moment', 'ext.gadget.site-lib', 'jquery'],
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	['moment', 'ext.gadget.site-lib'],
 	async () => {
 		const DEBUGMODE = mw.config.get('wgUserId') === 69859
 		const typelist = [undefined, 'view_counter', 'comment_num', 'mylist_counter', 'title'] // 首位undefined减少不必要的减法

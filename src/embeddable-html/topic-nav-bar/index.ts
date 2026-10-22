@@ -1,6 +1,7 @@
+import type { ResourceLoaderQueue } from '~/@types/rlq'
 // oxlint-disable typescript/no-unsafe-assignment typescript/no-unsafe-member-access typescript/no-unsafe-call
 
-;(window.RLQ ??= []).push(['jquery', () => $(() => void main())])
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([[], () => $(() => void main())])
 
 async function main() {
 	if (document.body.clientWidth < 550) {

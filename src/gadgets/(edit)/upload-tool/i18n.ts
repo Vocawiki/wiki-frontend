@@ -35,10 +35,7 @@ const MESSAGES = {
 		'文件名以不允许的前缀开头（$1），请改名后重试。',
 		'檔案名稱以不允許的前綴開頭（$1），請改名後重試。',
 	),
-	'err-filetype-unwanted-type': tr(
-		'不允许上传该类型的文件：$1。',
-		'不允許上傳該類型的檔案：$1。',
-	),
+	'err-filetype-unwanted-type': tr('不允许上传该类型的文件：$1。', '不允許上傳該類型的檔案：$1。'),
 	'err-large-file': tr('文件过大：$1。', '檔案過大：$1。'),
 	'err-empty-file': tr('文件是空的，无法上传。', '檔案是空的，無法上傳。'),
 	'err-warning-unknown': tr(

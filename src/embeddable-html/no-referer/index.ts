@@ -2,8 +2,10 @@
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:NoReferer?action=history
  */
 
-;(window.RLQ ??= []).push([
-	['mediawiki.Uri', 'jquery'],
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	['mediawiki.Uri'],
 	() => {
 		const domains = new Set(['hdslb.com'])
 		$('.noRefererConfig').each((_, { dataset: { domain } }) => {

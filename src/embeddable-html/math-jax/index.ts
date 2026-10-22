@@ -1,6 +1,9 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:MathJax?action=history
  */
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
 ;(() => {
 	window.MathJax = {
 		startup: {
@@ -43,20 +46,21 @@
 	script.async = true
 	script.addEventListener('load', () => {
 		let promise = Promise.resolve()
-		window.RLQ ??= []
-		// @ts-expect-error RLQ 也支持只传回调，但类型定义仅允许 [依赖, 回调] 元组
-		window.RLQ.push(() => {
-			const promiseJoin = () =>
-				(promise = promise.then(() =>
-					window.MathJax && typeof MathJax.typesetPromise === 'function'
-						? MathJax.typesetPromise()
-						: Promise.resolve(),
-				))
-			void promiseJoin()
-			$(() => {
+		;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+			[],
+			() => {
+				const promiseJoin = () =>
+					(promise = promise.then(() =>
+						window.MathJax && typeof MathJax.typesetPromise === 'function'
+							? MathJax.typesetPromise()
+							: Promise.resolve(),
+					))
 				void promiseJoin()
-			})
-		})
+				$(() => {
+					void promiseJoin()
+				})
+			},
+		])
 	})
 	document.head.appendChild(script)
 })()

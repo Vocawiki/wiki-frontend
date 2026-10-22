@@ -1,10 +1,12 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:Countdown?action=history
  */
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
 // oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
-window.RLQ ??= []
-window.RLQ.push([
-	['moment', 'jquery'],
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	['moment'],
 	() => {
 		// oxlint-disable-next-line complexity -- 年月日时分秒的逐级借位是刻意展开的
 		const fromNow = (then: moment.Moment, before: string, after: string, on: string) => {

@@ -1,9 +1,11 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:Hover?action=history
  */
-window.RLQ ??= []
-window.RLQ.push([
-	'jquery',
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	() => {
 		$('.hover').each(function () {
 			let height = 0

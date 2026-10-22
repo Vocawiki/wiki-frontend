@@ -1,7 +1,7 @@
+import type { ResourceLoaderQueue } from '~/@types/rlq'
 // oxlint-disable max-lines-per-function max-statements -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
-window.RLQ ??= []
-window.RLQ.push([
-	['ext.gadget.libOOUIDialog', 'jquery'],
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	['ext.gadget.libOOUIDialog'],
 	() => {
 		try {
 			const types = ['playlist', 'album', 'song', 'program', 'djradio']

@@ -1,6 +1,9 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:BilibiliCount?action=history
  */
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
 // oxlint-disable max-depth max-lines-per-function -- 逐层遍历接口返回的数据并一次性渲染，拆分需外提闭包状态，风险大于收益
 type DataType =
 	| 'view'
@@ -35,9 +38,8 @@ interface ViewResponse {
 	data: { stat: Record<string, number> }
 }
 
-window.RLQ ??= []
-window.RLQ.push([
-	['mediawiki.base', 'jquery', 'moment', 'ext.gadget.site-lib'],
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	['moment', 'ext.gadget.site-lib'],
 	async () => {
 		const DEBUGMODE = mw.config.get('wgUserId') === 69859
 		const typelist: (DataType | undefined)[] = [

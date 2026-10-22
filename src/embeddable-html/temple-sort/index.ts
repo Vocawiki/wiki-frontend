@@ -1,9 +1,11 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:TempleSort?action=history
  */
-window.RLQ ??= []
-window.RLQ.push([
-	'jquery',
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	() => {
 		// jQuery 的 each 回调不允许返回 Promise，故以 void 调用 async 函数，执行时序与原实现一致
 		const sortTemple = async (ele: HTMLElement) => {

@@ -1,7 +1,7 @@
+import type { ResourceLoaderQueue } from '~/@types/rlq'
 // oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
-window.RLQ ??= []
-window.RLQ.push([
-	'jquery',
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	() => {
 		const cssSanitizer = (cssStr: string) =>
 			(typeof cssStr === 'string' ? cssStr : '')

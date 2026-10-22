@@ -1,5 +1,5 @@
 // oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
-window.RLQ ??= []
+window.RLQ ??= [] as unknown[]
 
 function showX18Warning({
 	title,
@@ -33,7 +33,7 @@ function showX18Warning({
 }
 
 window.RLQ.push([
-	['mediawiki.api', 'jquery'],
+	['mediawiki.api'],
 	async () => {
 		$('#x18,#x18Style').prependTo('body')
 		$('.x18-page-warning').appendTo('.mw-panel')

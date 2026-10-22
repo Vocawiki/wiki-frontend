@@ -1,9 +1,11 @@
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:Mask?action=history
  */
-window.RLQ ??= []
-window.RLQ.push([
-	['jquery', 'mediawiki.Uri'],
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	['mediawiki.Uri'],
 	() => {
 		$(() => {
 			// oxlint-disable-next-line prefer-destructuring -- jQuery 集合并非真正的数组，可迭代性依赖 jQuery 版本，保留索引访问

@@ -1,6 +1,7 @@
-window.RLQ ??= []
-window.RLQ.push([
-	'jquery',
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
+	[],
 	() => {
 		const app = $('.echart-app')
 		if (!app[0]) {
