@@ -74,17 +74,14 @@ interface ImageThumbQueryResult {
 	responsiveUrls: ResponsiveUrls | undefined
 }
 type ResponsiveUrls = Record<`${number}`, string>
-interface ImagePromiseAndResolver {
-	promise: Promise<ImageThumbQueryResult>
-	resolve: (result: ImageThumbQueryResult) => void
-}
+type ImageThumbPromiseWithResolvers = PromiseWithResolvers<ImageThumbQueryResult>
 
 /** 键是缩略图宽度，值是标题集合 */
 const willQueryTasks = new Map<
 	`${'w' | 'h'}${number}`,
 	{
 		/** 键是文件标题，值是promise和该promise的resolve */
-		images: Map<string, ImagePromiseAndResolver>
+		images: Map<string, ImageThumbPromiseWithResolvers>
 		willQueryTimeoutKey: ReturnType<typeof setTimeout>
 	}
 >()
@@ -97,7 +94,7 @@ function getThumb(
 ): Promise<ImageThumbQueryResult> {
 	const taskKey: `${'w' | 'h'}${number}` = width === undefined ? `h${height!}` : `w${width}`
 	const task = willQueryTasks.getOrInsertComputed(taskKey, () => {
-		const images = new Map<string, ImagePromiseAndResolver>()
+		const images = new Map<string, ImageThumbPromiseWithResolvers>()
 		return {
 			images,
 			willQueryTimeoutKey: setTimeout(() => {
@@ -113,21 +110,15 @@ function getThumb(
 		}
 	})
 
-	const getThumbPromiseAndResolver = task.images.getOrInsertComputed(title, () => {
-		let resolve: (result: ImageThumbQueryResult) => void
-		const promise = new Promise<ImageThumbQueryResult>((res) => {
-			resolve = res
-		})
-		// @ts-expect-error resolve已赋值，并非赋值前使用变量
-		return { promise, resolve }
-	})
-
-	return getThumbPromiseAndResolver.promise
+	const { promise: imageThumbPromise } = task.images.getOrInsertComputed(title, () =>
+		Promise.withResolvers(),
+	)
+	return imageThumbPromise
 }
 
 async function query(
 	{ width, height }: WidthAndOrHeight,
-	resolvers: Map<string, ImagePromiseAndResolver>,
+	resolvers: Map<string, ImageThumbPromiseWithResolvers>,
 ) {
 	console.log(`查询缩略图: ${width ?? ''}x${height ?? ''}，数量: ${resolvers.size}`)
 	const titles = [...resolvers.keys()]
