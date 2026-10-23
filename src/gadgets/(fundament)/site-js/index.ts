@@ -8,18 +8,9 @@ declare global {
 		alert: (...args: readonly unknown[]) => void
 		sanitize: (str: string) => string
 	}
-
-	interface Window {
-		_TODO_REMOVE_THIS_LOGIC_vocawikiCommonJsExecuted?: true
-	}
 }
 
 void (async () => {
-	// oxlint-disable-next-line no-underscore-dangle
-	if (window._TODO_REMOVE_THIS_LOGIC_vocawikiCommonJsExecuted) return
-	// oxlint-disable-next-line no-underscore-dangle
-	window._TODO_REMOVE_THIS_LOGIC_vocawikiCommonJsExecuted = true
-
 	/* 函数定义体 */
 	const { wgUserGroups, wgServer, wgScriptPath, wgPageName, wgAction, wgNamespaceNumber } =
 		mw.config.get()
