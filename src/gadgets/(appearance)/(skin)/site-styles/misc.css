@@ -194,12 +194,6 @@ pre {
 	}
 }
 
-/* 注释里的列表 */
-.reference-text > ul.listInRef,
-.reference-text > ol.listInRef {
-	margin: -1.5em 0 0 2em;
-}
-
 /* 分类页同组页面不被拆分成两栏 */
 .mw-category-group {
 	-moz-column-break-inside: avoid;

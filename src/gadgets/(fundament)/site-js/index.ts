@@ -8,7 +8,188 @@ declare global {
 		alert: (...args: readonly unknown[]) => void
 		sanitize: (str: string) => string
 	}
+
+	interface Window {
+		_TODO_REMOVE_THIS_LOGIC_vocawikiCommonJsExecuted?: true
+	}
 }
+
+void (async () => {
+	// oxlint-disable-next-line no-underscore-dangle
+	if (window._TODO_REMOVE_THIS_LOGIC_vocawikiCommonJsExecuted) return
+	// oxlint-disable-next-line no-underscore-dangle
+	window._TODO_REMOVE_THIS_LOGIC_vocawikiCommonJsExecuted = true
+
+	/* 函数定义体 */
+	const { wgUserGroups, wgServer, wgScriptPath, wgPageName, wgAction, wgNamespaceNumber } =
+		mw.config.get()
+	/* 以下为允许添加版权声明的命名空间列表 */
+	const copyRightsNameSpaces = [
+		0, // （主）
+		4, // Vocawiki
+		8, // MediaWiki
+		10, // Template
+		12, // Help
+		274, // Widget
+		828, // Module
+	]
+	/* 检查是否为管理员 */
+	const allowedInGroup = wgUserGroups?.includes('sysop')
+
+	// 页顶公告自动滚动
+	function startScroll() {
+		$('#siteNotice .scrollDiv:not(.scrolling)')
+			.addClass('scrolling')
+			.each((_, ele) => {
+				const self = $(ele)
+				self.children().each((_, child) => {
+					if (child.innerHTML.trim() === '') {
+						child.remove()
+					}
+				})
+				const children = self.children()
+				if (children.length === 0) {
+					return
+				}
+				const firstChild = children.first()
+				const firstChildHeight = firstChild.outerHeight()!
+				self.height(firstChildHeight)
+				children.slice(1).css('top', `${Math.ceil(firstChildHeight)}px`)
+				firstChild.css('top', '0')
+			})
+	}
+	function autoScroll() {
+		setInterval(() => {
+			if (!document.hidden) {
+				$('#siteNotice .scrollDiv.scrolling').each((_, ele) => {
+					const self = $(ele)
+					if (self.css('font-weight') === '700') {
+						return
+					}
+					const children = self.children()
+					const all = self.add(children)
+					if (children.length === 1) {
+						return
+					}
+					const firstChild = children.first()
+					const firstChildHeight = firstChild.outerHeight()!
+					const secondChild = firstChild.next()
+					const secondChildHeight = secondChild.outerHeight()!
+					const otherChild = children.slice(2)
+					let maxHeight = Math.max(firstChildHeight, secondChildHeight)
+					otherChild.each((_, child) => {
+						maxHeight = Math.max(maxHeight, $(child).outerHeight()!)
+					})
+					all.addClass('animation')
+					self.height(maxHeight)
+					firstChild.css('top', `-${firstChildHeight}px`)
+					secondChild.css('top', `${(maxHeight - secondChildHeight) / 2}px`)
+					otherChild.css('top', `${Math.ceil(maxHeight)}px`)
+					setTimeout(() => {
+						all.removeClass('animation')
+						firstChild.appendTo(self).css('top', Math.ceil(maxHeight))
+					}, 400)
+				})
+			}
+		}, 5000)
+	}
+
+	// 跨站重定向页顶链接
+	const crossDomainLink = (url: URL) => {
+		const link = url.searchParams.get('title')
+		const domain = url.host
+		const crossDomain = $('<div/>')
+		const anchor = $('<a/>')
+		crossDomain.text('＜')
+		anchor.attr('href', `${url}`).text(`${link} 【来自 ${domain} 的跨站重定向】`)
+		crossDomain.append(anchor)
+		$('#contentSub').prepend(crossDomain)
+	}
+
+	// 复制修改内容
+	const copyRights = async () => {
+		await mw.loader.using('mediawiki.util')
+		const div = $('<div>', {
+				class: 'visually-hidden',
+				html: `<pre></pre><br>\n阅读更多：${/%/u.test(mw.util.wikiUrlencode(wgPageName)) ? `${wgPageName}（${wgServer}${wgScriptPath}/${encodeURIComponent(wgPageName)} ）` : `${wgServer}${wgScriptPath}/${wgPageName}`}<br>\n本文引自Vocawiki（${wgServer.replace(/^\/\//u, 'https://')}），文字内容默认使用《知识共享 署名—非商业性使用—相同方式共享 4.0 国际》协议。`,
+			}).appendTo('body'),
+			valueNode = div.find('pre')
+		$('#mw-content-text').on('copy', () => {
+			const selection = window.getSelection()
+			if (!selection) return
+			const value = selection.toString()
+			const range = selection.getRangeAt(0)
+
+			// 当复制内容长度小于定值时不添加声明
+			if (value.length < 128) return
+			// wikiplus特别处理
+			const wikiplusBox = document.querySelector('.Wikiplus-InterBox')
+			if (wikiplusBox && selection.containsNode(wikiplusBox, true)) {
+				return
+			}
+
+			valueNode.text(value)
+			selection.selectAllChildren(div[0]!)
+			window.setTimeout(() => {
+				// 以下将还原选区
+				selection.removeAllRanges()
+				selection.addRange(range)
+				valueNode.empty()
+			}, 0)
+		})
+	}
+
+	// 跨站重定向页顶链接
+	const crossDomainDetect = () => {
+		const redirectFrom = new URLSearchParams(window.location.search).get('rdfrom')
+		if (!redirectFrom) return
+
+		try {
+			const redirectFromUrl = new URL(redirectFrom)
+			const search = redirectFromUrl.searchParams
+			if (search.get('title') && search.get('redirect') === 'no') {
+				crossDomainLink(redirectFromUrl)
+			}
+		} catch {
+			// ignore
+		}
+	}
+
+	// 修正hash跳转错误
+	const hashJump = async () => {
+		await mw.loader.using(['jquery.makeCollapsible'])
+		$('.mw-collapsible').makeCollapsible()
+		const { hash } = location
+		location.hash = ''
+		location.hash = hash
+	}
+
+	/* 函数执行体 */
+	await $.ready
+	// 页顶公告自动滚动
+	startScroll()
+	autoScroll()
+
+	// 复制内容版权声明
+	if (
+		!allowedInGroup &&
+		!['edit', 'submit'].includes(wgAction) &&
+		copyRightsNameSpaces.includes(wgNamespaceNumber)
+	) {
+		void copyRights()
+	}
+
+	// 修正hash跳转错误
+	if ($('.mw-collapsible')[0] && location.hash !== '') {
+		void hashJump()
+	}
+	// 跨站重定向页顶链接
+	crossDomainDetect()
+	// 禁止移动被挂删的页面
+	if (!allowedInGroup && $('.regToDel')[0]) {
+		$('#ca-move').remove()
+	}
+})()
 
 /* 为不安全上下文提供`crypto.randomUUID()`（目前被几个Widget使用） */
 polyfillRandomUUID()
