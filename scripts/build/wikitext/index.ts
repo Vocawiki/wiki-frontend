@@ -24,7 +24,7 @@ async function buildPagesUnder(dir: string, namespace: string) {
 		}
 		const render = ((await import(`@/${dir}`)) as { default: () => ReactNode }).default
 		const reactNode = render()
-		const wikitext = await compileComponent(reactNode)
+		const wikitext = (await compileComponent(reactNode)).replace(/<\/?remove-me>/gu, '')
 		const notice = noticeForEditors(dir).join('\n\n')
 		const content = `<noinclude>\n${notice}\n</noinclude><includeonly>${wikitext}</includeonly>`
 		await writeBuiltPage(`${namespace}:${entry.name}`, content)

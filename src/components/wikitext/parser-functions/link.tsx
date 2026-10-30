@@ -2,7 +2,6 @@ import { assert } from 'radashi'
 import type { ComponentProps, ReactNode } from 'react'
 
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
-import { cssPropertiesToString } from '@/lib/react'
 import type { ObjectEntries } from '@/lib/typing'
 import { normalizeWikiTitle } from '@/lib/wiki'
 import { WikiExternalLink, WikiInternalLink } from '~/components/wiki-link'
@@ -117,7 +116,11 @@ export function ParserFunctionPlainLink({
 	)
 }
 
-function propsToWikitext(props: AllowedProps): string {
+async function propsToWikitext(props: AllowedProps): Promise<string> {
+	// Error: react-dom/server is not supported in React Server Components.
+	// https://github.com/vercel/next.js/issues/43810 TODO: 上游bug修复后移除
+	const { cssPropertiesToString } = await import('@/lib/react')
+
 	return (Object.entries(props) as ObjectEntries<AllowedProps>)
 		.filter((x) => x[1] !== undefined && x[1] !== false)
 		.map(([name, value]): [string, string] => {

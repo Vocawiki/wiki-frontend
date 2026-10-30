@@ -16,10 +16,10 @@ import {
 import postcss, { AtRule, type Root, type Plugin } from 'postcss'
 import { mapValues, traverse } from 'radashi'
 
-import { SOURCE_DIR_GADGETS } from '@/scripts/config'
-
-import { IS_PRODUCTION } from '../../../lib/config' // 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名@/lib
-import { CSS_BROWSER_TARGETS } from '../browser-target'
+// 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名，也必须带后缀
+import { IS_PRODUCTION } from '../../../lib/config.ts'
+import { SOURCE_DIR_GADGETS } from '../../config.ts'
+import { CSS_BROWSER_TARGETS } from '../browser-target.ts'
 
 export const lightningCSSOptions: Omit<
 	TransformOptions<{

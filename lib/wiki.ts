@@ -47,12 +47,23 @@ const lowercaseNamespaceNameToNumber = new Map<string, NamespaceNumber>(
 	entries.map(([name, number]) => [name.toLowerCase(), number]),
 )
 
+export function isValidWikiTitle(title: string): boolean {
+	if (/[<>\[\]|{}]/u.test(title)) {
+		return false
+	}
+	return true
+}
+
 export interface WikiTitleInfo {
 	namespace: { name: NamespaceName; number: number }
 	normalizedPageNameNoNamespace: string
 	unnormalizedPageNameNoNamespace: string
 }
 export function getWikiTitleInfo(title: string): WikiTitleInfo {
+	if (!isValidWikiTitle(title)) {
+		throw new Error(`“${title}”不是一个有效的MediaWiki标题`)
+	}
+
 	const [nsNumber, unnormalizedPageName] = ((): [NamespaceNumber, string] => {
 		const m = title.match(/^(.*?):(.*)$/u)
 		if (!m) {

@@ -4,8 +4,8 @@ import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import rsc from '@vitejs/plugin-rsc'
 import { defineConfig } from 'vite'
 
-import { IS_DEVELOPMENT } from '../../../lib/config'
-import { lightningCSSOptions } from '../../build/compilers/css-compiler'
+import { IS_DEVELOPMENT } from '../../../lib/config.ts'
+import { lightningCSSOptions } from '../../build/compilers/css-compiler.ts'
 
 export default defineConfig({
 	plugins: [

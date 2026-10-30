@@ -8,4 +8,4 @@ export {
 } from './transclude'
 export { WikitextNoLanguageConversion as NoConversion } from './language-convert'
 
-export * as Function from './parser-function'
+export * as Functions from './parser-functions'
