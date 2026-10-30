@@ -11,8 +11,9 @@ import path from 'node:path'
 import Cloudflare, { type Uploadable } from 'cloudflare'
 import { globby } from 'globby'
 import pMap from 'p-map'
-import { objectify, pick } from 'radashi'
+import { pick } from 'radashi'
 
+import { objectify } from '@/lib/array'
 import type { Base64String } from '@/lib/string'
 
 import { ASSETS_DIR, ASSETS_ROUT_PATH } from '../../config'
@@ -204,11 +205,11 @@ async function createCfManifest(
 	obsoleteAssets.forEach(({ hash, path }) => hashToFileInfo.set(hash, { type: 'obsolete', path }))
 
 	const getPath = (x: { path: string }) => x.path
-	const cfManifest: CfAssetManifest = objectify<
-		{ path: string; hash: string; size: number },
-		string,
-		CfManifestFileInfo
-	>([...obsoleteAssets, ...activeFiles], getPath, (x) => pick(x, ['hash', 'size']))
+	const cfManifest: CfAssetManifest = objectify(
+		[...obsoleteAssets, ...activeFiles],
+		getPath,
+		(x): CfManifestFileInfo => pick(x, ['hash', 'size']),
+	)
 	// 检查
 	{
 		const activeFileCount = activeFiles.length
