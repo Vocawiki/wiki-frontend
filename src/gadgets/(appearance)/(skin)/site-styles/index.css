@@ -107,24 +107,48 @@
 }
 
 @custom-variant dark {
-	&:where(:root.skin-theme-clientpref-night, :root.skin-theme-clientpref-night *) {
+	&:where(:root.skin-theme-clientpref-night *) {
 		@slot;
 	}
 
 	@media (prefers-color-scheme: dark) {
-		&:where(:root.skin-theme-clientpref-os, :root.skin-theme-clientpref-os *) {
+		&:where(:root.skin-theme-clientpref-os *) {
 			@slot;
 		}
 	}
 }
 
 @custom-variant not-dark {
-	&:where(:root.skin-theme-clientpref-day, :root.skin-theme-clientpref-day *) {
+	&:where(:root.skin-theme-clientpref-day *) {
 		@slot;
 	}
 
 	@media not (prefers-color-scheme: dark) {
-		&:where(:root.skin-theme-clientpref-os, :root.skin-theme-clientpref-os *) {
+		&:where(:root.skin-theme-clientpref-os *) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant root-dark {
+	&:where(.skin-theme-clientpref-night) {
+		@slot;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		&:where(.skin-theme-clientpref-os) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant root-not-dark {
+	&:where(.skin-theme-clientpref-day) {
+		@slot;
+	}
+
+	@media not (prefers-color-scheme: dark) {
+		&:where(.skin-theme-clientpref-os) {
 			@slot;
 		}
 	}
@@ -228,7 +252,7 @@
 :root {
 	/* 更改列表中的“机器人编辑”标识颜色 */
 	--color-botedit: #7e5953;
-	@variant dark {
+	@variant root-dark {
 		--color-botedit: #ab7167;
 	}
 

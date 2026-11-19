@@ -135,9 +135,7 @@ div#simpleSearch button#searchButton {
 #siteNotice .scrollDiv.scrolling.animation > * {
 	transition: all 0.37s ease-in-out;
 }
-.mw-body a.external:visited {
-	color: #36b;
-}
+
 #mw-content-text i:not([role="img"]) {
 	margin-right: 3px;
 }
