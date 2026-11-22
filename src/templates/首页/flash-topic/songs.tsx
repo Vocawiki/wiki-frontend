@@ -9,19 +9,16 @@ export function Songs({ data }: { data: TopicData }) {
 
 	return (
 		<div className="flex flex-col gap-4 border-t border-(--ft-line) px-4 py-4 main-sm:px-5">
-			<section className="flex flex-col gap-2.5">
-				<Header
-					badge="本届"
-					title="无色透名祭4"
-					note={currentNote(data)}
-					muted={data.current.length === 0}
-				/>
-				{data.current.length > 0 && <SongList songs={data.current} />}
-			</section>
+			{data.current.length > 0 && (
+				<section className="flex flex-col gap-2.5">
+					<Header badge="本届投稿" note={`已收录${data.currentTotal}首`} />
+					<SongList songs={data.current} />
+				</section>
+			)}
 
 			{data.past.length > 0 && (
 				<section className="flex flex-col gap-2.5">
-					<Header badge="往届" title="无色透名祭1–3" muted>
+					<Header badge="往届投稿" muted>
 						<Wiki.Link page={PARTICIPATION_CATEGORY_LINK}>
 							<span className="text-xs font-medium text-(--ft-primary)">全部作品→</span>
 						</Wiki.Link>
@@ -33,22 +30,13 @@ export function Songs({ data }: { data: TopicData }) {
 	)
 }
 
-/** 本届的提示语 */
-function currentNote({ current, currentTotal, currentTemplateExists }: TopicData): string {
-	if (current.length > 0) return `已收录${currentTotal}首`
-	if (!currentTemplateExists) return '本站尚未收录'
-	return '条目待补充'
-}
-
 function Header({
 	badge,
-	title,
 	note,
 	muted,
 	children,
 }: {
 	badge: string
-	title: string
 	note?: string
 	muted?: boolean
 	children?: React.ReactNode
@@ -62,7 +50,6 @@ function Header({
 			>
 				{badge}
 			</span>
-			<span className="text-sm leading-none font-semibold text-(--ft-ink)">{title}</span>
 			{note && <span className="text-xs leading-none text-(--ft-ink) opacity-55">{note}</span>}
 			{children && <span className="ml-auto">{children}</span>}
 		</div>

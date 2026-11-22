@@ -1,22 +1,28 @@
 /** 无色透名祭参与作品分类 */
 const PARTICIPATION_CATEGORY = 'Category:无色透名祭活动参与作品'
-/** 本届参加曲的niconico标签页（标签用的是日文“無色透名祭”） */
+/** 本届参加曲的niconico标签页 */
 const NICONICO_TAG_URL = 'https://www.nicovideo.jp/tag/無色透名祭4参加曲'
-/** 本届最多展示的曲目数，其余走“全部参赛曲”链接 */
+/** 本届最多展示的曲目数 */
 const CURRENT_LIMIT = 12
-/** 往届最多展示的曲目数。往期只是补充，一排就够 */
+/** 往届最多展示的曲目数 */
 const PAST_LIMIT = 6
-/** 往届的届次。本届（第4届）的模板一旦建立，往期判定就自动只覆盖1–3 */
+/** 往届的届次 */
 const PAST_EDITIONS = [1, 2, 3] as const
 /** 本届的届次 */
 const CURRENT_EDITION = 4
 
 /** 本届参赛曲数 */
 export const SUBMITTED_COUNT = 4463
+/** 本届日程 */
+export const SCHEDULE = [
+	{ date: '9/15', time: '12:00', label: '投稿开始' },
+	{ date: '9/28', time: '11:00', label: '投稿截止' },
+	{ date: '11/20', time: '13:00', label: '先行公开' },
+	{ date: '11/20', time: '18:00', label: '正式公开' },
+	{ date: '11/23', time: '19:00', label: '投稿者公开' },
+] as const
 /** “全部参赛曲”按钮指向的niconico标签页 */
 export const PARTICIPATION_TAG_URL = `${NICONICO_TAG_URL}?sort=viewCount&order=asc&kind=channel&genre=music_sound`
-/** 官网“随机播放”入口 */
-export const RANDOM_PLAY_URL = 'https://www.nicovideo.jp/random_play/338694'
 /** 活动官网 */
 export const OFFICIAL_SITE_URL = 'https://site.nicovideo.jp/mushokutomeisai'
 /** 本活动主条目 */
@@ -45,14 +51,11 @@ export interface TopicData {
 	currentTotal: number
 	/** 往期曲目，按加入分类的时间倒序 */
 	past: TopicSong[]
-	/** 本届的导航模板是否已建立 */
-	currentTemplateExists: boolean
 }
 
 interface ApiPage {
 	title: string
 	pageimage?: string
-	missing?: boolean
 }
 
 interface ApiResponse {
@@ -65,11 +68,7 @@ interface ApiResponse {
 }
 
 export async function loadTopicData(): Promise<TopicData> {
-	const [titles, editions, currentTemplateExists] = await Promise.all([
-		loadCollectedTitles(),
-		loadEditionMembers(),
-		loadTemplateExists(CURRENT_EDITION),
-	])
+	const [titles, editions] = await Promise.all([loadCollectedTitles(), loadEditionMembers()])
 
 	/** 届次由各届导航模板的嵌入关系判定 */
 	const belongsTo = (edition: number) => (title: string) =>
@@ -86,7 +85,6 @@ export async function loadTopicData(): Promise<TopicData> {
 		current: currentTitles.slice(0, CURRENT_LIMIT).map(toSong),
 		currentTotal: currentTitles.length,
 		past: pastTitles.slice(0, PAST_LIMIT).map(toSong),
-		currentTemplateExists,
 	}
 }
 
@@ -151,12 +149,6 @@ async function loadEditionMembers(): Promise<Map<number, Set<string>>> {
 		}),
 	)
 	return members
-}
-
-/** 判断某一届的导航模板是否已经建立 */
-async function loadTemplateExists(edition: number): Promise<boolean> {
-	const [response] = await callApi({ titles: `Template:无色透名祭${edition}`, prop: 'info' })
-	return response?.query?.pages?.[0]?.missing !== true
 }
 
 /** 调用wiki的query接口，自动跟随续页 */
