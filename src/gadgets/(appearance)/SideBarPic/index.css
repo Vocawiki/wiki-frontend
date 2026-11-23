@@ -87,8 +87,7 @@ body.sideBarPic .vector-sticky-pinned-container::after {
 			var(--color-surface-0-oklch__l) var(--color-surface-0-oklch__c)
 				var(--color-progressive-oklch__h) / 90%
 		);
-		/* https://github.com/parcel-bundler/lightningcss/issues/109 TODO: 上游bug修复后恢复 */
-		/* background-color: color-mix(var(--color-surface-0) 90%, transparent); */
+		background-color: color-mix(var(--color-surface-0) 90%, transparent);
 	}
 
 	.citizen-sitenotice-container {
@@ -100,8 +99,7 @@ body.sideBarPic .vector-sticky-pinned-container::after {
 			var(--color-surface-2-oklch__l) var(--color-surface-2-oklch__c)
 				var(--color-progressive-oklch__h) / 80%
 		);
-		/* https://github.com/parcel-bundler/lightningcss/issues/109 TODO: 上游bug修复后恢复 */
-		/* background-color: color-mix(var(--color-surface-2) 80%, transparent); */
+		background-color: color-mix(var(--color-surface-2) 80%, transparent);
 	}
 
 	.citizen-footer {
@@ -113,7 +111,6 @@ body.sideBarPic .vector-sticky-pinned-container::after {
 			var(--color-surface-1-oklch__l) var(--color-surface-1-oklch__c)
 				var(--color-progressive-oklch__h) / 80%
 		);
-		/* https://github.com/parcel-bundler/lightningcss/issues/109 TODO: 上游bug修复后恢复 */
-		/* background-color: color-mix(var(--color-surface-1) 80%, transparent); */
+		background-color: color-mix(var(--color-surface-1) 80%, transparent);
 	}
 }

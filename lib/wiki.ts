@@ -1,9 +1,8 @@
 import { assert } from 'radashi'
-import type { ValueOf } from 'type-fest'
+import type { ValueOf, ObjectEntries } from 'type-fest'
 
 import { BASE_URL } from './config'
 import { graphemesOf } from './string'
-import type { ObjectEntries } from './typing'
 
 const namespaceNameToNumber = {
 	Media: -2,

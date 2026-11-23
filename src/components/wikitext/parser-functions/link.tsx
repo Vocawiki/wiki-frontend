@@ -1,8 +1,8 @@
 import { assert } from 'radashi'
 import type { ComponentProps, ReactNode } from 'react'
+import type { ObjectEntries } from 'type-fest'
 
 import { SHOULD_CONVERT_WIKITEXT_TO_HTML } from '@/lib/config'
-import type { ObjectEntries } from '@/lib/typing'
 import { normalizeWikiTitle } from '@/lib/wiki'
 import { WikiExternalLink, WikiInternalLink } from '~/components/wiki-link'
 

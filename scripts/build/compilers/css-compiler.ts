@@ -66,7 +66,7 @@ export const lightningCSSOptions: Omit<
 					if (comments.length === 0) return
 					comments[0] = comments[0]!.replace(/(?<=tailwindcss v\d+)\.\d+\.\d+/u, '')
 
-					// https://github.com/parcel-bundler/lightningcss/issues/1081 TODO: 上游bug修复后移除
+					// https://github.com/parcel-bundler/lightningcss/issues/1065 TODO: 上游bug修复后移除
 					traverse(sheet, (value, key, parent) => {
 						if (value === null && typeof key === 'string') {
 							// oxlint-disable-next-line typescript/no-dynamic-delete
@@ -90,7 +90,7 @@ export const lightningCSSOptions: Omit<
 						transformLeafSelector(ruleInBody)
 					}
 
-					// https://github.com/parcel-bundler/lightningcss/issues/1081 TODO: 上游bug修复后移除
+					// https://github.com/parcel-bundler/lightningcss/issues/1065 TODO: 上游bug修复后移除
 					traverse(rule.body.value, (value, key, parent) => {
 						if (value === null && typeof key === 'string') {
 							// oxlint-disable-next-line typescript/no-dynamic-delete
