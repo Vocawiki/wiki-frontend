@@ -1,155 +1,150 @@
-import type { CSSProperties, ReactNode } from 'react'
+import { cn } from 'cn'
+import type { CSSProperties } from 'react'
 
+import { formatNumber } from '@/lib/number'
+import { WikiImageServerOnly } from '~/components/wiki-image/server'
 import * as Wiki from '~/components/wikitext'
 
-import { Contents } from './contents'
+import {
+	loadTopicData,
+	MAIN_ARTICLE,
+	OFFICIAL_SITE_URL,
+	PARTICIPATION_TAG_URL,
+	SUBMITTED_COUNT,
+} from './data'
+import { Songs } from './songs'
 
-export function FlashTopic() {
-	const copyright = '插画 © DWANGO Co., Ltd.'
+/** logo */
+const LOGO = '无色透名祭4LOGO.svg'
+
+export async function FlashTopic() {
+	const data = await loadTopicData()
 
 	return (
 		<div
-			className="preflight relative flow-root"
-			style={{ '--primary': '#6049d4', '--secondary': '#473dc1' } as CSSProperties}
+			className={cn(
+				'preflight relative flow-root text-(--ft-ink) [&_a]:auto-interact-fx',
+				'[--ft-accent:#f4664a] [--ft-bg:#d2f9ff] [--ft-ink:#173f49] [--ft-line:#d5e8ed] [--ft-primary:#0e4d5f] [--ft-soft:#eaf6f8] dark:[--ft-bg:#002628] dark:[--ft-ink:#dbeef2] dark:[--ft-line:#24363b] dark:[--ft-primary:#6fd3e4] dark:[--ft-soft:#132930]',
+			)}
 		>
-			<div className="fill ignore-article-inline-padding bg-[#a3aed4] [clip-path:inset(0)]">
-				<div className="fixed inset-x-0 top-0 h-screen bg-[url(/images/5/57/The_VOCALOID_Collection_2026_Summer_KV.webp)] bg-cover bg-center dark:brightness-50 not-dark:contrast-80" />
+			{/* 背景层 */}
+			<div className="fill ignore-article-inline-padding bg-(--ft-bg) bg-[url(/images/b/b7/%E6%97%A0%E8%89%B2%E9%80%8F%E5%90%8D%E7%A5%AD4kv-bg.webp)] bg-cover bg-top dark:brightness-40 dark:contrast-300" />
+			{/* 人物层 */}
+			<div className="fill grid grid-rows-[28rem_auto] *:relative">
+				<div className="-mx-10 bg-[url(/images/thumb/0/00/%E6%97%A0%E8%89%B2%E9%80%8F%E5%90%8D%E7%A5%ADillust04.png/800px-%E6%97%A0%E8%89%B2%E9%80%8F%E5%90%8D%E7%A5%ADillust04.png.webp)] bg-size-[auto_100%] bg-position-[calc(50%+10rem)_0] bg-no-repeat px-10 dark:brightness-90 main-not-sm:invisible" />
+				<div className="ignore-article-inline-padding -mt-48 grow bg-linear-to-b from-transparent to-(--ft-bg) to-[12rem]" />
 			</div>
-			<div className="relative my-4 flex flex-col">
-				<Title />
+			<div className="fill ignore-article-inline-padding border-y border-(--ft-line)" />
 
-				<div className="mt-4 grid grow gap-2 text-[#252525] main-md:grid-cols-[20rem_auto] [&_a]:auto-interact-fx">
-					<Information />
-					<Contents />
-				</div>
+			<div className="absolute top-4 right-0 text-xs leading-none opacity-60">
+				<span className="main-not-sm:hidden">
+					插画 <span lang="ja">いよわ</span> ·
+				</span>
+				<span className="main-sm:hidden">图像</span> © DWANGO
+			</div>
 
-				<div className="relative mt-1 text-right">
-					<div
-						aria-hidden
-						className="absolute right-0 text-xs text-[#161616] opacity-50 select-none"
-						style={{ WebkitTextStrokeWidth: '2px' }}
-					>
-						{copyright}
+			<div className="relative pt-8 pb-6">
+				{/* 标题 */}
+				<h2>
+					<div className="flex items-center gap-2 leading-none font-semibold tracking-[0.1875em] text-(--ft-primary) main-sm:text-lg">
+						<span className="h-4 w-0.75 rounded-full bg-(--ft-accent)" />
+						专题
+						<span className="visually-hidden">：</span>
 					</div>
-					<small className="relative text-xs text-white">{copyright}</small>
+					<Wiki.Functions.Link page={MAIN_ARTICLE} className="my-8 block w-max main-not-sm:mx-auto">
+						<WikiImageServerOnly
+							file={LOGO}
+							alt="无色透名祭4"
+							width={480}
+							className="h-12 w-auto dark:filter-(--filter-dark) main-xs:h-14 main-md:h-16"
+							style={
+								{
+									'--filter-dark':
+										'drop-shadow(-1px 0 3px #e5e5e5) drop-shadow(1px 0px 3px #e5e5e5) drop-shadow(-1px 1px 2px #e5e5e5) drop-shadow(1px 1px 2px #e5e5e5)',
+								} as CSSProperties
+							}
+						/>
+					</Wiki.Functions.Link>
+				</h2>
+
+				<p className="mx-2 text-sm leading-relaxed opacity-90 main-not-sm:text-center">
+					以“全员透名”为主题的VOCALOID歌曲匿名投稿活动。
+				</p>
+
+				<div className="mt-4 flex flex-wrap gap-2 main-not-sm:justify-center">
+					<Button page={MAIN_ARTICLE} variant="primary">
+						完整介绍
+					</Button>
+					<Button href={OFFICIAL_SITE_URL}>活动官网</Button>
+					<Button href={PARTICIPATION_TAG_URL}>全部{formatNumber(SUBMITTED_COUNT)}首参赛曲</Button>
 				</div>
+
+				<Schedule className="mt-6" />
+
+				<Songs data={data} className="mt-6" />
 			</div>
 		</div>
 	)
 }
 
-function Title() {
+/** 时间节点 */
+function Schedule({ className }: { className?: string }) {
 	return (
-		<div className="relative text-[1.75rem] leading-[calc(1em+2px)] font-black text-white main-sm:text-[2rem] main-md:text-[2.25rem] main-lg:text-[2.5rem]">
-			<div
-				aria-hidden
-				className="absolute top-11 left-px text-white blur-[2px] select-none"
-				style={{ WebkitTextStrokeWidth: '0.35em' }}
-			>
-				<TitleContent />
-			</div>
-			<div
-				aria-hidden
-				className="absolute top-11 left-px text-[#161616] select-none"
-				style={{ WebkitTextStrokeWidth: '0.15em' }}
-			>
-				<TitleContent />
-			</div>
-			<h2 className="relative">
-				<div
-					className="mb-2 h-9 w-16 rounded-[3px] border-2 bg-white p-0.5 text-[1.25rem] leading-none font-bold text-(--secondary)"
-					style={{ boxShadow: '0 0 4px 2px #fff' }}
-				>
-					<div className="flex-center size-full rounded-[2px] border-2 border-[#f5efff]">专题</div>
-				</div>
-				<div className="ml-px">
-					<TitleContent subColor="#e6ff55" />
-				</div>
-			</h2>
-		</div>
+		<ol
+			className={cn('grid grid-cols-2 gap-2.5 main-xs:grid-cols-3 main-md:grid-cols-5', className)}
+			style={{ '--bg': '#fff' } as CSSProperties}
+		>
+			<ScheduleItem date="9/15" time="12:00" label="投稿开始" />
+			<ScheduleItem date="9/28" time="11:00" label="投稿截止" />
+			<ScheduleItem date="11/20" time="13:00" label="先行公开" />
+			<ScheduleItem date="11/20" time="18:00" label="正式公开" />
+			<ScheduleItem date="11/23" time="19:00" label="投稿者公开" />
+		</ol>
 	)
 }
 
-function TitleContent({ subColor }: { subColor?: string }) {
+function ScheduleItem({ date, time, label }: { date: string; time: string; label: string }) {
 	return (
-		<>
-			<span className="inline-block">The VOCALOID Collection</span>{' '}
-			<span className="inline-block" style={subColor ? { color: subColor } : undefined}>
-				2026 Summer
-			</span>
-		</>
+		<li
+			key={`${date}${time}`}
+			className="space-y-1 rounded-md border border-white bg-white/80 px-3 py-2 text-center backdrop-blur-xs backdrop-saturate-200 dark:border-(--ft-primary)/25 dark:bg-(--ft-soft)/60 main-md:py-3"
+		>
+			<div className="text-xs leading-none opacity-80">{label}</div>
+			<div className="text-sm leading-none font-semibold text-(--ft-primary) tabular-nums">
+				{date} <span className="font-normal opacity-80">{time}</span>
+			</div>
+		</li>
 	)
 }
 
-function Information() {
-	return (
-		<div className="flex flex-col gap-2">
-			<div className="space-y-1 rounded-container border border-[#e4e4e7] bg-white/85 py-2 text-sm leading-tight font-medium shadow backdrop-brightness-200 backdrop-saturate-150 [&_a]:ml-3 [&_a]:block [&_a]:font-semibold [&_a]:text-(--primary)">
-				<Wiki.Link page="The VOCALOID Collection">
-					The VOCALOID Collection（<span lang="ja">ボカコレ</span>）
-				</Wiki.Link>
-				<div className="mr-3 ml-2.25 flex gap-1">
-					<div className="w-1 rounded-max bg-[#eae6ff]" />
-					<p className="text-justify font-normal">
-						由DWANGO举办的线上VOCALOID歌曲投稿节，每年两届。国内粉丝将其简称为VCCL。
-					</p>
-				</div>
-			</div>
-			<div className="space-y-2 rounded-container border border-[#e4e4e7] bg-white/85 p-2.25 shadow backdrop-brightness-200 backdrop-saturate-150">
-				<div className="flex items-center gap-2 rounded-md bg-[#eae6ff] py-2 pr-4">
-					<div className="grow space-y-1 text-center font-bold">
-						<div className="text-sm leading-none font-medium">本届</div>
-						<div className="text-xl leading-none text-(--primary)">2026夏</div>
-					</div>
-					<div className="grid border-separate grid-cols-[auto_auto] items-center gap-x-2 gap-y-1 font-medium">
-						<div className="text-sm leading-none">开始</div>
-						<div>8月20日</div>
-						<div className="text-sm leading-none">结束</div>
-						<div>8月24日</div>
-					</div>
-				</div>
-				<div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-2 text-center text-sm leading-none font-medium">
-					<div className="border-t border-[#e4e4e7]" />
-					投稿数量
-					<div className="border-t border-[#e4e4e7]" />
-				</div>
-				<div className="grid grid-cols-3 justify-between gap-4">
-					<SubmitNumber category="TOP100" value={2368} bg="#f1ad29" />
-					<SubmitNumber category="ROOKIE" value={3270} bg="#288bd2" />
-					<SubmitNumber category="REMIX" value={671} bg="#349d4b" />
-				</div>
-			</div>
-			<ul className="[&_a]:ring- grid grid-cols-2 gap-x-1 gap-y-2 text-center text-sm font-medium text-white *:*:flex-center *:contents *:*:rounded-max *:*:p-3 *:*:leading-none [&_a]:border [&_a]:border-[#e4e4e7] [&_a]:shadow">
-				<li className="*:col-span-2 *:bg-(--primary)">
-					<Wiki.Link page="The VOCALOID Collection">完整介绍</Wiki.Link>
-				</li>
-				<li className="*:bg-[#252525]">
-					<Wiki.Link page="Template:The VOCALOID Collection2026夏">
-						<span>
-							Vocawiki
-							<span className="whitespace-nowrap">上的</span>
-							<span className="whitespace-nowrap">曲目</span>
-						</span>
-					</Wiki.Link>
-				</li>
-				<li className="*:bg-[#252525]!">
-					<Wiki.Link href="https://vocaloid-collection.jp/">活动官网</Wiki.Link>
-				</li>
-			</ul>
-		</div>
+function Button({
+	variant = 'outline',
+	children,
+	...props
+}: {
+	variant?: 'primary' | 'outline'
+	children: React.ReactNode
+} & (
+	| {
+			page: string
+	  }
+	| { href: string }
+)) {
+	const className = cn(
+		'inline-flex items-center rounded-max px-3.5 py-2 text-sm leading-none font-medium',
+		{
+			'bg-(--ft-primary) text-(--ft-soft)': variant === 'primary',
+			'border border-(--ft-primary)/25 bg-(--ft-soft) text-(--ft-primary)': variant === 'outline',
+		},
 	)
-}
 
-function SubmitNumber({ category, value, bg }: { category: ReactNode; value: number; bg: string }) {
-	return (
-		<div className="text-center">
-			<div
-				className="rounded-full p-1 text-sm leading-none font-medium text-white"
-				style={{ backgroundColor: bg }}
-			>
-				{category}
-			</div>
-			<div className="mt-0.5 text-xl leading-none font-bold">{value}</div>
-		</div>
+	return 'page' in props ? (
+		<Wiki.Functions.Link page={props.page} className={className}>
+			{children}
+		</Wiki.Functions.Link>
+	) : (
+		<Wiki.Functions.ExternalLink href={props.href} className={className}>
+			{children}
+		</Wiki.Functions.ExternalLink>
 	)
 }
