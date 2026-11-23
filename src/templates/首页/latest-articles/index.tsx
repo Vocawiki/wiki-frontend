@@ -15,7 +15,8 @@ export function LatestArticles() {
 function Wikitext() {
 	return (
 		<>
-			{'{{#html:latest-article-list}}'}
+			{/* @ts-expect-error 解析器扩展标签 */}
+			<embedhtml name="latest-article-list" />
 			<div
 				id="latest-article-list"
 				className="preflight"
