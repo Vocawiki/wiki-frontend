@@ -131,10 +131,10 @@ function Button({
 	| { href: string }
 )) {
 	const className = cn(
-		'inline-flex items-center rounded-max px-3.5 py-2 text-sm leading-none font-medium',
+		'inline-flex items-center rounded-max px-3.5! py-2! text-sm leading-none font-medium',
 		{
-			'bg-(--ft-primary) text-(--ft-soft)': variant === 'primary',
-			'border border-(--ft-primary)/25 bg-(--ft-soft) text-(--ft-primary)': variant === 'outline',
+			'bg-(--ft-primary)! text-(--ft-soft)': variant === 'primary',
+			'border border-(--ft-primary)/25 bg-(--ft-soft)! text-(--ft-primary)': variant === 'outline',
 		},
 	)
 

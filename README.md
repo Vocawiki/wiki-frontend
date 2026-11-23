@@ -29,6 +29,7 @@
       		"*.css.txt": "css",
       		"*.js.txt": "javascript",
       	},
+      	"tailwindCSS.classFunctions": ["cn"],
       	"tailwindCSS.experimental.configFile": "src/gadgets/(appearance)/(skin)/site-styles/index.css",
       	"[html]": {
       		"editor.defaultFormatter": "oxc.oxc-vscode",

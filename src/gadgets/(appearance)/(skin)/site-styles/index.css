@@ -212,6 +212,8 @@
 }
 
 @utility ignore-article-inline-padding {
+	margin-inline: -1rem;
+
 	@container article-container (width > 0) {
 		:where(body.skin-citizen:not(.citizen-toc-enabled)) & {
 			margin-inline: calc(
