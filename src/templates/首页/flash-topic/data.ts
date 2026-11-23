@@ -1,7 +1,5 @@
 /** 无色透名祭参与作品分类 */
 const PARTICIPATION_CATEGORY = 'Category:无色透名祭活动参与作品'
-/** 本届参加曲的niconico标签页 */
-const NICONICO_TAG_URL = 'https://www.nicovideo.jp/tag/無色透名祭4参加曲'
 /** 本届最多展示的曲目数 */
 const CURRENT_LIMIT = 12
 /** 往届最多展示的曲目数 */
@@ -13,16 +11,8 @@ const CURRENT_EDITION = 4
 
 /** 本届参赛曲数 */
 export const SUBMITTED_COUNT = 4463
-/** 本届日程 */
-export const SCHEDULE = [
-	{ date: '9/15', time: '12:00', label: '投稿开始' },
-	{ date: '9/28', time: '11:00', label: '投稿截止' },
-	{ date: '11/20', time: '13:00', label: '先行公开' },
-	{ date: '11/20', time: '18:00', label: '正式公开' },
-	{ date: '11/23', time: '19:00', label: '投稿者公开' },
-] as const
 /** “全部参赛曲”按钮指向的niconico标签页 */
-export const PARTICIPATION_TAG_URL = `${NICONICO_TAG_URL}?sort=viewCount&order=asc&kind=channel&genre=music_sound`
+export const PARTICIPATION_TAG_URL = `https://www.nicovideo.jp/tag/無色透名祭4参加曲?sort=viewCount&order=asc&kind=channel&genre=music_sound`
 /** 活动官网 */
 export const OFFICIAL_SITE_URL = 'https://site.nicovideo.jp/mushokutomeisai'
 /** 本活动主条目 */
@@ -124,7 +114,9 @@ async function loadCoverFiles(titles: string[]): Promise<Map<string, string>> {
 
 	for (const { query } of responses) {
 		for (const page of query?.pages ?? []) {
-			if (page.pageimage) covers.set(page.title, page.pageimage)
+			if (page.pageimage) {
+				covers.set(page.title, page.pageimage)
+			}
 		}
 	}
 	return covers

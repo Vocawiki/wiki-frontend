@@ -86,7 +86,7 @@ const willQueryTasks = new Map<
 	}
 >()
 
-const queryQueue = new PQueue({ concurrency: 1, timeout: 10_000 })
+const queryQueue = new PQueue({ concurrency: 4, timeout: 10_000 })
 
 function getThumb(
 	title: string,
