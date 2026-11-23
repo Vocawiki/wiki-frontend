@@ -12,21 +12,21 @@ export function Songs({ data, className }: { data: TopicData; className?: string
 	return (
 		<div className={cn('space-y-4', className)}>
 			{data.current.length > 0 && (
-				<section className="flex flex-col gap-2.5">
+				<div className="flex flex-col gap-2.5">
 					<Header badge="本届投稿" note={`已收录${data.currentTotal}首`} />
 					<SongList songs={data.current} />
-				</section>
+				</div>
 			)}
 
 			{data.past.length > 0 && (
-				<section className="flex flex-col gap-2.5">
+				<div className="flex flex-col gap-2.5">
 					<Header badge="往届投稿" muted>
 						<Wiki.Link page={PARTICIPATION_CATEGORY_LINK}>
 							<span className="text-xs font-medium text-(--ft-primary)">更多作品 →</span>
 						</Wiki.Link>
 					</Header>
 					<SongList songs={data.past} />
-				</section>
+				</div>
 			)}
 		</div>
 	)
