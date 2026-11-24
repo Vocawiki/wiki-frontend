@@ -76,7 +76,7 @@ export async function FlashTopic() {
 						完整介绍
 					</Button>
 					<Button href={OFFICIAL_SITE_URL}>活动官网</Button>
-					<Button href={PARTICIPATION_TAG_URL}>全部{formatNumber(SUBMITTED_COUNT)}首参赛曲</Button>
+					<Button href={PARTICIPATION_TAG_URL}>全部{formatNumber(SUBMITTED_COUNT)}首曲目</Button>
 				</div>
 
 				<Schedule className="mt-6" />

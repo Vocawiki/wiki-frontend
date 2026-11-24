@@ -10,8 +10,8 @@ const PAST_EDITIONS = [1, 2, 3] as const
 const CURRENT_EDITION = 4
 
 /** 本届参赛曲数 */
-export const SUBMITTED_COUNT = 4463
-/** “全部参赛曲”按钮指向的niconico标签页 */
+export const SUBMITTED_COUNT = 4410
+/** “全部曲目”按钮指向的niconico标签页 */
 export const PARTICIPATION_TAG_URL = `https://www.nicovideo.jp/tag/無色透名祭4参加曲?sort=viewCount&order=asc&kind=channel&genre=music_sound`
 /** 活动官网 */
 export const OFFICIAL_SITE_URL = 'https://site.nicovideo.jp/mushokutomeisai'
