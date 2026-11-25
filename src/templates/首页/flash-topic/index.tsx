@@ -39,11 +39,11 @@ export async function FlashTopic() {
 			<div className="relative pt-8 pb-6">
 				{/* 标题 */}
 				<h2>
-					<div className="flex items-center gap-2 leading-none font-semibold tracking-[0.1875em] text-(--ft-primary) main-sm:text-lg">
+					<span className="flex items-center gap-2 leading-none font-semibold tracking-[0.1875em] text-(--ft-primary) main-sm:text-lg">
 						<span className="h-4 w-0.75 rounded-full bg-(--ft-accent)" />
 						专题
 						<span className="visually-hidden">：</span>
-					</div>
+					</span>
 					<Wiki.Functions.Link page={MAIN_ARTICLE} className="my-8 block w-max main-not-sm:mx-auto">
 						<WikiImageServerOnly
 							file={LOGO}
@@ -77,7 +77,7 @@ export async function FlashTopic() {
 				<Songs data={data} className="mt-6" />
 			</div>
 
-			<p className="absolute top-4 right-0 text-xs leading-none opacity-80">
+			<p className="absolute top-8 right-0 text-xs leading-none opacity-80">
 				<small>
 					<span className="main-not-sm:hidden">
 						插画 <span lang="ja">いよわ</span> ·

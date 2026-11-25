@@ -1,9 +1,10 @@
 import { cn } from 'cn'
 
+import { formatNumber } from '@/lib/number'
 import { WikiImageServerOnly } from '~/components/wiki-image/server'
 import * as Wiki from '~/components/wikitext'
 
-import { PARTICIPATION_CATEGORY_LINK, type TopicData, type TopicSong } from './data'
+import { CURRENT_LIMIT, PARTICIPATION_CATEGORY_LINK, type TopicData, type TopicSong } from './data'
 
 /** 曲目区 */
 export function Songs({ data, className }: { data: TopicData; className?: string }) {
@@ -13,7 +14,16 @@ export function Songs({ data, className }: { data: TopicData; className?: string
 		<div className={cn('space-y-4', className)}>
 			{data.current.length > 0 && (
 				<div className="flex flex-col gap-2.5">
-					<Header badge="本届投稿" note={`已收录${data.currentTotal}首`} />
+					<Header badge="本届投稿" note={`已收录${formatNumber(data.currentTotal)}首`}>
+						{data.currentTotal > CURRENT_LIMIT && (
+							<Wiki.Functions.Link
+								page="Template:无色透名祭4"
+								className="text-xs font-medium text-(--ft-primary)"
+							>
+								更多作品 →
+							</Wiki.Functions.Link>
+						)}
+					</Header>
 					<SongList songs={data.current} />
 				</div>
 			)}
@@ -21,9 +31,12 @@ export function Songs({ data, className }: { data: TopicData; className?: string
 			{data.past.length > 0 && (
 				<div className="flex flex-col gap-2.5">
 					<Header badge="往届投稿" muted>
-						<Wiki.Link page={PARTICIPATION_CATEGORY_LINK}>
-							<span className="text-xs font-medium text-(--ft-primary)">更多作品 →</span>
-						</Wiki.Link>
+						<Wiki.Functions.Link
+							page={PARTICIPATION_CATEGORY_LINK}
+							className="text-xs font-medium text-(--ft-primary)"
+						>
+							更多作品 →
+						</Wiki.Functions.Link>
 					</Header>
 					<SongList songs={data.past} />
 				</div>
@@ -48,12 +61,12 @@ function Header({
 			<span
 				className={cn(
 					'rounded-max px-2 py-1.5 text-sm leading-none font-semibold',
-					muted ? 'bg-(--ft-soft) text-(--ft-primary)' : 'bg-(--ft-primary) text-white',
+					muted ? 'bg-(--ft-soft) text-(--ft-primary)' : 'bg-(--ft-primary) text-(--ft-soft)',
 				)}
 			>
 				{badge}
 			</span>
-			{note && <span className="text-xs leading-none text-(--ft-ink) opacity-55">{note}</span>}
+			{note && <span className="text-xs leading-none text-(--ft-ink) opacity-80">{note}</span>}
 			{children && <span className="ml-auto">{children}</span>}
 		</div>
 	)

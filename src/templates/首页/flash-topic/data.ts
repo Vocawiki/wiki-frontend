@@ -1,7 +1,7 @@
 /** 无色透名祭参与作品分类 */
 const PARTICIPATION_CATEGORY = 'Category:无色透名祭活动参与作品'
 /** 本届最多展示的曲目数 */
-const CURRENT_LIMIT = 12
+export const CURRENT_LIMIT = 12
 /** 往届最多展示的曲目数 */
 const PAST_LIMIT = 6
 /** 往届的届次 */
