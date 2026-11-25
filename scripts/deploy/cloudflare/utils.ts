@@ -1,14 +1,12 @@
+import { stringHash } from '@/lib/hash'
 import type { Base64String } from '@/lib/string'
 
 import { ASSETS_BASE_URL_WITHOUT_ROUTE_PATH } from '../../config'
 import type { AssetsState } from '../types'
 
-export async function getCfFileHash(
-	fileContentBase64: Base64String,
-	extension: string,
-): Promise<string> {
+export function getCfFileHash(fileContentBase64: Base64String, extension: string): Promise<string> {
 	// 算法来自Cloudflare官方示例，我也不知道到底是不是非要这么算，
-	// 还是说只要保证同样的文件算出来的hash一样就行。
+	// 还是说只要保证同样的文件算出来的hash一样就行？
 	// 官方示例：
 	// return crypto
 	// 	.createHash('sha256')
@@ -16,10 +14,10 @@ export async function getCfFileHash(
 	// 	.digest('hex')
 	// 	.slice(0, 32)
 
-	const bytes = new TextEncoder().encode(fileContentBase64 + extension)
-	const hashBuffer = await crypto.subtle.digest('SHA-256', bytes)
-	const hashFirst16BytesHex = new Uint8Array(hashBuffer.slice(0, 16)).toHex()
-	return hashFirst16BytesHex
+	return stringHash(fileContentBase64 + extension, {
+		alphabet: 'hex',
+		lengthInString: 32,
+	})
 }
 
 export function getFilesWillBeObsoleteAfterDeploy(

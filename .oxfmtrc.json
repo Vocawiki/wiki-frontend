@@ -24,7 +24,7 @@
 	},
 	"experimentalSortPackageJson": false,
 	"sortTailwindcss": {
-		"stylesheet": "./src/gadgets/(appearance)/(skin)/site-styles/index.css",
+		"stylesheet": "./src/theme.css",
 		"functions": ["cn", "cva"]
 	},
 	"overrides": [

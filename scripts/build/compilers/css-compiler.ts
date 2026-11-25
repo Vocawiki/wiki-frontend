@@ -18,7 +18,7 @@ import { mapValues, traverse } from 'radashi'
 
 // 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名，也必须带后缀
 import { IS_PRODUCTION } from '../../../lib/config.ts'
-import { SOURCE_DIR_GADGETS } from '../../config.ts'
+import { SOURCE_PATH_TAILWIND_THEME } from '../../config.ts'
 import { CSS_BROWSER_TARGETS } from '../browser-target.ts'
 
 export const lightningCSSOptions: Omit<
@@ -107,9 +107,7 @@ export const lightningCSSOptions: Omit<
 }
 
 const postcssInstance = postcss(
-	postcssInsertImportTailwindConfig(
-		`${SOURCE_DIR_GADGETS}/(appearance)/(skin)/site-styles/index.css`,
-	),
+	postcssInsertImportTailwindTheme(SOURCE_PATH_TAILWIND_THEME),
 	tailwindcss({
 		base: 'src',
 		optimize: false,
@@ -260,7 +258,7 @@ function version(major: number, minor = 0, patch = 0) {
 	return (major << 16) | (minor << 8) | patch
 }
 
-function postcssInsertImportTailwindConfig(referencePath: string): Plugin {
+function postcssInsertImportTailwindTheme(referencePath: string): Plugin {
 	return {
 		postcssPlugin: 'postcss-ensure-reference-tailwind-theme',
 		Once(root: Root) {

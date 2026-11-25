@@ -14,7 +14,7 @@ import { getWikiTitleInfo, type NamespaceName } from '@/lib/wiki'
 import { loadReferencedFiles } from '@/tools/file-usage'
 
 import {
-	ASSETS_BASE_URL,
+	ASSETS_BASE_URL_IMPLICIT_ORIGIN,
 	ASSETS_DIR_IN_OUTPUT_DIR,
 	PAGES_DIR,
 	NONDEFAULT_CONTENT_MODELS_PATH,
@@ -42,6 +42,10 @@ import {
 } from './types'
 
 const namespacePrecedence: NamespaceName[] = ['HTML', 'MediaWiki', 'Template']
+const siblingAssetsPathPattern = new RegExp(
+	`${RegExp.escape(`../${ASSETS_DIR_IN_OUTPUT_DIR}`)}(?=/)`,
+	'gu',
+)
 
 const { values: args } = parseArgs({
 	args: process.argv,
@@ -239,7 +243,12 @@ async function getBuiltPages(): Promise<Page[]> {
 		const contentWithSourceMapComment = await fs.readFile(entry.path, 'utf-8')
 		const content = contentWithSourceMapComment
 			.replace(/\n\/\/# sourceMappingURL=.+/u, '')
-			.replaceAll(`../${ASSETS_DIR_IN_OUTPUT_DIR}`, ASSETS_BASE_URL)
+			// 在 ResourceLoader 模块（构建到 out/pages，从 /load.php?... 请求）中，
+			// 导入位于 Worker（构建到 out/assets，从 /assets/... 请求）中的模块时，会出现：
+			//   import("../assets/xxx.js")
+			// 需要将其改写成：
+			//   import("/assets/xxx.js")
+			.replace(siblingAssetsPathPattern, ASSETS_BASE_URL_IMPLICIT_ORIGIN)
 		return {
 			title,
 			content,

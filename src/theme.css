@@ -1,0 +1,284 @@
+/* @layer 在site-styles里定义，因为那里更先执行 */
+
+@import "tailwindcss/theme.css" layer(theme);
+
+@source not inline("container");
+/* [[Help:CSS工具类、变量]]中明确提及的 */
+@source inline(
+	"select-none hidden font-main font-mono text-xs text-sm text-base text-lg text-xl visually-hidden image-pixelated image-rendering-auto"
+);
+
+@theme {
+	/* 下面两个暂时没需要 */
+	--font-sans: initial;
+	--font-serif: initial;
+	--font-main:
+		ui-sans-serif, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji";
+	/**
+	 * 参考：
+	 * - GitHub: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, "Liberation Mono", monospace
+	 * - Tailwind CSS: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+	 * - Bootstrap: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+	 * - [Gentle Intro to System Default Monospace Fonts](https://ianyepan.github.io/posts/system-default-monospace-fonts-pt1/)
+	 *
+	 * 字体选用理由：
+	 * - SF Mono: macOS 默认，不知道为什么几个框架和网站都把 SFMono-Regular 而不是 SF Mono 排在前面
+	 * - JetBrains Mono: 如果装了 JetBrains 系的软件就会被安装
+	 * - Menlo: macOS 旧默认，基于 DejaVu 设计，更现代
+	 * - Roboto Mono: Android 预装
+	 * - DejaVu Sans Mono: Linux 预装
+	 * - Monaco: macOS 旧旧默认
+	 * - Consolas: Windows 默认，字形不现代
+	 * - Liberation Mono: Linux 预装，字形不现代
+	 * - Droid Sans Mono: Android 默认，但是没 Roboto Mono 现代
+	 * - Courier New: 老古董
+	 * - 最后不能是 monospace，因为很多浏览器 monospace 的中文是宋体，很出戏，所以这里用 --font-main，但因此我们需要让前面尽可能多地覆盖用户可能有的字体。
+	 * 不选用的字体：
+	 * - Cascadia Code/Mono: Windows 预装，但是太粗了，和中文不搭。
+	 */
+	--font-mono:
+		ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, "Roboto Mono",
+		"DejaVu Sans Mono", Monaco, Consolas, "Liberation Mono", "Droid Sans Mono", "Courier New",
+		var(--font-main);
+
+	/* 这两个preflight要用 */
+	--default-font-family: var(--font-main);
+	--default-font-feature-settings: "locl";
+
+	--color-subtle: var(--skin-specific);
+
+	/* https://doc.wikimedia.org/codex/latest/design-tokens/breakpoint.html */
+	--breakpoint-codex-mobile: 320px;
+	--breakpoint-codex-tablet: 640px;
+	--breakpoint-codex-desktop: 1120px;
+	--breakpoint-codex-desktop-wide: 1680px;
+
+	/* 每个皮肤不同 */
+	--text-xs: var(--skin-specific);
+	--text-xs--line-height: var(--skin-specific);
+	--text-sm: var(--skin-specific);
+	--text-sm--line-height: var(--skin-specific);
+	--text-base: var(--skin-specific);
+	--text-base--line-height: var(--skin-specific);
+	--text-lg: var(--skin-specific);
+	--text-lg--line-height: var(--skin-specific);
+	--text-xl: var(--skin-specific);
+	--text-xl--line-height: var(--skin-specific);
+
+	/* 参考：
+	Citizen:
+    --border-radius-base: 4px;
+	--border-radius-medium: calc(var(--border-radius-base) * 2); = 8px
+    --border-radius-large: calc(var(--border-radius-base) * 3); = 12px
+
+	Tailwind:
+	--radius-xs: 0.125rem; = 2px
+	--radius-sm: 0.25rem; = 4px
+	--radius-md: 0.375rem; = 6px
+	--radius-lg: 0.5rem; = 8px
+	--radius-xl: 0.75rem; = 12px
+
+	shadcn/ui:
+  	--radius: 0.625rem;
+	--radius-sm: calc(var(--radius) - 4px); = 6px
+	--radius-md: calc(var(--radius) - 2px); = 8px
+	--radius-lg: var(--radius); = 10px
+	--radius-xl: calc(var(--radius) + 4px); = 14px
+	*/
+	--radius-*: initial;
+	--radius-xs: var(--skin-specific);
+	--radius-sm: var(--skin-specific);
+	--radius-md: var(--skin-specific);
+	--radius-lg: var(--skin-specific);
+	/* 在Citizen上可以是完全圆形，而Vector上则比较方 */
+	--radius-max: var(--skin-specific);
+	--radius-container: var(--skin-specific);
+	/**
+	 * 等最低目标浏览器支持infinity后可去除，瓶颈在Firefox >= 114
+	 * https://caniuse.com/mdn-css_types_calc-keyword_infinity
+	 */
+	--radius-full: 9999px;
+}
+
+@custom-variant dark {
+	&:where(:root.skin-theme-clientpref-night *) {
+		@slot;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		&:where(:root.skin-theme-clientpref-os *) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant not-dark {
+	&:where(:root.skin-theme-clientpref-day *) {
+		@slot;
+	}
+
+	@media not (prefers-color-scheme: dark) {
+		&:where(:root.skin-theme-clientpref-os *) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant root-dark {
+	&:where(.skin-theme-clientpref-night) {
+		@slot;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		&:where(.skin-theme-clientpref-os) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant root-not-dark {
+	&:where(.skin-theme-clientpref-day) {
+		@slot;
+	}
+
+	@media not (prefers-color-scheme: dark) {
+		&:where(.skin-theme-clientpref-os) {
+			@slot;
+		}
+	}
+}
+
+@custom-variant main-2xs (&:where(body.main-2xs *));
+@custom-variant main-xs (&:where(body.main-xs *));
+@custom-variant main-sm (&:where(body.main-sm *));
+@custom-variant main-md (&:where(body.main-md *));
+@custom-variant main-lg (&:where(body.main-lg *));
+@custom-variant main-xl (&:where(body.main-xl *));
+@custom-variant main-2xl (&:where(body.main-2xl *));
+@custom-variant main-not-sm (&:where(body:not(.main-sm) *));
+@custom-variant main-not-md (&:where(body:not(.main-md) *));
+@custom-variant main-not-lg (&:where(body:not(.main-lg) *));
+@custom-variant main-not-xl (&:where(body:not(.main-xl) *));
+@custom-variant main-not-2xl (&:where(body:not(.main-2xl) *));
+
+@utility text-left {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-right {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-justify {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-start {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-end {
+	text-spacing-trim: var(--text-spacing-trim-default);
+}
+@utility text-center {
+	text-spacing-trim: var(--text-spacing-trim-centered);
+}
+
+@utility fill {
+	position: absolute;
+	inset: 0;
+}
+
+@utility visually-hidden {
+	@apply sr-only;
+}
+
+@utility image-pixelated {
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+@utility image-rendering-auto {
+	image-rendering: auto;
+}
+
+@utility flex-center {
+	@apply flex items-center justify-center;
+}
+
+@utility auto-interact-fx {
+	@apply transition-[filter] hover:brightness-95 hover:saturate-103 active:brightness-92 active:saturate-106 active:transition-none;
+}
+
+@utility ignore-article-inline-padding {
+	margin-inline: -1rem;
+
+	@container article-container (width > 0) {
+		:where(body.skin-citizen:not(.citizen-toc-enabled)) & {
+			margin-inline: calc(
+				(var(--article-body-inline-size) - var(--article-container-inline-size)) / 2
+			);
+		}
+	}
+
+	:where(
+			:root.vector-feature-main-menu-pinned-disabled:is(
+					.vector-toc-not-available,
+					.vector-feature-toc-pinned-clientpref-0
+				).vector-feature-page-tools-pinned-disabled.vector-feature-appearance-pinned-clientpref-0
+		)
+		& {
+		margin-inline: calc(var(--article-body-inline-size) / 2 - 50vw);
+	}
+
+	@media (width < 1120px) {
+		:where(body.skin-vector-2022) & {
+			margin-inline: calc(var(--article-body-inline-size) / 2 - 50vw);
+		}
+	}
+}
+
+@property --article-container-inline-size {
+	syntax: "<length>";
+	initial-value: 100svi;
+	inherits: true;
+}
+
+@property --article-body-inline-size {
+	syntax: "<length>";
+	initial-value: 100svi;
+	inherits: true;
+}
+
+#mw-content-text {
+	container: article-body / inline-size;
+
+	> * {
+		--article-body-inline-size: 100cqw;
+	}
+}
+
+/**
+ * 全站存在太多无layer的样式，这些样式经常覆盖Tailwind的样式，过于降低开发体验。
+ * 使用`:not(#a#b)`这种只会增加优先级而没有副作用的选择器，可以覆盖掉大部分全站样式。
+ * 不用担心嵌套选择器展开后一堆`:not(#a#b)`导致长度爆炸，这种重复内容对于gzip来说不在话下。
+ */
+/* 充当原本的base层 */
+.preflight:not(#a#b) {
+	all: revert;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: 0 solid;
+
+	&[hidden]:where(:not([hidden="until-found"])) {
+		display: none !important;
+	}
+
+	:where(:not(img, svg, svg *, video, canvas, audio, iframe, embed, object, math, math *)) {
+		all: revert;
+	}
+
+	@import "tailwindcss/preflight.css";
+}
+
+/* 充当原本的utilities层，对该@rule的处理逻辑见Lightning CSS侧（/scripts/build/compilers） */
+@tw-utilities {
+	@import "tailwindcss/utilities.css";
+}

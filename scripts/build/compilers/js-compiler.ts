@@ -14,7 +14,7 @@ import type { Promisable } from 'type-fest'
 
 import { IS_PRODUCTION } from '@/lib/config'
 import {
-	ASSETS_BASE_URL,
+	ASSETS_BASE_URL_IMPLICIT_ORIGIN,
 	ASSETS_DIR_IN_OUTPUT_DIR,
 	OUTPUT_DIR,
 	PAGES_DIR_IN_OUTPUT_DIR,
@@ -159,7 +159,7 @@ export async function buildJsEntries(
 						if (!handler) return
 						void postBuildQueue.add(async () => {
 							await handler(
-								`${ASSETS_BASE_URL}/${chunk.fileName.slice(ASSETS_DIR_IN_OUTPUT_DIR.length + 1)}`,
+								`${ASSETS_BASE_URL_IMPLICIT_ORIGIN}/${chunk.fileName.slice(ASSETS_DIR_IN_OUTPUT_DIR.length + 1)}`,
 							)
 							calledPostBuildHandlers.add(name)
 						})
