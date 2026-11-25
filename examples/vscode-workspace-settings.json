@@ -1,0 +1,41 @@
+{
+	"files.associations": {
+		"*.css": "tailwindcss",
+		"*.css.txt": "css",
+		"*.js.txt": "javascript"
+	},
+	"tailwindCSS.classFunctions": ["cn"],
+	"tailwindCSS.experimental.configFile": "src/theme.css",
+	"[html]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[tailwindcss]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[markdown]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"js/ts.experimental.useTsgo": true,
+	"js/ts.tsdk.path": "node_modules/@typescript/native/lib"
+}

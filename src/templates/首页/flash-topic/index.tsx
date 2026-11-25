@@ -36,13 +36,6 @@ export async function FlashTopic() {
 			</div>
 			<div className="fill ignore-article-inline-padding border-y border-(--ft-line)" />
 
-			<div className="absolute top-4 right-0 text-xs leading-none opacity-60">
-				<span className="main-not-sm:hidden">
-					插画 <span lang="ja">いよわ</span> ·
-				</span>
-				<span className="main-sm:hidden">图像</span> © DWANGO
-			</div>
-
 			<div className="relative pt-8 pb-6">
 				{/* 标题 */}
 				<h2>
@@ -83,6 +76,15 @@ export async function FlashTopic() {
 
 				<Songs data={data} className="mt-6" />
 			</div>
+
+			<p className="absolute top-4 right-0 text-xs leading-none opacity-80">
+				<small>
+					<span className="main-not-sm:hidden">
+						插画 <span lang="ja">いよわ</span> ·
+					</span>
+					<span className="main-sm:hidden">图像</span> © DWANGO
+				</small>
+			</p>
 		</div>
 	)
 }
