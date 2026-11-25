@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/postcss'
 import {
 	Features,
 	transform,
+	type CustomProperty,
 	type Declaration,
 	type MediaQuery,
 	type Rule,
@@ -56,6 +57,17 @@ export const lightningCSSOptions: Omit<
 		},
 	},
 	visitor: {
+		// Tailwind会把`@theme`编译为
+		// `:root, :host { --radius-max: var(--skin-specific); /* ... */ }`
+		// 这类主题变量。其中`var(--skin-specific)`仅为占位符，作用是让Tailwind照常生成工具类，
+		// 真实值由各皮肤的CSS定义（见 docs/项目所配置的Tailwind CSS.md）。
+		// 占位符若被保留，变量将解析为无效值，故在此删除整条声明。
+		Declaration: {
+			custom(property) {
+				// 返回空数组即删除该声明，其余情况原样保留
+				return isSkinSpecificPlaceholder(property) ? [] : undefined
+			},
+		},
 		// Tailwind会在CSS文件中加入如
 		// `/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */`
 		// 的注释，更新Tailwind版本时会在站内产生大量无意义的编辑记录。
@@ -115,14 +127,13 @@ const postcssInstance = postcss(
 )
 
 export async function compileCSS(path: string): Promise<string> {
-	let css = await fs.readFile(path, 'utf-8')
-	css = (
-		await postcssInstance.process(css, {
+	const source = await fs.readFile(path, 'utf-8')
+	const css = (
+		await postcssInstance.process(source, {
 			from: path,
 			to: undefined,
 		})
 	).css
-	css = cleanTailwindPlaceholders(css)
 
 	const result = transform({
 		...lightningCSSOptions,
@@ -294,7 +305,20 @@ function postcssInsertImportTailwindTheme(referencePath: string): Plugin {
 	}
 }
 
-function cleanTailwindPlaceholders(css: string): string {
-	return css.replaceAll(/(?<=;|\{)\s*--[a-z-]+:\s*var\(--skin-specific\);?/gmu, '') // 移除“--xxx: var(--skin-specific)”
-	// .replaceAll(/(?<=\*\/\n):root,\s*:host\s*\{\s*\}\s*/gm, '') // 移除空的 “:root, :host {}”
+/** 主题变量占位符的值，见 docs/项目所配置的Tailwind CSS.md */
+const SKIN_SPECIFIC_PLACEHOLDER = '--skin-specific'
+
+/**
+ * 判断一条自定义属性是否是“由皮肤决定其值”的占位声明，即值有且仅有`var(--skin-specific)`。
+ *
+ * @returns 是占位声明时为`true`，此类声明应被移除
+ */
+function isSkinSpecificPlaceholder(property: CustomProperty): boolean {
+	const [component, ...rest] = property.value
+	return (
+		rest.length === 0 &&
+		component?.type === 'var' &&
+		component.value.name.ident === SKIN_SPECIFIC_PLACEHOLDER &&
+		!component.value.fallback
+	)
 }
