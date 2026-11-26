@@ -124,7 +124,7 @@ function PageCard({
 } & PartialPageInfo) {
 	const [themeColor, setThemeColor] = useState<
 		{ color: string; isDark: boolean; supportsOklch: boolean } | undefined
-	>(undefined)
+	>()
 
 	const imgRef: React.RefCallback<HTMLImageElement> = (img) => {
 		if (!img || themeColor) return

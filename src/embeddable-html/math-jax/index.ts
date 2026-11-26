@@ -46,15 +46,16 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 	script.async = true
 	script.addEventListener('load', () => {
 		let promise = Promise.resolve()
+		const promiseJoin = () =>
+			(promise = promise.then(() =>
+				window.MathJax && typeof MathJax.typesetPromise === 'function'
+					? MathJax.typesetPromise()
+					: Promise.resolve(),
+			))
+
 		;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 			[],
 			() => {
-				const promiseJoin = () =>
-					(promise = promise.then(() =>
-						window.MathJax && typeof MathJax.typesetPromise === 'function'
-							? MathJax.typesetPromise()
-							: Promise.resolve(),
-					))
 				void promiseJoin()
 				$(() => {
 					void promiseJoin()
@@ -62,5 +63,5 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 			},
 		])
 	})
-	document.head.appendChild(script)
+	document.head.append(script)
 })()

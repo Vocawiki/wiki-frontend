@@ -24,7 +24,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				const id = `akalinControllerList-${index}`
 				const monitor = document.createElement('span')
 				monitor.innerHTML = `${fixZero(opacity)}%）：`
-				akalinController.appendChild(monitor)
+				akalinController.append(monitor)
 				const range = document.createElement('input')
 				const $range = $(range)
 				range.type = 'range'
@@ -38,14 +38,14 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				akalinController.append(range)
 				const list = document.createElement('datalist')
 				list.id = id
-				const labeledValues = [0, 50, 100]
+				const labeledValues = new Set([0, 50, 100])
 				for (let v = 0; v <= 100; v += 10) {
 					const selected = v === opacity
 					const option = new Option(`${v}%`, `${v}`, selected, selected)
-					if (selected || labeledValues.includes(v)) {
+					if (selected || labeledValues.has(v)) {
 						option.label = `${v}%`
 					}
-					list.appendChild(option)
+					list.append(option)
 				}
 				akalinController.append(list)
 

@@ -27,8 +27,8 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 					}
 					const chartNode = self.find('.echart-main')
 					// TODO: 原实现用 const 声明后又重新赋值（会抛错并被 catch 吞掉），这里改为 let 以保留原意
-					let width = parseInt(ele.dataset.width!, 10)
-					let height = parseInt(ele.dataset.height!, 10)
+					let width = Number.parseInt(ele.dataset.width!, 10)
+					let height = Number.parseInt(ele.dataset.height!, 10)
 					if (width <= 160) {
 						width = 1200
 					}

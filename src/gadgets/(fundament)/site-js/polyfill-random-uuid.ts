@@ -5,6 +5,8 @@ function isValidUUIDv4(uuid: unknown): boolean {
 	)
 }
 
+const byteToHex = (n: number) => n.toString(16).padStart(2, '0')
+
 export function polyfillRandomUUID() {
 	try {
 		const uuid = crypto.randomUUID()
@@ -13,14 +15,12 @@ export function polyfillRandomUUID() {
 		}
 	} catch {
 		const rnds8 = new Uint8Array(16)
-		const rng = () => crypto.getRandomValues(rnds8)
-		const byteToHex = (n: number) => n.toString(16).padStart(2, '0')
 
 		crypto.randomUUID = () => {
-			const rnds = rng()
-			rnds[6] = (rnds[6]! & 0x0f) | 0x40
-			rnds[8] = (rnds[8]! & 0x3f) | 0x80
-			const chars = Array.from(rnds, byteToHex)
+			crypto.getRandomValues(rnds8)
+			rnds8[6] = (rnds8[6]! & 0x0f) | 0x40
+			rnds8[8] = (rnds8[8]! & 0x3f) | 0x80
+			const chars = Array.from(rnds8, byteToHex)
 
 			return [
 				...chars.slice(0, 4),

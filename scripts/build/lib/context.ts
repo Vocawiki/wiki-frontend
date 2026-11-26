@@ -32,6 +32,7 @@ export class BuildContext<const Stages extends BuildStagesBase> {
 		timing: {
 			after: AfterStage
 			before: Arrayable<keyof Stages>
+			// oxlint-disable-next-line unicorn/no-object-as-default-parameter
 		} = {
 			after: 'start' as AfterStage,
 			before: ['end'],

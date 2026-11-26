@@ -152,6 +152,8 @@ type HashToFileInfoMapValue =
 
 type HashToFileInfoMap = Map<string, HashToFileInfoMapValue>
 
+const getPath = (x: { path: string }) => x.path
+
 /**
  * Recursively reads all files from a directory and creates a manifest
  * mapping file paths to their hash and size.
@@ -204,7 +206,6 @@ async function createCfManifest(
 	)
 	obsoleteAssets.forEach(({ hash, path }) => hashToFileInfo.set(hash, { type: 'obsolete', path }))
 
-	const getPath = (x: { path: string }) => x.path
 	const cfManifest: CfAssetManifest = objectify(
 		[...obsoleteAssets, ...activeFiles],
 		getPath,

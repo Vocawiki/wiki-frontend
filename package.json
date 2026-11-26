@@ -20,7 +20,7 @@
 		"p-map": "^7.1.1",
 		"p-props": "^6.1.0",
 		"p-queue": "^10.0.0",
-		"radashi": "^13.1.0",
+		"radashi": "^13.1.1",
 		"react": "^19.3.1",
 		"react-dom": "^19.3.1",
 		"ts-extras": "^3.0.0",
@@ -33,7 +33,7 @@
 		"@tailwindcss/postcss": "^4.3.5",
 		"@tailwindcss/vite": "^4.3.5",
 		"@types/fs-extra": "^11.0.4",
-		"@types/react": "^19.3.0",
+		"@types/react": "^19.3.1",
 		"@types/react-dom": "^19.3.0",
 		"@typescript/native": "npm:typescript@^7.0.2",
 		"@vitejs/plugin-react": "^6.3.0",
@@ -46,8 +46,8 @@
 		"globals": "^17.14.0",
 		"globby": "^16.2.4",
 		"lightningcss": "^1.33.0",
-		"oxfmt": "^0.79.0",
-		"oxlint": "^1.94.0",
+		"oxfmt": "^0.80.0",
+		"oxlint": "^1.95.0",
 		"oxlint-tsgolint": "^7.0.2008",
 		"postcss": "^8.5.33",
 		"rolldown": "1.3.3",
@@ -60,5 +60,5 @@
 		"vite": "8.3.8",
 		"vue": "^3.5.46"
 	},
-	"packageManager": "pnpm@12.23.0"
+	"packageManager": "pnpm@12.23.0+sha512.02da94ffaf133f46074322afe552f90d40b5f71ae259aefbccdacc5085b1d617e98d65e0131f5748b9b67445978ee5055d7d59a473f1eef0d504854fefcd5975"
 }

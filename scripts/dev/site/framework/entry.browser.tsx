@@ -1,4 +1,4 @@
-// oxlint-disable typescript/no-floating-promises typescript/unbound-method typescript/no-misused-promises react/hook-use-state typescript/no-unsafe-argument
+// oxlint-disable typescript/no-floating-promises typescript/unbound-method typescript/no-misused-promises react/hook-use-state typescript/no-unsafe-argument unicorn/consistent-function-scoping
 import {
 	createFromReadableStream,
 	createFromFetch,
@@ -137,4 +137,4 @@ function listenNavigation(onNavigation: () => void) {
 	}
 }
 
-main()
+await main()

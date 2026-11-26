@@ -21,7 +21,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 			const $startNode = isParent ? $ele.parent() : $ele
 			let $target = isLeft ? $startNode.prev() : $startNode.next()
 
-			while ($target.length) {
+			while ($target.length > 0) {
 				if ($target.hasClass('mw-collapsible') && $target.hasClass('toggle-template-button')) {
 					$target.attr('id', `mw-customcollapsible-${id}`)
 					break

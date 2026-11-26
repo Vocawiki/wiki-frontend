@@ -248,7 +248,7 @@ async function getBuiltPages(): Promise<Page[]> {
 			//   import("../assets/xxx.js")
 			// 需要将其改写成：
 			//   import("/assets/xxx.js")
-			.replace(siblingAssetsPathPattern, ASSETS_BASE_URL_IMPLICIT_ORIGIN)
+			.replaceAll(siblingAssetsPathPattern, ASSETS_BASE_URL_IMPLICIT_ORIGIN)
 		return {
 			title,
 			content,

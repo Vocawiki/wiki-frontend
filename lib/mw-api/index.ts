@@ -56,7 +56,7 @@ function solveApiValue(value: unknown): string | undefined {
 		return value ? '1' : undefined
 	}
 	if (typeof value === 'object') {
-		throw new Error('MwApiCall参数不应出现对象')
+		throw new TypeError('MwApiCall参数不应出现对象')
 	}
 	// oxlint-disable-next-line typescript/no-base-to-string
 	return String(value)

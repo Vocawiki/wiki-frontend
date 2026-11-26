@@ -1,4 +1,4 @@
-// oxlint-disable max-lines-per-function no-await-in-loop typescript/no-unsafe-assignment typescript/no-unsafe-return typescript/no-unsafe-member-access typescript/no-unsafe-call typescript/no-unsafe-argument typescript/no-misused-promises
+// oxlint-disable max-lines-per-function no-await-in-loop typescript/no-unsafe-assignment typescript/no-unsafe-return typescript/no-unsafe-member-access typescript/no-unsafe-call typescript/no-unsafe-argument typescript/no-misused-promises unicorn/no-array-reduce
 /*
  * Originally from https://github.com/MoegirlPediaInterfaceAdmins/MoegirlPediaInterfaceCodes/blob/a157f6/src/gadgets/interfaceVariantConverter/Gadget-interfaceVariantConverter.js
  */
@@ -14,6 +14,12 @@
 // declare var InPageEdit: {
 //     [key: string]: any;
 // };
+
+const toParams = (obj) =>
+	Object.entries(obj)
+		.map(([k, v]) => `${k}=${v}`)
+		.join('|')
+
 $(async () => {
 	const { wgPageName, wgUserName, wgArticleId } = mw.config.get([
 		'wgPageName',
@@ -62,10 +68,6 @@ $(async () => {
 	} catch {
 		/* empty */
 	}
-	const toParams = (obj) =>
-		Object.entries(obj)
-			.map(([k, v]) => `${k}=${v}`)
-			.join('|')
 	const variantPage = (variant) => (variant === '(main)' ? basepage : `${basepage}/${variant}`)
 
 	const REGEXP = {
@@ -113,7 +115,7 @@ $(async () => {
 				(acc, param) => {
 					const [first, ...rest] = param.split('=')
 					// If rest is not empty, it's a named parameter; otherwise, it's a positional parameter
-					return rest.length
+					return rest.length > 0
 						? `${acc}|${mappings.push(first) - 1}=${rest.join('=')}`
 						: `${acc}|${param}`
 				},
@@ -152,7 +154,7 @@ $(async () => {
 			return `${paramList.reduce((acc, param) => {
 				const [first, ...rest] = param.split('=')
 				// If rest is not empty, it's a named parameter; otherwise, it's a positional parameter
-				return rest.length ? `${acc}|${mappings[first]}=${rest.join('=')}` : `${acc}|${param}`
+				return rest.length > 0 ? `${acc}|${mappings[first]}=${rest.join('=')}` : `${acc}|${param}`
 			}, `{{${name}`)}}}`
 		})
 		// Restore external link targets

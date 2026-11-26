@@ -1,3 +1,4 @@
+// oxlint-disable unicorn/consistent-function-scoping
 import type { ResourceLoaderQueue } from '~/@types/rlq'
 // oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
@@ -5,20 +6,20 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 	() => {
 		const cssSanitizer = (cssStr: string) =>
 			(typeof cssStr === 'string' ? cssStr : '')
-				.replace(RegExp(decodeURIComponent('%3C!--'), 'gu'), '')
-				.replace(RegExp(decodeURIComponent('-%3E'), 'gu'), '')
-				.replace(/\/\//gu, '')
-				.replace(/url/gu, '')
-				.replace(/&/gu, '')
-				.replace(/pointer-event/gu, ';')
-				.replace(/display\s*:\s*none\s*!\s*important/gu, 'display: none')
+				.replaceAll('<!--', '')
+				.replaceAll('->', '')
+				.replaceAll('//', '')
+				.replaceAll('url', '')
+				.replaceAll('&', '')
+				.replaceAll('pointer-event', ';')
+				.replaceAll(/display\s*:\s*none\s*!\s*important/gu, 'display: none')
 		const uuidv4 = () => {
 			let result = ''
 			while (result === '' || $(`#${result}, [name="${result}"]`).length > 0) {
 				// 与原实现 `[1e7] + -1e3 + ...` 的隐式字符串拼接结果完全一致
 				result = [1e7, -1e3, -4e3, -8e3, -1e11]
 					.join('')
-					.replace(/[018]/gu, (c) =>
+					.replaceAll(/[018]/gu, (c) =>
 						(
 							Number(c) ^
 							((crypto.getRandomValues(new Uint8Array(1))[0]! & 15) >> (Number(c) / 4))
@@ -35,10 +36,10 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 			Object.entries(ele.dataset)
 				.filter(([n, m]) => n.startsWith('key-') && !/['"<>\\/]/u.test(m!))
 				.forEach(([__key, _key]) => {
-					const value = ele.dataset[`value-${__key.substring(4)}`]
+					const value = ele.dataset[`value-${__key.slice(4)}`]
 					if (_key!.length > 0 && value!.length > 0) {
 						const isConfig = _key!.startsWith('@')
-						const key = isConfig ? _key!.substring(1) : _key!
+						const key = isConfig ? _key!.slice(1) : _key!
 						const base = result[isConfig ? 'config' : 'data']
 						base[key] = value!
 						if (/@o(?:n|ff)$/u.test(_key!)) {

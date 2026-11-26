@@ -2,6 +2,10 @@
 
 import type { ReactNode } from 'react'
 
+const back = () => {
+	history.back()
+}
+
 export function BackButton({
 	children = '返回',
 	linkLike,
@@ -9,10 +13,6 @@ export function BackButton({
 	children?: ReactNode
 	linkLike?: boolean
 }) {
-	const back = () => {
-		history.back()
-	}
-
 	if (linkLike) {
 		return (
 			<a href="#" onClick={back}>

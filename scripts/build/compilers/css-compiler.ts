@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import * as fs from 'node:fs/promises'
-import { join, relative, resolve } from 'node:path'
+import path from 'node:path'
 
 import tailwindcss from '@tailwindcss/postcss'
 import {
@@ -276,7 +276,7 @@ function postcssInsertImportTailwindTheme(referencePath: string): Plugin {
 			const srcFilePath = root.source?.input.file
 			assert(srcFilePath, '插件当前处理的文件未知路径')
 
-			if (resolve(srcFilePath) === resolve(referencePath)) {
+			if (path.resolve(srcFilePath) === path.resolve(referencePath)) {
 				return
 			}
 
@@ -286,8 +286,8 @@ function postcssInsertImportTailwindTheme(referencePath: string): Plugin {
 			})
 			if (hasExistingImport) return
 
-			const srcFileDir = join(srcFilePath, '..')
-			const relativeImportPath = relative(srcFileDir, referencePath).replaceAll('\\', '/')
+			const srcFileDir = path.join(srcFilePath, '..')
+			const relativeImportPath = path.relative(srcFileDir, referencePath).replaceAll('\\', '/')
 
 			const importRule = new AtRule({
 				name: 'reference',

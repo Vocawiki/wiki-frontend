@@ -1,4 +1,5 @@
 if (typeof window !== 'undefined') {
+	// oxlint-disable-next-line unicorn/prefer-type-error
 	throw new Error('禁止在浏览器导入此模块')
 }
 

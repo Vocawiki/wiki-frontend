@@ -27,7 +27,7 @@ const authorizedBuild = (v: Record<string, string>) => {
 	const params: string[] = []
 	splitNumbered(v.authors, '作者名', params)
 	splitNumbered(v.proof, '授权证明', params)
-	return params.length ? `|${params.join('|')}` : ''
+	return params.length > 0 ? `|${params.join('|')}` : ''
 }
 
 export const LICENSES: LicenseGroup[] = [

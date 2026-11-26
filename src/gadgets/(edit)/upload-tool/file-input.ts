@@ -40,6 +40,11 @@ function validateFile(f: File, deps: FileInputDeps): boolean {
 	return true
 }
 
+function chooseFile() {
+	const f = document.getElementById('wpUploadFile')
+	f?.click()
+}
+
 /** 本地文件选择、预览与元信息读取。 */
 export function useFileInput(Vue: typeof VueTypes, deps: FileInputDeps) {
 	const { onMounted, onUnmounted } = Vue
@@ -48,13 +53,6 @@ export function useFileInput(Vue: typeof VueTypes, deps: FileInputDeps) {
 	let fileEl: HTMLInputElement | null
 	/** 上一次由本函数写入目标名的值，用来区分自动填写和用户修改 */
 	let lastAutoName = ''
-
-	function chooseFile() {
-		const f = document.getElementById('wpUploadFile')
-		if (f) {
-			f.click()
-		}
-	}
 
 	/** 释放上一张测量用的object URL。 */
 	function releaseObjectUrl() {
@@ -78,16 +76,16 @@ export function useFileInput(Vue: typeof VueTypes, deps: FileInputDeps) {
 		deps.fileMeta.value = formatBytes(f.size)
 		if (!f.type.startsWith('image/')) return
 		const reader = new FileReader()
-		reader.onload = (ev) => {
-			deps.filePreview.value = (ev.target?.result as string) || ''
-		}
+		reader.addEventListener('load', (e) => {
+			deps.filePreview.value = (e.target?.result as string) || ''
+		})
 		reader.readAsDataURL(f)
 		objectUrl = URL.createObjectURL(f)
 		const img = new Image()
-		img.onload = () => {
+		img.addEventListener('load', () => {
 			deps.fileMeta.value = `${img.width} × ${img.height}, ${formatBytes(f.size)}`
 			releaseObjectUrl()
-		}
+		})
 		img.src = objectUrl
 	}
 

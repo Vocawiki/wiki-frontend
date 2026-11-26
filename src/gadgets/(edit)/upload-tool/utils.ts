@@ -12,7 +12,7 @@ export function stripAuthorCategory(title: string) {
 }
 
 function trimUnicodeWhitespace(s: string): string {
-	return s.replace(/^\s+|\s+$/gu, '')
+	return s.replaceAll(/^\s+|\s+$/gu, '')
 }
 
 export function trimChip(c: Chip): void {
@@ -70,7 +70,7 @@ export function formatBytes(n: number) {
 
 /** 转义模板参数 */
 export function escapeTemplateParam(s: string) {
-	return s.replace(/\|/gu, '{{!}}').replace(/[=]/gu, '{{=}}')
+	return s.replaceAll('|', '{{!}}').replaceAll(/[=]/gu, '{{=}}')
 }
 
 /** mw.notify同时接受字符串与jQuery对象（mw.Api#getErrorMessage返回后者）。 */

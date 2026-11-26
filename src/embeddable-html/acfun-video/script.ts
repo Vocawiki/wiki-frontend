@@ -1,43 +1,44 @@
-import type { ResourceLoaderQueue } from '~/@types/rlq'
 // oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
+const cssLengthUnitValidator = (
+	length: string | undefined,
+	defaultValue: string | undefined,
+	callback: (isValidated: boolean) => void,
+) => {
+	if (typeof length !== 'string' || length.length === 0) {
+		callback(false)
+		return defaultValue
+	}
+	const parsedNumber = Number.parseFloat(length.replace(/[a-z]+/iu, ''))
+	if (Number.isNaN(parsedNumber) || parsedNumber <= 0) {
+		callback(false)
+		return defaultValue
+	}
+	if (/^(?:\d+|\d*\.\d+)(?:em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|Q|in|pc|pt|px|%)$/u.test(length)) {
+		callback(true)
+		return length
+	}
+	if (/^(?:\d+|\d*\.\d+)$/u.test(length)) {
+		callback(true)
+		return `${length}px`
+	}
+	callback(false)
+	return defaultValue
+}
+
+const placeholderToggle = (iframe: JQuery) => {
+	if (iframe.data('displayFlag')) {
+		iframe.data('displayFlag', false)
+		const placeholder = iframe.data('placeholder') as JQuery
+		placeholder.fadeOut(370)
+	}
+}
+
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 	[],
 	() => {
 		try {
-			const cssLengthUnitValidator = (
-				length: string | undefined,
-				defaultValue: string | undefined,
-				callback: (isValidated: boolean) => void,
-			) => {
-				if (typeof length !== 'string' || length.length === 0) {
-					callback(false)
-					return defaultValue
-				}
-				const parsedNumber = parseFloat(length.replace(/[a-z]+/iu, ''))
-				if (Number.isNaN(parsedNumber) || parsedNumber <= 0) {
-					callback(false)
-					return defaultValue
-				}
-				if (
-					/^(?:\d+|\d*\.\d+)(?:em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|Q|in|pc|pt|px|%)$/u.test(length)
-				) {
-					callback(true)
-					return length
-				}
-				if (/^(?:\d+|\d*\.\d+)$/u.test(length)) {
-					callback(true)
-					return `${length}px`
-				}
-				callback(false)
-				return defaultValue
-			}
-			const placeholderToggle = (iframe: JQuery) => {
-				if (iframe.data('displayFlag')) {
-					iframe.data('displayFlag', false)
-					const placeholder = iframe.data('placeholder') as JQuery
-					placeholder.fadeOut(370)
-				}
-			}
 			let lazyLoadObserver: IntersectionObserver | { observe: (target: HTMLIFrameElement) => void }
 			if (
 				'IntersectionObserver' in window &&
@@ -87,7 +88,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 							ele.outerHTML = '<i>id错误</i>'
 							return
 						}
-						let page = parseInt(String(Number(dataset.page || 1)), 10)
+						let page = Math.trunc(Number(dataset.page || 1))
 						if (Number.isNaN(page) || page < 1) {
 							page = 1
 						}

@@ -4,6 +4,14 @@
 
 import type { ResourceLoaderQueue } from '~/@types/rlq'
 
+const callback = (records: MutationRecord[]) => {
+	for (const { target } of records) {
+		if ((target as HTMLElement).dataset.lazyState === 'fail') {
+			;(target as HTMLImageElement).src = (target as HTMLElement).dataset.lazySrc!
+		}
+	}
+}
+
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 	['mediawiki.Uri'],
 	() => {
@@ -15,14 +23,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				}
 			}
 		})
-		const callback = (records: MutationRecord[]) => {
-				for (const { target } of records) {
-					if ((target as HTMLElement).dataset.lazyState === 'fail') {
-						;(target as HTMLImageElement).src = (target as HTMLElement).dataset.lazySrc!
-					}
-				}
-			},
-			observer = new MutationObserver(callback)
+		const observer = new MutationObserver(callback)
 		$('img').each((_, ele) => {
 			const img = ele as HTMLImageElement
 			// oxlint-disable-next-line typescript/no-deprecated -- mw.Uri 是 ResourceLoader 提供的模块，运行时依赖已上线验证

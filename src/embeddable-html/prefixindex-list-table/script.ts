@@ -1,5 +1,25 @@
 import type { ResourceLoaderQueue } from '~/@types/rlq'
 // oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
+
+function chunkify(t: string) {
+	const tz: string[] = []
+	let x = 0,
+		y = -1,
+		n = false,
+		i,
+		j
+	// oxlint-disable-next-line unicorn/prefer-code-point
+	while (((i = (j = t.charAt(x++)).charCodeAt(0)), Boolean(i))) {
+		const m = i === 46 || (i >= 48 && i <= 57)
+		if (m !== n) {
+			tz[++y] = ''
+			n = m
+		}
+		tz[y] += j
+	}
+	return tz
+}
+
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 	[],
 	() => {
@@ -17,23 +37,6 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 					九: '9',
 				}
 				function alphanum(a: string, b: string) {
-					function chunkify(t: string) {
-						const tz: string[] = []
-						let x = 0,
-							y = -1,
-							n = false,
-							i,
-							j
-						while (((i = (j = t.charAt(x++)).charCodeAt(0)), Boolean(i))) {
-							const m = i === 46 || (i >= 48 && i <= 57)
-							if (m !== n) {
-								tz[++y] = ''
-								n = m
-							}
-							tz[y] += j
-						}
-						return tz
-					}
 					const aa = chunkify(a)
 					const bb = chunkify(b)
 					for (let x = 0; aa[x] && bb[x]; x++) {
@@ -50,10 +53,10 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				}
 				function chineseNorm(_title: string) {
 					let title = _title
-						.replace(/([一二三四五六七八九])十([一二三四五六七八九])/gu, '$1$2')
-						.replace(/十(?=[一二三四五六七八九])/gu, '1')
-						.replace(/十/gu, '10')
-					title = title.replace(/[一二三四五六七八九]/gu, (c) => normalizationList[c]!)
+						.replaceAll(/([一二三四五六七八九])十([一二三四五六七八九])/gu, '$1$2')
+						.replaceAll(/十(?=[一二三四五六七八九])/gu, '1')
+						.replaceAll('十', '10')
+					title = title.replaceAll(/[一二三四五六七八九]/gu, (c) => normalizationList[c]!)
 					return title
 				}
 				return function chinesenumSort(a: string, b: string) {
@@ -64,7 +67,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 			})()
 			const proposalSort = (() => {
 				const methods = ['setFullYear', 'setMonth', 'setDate']
-				const nowTime = new Date().getTime()
+				const nowTime = Date.now()
 				function parse($ele: JQuery<Element>, cB?: boolean) {
 					const text = $ele.text()
 					const isPinned = text.startsWith('【置顶】')

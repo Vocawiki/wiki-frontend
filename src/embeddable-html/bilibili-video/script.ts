@@ -1,6 +1,98 @@
 import type { ResourceLoaderQueue } from '~/@types/rlq'
 
 // oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
+
+const rememberWH = (ele: JQuery) => {
+	ele.data({ width: ele.width(), height: ele.height() })
+}
+const setTureHeight = (ele: JQuery) => {
+	const barHeight = ele.data('height') - (ele.data('width') * 9) / 16 // 计算标题和播放器控制栏高度
+	ele.height((ele.width()! * 9) / 16 + barHeight)
+}
+const setWH = (ele: JQuery) => {
+	ele.css({ width: '100%', height: '100%' })
+}
+const recallWH = (ele: JQuery) => {
+	ele.width(ele.data('width') as number).height(ele.data('height') as number)
+}
+const setMaxHeight = (container: JQuery, target: JQuery) => {
+	const h = container.outerHeight(true)!
+	let t = 0
+	container.children().each((_, ele) => {
+		t += $(ele).outerHeight(true)!
+	})
+	target.css('max-height', `calc(100% - ${Math.trunc(t - h + 2 - Number.EPSILON)}px)`)
+}
+
+const getErrorType = (code: number) => {
+	switch (code) {
+		case 62003: {
+			return false
+		}
+		case -403: {
+			return 'forbidden'
+		}
+		default: {
+			return 'failed'
+		}
+	}
+}
+const idCorrector = (id: string) => {
+	let type: string | false = false
+	// 1. 有明确的 av 前缀且符合 aid 规则
+	if (/^av[1-9]\d*$/iu.test(id)) {
+		type = 'av'
+	}
+	// 2. 有明确的 bv 前缀且符合 bvid 规则
+	else if (/^[bB][vV]1[FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf]{9}$/u.test(id)) {
+		type = 'bv'
+	}
+	// 3. 没有明确的前缀，但符合 aid 规则
+	else if (/^[1-9]\d*$/u.test(id)) {
+		type = 'av'
+	}
+	// 4. 没有明确的前缀，但符合 bvid 规则且不符合 aid 规则
+	else if (/^1?[FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf]{9}$/u.test(id)) {
+		type = 'bv'
+	}
+	// 5. 无法判断
+
+	if (type === 'av') {
+		return {
+			id: id.replace(/^av/iu, ''),
+			prefix: {
+				href: 'av',
+				iframe: 'aid',
+			},
+		}
+	}
+	if (type === 'bv') {
+		return {
+			id: id.replace(
+				/^.*([FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf]{9})$/iu,
+				'1$1',
+			),
+			prefix: {
+				href: 'BV',
+				iframe: 'bvid',
+			},
+		}
+	}
+	return false
+}
+
+const fixedNumber = (number: number | string) => `${Number(number) < 10 ? '0' : ''}${number}`
+const secondsParser = (seconds: number | string) =>
+	`${Math.floor(Number(seconds) / 60)}:${fixedNumber(Number(seconds) % 60)}`
+
+const placeholderToggle = (iframe: JQuery) => {
+	if (iframe.data('displayFlag')) {
+		iframe.data('displayFlag', false)
+		const placeholder = iframe.data('placeholder') as JQuery
+		placeholder.fadeOut(370)
+	}
+}
+
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 	[],
 	async () => {
@@ -29,67 +121,8 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				: ''
 		const injectErrMsgBefore = ($ele: JQuery, type: string, msg = '') =>
 			$ele.before(genErr(type, msg))
-		const getErrorType = (code: number) => {
-			switch (code) {
-				case 62003: {
-					return false
-				}
-				case -403: {
-					return 'forbidden'
-				}
-				default: {
-					return 'failed'
-				}
-			}
-		}
-		const idCorrector = (id: string) => {
-			let type: string | false = false
-			// 1. 有明确的 av 前缀且符合 aid 规则
-			if (/^av[1-9]\d*$/iu.test(id)) {
-				type = 'av'
-			}
-			// 2. 有明确的 bv 前缀且符合 bvid 规则
-			else if (
-				/^[bB][vV]1[FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf]{9}$/u.test(id)
-			) {
-				type = 'bv'
-			}
-			// 3. 没有明确的前缀，但符合 aid 规则
-			else if (/^[1-9]\d*$/u.test(id)) {
-				type = 'av'
-			}
-			// 4. 没有明确的前缀，但符合 bvid 规则且不符合 aid 规则
-			else if (/^1?[FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf]{9}$/u.test(id)) {
-				type = 'bv'
-			}
-			// 5. 无法判断
 
-			if (type === 'av') {
-				return {
-					id: id.replace(/^av/iu, ''),
-					prefix: {
-						href: 'av',
-						iframe: 'aid',
-					},
-				}
-			}
-			if (type === 'bv') {
-				return {
-					id: id.replace(
-						/^.*([FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf]{9})$/iu,
-						'1$1',
-					),
-					prefix: {
-						href: 'BV',
-						iframe: 'bvid',
-					},
-				}
-			}
-			return false
-		}
 		try {
-			// oxlint-disable-next-line typescript/no-unnecessary-condition -- 沿用原实现的变量名与 isNaN 回退写法，不改动运行时行为
-			const isNaN = Number.isNaN || window.isNaN
 			const cssLengthUnitValidator = (
 				length: string | undefined,
 				defaultValue: string,
@@ -101,8 +134,8 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 					callback(false)
 					return defaultValue
 				}
-				const parsedNumber = parseFloat(length.replace(/[a-z]+/iu, ''))
-				if (isNaN(parsedNumber) || parsedNumber <= 0) {
+				const parsedNumber = Number.parseFloat(length.replace(/[a-z]+/iu, ''))
+				if (Number.isNaN(parsedNumber) || parsedNumber <= 0) {
 					callback(false)
 					injectErrMsgBefore($ele, 'attr', paramName)
 					return defaultValue
@@ -121,9 +154,6 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				injectErrMsgBefore($ele, 'attr', paramName)
 				return defaultValue
 			}
-			const fixedNumber = (number: number | string) => `${Number(number) < 10 ? '0' : ''}${number}`
-			const secondsParser = (seconds: number | string) =>
-				`${Math.floor(Number(seconds) / 60)}:${fixedNumber(Number(seconds) % 60)}`
 			const submit = (ids: {
 				failed: { aid: Set<string>; bvid: Set<string> }
 				forbidden: { aid: Set<string>; bvid: Set<string> }
@@ -167,13 +197,6 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				}
 			}
 			const global_element = $('#mw-content-text')
-			const placeholderToggle = (iframe: JQuery) => {
-				if (iframe.data('displayFlag')) {
-					iframe.data('displayFlag', false)
-					const placeholder = iframe.data('placeholder') as JQuery
-					placeholder.fadeOut(370)
-				}
-			}
 			let lazyLoadObserver: IntersectionObserver | { observe: (target: HTMLIFrameElement) => void }
 			if (
 				Reflect.has(window, 'IntersectionObserver') &&
@@ -205,31 +228,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 			}
 			const iframe_href_base =
 				'https://player.bilibili.com/player.html?isOutside=true&playlist=true&playlist_order=sequential&musth5=1&noEndPanel=1&crossDomain=1&autoplay=0&'
-			const EPSILON = 2.220446049250313e-16,
-				rememberWH = (ele: JQuery) => {
-					ele.data({ width: ele.width(), height: ele.height() })
-				},
-				setTureHeight = (ele: JQuery) => {
-					const barHeight = ele.data('height') - (ele.data('width') * 9) / 16 // 计算标题和播放器控制栏高度
-					ele.height((ele.width()! * 9) / 16 + barHeight)
-				},
-				setWH = (ele: JQuery) => {
-					ele.css({ width: '100%', height: '100%' })
-				},
-				recallWH = (ele: JQuery) => {
-					ele.width(ele.data('width') as number).height(ele.data('height') as number)
-				},
-				setMaxHeight = (container: JQuery, target: JQuery) => {
-					const h = container.outerHeight(true)!
-					let t = 0
-					container.children().each((_, ele) => {
-						t += $(ele).outerHeight(true)!
-					})
-					target.css(
-						'max-height',
-						`calc(100% - ${parseInt(String(t - h + 2 - (Number.EPSILON || EPSILON)), 10)}px)`,
-					)
-				}
+
 			const run = () => {
 				const ids = {
 					failed: {
@@ -257,8 +256,8 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 						return
 					}
 					const { id, prefix } = validation
-					let page = parseInt(String(Number(dataset.page || 1)), 10)
-					if (isNaN(page) || page < 1) {
+					let page = Math.trunc(Number(dataset.page || 1))
+					if (Number.isNaN(page) || page < 1) {
 						page = 1
 						if (typeof dataset.page === 'string' && dataset.page !== '') {
 							injectErrMsgBefore(selfbox, 'attr', 'page')
@@ -295,8 +294,8 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 					)
 					const subtitle = dataset.subtitle === 'true'
 					// oxlint-disable-next-line radix -- t 为用户填写的原始字符串，保留原实现的默认基数解析
-					const t = parseInt(dataset.t!)
-					const tIsInvalid = isNaN(t) || t <= 0
+					const t = Number.parseInt(dataset.t!)
+					const tIsInvalid = Number.isNaN(t) || t <= 0
 					const iframeContainer = selfbox.find('.bilibili-iframe-container')
 					const title_text = $('<a/>')
 						.attr('rel', 'nofollow noreferrer noopener')
@@ -415,7 +414,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 								)
 								title_text.attr(
 									'href',
-									href!.replace(new RegExp(`\\?p=${page}`, 'gu'), `?p=${_page}`),
+									href!.replaceAll(new RegExp(`\\?p=${page}`, 'gu'), `?p=${_page}`),
 								)
 								title_text.text(
 									`${name} [${_page}/${list.length}]${tIsInvalid ? '' : `[视频从${time}开始播放]`}`,

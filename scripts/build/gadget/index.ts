@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { extname } from 'node:path'
+import path from 'node:path'
 
 import { globby, convertPathToPattern } from 'globby'
 import type { NonEmptyTuple } from 'type-fest'
@@ -155,7 +155,7 @@ async function collectGadgetsInDir(): Promise<ParsedGadgetMeta[]> {
 					const pages = (
 						await globby(`${convertPathToPattern(gadgetDir)}/index.*`, { stats: true })
 					).map((entry): GadgetMetaPage => {
-						const extension = extname(entry.name).slice(1)
+						const extension = path.extname(entry.name).slice(1)
 						const builtExtension = srcDistExtensionMap[
 							extension as keyof typeof srcDistExtensionMap
 						] as string | undefined

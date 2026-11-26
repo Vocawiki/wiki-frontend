@@ -26,7 +26,7 @@ const EXCEPTION_RE = /Caught exception of type ([\w\\]+)/u
  * 这些警告只在`exists`成立时才会一起返回，
  * 本身不说明任何新情况，单独显示反而会盖掉真正的原因。
  */
-const SECONDARY_WARNINGS = ['nochange', 'duplicateversions']
+const SECONDARY_WARNINGS = new Set(['nochange', 'duplicateversions'])
 
 /**
  * 把警告值转成可读文本。MediaWiki的警告值可能是字符串、字符串数组，
@@ -77,6 +77,45 @@ interface UploadSubmitDeps {
 	licenseFieldValues: VueTypes.Ref<Record<string, string>>
 }
 
+/* 勾选忽略警告时MediaWiki返回的是Success，但warnings仍然挂在响应里。 */
+function handleSuccessWarnings(warnings: Record<string, unknown> | undefined): string | null {
+	if (!warnings) {
+		return null
+	}
+	if (Object.keys(warnings).some((k) => k !== 'exists')) {
+		console.warn('上传成功，但服务器返回了警告：', warnings)
+	}
+	return warningText(warnings.exists) || null
+}
+
+/** 服务器内部错误：MediaWiki只给英文异常名，换成可读文案并保留编号。 */
+function reportApiError(info: string): void {
+	console.error('上传时服务器内部错误：', info)
+	const name = EXCEPTION_RE.exec(info)?.[1]
+	const requestId = REQUEST_ID_RE.exec(info)?.[1]
+	if (!name) {
+		notifyError(info)
+		return
+	}
+	const message = msg('err-server-error', name)
+	if (!requestId) {
+		notifyError(message)
+		return
+	}
+	notifyError($('<div>').append(message, $('<div>').text(msg('err-http-id', requestId))))
+}
+
+// jQuery Deferred的fail回调签名是 (code, result)，而await只能拿到
+// reject的第一个参数；包装成对象以保留result供fail()解析警告详情
+const awaitRequest = (request: JQuery.Promise<UploadResponse>): Promise<UploadResponse> =>
+	new Promise((resolve, reject) => {
+		request
+			.done((data) => resolve(data))
+			.fail((code: string, result: UploadResponse | ApiTransportError) => {
+				reject(Object.assign(new Error(code || 'upload failed'), { code, result }))
+			})
+	})
+
 /** 上传提交：客户端校验、请求发出与警告/错误解析。 */
 export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 	const { ref } = Vue
@@ -90,17 +129,6 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			fileInput.value = ''
 		}
 		$(deps.form).data('origtext', $(deps.form).serialize())
-	}
-
-	/* 勾选忽略警告时MediaWiki返回的是Success，但warnings仍然挂在响应里。 */
-	function handleSuccessWarnings(warnings: Record<string, unknown> | undefined): string | null {
-		if (!warnings) {
-			return null
-		}
-		if (Object.keys(warnings).some((k) => k !== 'exists')) {
-			console.warn('上传成功，但服务器返回了警告：', warnings)
-		}
-		return warningText(warnings.exists) || null
 	}
 
 	function finishUpload(filename: string, overwrote: string | null = null) {
@@ -126,25 +154,8 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		// 展开成对象字面量：interface没有隐式索引签名，无法直接传给mw.Api#getErrorMessage
 		const message = deps.api.getErrorMessage({ ...result })
 		// 错误页里`[编号]`与时间之间可能夹着标签，先剥掉标签再取编号
-		const responseText = (result.xhr?.responseText ?? '').replace(/<[^>]*>/gu, '')
+		const responseText = (result.xhr?.responseText ?? '').replaceAll(/<[^>]*>/gu, '')
 		const requestId = REQUEST_ID_RE.exec(responseText)?.[1]
-		if (!requestId) {
-			notifyError(message)
-			return
-		}
-		notifyError($('<div>').append(message, $('<div>').text(msg('err-http-id', requestId))))
-	}
-
-	/** 服务器内部错误：MediaWiki只给英文异常名，换成可读文案并保留编号。 */
-	function reportApiError(info: string): void {
-		console.error('上传时服务器内部错误：', info)
-		const name = EXCEPTION_RE.exec(info)?.[1]
-		const requestId = REQUEST_ID_RE.exec(info)?.[1]
-		if (!name) {
-			notifyError(info)
-			return
-		}
-		const message = msg('err-server-error', name)
 		if (!requestId) {
 			notifyError(message)
 			return
@@ -161,7 +172,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 		const w = result.upload?.warnings
 		if (w) {
 			// 跳过只起补充作用的次要警告，取第一个真正要说明情况的
-			const key = Object.keys(w).find((k) => !SECONDARY_WARNINGS.includes(k))
+			const key = Object.keys(w).find((k) => !SECONDARY_WARNINGS.has(k))
 			if (key) {
 				const id = WARNING_MESSAGES[key]
 				const value = warningText(w[key])
@@ -199,16 +210,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			}
 			return p
 		}
-		// jQuery Deferred的fail回调签名是 (code, result)，而await只能拿到
-		// reject的第一个参数；包装成对象以保留result供fail()解析警告详情
-		const awaitRequest = (request: JQuery.Promise<UploadResponse>): Promise<UploadResponse> =>
-			new Promise((resolve, reject) => {
-				request
-					.done((data) => resolve(data))
-					.fail((code: string, result: UploadResponse | ApiTransportError) => {
-						reject(Object.assign(new Error(code || 'upload failed'), { code, result }))
-					})
-			})
+
 		// 发送一次并取结果
 		const sendOnce = async (p: Record<string, string | boolean>): Promise<UploadResponse> => {
 			let request: JQuery.Promise<UploadResponse>
@@ -293,7 +295,7 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			const missing = o.fields.filter(
 				(f) => f.required && !(deps.licenseFieldValues.value[`${o.tpl}|${f.key}`] ?? '').trim(),
 			)
-			if (missing.length) {
+			if (missing.length > 0) {
 				notifyError(msg('err-required', missing.map((f) => f.label).join('、')))
 				return
 			}

@@ -32,7 +32,7 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 	async () => {
 		await $.ready
 		const DEBUGMODE = mw.config.get('wgUserId') === 69859
-		const typelist = [
+		const typelist = new Set([
 			'publishedAt',
 			'title',
 			'privacyStatus',
@@ -40,8 +40,8 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 			'viewCount',
 			'likeCount',
 			'commentCount',
-		]
-		const formats = ['toFixed', 'plain', 'separate']
+		])
+		const formats = new Set(['toFixed', 'plain', 'separate'])
 		const map: Record<string, Record<string, NodeCollection>> = {}
 		const helper = {
 			sendError: (error: ErrorReport) => {
@@ -158,10 +158,10 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 								nodes.empty().each((_, ele) => {
 									let format = ele.dataset.format
 									const dateFormat = ele.dataset.dateFormat || 'LLL'
-									if (!formats.includes(format!)) {
+									if (!formats.has(format!)) {
 										format = 'toFixed'
 									}
-									let decimalLength = parseInt(ele.dataset.decimalLength!, 10)
+									let decimalLength = Number.parseInt(ele.dataset.decimalLength!, 10)
 									if (!Number.isInteger(decimalLength) || decimalLength < 1) {
 										decimalLength = 2
 									}
@@ -228,7 +228,7 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 					self.empty().text(wgUVS('(参数 id 错误)', '(引數 id 錯誤)')).css('font-style', 'italic')
 					return
 				}
-				if (!typelist.includes(type!)) {
+				if (!typelist.has(type!)) {
 					type = undefined
 				}
 				if (!type) {

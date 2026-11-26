@@ -5,6 +5,122 @@
 import type { ResourceLoaderQueue } from '~/@types/rlq'
 
 // oxlint-disable max-depth max-lines-per-function -- 逐层遍历接口返回的数据并一次性渲染，拆分需外提闭包状态，风险大于收益
+
+const clear = () => {
+	for (const node of document.querySelectorAll(
+		'.bilibiliCount.done[data-bilibili-count-onlyTime="false"][data-bilibili-count-noTime="true"] sub',
+	)) {
+		node.remove()
+	}
+	for (const node of document.querySelectorAll<HTMLElement>(
+		'.bilibiliCount.done[data-time]:not([data-time=""])[data-bilibili-count-onlyTime="false"][data-bilibili-count-noTime="false"]',
+	)) {
+		const sub = node.querySelector('sub')
+		if (sub) {
+			sub.innerText = `(${moment(
+				/^\d{12,}$/u.test(node.dataset.time!) ? Number(node.dataset.time!) : node.dataset.time,
+			).format(node.dataset.dateFormat || 'LLL')})`
+		}
+	}
+	for (const node of document.querySelectorAll<HTMLElement>(
+		'.bilibiliCount.done[data-time]:not([data-time=""])[data-bilibili-count-onlyTime="true"]',
+	)) {
+		node.innerText = moment(
+			/^\d{12,}$/u.test(node.dataset.time!) ? Number(node.dataset.time!) : node.dataset.time,
+		).format(node.dataset.dateFormat || 'LLL')
+	}
+	for (const node of document.querySelectorAll('.bilibiliCount.done')) {
+		node.classList.remove('done')
+	}
+}
+
+const setErrorMsg = (node: HTMLElement, ...msg: (string | HTMLElement)[]) => {
+	node.innerText = ''
+	node.append(...msg)
+	node.style.fontStyle = 'italic'
+}
+
+const ajax = async (input: URL | RequestInfo, init?: RequestInit & { timeout?: number }) => {
+	const timeout = Number.isSafeInteger(init?.timeout) && init!.timeout! > 0 ? init!.timeout! : 60000
+	const controller = new AbortController()
+	const timeoutId = setTimeout(() => controller.abort(), timeout)
+	const response = await fetch(input, {
+		...init,
+		signal: controller.signal,
+	}).catch((e: unknown) =>
+		e instanceof DOMException ? e : new DOMException(JSON.stringify(e, null, 4), 'UnknownError'),
+	)
+	clearTimeout(timeoutId)
+	return response
+}
+
+const getNodes = () => [...document.querySelectorAll<HTMLElement>('.bilibiliCount')]
+
+const sendError = (
+	error:
+		| { type: 'network'; information: Response }
+		| { type: 'networkException'; information: DOMException }
+		| { type: 'error'; information: Error },
+) => {
+	console.error('widget:BilibiliCount', error.type, 'occurred:', error.information)
+	const nodes = getNodes()
+	for (const node of nodes) {
+		node.innerHTML = `BilibiliCount ${wgUVS('运行错误', '執行錯誤')}`
+	}
+	if (error.type === 'network' && error.information.status === 429) {
+		nodes[0]!.innerHTML += [
+			wgUVS(
+				/* BilibiliCount 运行错误 */ '：非常抱歉，但由于过多的请求，现已触发数据统计服务器的临时封禁措施。',
+				/* BilibiliCount 執行錯誤 */ '：非常抱歉，但由於過多的請求，現已觸發資料統計伺服器的臨時封鎖措施。',
+			),
+			wgUVS(
+				'这可能是因为您短时间内打开了多个页面进而产生大量请求导致的，请等待1分钟后刷新本页面，并建议您打开相关数据统计页面时每次间隔1分钟，感谢您的合作！',
+				'這可能是因為您短時間內打开了多個頁面進而產生大量請求導致的，請等待1分鐘後重新整理本頁面，並建議您開啟相關資料統計頁面時每次間隔1分鐘，感謝您的合作！',
+			),
+		].join('\n')
+		return
+	}
+	nodes[0]!.innerHTML += '：'
+	if (error.type === 'networkException') {
+		switch (error.information.name) {
+			case 'NetworkError': {
+				nodes[0]!.innerHTML += wgUVS('发生网络错误，请检查你的网络。')
+				return
+			}
+			case 'AbortError':
+			case 'TimeoutError': {
+				nodes[0]!.innerHTML += wgUVS('请求超时，请检查你的网络，或等待一段时间后再试。')
+				return
+			}
+			default: {
+				nodes[0]!.innerHTML += `发生网络错误：${error.information.name} - ${error.information.message}`
+				return
+			}
+		}
+	}
+	const reason: Record<string, unknown> = {
+		type: error.type,
+	}
+	if (error.type === 'network') {
+		reason.information = {
+			status: error.information.status,
+			statusText: error.information.statusText,
+		}
+	} else {
+		reason.information = {
+			name: error.information.name,
+			message: error.information.message,
+		}
+		if (error.information.stack) {
+			const [, secondLine] = error.information.stack.split('\n')
+			;(reason.information as Record<string, unknown>).stack = secondLine
+		}
+	}
+	for (const [k, v] of Object.entries(reason)) {
+		nodes[0]!.innerHTML += `\n${k}: ${JSON.stringify(v, undefined, 4)}`
+	}
+}
+
 type DataType =
 	| 'view'
 	| 'danmaku'
@@ -55,123 +171,10 @@ interface ViewResponse {
 			'dislike',
 			'title',
 		] // 首位undefined减少不必要的减法
-		const formats = ['toFixed', 'plain', 'separate']
+		const formats = new Set(['toFixed', 'plain', 'separate'])
 		const map: { aid: Collection; bvid: Collection } = {
 			aid: {},
 			bvid: {},
-		}
-		const getNodes = () => [...document.querySelectorAll<HTMLElement>('.bilibiliCount')]
-		const sendError = (
-			error:
-				| { type: 'network'; information: Response }
-				| { type: 'networkException'; information: DOMException }
-				| { type: 'error'; information: Error },
-		) => {
-			console.error('widget:BilibiliCount', error.type, 'occurred:', error.information)
-			const nodes = getNodes()
-			for (const node of nodes) {
-				node.innerHTML = `BilibiliCount ${wgUVS('运行错误', '執行錯誤')}`
-			}
-			if (error.type === 'network' && error.information.status === 429) {
-				nodes[0]!.innerHTML += [
-					wgUVS(
-						/* BilibiliCount 运行错误 */ '：非常抱歉，但由于过多的请求，现已触发数据统计服务器的临时封禁措施。',
-						/* BilibiliCount 執行錯誤 */ '：非常抱歉，但由於過多的請求，現已觸發資料統計伺服器的臨時封鎖措施。',
-					),
-					wgUVS(
-						'这可能是因为您短时间内打开了多个页面进而产生大量请求导致的，请等待1分钟后刷新本页面，并建议您打开相关数据统计页面时每次间隔1分钟，感谢您的合作！',
-						'這可能是因為您短時間內打开了多個頁面進而產生大量請求導致的，請等待1分鐘後重新整理本頁面，並建議您開啟相關資料統計頁面時每次間隔1分鐘，感謝您的合作！',
-					),
-				].join('\n')
-				return
-			}
-			nodes[0]!.innerHTML += '：'
-			if (error.type === 'networkException') {
-				switch (error.information.name) {
-					case 'NetworkError': {
-						nodes[0]!.innerHTML += wgUVS('发生网络错误，请检查你的网络。')
-						return
-					}
-					case 'AbortError':
-					case 'TimeoutError': {
-						nodes[0]!.innerHTML += wgUVS('请求超时，请检查你的网络，或等待一段时间后再试。')
-						return
-					}
-					default: {
-						nodes[0]!.innerHTML += `发生网络错误：${error.information.name} - ${error.information.message}`
-						return
-					}
-				}
-			}
-			const reason: Record<string, unknown> = {
-				type: error.type,
-			}
-			if (error.type === 'network') {
-				reason.information = {
-					status: error.information.status,
-					statusText: error.information.statusText,
-				}
-			} else {
-				reason.information = {
-					name: error.information.name,
-					message: error.information.message,
-				}
-				if (error.information.stack) {
-					const [, secondLine] = error.information.stack.split('\n')
-					;(reason.information as Record<string, unknown>).stack = secondLine
-				}
-			}
-			for (const [k, v] of Object.entries(reason)) {
-				nodes[0]!.innerHTML += `\n${k}: ${JSON.stringify(v, undefined, 4)}`
-			}
-		}
-		const clear = () => {
-			for (const node of document.querySelectorAll(
-				'.bilibiliCount.done[data-bilibili-count-onlyTime="false"][data-bilibili-count-noTime="true"] sub',
-			)) {
-				node.remove()
-			}
-			for (const node of document.querySelectorAll<HTMLElement>(
-				'.bilibiliCount.done[data-time]:not([data-time=""])[data-bilibili-count-onlyTime="false"][data-bilibili-count-noTime="false"]',
-			)) {
-				const sub = node.querySelector('sub')
-				if (sub) {
-					sub.innerText = `(${moment(
-						/^\d{12,}$/u.test(node.dataset.time!) ? Number(node.dataset.time!) : node.dataset.time,
-					).format(node.dataset.dateFormat || 'LLL')})`
-				}
-			}
-			for (const node of document.querySelectorAll<HTMLElement>(
-				'.bilibiliCount.done[data-time]:not([data-time=""])[data-bilibili-count-onlyTime="true"]',
-			)) {
-				node.innerText = moment(
-					/^\d{12,}$/u.test(node.dataset.time!) ? Number(node.dataset.time!) : node.dataset.time,
-				).format(node.dataset.dateFormat || 'LLL')
-			}
-			for (const node of document.querySelectorAll('.bilibiliCount.done')) {
-				node.classList.remove('done')
-			}
-		}
-		const setErrorMsg = (node: HTMLElement, ...msg: (string | HTMLElement)[]) => {
-			node.innerText = ''
-			node.append(...msg)
-			node.style.fontStyle = 'italic'
-		}
-		const ajax = async (input: URL | RequestInfo, init?: RequestInit & { timeout?: number }) => {
-			const timeout =
-				Number.isSafeInteger(init?.timeout) && init!.timeout! > 0 ? init!.timeout! : 60000
-			const controller = new AbortController()
-			const timeoutId = setTimeout(() => controller.abort(), timeout)
-			const response = await fetch(input, {
-				...(init ?? {}),
-				signal: controller.signal,
-			}).catch((e: unknown) =>
-				e instanceof DOMException
-					? e
-					: new DOMException(JSON.stringify(e, null, 4), 'UnknownError'),
-			)
-			clearTimeout(timeoutId)
-			return response
 		}
 		// eslint-disable-next-line no-unused-vars
 		const getFreshData = async (prefix: 'aid' | 'bvid', id: string) => {
@@ -258,7 +261,7 @@ interface ViewResponse {
 							}
 							const rawValue = data.data[type]
 							if (
-								typeof rawValue === 'undefined' ||
+								rawValue === undefined ||
 								// @ts-expect-error 接口约定计数为数字，但沿用旧有的空字符串判断
 								rawValue === ''
 							) {
@@ -270,10 +273,10 @@ interface ViewResponse {
 							}
 							let format = node.dataset.format as 'toFixed' | 'plain' | 'separate'
 							let value: number | string
-							if (!formats.includes(format)) {
+							if (!formats.has(format)) {
 								format = 'toFixed'
 							}
-							let decimalLength = parseInt(node.dataset.decimalLength!, 10)
+							let decimalLength = Number.parseInt(node.dataset.decimalLength!, 10)
 							if (!Number.isInteger(decimalLength) || decimalLength < 1) {
 								decimalLength = 2
 							}

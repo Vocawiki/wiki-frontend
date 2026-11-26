@@ -2,6 +2,10 @@
 
 // TMD改天给它废掉
 
+const getOwnPropertyNamesLength = (obj: any) => Reflect.ownKeys(obj).length
+const toLowerFirstCase = (str: string) => str.slice(0, 1).toLowerCase() + str.slice(1)
+const toUpperFirstCase = (str: string) => str.slice(0, 1).toUpperCase() + str.slice(1)
+
 export function tabs() {
 	const { body } = document
 	const $body = $(body)
@@ -121,18 +125,15 @@ export function tabs() {
 			dividerSizeType: 'width',
 		},
 	}
-	const truthy = ['1', 'on', 'true', 'yes']
+	const truthy = new Set(['1', 'on', 'true', 'yes'])
 	$body.addClass('tab')
-	const getOwnPropertyNamesLength = (obj: any) => Reflect.ownKeys(obj).length
-	const toLowerFirstCase = (str: string) => str.substring(0, 1).toLowerCase() + str.substring(1)
-	const toUpperFirstCase = (str: string) => str.substring(0, 1).toUpperCase() + str.substring(1)
 	mw.hook('wikipage.content').add((content) => {
 		content.find('.Tabs').each(function () {
 			const self = $(this)
 			if (self.children('.TabLabel')[0]) {
 				return
 			}
-			const classList = Array.from(this.classList).filter((n) => Reflect.has(defaultStyle, n))
+			const className = Array.from(this.classList).find((n) => n in defaultStyle)
 			const data = $.extend(
 				{
 					labelPadding: '2px',
@@ -144,7 +145,7 @@ export function tabs() {
 					textBackgroundColor: 'white',
 					defaultTab: 1,
 				},
-				classList[0] ? (defaultStyle[classList[0]] ?? {}) : {},
+				className ? (defaultStyle[className] ?? {}) : {},
 				this.dataset,
 			)
 			const styleSheet = {
@@ -157,9 +158,9 @@ export function tabs() {
 				{ labelPadding, labelColor } = data,
 				labelSide = Reflect.has(sides, data.labelSide as any) ? data.labelSide : 'top',
 				side = sides[labelSide as keyof typeof sides],
-				labelColorSideReverse = truthy.includes(data.labelColorSideReverse as any),
-				dividerSize = parseInt(data.dividerSize as any, 10)
-			let defaultTab = parseInt(data.defaultTab as any, 10)
+				labelColorSideReverse = truthy.has(data.labelColorSideReverse as any),
+				dividerSize = Number.parseInt(data.dividerSize as any, 10)
+			let defaultTab = Number.parseInt(data.defaultTab as any, 10)
 			if (labelSide === 'top') {
 				tabLabel.after(tabDivider)
 				tabDivider.after(tabContent)
@@ -167,7 +168,7 @@ export function tabs() {
 				tabContent.after(tabDivider)
 				tabDivider.after(tabLabel)
 			}
-			if (!isNaN(dividerSize) && dividerSize > 0) {
+			if (!Number.isNaN(dividerSize) && dividerSize > 0) {
 				;(self.find('.TabDivider')[side.dividerSizeType as unknown as number] as any)(dividerSize)
 			}
 			const labelColorName = toUpperFirstCase(
@@ -179,7 +180,7 @@ export function tabs() {
 			}
 			self.children('.Tab').each(function () {
 				if (
-					$(this).children('.TabLabelText').text().replace(/\s/gu, '').length > 0 ||
+					$(this).children('.TabLabelText').text().replaceAll(/\s/gu, '').length > 0 ||
 					$(this).children('.TabLabelText').children().length > 0
 				) {
 					$(this).children('.TabLabelText').appendTo(tabLabel)
@@ -188,7 +189,7 @@ export function tabs() {
 				$(this).remove()
 			})
 			if (
-				isNaN(defaultTab) ||
+				Number.isNaN(defaultTab) ||
 				defaultTab <= 0 ||
 				defaultTab > tabLabel.children('.TabLabelText').length
 			) {

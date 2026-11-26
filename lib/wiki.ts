@@ -108,7 +108,7 @@ export function withBaseURL(urlPart: string, options: { absolute?: boolean } = {
 }
 
 function normalizeSpace(titlePart: string): string {
-	return titlePart.replace(/[_\s]+/gu, ' ').trim()
+	return titlePart.replaceAll(/[_\s]+/gu, ' ').trim()
 }
 
 function capitalizeTitleByNs(title: string, namespaceNumber: NamespaceNumber): string {

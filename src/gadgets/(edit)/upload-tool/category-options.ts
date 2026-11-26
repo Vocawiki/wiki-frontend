@@ -188,9 +188,10 @@ export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
 					...(await Promise.all(batch.map(async (n) => ({ n, s: await fetchSubcats(n) })))),
 				)
 			}
-			const childrenMap: Record<string, string[]> = {}
-			childrenMap[roots[0]] = tech
-			childrenMap[roots[1]] = intro
+			const childrenMap: Record<string, string[]> = {
+				[roots[0]]: tech,
+				[roots[1]]: intro,
+			}
 			entries.forEach((e) => {
 				childrenMap[e.n] = e.s
 			})

@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client'
 
 import type { ResourceLoaderQueue } from '~/@types/rlq'
-import type {} from '~/@types/rlq'
 
 import { LatestArticleList } from './page-list'
 

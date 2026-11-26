@@ -32,6 +32,20 @@ interface UploadComponentContext {
 	uploadTextHtml: string
 }
 
+/**
+ * 防止在文本框里回车意外提交原生表单
+ */
+function onFormKeydown(e: KeyboardEvent) {
+	const target = e.target as HTMLInputElement | null
+	if (e.key === 'Enter' && target?.tagName === 'INPUT' && target.type !== 'submit') {
+		e.preventDefault()
+	}
+}
+
+function goToBatchUpload() {
+	location.href = mw.util.getUrl(BATCH_UPLOAD_PAGE)
+}
+
 export const createUploadComponent = ({
 	Vue,
 	api,
@@ -232,9 +246,6 @@ export const createUploadComponent = ({
 					nativeSubmit.style.display = ''
 				}
 			}
-			function goToBatchUpload() {
-				location.href = mw.util.getUrl(BATCH_UPLOAD_PAGE)
-			}
 			function commitFunctionInput() {
 				commitChip(functionInput, functionChips, functionSelected)
 			}
@@ -281,13 +292,11 @@ export const createUploadComponent = ({
 			watch(sourceType, () => {
 				if (sourceType.value === 'url') {
 					filePreview.value = (fileUrl.value || '').trim()
-					fileName.value = ''
-					fileMeta.value = ''
 				} else {
 					filePreview.value = ''
-					fileName.value = ''
-					fileMeta.value = ''
 				}
+				fileName.value = ''
+				fileMeta.value = ''
 			})
 			watch(fileUrl, (v) => {
 				if (sourceType.value === 'url') {
@@ -328,13 +337,6 @@ export const createUploadComponent = ({
 				{ deep: true, flush: 'sync' },
 			)
 			/** lifecycle */
-			// 防止在文本框里回车意外提交原生表单
-			function onFormKeydown(e: KeyboardEvent) {
-				const target = e.target as HTMLInputElement | null
-				if (e.key === 'Enter' && target?.tagName === 'INPUT' && target.type !== 'submit') {
-					e.preventDefault()
-				}
-			}
 			onMounted(() => {
 				const dest = document.getElementById('wpDestFile') as HTMLInputElement | null
 				if (dest) {

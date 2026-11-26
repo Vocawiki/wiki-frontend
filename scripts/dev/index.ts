@@ -1,4 +1,4 @@
-import { join } from 'node:path'
+import path from 'node:path'
 
 import { outputFile, pathExists, readJson, remove } from 'fs-extra/esm'
 import * as z from 'zod'
@@ -19,9 +19,9 @@ const cacheMetaSchema = z.object({
 
 type CacheMeta = z.output<typeof cacheMetaSchema>
 
-const cacheDir = join(import.meta.dirname, 'site', '.cache')
-const cacheMetaPath = join(cacheDir, 'meta.json')
-const cssPath = join(cacheDir, 'software.css')
+const cacheDir = path.join(import.meta.dirname, 'site', '.cache')
+const cacheMetaPath = path.join(cacheDir, 'meta.json')
+const cssPath = path.join(cacheDir, 'software.css')
 
 const cacheMeta = await getCacheMeta()
 if (!cacheMeta) {

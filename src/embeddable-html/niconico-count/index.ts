@@ -32,7 +32,7 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 	async () => {
 		const DEBUGMODE = mw.config.get('wgUserId') === 69859
 		const typelist = [undefined, 'view_counter', 'comment_num', 'mylist_counter', 'title'] // 首位undefined减少不必要的减法
-		const formats = ['toFixed', 'plain', 'separate']
+		const formats = new Set(['toFixed', 'plain', 'separate'])
 		const map: Record<string, Record<string, NodeCollection>> = {}
 		const helper = {
 			sendError: (error: ErrorReport) => {
@@ -138,10 +138,10 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 								}
 								nodes.empty().each((_, ele) => {
 									let format = ele.dataset.format
-									if (!formats.includes(format!)) {
+									if (!formats.has(format!)) {
 										format = 'toFixed'
 									}
-									let decimalLength = parseInt(ele.dataset.decimalLength!, 10)
+									let decimalLength = Number.parseInt(ele.dataset.decimalLength!, 10)
 									if (!Number.isInteger(decimalLength) || decimalLength < 1) {
 										decimalLength = 2
 									}
@@ -223,8 +223,8 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 				self.html(`<i>${wgUVS('加载中', '載入中')}……</i>`)
 			})
 			helper.clear()
-			const targets = Object.keys(map).filter(
-				(key) => Object.entries(map[key]!).filter(([, { length }]) => length > 0).length > 0,
+			const targets = Object.keys(map).filter((key) =>
+				Object.entries(map[key]!).some(([, { length }]) => length > 0),
 			)
 			for (let i = 0; i * 10 < targets.length; i++) {
 				// oxlint-disable-next-line no-await-in-loop -- 刻意串行请求，避免触发接口限流

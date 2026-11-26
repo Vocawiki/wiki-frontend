@@ -184,8 +184,7 @@ export async function buildJsEntries(
 		// 发生名称过滤时输出一条警告
 		sanitizeFileName: (name) => {
 			// 遵循默认行为：https://github.com/rolldown/rolldown/blob/bba03da85ecbf2a4d954b95ddce80a4c6dd88a7d/crates/rolldown_utils/src/sanitize_filename.rs
-			// oxlint-disable-next-line no-control-regex
-			const sanitized = name.replace(/[\0-\x1f"#$%&*+,:;<=>?\[\]^`{|}\x7f]/gu, '_')
+			const sanitized = name.replaceAll(/["#$%&*+,:;<=>?\[\]^`{|}\u007F]/gu, '_')
 			if (sanitized !== name) {
 				console.warn(`名称被转换：“${name}” → “${sanitized}”`)
 			}

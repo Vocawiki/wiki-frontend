@@ -1,5 +1,6 @@
+// oxlint-disable unicorn/consistent-function-scoping max-lines-per-function max-statements -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
 import type { ResourceLoaderQueue } from '~/@types/rlq'
-// oxlint-disable max-lines-per-function max-statements -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
+
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 	['ext.gadget.libOOUIDialog'],
 	() => {
@@ -57,8 +58,8 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 					let type = that.dataset.type
 					let float = that.dataset.float
 					let align = that.dataset.align
-					let width = parseInt(that.dataset.width!, 10)
-					let height = parseInt(that.dataset.height!, 10)
+					let width = Number.parseInt(that.dataset.width!, 10)
+					let height = Number.parseInt(that.dataset.height!, 10)
 					let height_type: number
 					// 检测ID是否合法（纯数字），不合法则抛出异常。
 					if (!/^\d+$/u.test(id || '')) {
@@ -66,7 +67,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 						return
 					}
 					// 检测宽度是否合法（纯数字、260 < width < 510），不合法则使用默认值。
-					if (isNaN(width) || width < 260 || width > 510) {
+					if (Number.isNaN(width) || width < 260 || width > 510) {
 						width = size === 'small' ? 278 : 310
 					}
 					// 检测类型是否合法（在类型表内），合法则替换为类型下标，不合法则使用默认值。
@@ -97,7 +98,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 						height_type = height - 20
 					}
 					// 3、大播放器的高度如果不合法则使用默认值，高度类型为默认值减去20；
-					else if (isNaN(width) || width < 210 || width > 520) {
+					else if (Number.isNaN(width) || width < 210 || width > 520) {
 						height = size === 'small' ? 110 : 450
 						height_type = height - 20
 					}

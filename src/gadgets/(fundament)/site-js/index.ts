@@ -10,6 +10,43 @@ declare global {
 	}
 }
 
+// 跨站重定向页顶链接
+const crossDomainLink = (url: URL) => {
+	const link = url.searchParams.get('title')
+	const domain = url.host
+	const crossDomain = $('<div/>')
+	const anchor = $('<a/>')
+	crossDomain.text('＜')
+	anchor.attr('href', `${url}`).text(`${link} 【来自 ${domain} 的跨站重定向】`)
+	crossDomain.append(anchor)
+	$('#contentSub').prepend(crossDomain)
+}
+
+// 跨站重定向页顶链接
+const crossDomainDetect = () => {
+	const redirectFrom = new URLSearchParams(window.location.search).get('rdfrom')
+	if (!redirectFrom) return
+
+	try {
+		const redirectFromUrl = new URL(redirectFrom)
+		const search = redirectFromUrl.searchParams
+		if (search.get('title') && search.get('redirect') === 'no') {
+			crossDomainLink(redirectFromUrl)
+		}
+	} catch {
+		// ignore
+	}
+}
+
+// 修正hash跳转错误
+const hashJump = async () => {
+	await mw.loader.using(['jquery.makeCollapsible'])
+	$('.mw-collapsible').makeCollapsible()
+	const { hash } = location
+	location.hash = ''
+	location.hash = hash
+}
+
 void (async () => {
 	/* 函数定义体 */
 	const { wgUserGroups, wgServer, wgScriptPath, wgPageName, wgAction, wgNamespaceNumber } =
@@ -85,18 +122,6 @@ void (async () => {
 		}, 5000)
 	}
 
-	// 跨站重定向页顶链接
-	const crossDomainLink = (url: URL) => {
-		const link = url.searchParams.get('title')
-		const domain = url.host
-		const crossDomain = $('<div/>')
-		const anchor = $('<a/>')
-		crossDomain.text('＜')
-		anchor.attr('href', `${url}`).text(`${link} 【来自 ${domain} 的跨站重定向】`)
-		crossDomain.append(anchor)
-		$('#contentSub').prepend(crossDomain)
-	}
-
 	// 复制修改内容
 	const copyRights = async () => {
 		await mw.loader.using('mediawiki.util')
@@ -129,32 +154,6 @@ void (async () => {
 			}, 0)
 		})
 	}
-
-	// 跨站重定向页顶链接
-	const crossDomainDetect = () => {
-		const redirectFrom = new URLSearchParams(window.location.search).get('rdfrom')
-		if (!redirectFrom) return
-
-		try {
-			const redirectFromUrl = new URL(redirectFrom)
-			const search = redirectFromUrl.searchParams
-			if (search.get('title') && search.get('redirect') === 'no') {
-				crossDomainLink(redirectFromUrl)
-			}
-		} catch {
-			// ignore
-		}
-	}
-
-	// 修正hash跳转错误
-	const hashJump = async () => {
-		await mw.loader.using(['jquery.makeCollapsible'])
-		$('.mw-collapsible').makeCollapsible()
-		const { hash } = location
-		location.hash = ''
-		location.hash = hash
-	}
-
 	/* 函数执行体 */
 	await $.ready
 	// 页顶公告自动滚动

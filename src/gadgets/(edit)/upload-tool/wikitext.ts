@@ -36,7 +36,7 @@ export function buildWikitext(input: WikitextInput, msg: MsgFn): string {
 		.map((a) => a.value)
 		.map((name) => formatAuthorSummaryName(name, input.disambigTitles))
 		.filter(Boolean)
-	if (authors.length) {
+	if (authors.length > 0) {
 		lines.push(msg('wikitext-author') + authors.join('、'))
 	}
 	input.authorChips.forEach((a) => {
@@ -50,13 +50,12 @@ export function buildWikitext(input: WikitextInput, msg: MsgFn): string {
 		}
 	})
 	input.functionChips.forEach((c) => {
-		const name = c.value.replace(/^[\s\u3000]+|[\s\u3000]+$/gu, '')
+		const name = c.value.replaceAll(/^[\s\u3000]+|[\s\u3000]+$/gu, '')
 		if (name) {
 			lines.push(msg('wikitext-category', name))
 		}
 	})
-	lines.push('')
-	lines.push(msg('wikitext-license'))
+	lines.push('', msg('wikitext-license'))
 	if (input.licenseTpl) {
 		lines.push(`{{${input.licenseTpl}${input.licenseParams}}}`)
 	}

@@ -82,7 +82,7 @@ export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 			categories: parseList('categories') as any,
 			namespaces: (() => {
 				const strings = parseList('namespaces')
-				if (strings === undefined) return undefined
+				if (strings === undefined) return
 				return strings.map((s) => Number.parseInt(s, 10)) as unknown as NonEmptyTuple<number>
 			})(),
 			contentModels: parseList('contentModels') as any,
@@ -91,7 +91,7 @@ export function parseGadgetDefinition(definition: string): ParsedGadgetMeta {
 		codexIcons: parseList('codexIcons'),
 		supportsUrlLoad: (() => {
 			const s = parseValue('supportsUrlLoad')
-			if (s === undefined) return undefined
+			if (s === undefined) return
 			if (s === 'true') return true
 			if (s === 'false') return false
 			throw new Error('选项 `supportsUrlLoad` 的值未知')

@@ -6,6 +6,6 @@ export async function compileComponent(node: ReactNode): Promise<string> {
 	const { prelude } = await prerender(node, {})
 	const html = (await new Response(prelude).text())
 		.replaceAll('<!-- -->' /* React Stream自带 */, '')
-		.replace(/--构建时去掉这个属性名和后面的冒号只保留值-\d+:/gu, '')
+		.replaceAll(/--构建时去掉这个属性名和后面的冒号只保留值-\d+:/gu, '')
 	return html
 }

@@ -51,7 +51,7 @@ async function getComponent(page: PageToPreview) {
 	}
 	const moduleDefault = module.default
 	if (typeof moduleDefault !== 'function') {
-		throw new Error(`${page.fullPageName}的默认导出不是组件`)
+		throw new TypeError(`${page.fullPageName}的默认导出不是组件`)
 	}
 	return moduleDefault as ComponentType
 }
