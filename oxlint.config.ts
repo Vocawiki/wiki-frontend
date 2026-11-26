@@ -86,6 +86,7 @@ export default defineConfig({
 		'unicorn/no-array-sort': OFF, // 浏览器兼容性
 		// import type {} from 'module' 是有用的。其余情况被 typescript/no-import-type-side-effects 涵盖了
 		'unicorn/require-module-specifiers': OFF,
+		'typescript/no-unsafe-enum-assignment': OFF, // tsconfig已禁止使用enum；此规则过于耗时
 
 		// pedantic
 		eqeqeq: [ERROR, 'always', { null: 'ignore' }],
