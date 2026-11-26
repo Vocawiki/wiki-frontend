@@ -66,6 +66,10 @@ body.sideBarPic.skin-vector-2022.mediawiki .mw-page-container,
 body.sideBarPic .vector-header-container .mw-header,
 body.sideBarPic .vector-dropdown .vector-dropdown-content {
 	background-color: rgb(255 255 255 / 90%);
+
+	@variant dark {
+		background-color: rgb(27 27 27 / 90%);
+	}
 }
 
 body.sideBarPic .vector-pinned-container {
