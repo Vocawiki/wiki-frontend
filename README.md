@@ -122,7 +122,7 @@
 
 #### wikitext组件库
 
-wikitext组件库位于['src/components/wikitext/'](src/components/wikitext)，它在开发预览时渲染为HTML，构建时则变为wikitext。用法：
+wikitext组件库位于[`src/components/wikitext/`](src/components/wikitext)，它在开发预览时渲染为HTML，构建时则变为wikitext。用法：
 
 ```tsx
 import * as Wiki from '~/components/wikitext'
