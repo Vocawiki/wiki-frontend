@@ -21,14 +21,14 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 			}
 			$('.applyMask').each((_, ele) => {
 				try {
-					const target = Array.from(
-						root!.querySelectorAll(
+					const target = [
+						...root!.querySelectorAll(
 							ele.dataset
 								.target!.split(',')
 								.map((s) => `:scope ${s.trim()}`)
 								.join(', '),
 						),
-					)
+					]
 					if (target.length === 0) {
 						return
 					}

@@ -75,7 +75,7 @@ function chunkify(t: string) {
 						return -1
 					}
 					const date = new Date(0)
-					const match = Array.from(text.match(/\((\d{4}\.\d{1,2}\.\d{1,2})\)/u) ?? [])
+					const match = [...(text.match(/\((\d{4}\.\d{1,2}\.\d{1,2})\)/u) ?? [])]
 					if (!match[1]) {
 						return -1
 					}

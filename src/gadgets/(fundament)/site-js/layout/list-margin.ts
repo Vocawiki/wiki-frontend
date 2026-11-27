@@ -25,7 +25,7 @@ function applyListMarginLeftOnce() {
 			})
 			$ele
 				.attr('data-last-margin-left-max-length', max)
-				.css('margin-left', `${`${max}`.length * 0.5 + 1.2}em`)
+				.css('margin-left', `${String(max).length * 0.5 + 1.2}em`)
 		} else {
 			$ele.css('margin-left', '1.2em')
 		}

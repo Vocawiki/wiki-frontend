@@ -41,7 +41,8 @@ const setErrorMsg = (node: HTMLElement, ...msg: (string | HTMLElement)[]) => {
 }
 
 const ajax = async (input: URL | RequestInfo, init?: RequestInit & { timeout?: number }) => {
-	const timeout = Number.isSafeInteger(init?.timeout) && init!.timeout! > 0 ? init!.timeout! : 60000
+	const timeout =
+		Number.isSafeInteger(init?.timeout) && init!.timeout! > 0 ? init!.timeout! : 60_000
 	const controller = new AbortController()
 	const timeoutId = setTimeout(() => controller.abort(), timeout)
 	const response = await fetch(input, {
@@ -184,7 +185,7 @@ interface ViewResponse {
 				const url = new URL('https://api.bilibili.com/x/web-interface/view?jsonp=jsonp')
 				url.searchParams.set(prefix, id)
 				const script = document.createElement('script')
-				script.src = `${url}`
+				script.src = url.toString()
 				const {
 					code,
 					message,
@@ -270,27 +271,25 @@ interface ViewResponse {
 								continue
 							}
 							let format = node.dataset.format as 'toFixed' | 'plain' | 'separate'
-							let value: number | string
+							let value: number | string = rawValue
 							if (!formats.has(format)) {
 								format = 'toFixed'
 							}
-							let decimalLength = Number.parseInt(node.dataset.decimalLength!, 10)
-							if (!Number.isInteger(decimalLength) || decimalLength < 1) {
-								decimalLength = 2
-							}
 							switch (format) {
-								case 'toFixed':
-									if (!/\D/u.test(`${rawValue}`) && rawValue > 10000) {
-										value = `${(rawValue / 10000).toFixed(Number.isInteger(decimalLength) ? decimalLength : 2)}${wgUVS('万', '萬')}`
-									} else {
-										value = rawValue
+								case 'toFixed': {
+									let decimalLength = Number.parseInt(node.dataset.decimalLength!, 10)
+									if (Number.isNaN(decimalLength) || decimalLength < 1) {
+										decimalLength = 2
+									}
+									if (!/\D/u.test(String(rawValue)) && rawValue > 10_000) {
+										value = `${(rawValue / 10_000).toFixed(decimalLength)}${wgUVS('万', '萬')}`
 									}
 									break
+								}
 								case 'plain':
-									value = rawValue
 									break
 								case 'separate':
-									value = `${rawValue}`
+									value = String(rawValue)
 										.split('')
 										.reverse()
 										.map((digit, index) => (index > 0 && index % 3 === 0 ? `${digit},` : digit))
@@ -343,7 +342,7 @@ interface ViewResponse {
 				}
 				if (type === 'dislike') {
 					const link = document.createElement('a')
-					link.href = `${dislikeDocLink}`
+					link.href = String(dislikeDocLink)
 					link.target = '_blank'
 					link.classList.add('external', 'free')
 					link.textContent = wgUVS(

@@ -76,8 +76,8 @@ export default defineConfig({
 		],
 
 		// suspicious
-		'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
 		'no-shadow': OFF,
+		'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
 		'react/react-in-jsx-scope': OFF,
 		'typescript/consistent-return': OFF, // 由TypeScript `noImplicitReturns`代替
 		'typescript/no-unnecessary-type-arguments': OFF,
@@ -159,7 +159,7 @@ export default defineConfig({
 		'new-cap': ERROR,
 		'no-duplicate-imports': ERROR,
 		'no-extra-label': ERROR,
-		'no-implicit-coercion': ERROR,
+		'no-implicit-coercion': [ERROR, { disallowTemplateShorthand: true }],
 		'no-label-var': ERROR,
 		'no-labels': ERROR,
 		'no-lone-blocks': ERROR,
@@ -216,8 +216,67 @@ export default defineConfig({
 		'typescript/prefer-return-this-type': ERROR,
 		'typescript/prefer-string-starts-ends-with': ERROR,
 		'typescript/unified-signatures': ERROR,
+		'unicorn/catch-error-name': ERROR,
+		'unicorn/consistent-date-clone': ERROR,
+		'unicorn/consistent-existence-index-check': ERROR,
+		'unicorn/consistent-template-literal-escape': ERROR,
+		'unicorn/custom-error-definition': ERROR,
+		'unicorn/error-message': ERROR,
+		'unicorn/explicit-timer-delay': ERROR,
+		'unicorn/filename-case': [
+			ERROR,
+			{
+				case: 'kebabCase',
+				ignore: ['^heimu-toggle-defaultOn\\.'], // 历史遗留
+			},
+		],
+		'unicorn/max-nested-calls': ERROR,
+		'unicorn/no-array-method-this-argument': ERROR,
+		'unicorn/no-console-spaces': ERROR,
+		'unicorn/no-unreadable-array-destructuring': ERROR,
+		'unicorn/no-useless-collection-argument': ERROR,
+		'unicorn/no-zero-fractions': ERROR,
+		'unicorn/numeric-separators-style': [
+			ERROR,
+			{ hexadecimal: { groupLength: 4, minimumDigits: 8 } },
+		],
+		'unicorn/prefer-array-index-of': ERROR,
+		'unicorn/prefer-bigint-literals': ERROR,
+		'unicorn/prefer-class-fields': ERROR,
+		'unicorn/prefer-classlist-toggle': ERROR,
+		'unicorn/prefer-default-parameters': ERROR,
+		'unicorn/prefer-dom-node-text-content': ERROR,
+		'unicorn/prefer-export-from': ERROR,
+		'unicorn/prefer-includes': ERROR,
+		'unicorn/prefer-keyboard-event-key': ERROR,
+		'unicorn/prefer-logical-operator-over-ternary': ERROR,
+		'unicorn/prefer-modern-dom-apis': ERROR,
+		'unicorn/prefer-negative-index': ERROR,
+		'unicorn/prefer-object-from-entries': ERROR,
+		'unicorn/prefer-reflect-apply': ERROR,
+		'unicorn/prefer-response-static-json': ERROR,
+		'unicorn/prefer-spread': ERROR,
+		'unicorn/prefer-string-trim-start-end': ERROR,
+		'unicorn/prefer-structured-clone': ERROR,
+		'unicorn/prefer-ternary': [ERROR, 'only-single-line'],
+		'unicorn/relative-url-style': ERROR,
+		'unicorn/require-array-join-separator': ERROR,
+		'unicorn/require-module-attributes': ERROR,
+		'unicorn/switch-case-break-position': ERROR,
+		'unicorn/text-encoding-identifier-case': [ERROR, { withDash: true }],
 
 		'typescript/parameter-properties': OFF, // tsconfig已设置erasableSyntaxOnly
+		'unicorn/empty-brace-spaces': OFF, // 由formatter完成
+		'unicorn/no-await-expression-member': OFF, // 并不一定影响阅读
+		'unicorn/no-nested-ternary': OFF, // 虽然这个规则支持“one level deep”，但是它要求必须加括号，与Oxfmt冲突
+		'unicorn/no-null': OFF, // 过于严格
+		'unicorn/number-literal-case': OFF, // 与Oxfmt冲突，希望日后Oxfmt支持配置数字大小写
+		// 本项目大多代码是**仅且仅能**在浏览器执行的代码，在浏览器之外的环境执行没有意义，用window语义更直白
+		'unicorn/prefer-global-this': OFF,
+		'unicorn/prefer-optional-catch-binding': OFF, // 由no-unused-vars处理
+		'unicorn/prefer-string-raw': OFF, // 哪怕只有一个反斜杠也报，干扰阅读
+		'unicorn/switch-case-braces': OFF, // TODO: 等single-statement选项实现后再开启
+		'unicorn/throw-new-error': OFF, // 由new-cap处理
 	} satisfies KnownRuleMap,
 	overrides: [
 		{

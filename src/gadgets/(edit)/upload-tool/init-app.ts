@@ -36,7 +36,7 @@ export function mountApp({ Vue, Codex }: { Vue: VueType; Codex: CodexType }) {
 
 	const mount = document.createElement('div')
 	mount.id = 'ut-app'
-	form.insertBefore(mount, form.firstChild)
+	form.prepend(mount)
 
 	const initialDesc = desc.value
 	const hasExisting = initialDesc.trim() !== ''

@@ -133,7 +133,7 @@ export function tabs() {
 			if (self.children('.TabLabel')[0]) {
 				return
 			}
-			const className = Array.from(this.classList).find((n) => n in defaultStyle)
+			const className = [...this.classList].find((n) => n in defaultStyle)
 			const data = $.extend(
 				{
 					labelPadding: '2px',

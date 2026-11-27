@@ -111,21 +111,18 @@ export class MwApiCall<
 			}
 		}
 
-		const data = (await (
-			await fetch(
-				`https://voca.wiki/api.php?${new URLSearchParams(
-					shake({
-						...solvedParams,
-						...this.lastContinue,
-						action: 'query',
-						format: 'json',
-						formatversion: '2',
-						titles: solveApiValue(this.titles),
-						prop: solveApiValue(props),
-					}),
-				).toString()}`,
-			)
-		).json()) as {
+		const url = `https://voca.wiki/api.php?${new URLSearchParams(
+			shake({
+				...solvedParams,
+				...this.lastContinue,
+				action: 'query',
+				format: 'json',
+				formatversion: '2',
+				titles: solveApiValue(this.titles),
+				prop: solveApiValue(props),
+			}),
+		).toString()}`
+		const data = (await (await fetch(url)).json()) as {
 			batchcomplete?: boolean
 			continue?: {
 				continue: string

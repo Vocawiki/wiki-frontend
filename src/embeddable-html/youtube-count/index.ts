@@ -123,7 +123,7 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 				$.ajax({
 					url: `https://cors.funce.dev/https://moegirlpedia.annangela.cn/youtubeCollector/video?target=${arr.join('|')}`,
 					type: 'GET',
-					timeout: 60000,
+					timeout: 60_000,
 					success: (d: CollectorResponse) => {
 						// oxlint-disable-next-line guard-for-in -- 接口返回的纯 JSON 对象，无原型链污染风险
 						for (const id in d.query.videos) {
@@ -161,7 +161,7 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 										format = 'toFixed'
 									}
 									let decimalLength = Number.parseInt(ele.dataset.decimalLength!, 10)
-									if (!Number.isInteger(decimalLength) || decimalLength < 1) {
+									if (Number.isNaN(decimalLength) || decimalLength < 1) {
 										decimalLength = 2
 									}
 									$(ele)

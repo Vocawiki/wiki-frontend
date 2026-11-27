@@ -19,8 +19,6 @@
 
    2. 将[examples/vscode-workspace-settings.json](examples/vscode-workspace-settings.json)的内容放入项目目录下的`.vscode/settings.json`（不存在则创建）中。
 
-      > [!NOTE]
-      >
       > [理论上](https://code.visualstudio.com/docs/configure/settings#_multiple-language-specific-editor-settings)这里的语言键是可以合并的，比如`"[javascript][typescript]": { ... }`，但目前一合并就失效。
       >
       > 另外 microsoft/vscode#40233 什么时候好啊。
@@ -32,8 +30,8 @@
    ```
 
    此命令实际一次性完成了三个任务：
-   1. 格式化代码：`pnpm run format`；
-   2. 检查代码问题：`pnpm run lint`；
+   1. 格式化代码：`pnpm run format`。
+   2. 检查代码问题：`pnpm run lint`（coding agent请使用`pnpm run lint --format=agent`）。在处理lint错误之前请务必阅读《[处理lint错误](docs/处理lint错误.md)》。
    3. 构建：`pnpm run build`，构建产物可在`out/`查看。
 
 5. 提交（commit）、推送（push）更改。提交前须确保完成第4步。

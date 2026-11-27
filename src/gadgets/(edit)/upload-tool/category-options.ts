@@ -151,8 +151,9 @@ export function useCategoryOptions(Vue: typeof VueTypes, api: mw.Api) {
 		functionLoading.value = true
 		try {
 			const roots = SITE.functionRoots
+			// FIXME: 不可假定`SITE.functionRoots`有且只有两个元素
 			const [tech = [], intro = []] = await Promise.all(roots.map((r) => fetchSubcats(r)))
-			const allLeaves = tech.concat(intro)
+			const allLeaves = [...tech, ...intro]
 			const allNames = [...roots, ...allLeaves]
 			const titles = allNames.map((n) => `Category:${n}`)
 			const results = await Promise.all(

@@ -1,3 +1,4 @@
+// oxlint-disable unicorn/max-nested-calls -- 历史遗留
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:Akalin?action=history
  */
@@ -10,7 +11,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 		await $.ready
 		const zero = `<span style="speak:none;visibility:hidden;color:transparent">0</span>`
 		const fixZero = (v: string | number) => {
-			let s = `${v}`
+			let s = String(v)
 			for (let i = s.length; i < 3; i++) {
 				s = `${zero}${s}`
 			}
@@ -32,7 +33,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				range.max = '100'
 				range.min = '0'
 				range.step = '1'
-				range.value = `${opacity}`
+				range.value = String(opacity)
 				range.style.width = '100%'
 				range.style.maxWidth = '30em'
 				akalinController.append(range)
@@ -41,7 +42,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 				const labeledValues = new Set([0, 50, 100])
 				for (let v = 0; v <= 100; v += 10) {
 					const selected = v === opacity
-					const option = new Option(`${v}%`, `${v}`, selected, selected)
+					const option = new Option(`${v}%`, String(v), selected, selected)
 					if (selected || labeledValues.has(v)) {
 						option.label = `${v}%`
 					}

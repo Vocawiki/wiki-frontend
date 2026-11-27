@@ -6,7 +6,7 @@
 	"useTabs": true,
 	"semi": false,
 	"singleQuote": true,
-	"experimentalSortImports": {
+	"sortImports": {
 		"newlinesBetween": false,
 		"groups": [
 			["side_effect"],
@@ -22,7 +22,7 @@
 			["index", "type-index"]
 		]
 	},
-	"experimentalSortPackageJson": false,
+	"sortPackageJson": false,
 	"sortTailwindcss": {
 		"stylesheet": "./src/theme.css",
 		"functions": ["cn", "cva"]

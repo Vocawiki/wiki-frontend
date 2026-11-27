@@ -32,11 +32,7 @@ const fromNow = (then: moment.Moment, before: string, after: string, on: string)
 		if (monthsHave31Days.includes((isBefore ? then : now).month())) {
 			day += 31
 		} else if ((isBefore ? then : now).month() === 1) {
-			if ((isBefore ? then : now).year() % 4 === 0) {
-				day += 29
-			} else {
-				day += 28
-			}
+			day += (isBefore ? then : now).year() % 4 === 0 ? 29 : 28
 		} else {
 			day += 30
 		}

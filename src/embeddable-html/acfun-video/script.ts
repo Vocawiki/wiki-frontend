@@ -53,7 +53,7 @@ const placeholderToggle = (iframe: JQuery) => {
 							target.src = target.dataset.src!
 							setTimeout(() => {
 								placeholderToggle($(target))
-							}, 13070)
+							}, 13_070)
 							;(lazyLoadObserver as IntersectionObserver).unobserve(target)
 						}
 					})
@@ -64,7 +64,7 @@ const placeholderToggle = (iframe: JQuery) => {
 						target.src = target.dataset.src!
 						setTimeout(() => {
 							placeholderToggle($(target))
-						}, 13070)
+						}, 13_070)
 					},
 				}
 			}

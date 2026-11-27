@@ -1,5 +1,5 @@
+// oxlint-disable max-lines-per-function unicorn/max-nested-calls -- 历史遗留
 import type { ResourceLoaderQueue } from '~/@types/rlq'
-// oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
 
 const placeholderToggle = (iframe: JQuery) => {
 	if (iframe.data('displayFlag')) {
@@ -32,7 +32,7 @@ const placeholderToggle = (iframe: JQuery) => {
 							target.src = target.dataset.src!
 							setTimeout(() => {
 								placeholderToggle($(target))
-							}, 13070)
+							}, 13_070)
 							lazyLoadObserver.unobserve?.(target)
 						}
 					})
@@ -43,7 +43,7 @@ const placeholderToggle = (iframe: JQuery) => {
 						target.src = target.dataset.src!
 						setTimeout(() => {
 							placeholderToggle($(target))
-						}, 13070)
+						}, 13_070)
 					},
 				}
 			}

@@ -26,15 +26,13 @@ const setMaxHeight = (container: JQuery, target: JQuery) => {
 
 const getErrorType = (code: number) => {
 	switch (code) {
-		case 62003: {
+		// oxlint-disable-next-line unicorn/numeric-separators-style -- 非数量
+		case 62003:
 			return false
-		}
-		case -403: {
+		case -403:
 			return 'forbidden'
-		}
-		default: {
+		default:
 			return 'failed'
-		}
 	}
 }
 const idCorrector = (id: string) => {
@@ -193,7 +191,7 @@ const placeholderToggle = (iframe: JQuery) => {
 				if (changed) {
 					const url = new URL('https://moegirlpedia.annangela.cn/bilibiliCollector/videoCheck')
 					url.searchParams.set('pageid', String(mw.config.get('wgArticleId')))
-					$.get(`${url}`)
+					$.get(url.toString())
 				}
 			}
 			const global_element = $('#mw-content-text')
@@ -211,7 +209,7 @@ const placeholderToggle = (iframe: JQuery) => {
 							target.src = target.dataset.src!
 							setTimeout(() => {
 								placeholderToggle($(target))
-							}, 13070)
+							}, 13_070)
 							;(lazyLoadObserver as IntersectionObserver).unobserve(target)
 						}
 					})
@@ -222,7 +220,7 @@ const placeholderToggle = (iframe: JQuery) => {
 						target.src = target.dataset.src!
 						setTimeout(() => {
 							placeholderToggle($(target))
-						}, 13070)
+						}, 13_070)
 					},
 				}
 			}
@@ -367,7 +365,7 @@ const placeholderToggle = (iframe: JQuery) => {
 						url: `https://api.bilibili.com/x/web-interface/view?${prefix.iframe}=${id}&jsonp=jsonp`,
 						type: 'GET',
 						dataType: 'jsonp',
-						timeout: 10000,
+						timeout: 10_000,
 						success: ({ code, message, data }: BilibiliViewResponse) => {
 							if (code !== 0) {
 								title_text.text(

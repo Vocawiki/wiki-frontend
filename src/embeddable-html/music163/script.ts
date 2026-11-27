@@ -32,7 +32,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 							target.src = target.dataset.src!
 							setTimeout(() => {
 								placeholderToggle($(target))
-							}, 13070)
+							}, 13_070)
 							lazyLoadObserver.unobserve?.(target)
 						}
 					})
@@ -43,7 +43,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 						target.src = target.dataset.src!
 						setTimeout(() => {
 							placeholderToggle($(target))
-						}, 13070)
+						}, 13_070)
 					},
 				}
 			}
@@ -171,6 +171,7 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 					.text('Music163模板执行出现问题，请复制以下内容并在提问求助区处粘贴寻求帮助：')
 					.append(
 						$('<pre>').text(
+							// oxlint-disable-next-line unicorn/max-nested-calls -- 历史遗留
 							`wgPageName: ${mw.config.get('wgPageName')}\nwgArticleId: ${mw.config.get('wgArticleId')}\nwgRevisionId: ${mw.config.get('wgRevisionId')}\n----\nUser Agent: ${navigator.userAgent}\n----\n${error as string}\n${(error as Error).stack?.split('\n')[1]!.trim()}`,
 						),
 					),

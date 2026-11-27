@@ -17,7 +17,7 @@ const crossDomainLink = (url: URL) => {
 	const crossDomain = $('<div/>')
 	const anchor = $('<a/>')
 	crossDomain.text('＜')
-	anchor.attr('href', `${url}`).text(`${link} 【来自 ${domain} 的跨站重定向】`)
+	anchor.attr('href', url.toString()).text(`${link} 【来自 ${domain} 的跨站重定向】`)
 	crossDomain.append(anchor)
 	$('#contentSub').prepend(crossDomain)
 }

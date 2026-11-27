@@ -69,13 +69,15 @@ const hashAndSize = {
 	size: z.number().int().nonnegative().meta({ title: '文件大小' }),
 } as const
 
+const lastUsedSchema = isoDatetimeToInstant.meta({ title: '最后使用时间' })
+
 export const assetsStateSchema = z.object({
 	active: z.record(pathSchema.meta({ title: '文件路径' }), z.object(hashAndSize)),
 	obsolete: z.record(
 		pathSchema.meta({ title: '文件路径' }),
 		z.object({
 			...hashAndSize,
-			lastUsed: isoDatetimeToInstant.meta({ title: '最后使用时间' }),
+			lastUsed: lastUsedSchema,
 		}),
 	),
 })

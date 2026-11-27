@@ -1,4 +1,4 @@
-// oxlint-disable max-lines-per-function no-await-in-loop typescript/no-unsafe-assignment typescript/no-unsafe-return typescript/no-unsafe-member-access typescript/no-unsafe-call typescript/no-unsafe-argument typescript/no-misused-promises unicorn/no-array-reduce
+// oxlint-disable max-lines-per-function no-await-in-loop typescript/no-unsafe-assignment typescript/no-unsafe-return typescript/no-unsafe-member-access typescript/no-unsafe-call typescript/no-unsafe-argument typescript/no-misused-promises unicorn/no-array-reduce unicorn/max-nested-calls
 /*
  * Originally from https://github.com/MoegirlPediaInterfaceAdmins/MoegirlPediaInterfaceCodes/blob/a157f6/src/gadgets/interfaceVariantConverter/Gadget-interfaceVariantConverter.js
  */

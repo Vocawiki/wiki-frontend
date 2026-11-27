@@ -289,12 +289,8 @@ export const createUploadComponent = ({
 			}
 
 			/** watch */
-			watch(sourceType, () => {
-				if (sourceType.value === 'url') {
-					filePreview.value = (fileUrl.value || '').trim()
-				} else {
-					filePreview.value = ''
-				}
+			watch(sourceType, (type) => {
+				filePreview.value = type === 'url' ? fileUrl.value.trim() : ''
 				fileName.value = ''
 				fileMeta.value = ''
 			})

@@ -15,7 +15,7 @@ export function Root(props: { url: URL }) {
 			dir="ltr"
 		>
 			<head>
-				<meta charSet="UTF-8" />
+				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 				<title>Vocawiki开发</title>
 			</head>

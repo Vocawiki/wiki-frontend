@@ -1,4 +1,4 @@
-// oxlint-disable max-lines-per-function
+// oxlint-disable max-lines-per-function unicorn/max-nested-calls -- AI拉的屎
 import type * as VueTypes from 'vue'
 
 import { msg } from './i18n'

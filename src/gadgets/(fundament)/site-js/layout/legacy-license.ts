@@ -1,3 +1,4 @@
+// oxlint-disable-next-line unicorn/numeric-separators-style -- 非数量
 const MINIMAL_REVISION_ID_FOR_NEW_LICENSE = 188873 // 2026-06-06第一笔编辑
 
 /**
