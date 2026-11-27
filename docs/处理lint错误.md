@@ -33,7 +33,7 @@ if (parentElement.firstChild) {
 }
 ```
 
-不如思考一下，是否从一开始就设计错了？你本可以使用更直观、简介的写法：
+不如思考一下，是否从一开始就设计错了？你本可以使用更直观、简洁的写法：
 
 ```ts
 parentElement.prepend(newChild)
