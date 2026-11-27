@@ -37,8 +37,8 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 					}
 					chartNode.width(width).height(height)
 					echarts.init(chartNode[0]!).setOption(data)
-				} catch (e) {
-					self.text(`${String(e)}\n${(e as Error).stack?.split('\n').slice(1).join('\n')}`)
+				} catch (error) {
+					self.text(`${String(error)}\n${(error as Error).stack?.split('\n').slice(1).join('\n')}`)
 				}
 			})
 		})

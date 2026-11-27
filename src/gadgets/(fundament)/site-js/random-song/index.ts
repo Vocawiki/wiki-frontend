@@ -46,11 +46,11 @@ async function apiGetRandomSongs() {
 				return pages.map((page) => page.title) as readonly string[] as NonEmptyTuple<string>
 			}
 		}
-	} catch (e) {
+	} catch (error) {
 		mw.notify(wgULS(undefined, undefined, '网络连接出错', '網路連接出錯', '網絡連接出錯'), {
 			type: 'error',
 		})
-		console.error('网络/API错误:', e)
+		console.error('网络/API错误:', error)
 	}
 	return null
 }

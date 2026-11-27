@@ -19,9 +19,9 @@ async function conditionalInit() {
 	try {
 		await init()
 		window._gadgetUploadToolState = 'loaded'
-	} catch (e) {
+	} catch (error) {
 		window._gadgetUploadToolState = undefined
-		console.error('[upload-tool] 初始化失败', e)
+		console.error('[upload-tool] 初始化失败', error)
 		mw.notify(wgULS('新版界面加载失败，已回退到原始表单', '新版介面載入失敗，已回退到原始表單'), {
 			type: 'error',
 		})

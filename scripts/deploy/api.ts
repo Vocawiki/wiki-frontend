@@ -133,11 +133,11 @@ export async function deletePage(api: MediaWikiApi, { runId }: DeploymentContext
 			title,
 			reason,
 		})
-	} catch (e) {
-		if (e instanceof MediaWikiApiError && e.code === 'missingtitle') {
+	} catch (error) {
+		if (error instanceof MediaWikiApiError && error.code === 'missingtitle') {
 			// ignore error
 		} else {
-			throw e
+			throw error
 		}
 	}
 }

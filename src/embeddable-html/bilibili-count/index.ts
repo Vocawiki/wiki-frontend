@@ -47,8 +47,10 @@ const ajax = async (input: URL | RequestInfo, init?: RequestInit & { timeout?: n
 	const response = await fetch(input, {
 		...init,
 		signal: controller.signal,
-	}).catch((e: unknown) =>
-		e instanceof DOMException ? e : new DOMException(JSON.stringify(e, null, 4), 'UnknownError'),
+	}).catch((error: unknown) =>
+		error instanceof DOMException
+			? error
+			: new DOMException(JSON.stringify(error, null, 4), 'UnknownError'),
 	)
 	clearTimeout(timeoutId)
 	return response
@@ -208,8 +210,8 @@ interface ViewResponse {
 					) as Record<DataType, number>
 				}
 				console.info('Widget:BilibiliVideo', `${prefix}${id}`, code, message)
-			} catch (e) {
-				console.info('Widget:BilibiliCount', `${prefix}${id}`, e)
+			} catch (error) {
+				console.info('Widget:BilibiliCount', `${prefix}${id}`, error)
 			}
 			return null
 		}
@@ -379,11 +381,11 @@ interface ViewResponse {
 					await get(type as 'aid' | 'bvid', arr.slice(i * 30, i * 30 + 30))
 				}
 			}
-		} catch (e) {
-			if (e !== false) {
+		} catch (error) {
+			if (error !== false) {
 				sendError({
 					type: 'error',
-					information: e as Error,
+					information: error as Error,
 				})
 			}
 		}

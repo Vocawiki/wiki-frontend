@@ -41,8 +41,8 @@ async function getCacheMeta(): Promise<CacheMeta | null> {
 		const rawMeta = (await readJson(cacheMetaPath)) as unknown
 		const meta = cacheMetaSchema.parse(rawMeta)
 		return meta
-	} catch (e) {
-		console.error('解析cache meta时发生错误：', e)
+	} catch (error) {
+		console.error('解析cache meta时发生错误：', error)
 		await remove(cacheMetaPath)
 		return null
 	}
@@ -71,7 +71,7 @@ async function fetchStyles({ isRefreshing }: { isRefreshing: boolean }) {
 		await outputFile(cssPath, css)
 		await outputFile(cacheMetaPath, meta)
 		console.log(`网站样式已${isRefreshing ? '更新' : '下载'}`)
-	} catch (e) {
+	} catch (error) {
 		if (!isRefreshing) {
 			const message = `网站样式下载失败，请手动创建以下文件：
 1. ${cacheMetaPath}
@@ -81,9 +81,9 @@ ${meta}
 2. ${cssPath}
 从 ${softwareStylesURL} 下载。`
 			throw new Error(message, {
-				cause: e,
+				cause: error,
 			})
 		}
-		console.error('网站样式下载失败，使用缓存中的样式。错误如下：', e)
+		console.error('网站样式下载失败，使用缓存中的样式。错误如下：', error)
 	}
 }

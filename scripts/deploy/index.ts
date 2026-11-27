@@ -133,9 +133,9 @@ async function deploy(pages: Page[], ctx: DeploymentContext) {
 			notminor: true,
 			bot: true,
 		})
-	} catch (err) {
+	} catch (error) {
 		await unlockDeploymentState(api, ctx, previousDeploymentState)
-		throw err
+		throw error
 	}
 }
 

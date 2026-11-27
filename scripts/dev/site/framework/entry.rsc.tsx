@@ -53,8 +53,8 @@ async function handler(request: Request): Promise<Response> {
 			try {
 				const data = await action.apply(null, args)
 				returnValue = { ok: true, data }
-			} catch (e) {
-				returnValue = { ok: false, data: e }
+			} catch (error) {
+				returnValue = { ok: false, data: error }
 				actionStatus = 500
 			}
 		} else {

@@ -55,8 +55,8 @@ void (async () => {
 								}
 							})
 							lazyLoad.src = url.toString()
-						} catch (e) {
-							console.info('Widget:SideBarPic img-load-failed\n', e)
+						} catch (error) {
+							console.info('Widget:SideBarPic img-load-failed\n', error)
 							img.remove()
 							res()
 						}

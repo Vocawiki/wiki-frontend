@@ -230,16 +230,16 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 			}
 			try {
 				return await awaitRequest(request)
-			} catch (e) {
-				const err = e as { result?: UploadResponse | ApiTransportError; message?: string }
-				const result = err.result
+			} catch (error) {
+				const result = (error as { result?: UploadResponse | ApiTransportError; message?: string })
+					.result
 				if (
 					!isTransportError(result) &&
 					(result?.upload?.result === 'Warning' || result?.upload?.result === 'Success')
 				) {
 					return result
 				}
-				throw e
+				throw error
 			}
 		}
 		submitting.value = true
@@ -259,9 +259,9 @@ export function useUploadSubmit(Vue: typeof VueTypes, deps: UploadSubmitDeps) {
 				result.upload?.filename || finalFilename,
 				handleSuccessWarnings(result.upload?.warnings),
 			)
-		} catch (e) {
+		} catch (error) {
 			// 真实失败：缺文件、缺文件名、或重传后撞其它警告
-			const err = e as {
+			const err = error as {
 				code?: string
 				result?: UploadResponse | ApiTransportError
 				message?: string

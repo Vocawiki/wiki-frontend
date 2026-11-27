@@ -230,13 +230,13 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 				// oxlint-disable-next-line no-await-in-loop -- 刻意串行请求，避免触发接口限流
 				await helper.get(targets.slice(i * 10, i * 10 + 10))
 			}
-		} catch (e) {
+		} catch (error) {
 			helper.sendError({
 				type: 'throw_error',
 				information: {
-					name: (e as Error).name,
-					message: (e as Error).message,
-					stack: (e as Error).stack?.split('\n')[1]!.trim(),
+					name: (error as Error).name,
+					message: (error as Error).message,
+					stack: (error as Error).stack?.split('\n')[1]!.trim(),
 				},
 			})
 		}

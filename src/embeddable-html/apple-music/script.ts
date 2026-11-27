@@ -120,13 +120,13 @@ const placeholderToggle = (iframe: JQuery) => {
 			$(run)
 			mw.hook('wikipage.content').add(run)
 			$(window).on('load', run)
-		} catch (e) {
+		} catch (error) {
 			oouiDialog.alert(
 				$('<div>')
 					.text('AppleMusic模板执行出现问题，请复制以下内容并在提问求助区处粘贴寻求帮助：')
 					.append(
 						$('<pre>').text(
-							`wgPageName: ${mw.config.get('wgPageName')}\nwgArticleId: ${mw.config.get('wgArticleId')}\nwgRevisionId: ${mw.config.get('wgRevisionId')}\n----\nUser Agent: ${navigator.userAgent}\n----\n${e as string}\n${(e as Error).stack?.split('\n')[1]!.trim()}`,
+							`wgPageName: ${mw.config.get('wgPageName')}\nwgArticleId: ${mw.config.get('wgArticleId')}\nwgRevisionId: ${mw.config.get('wgRevisionId')}\n----\nUser Agent: ${navigator.userAgent}\n----\n${error as string}\n${(error as Error).stack?.split('\n')[1]!.trim()}`,
 						),
 					),
 				{

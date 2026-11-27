@@ -510,10 +510,10 @@ const placeholderToggle = (iframe: JQuery) => {
 					setMaxHeight(selfbox, selfbox.find('.bilibili-iframe-container'))
 				})
 			})
-		} catch (e) {
+		} catch (error) {
 			const msg = genErr(
 				'error',
-				`${navigator.userAgent} : ${String(e)} ${String((e as Error).stack?.split('\n')[1]!.trim())}`,
+				`${navigator.userAgent} : ${String(error)} ${String((error as Error).stack?.split('\n')[1]!.trim())}`,
 			)
 			$('.bilibili-video-container').each((_, ele) => {
 				ele.outerHTML = msg

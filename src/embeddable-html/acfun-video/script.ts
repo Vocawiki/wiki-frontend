@@ -199,11 +199,11 @@ const placeholderToggle = (iframe: JQuery) => {
 				// oxlint-disable-next-line typescript/no-deprecated -- 沿用原实现的 jQuery 简写方法，改为 .trigger 会改变行为细节
 				$('.acfun-video-container.exec[data-auto-expand="true"]').find('.acfun-toggle').click()
 			}, 100)
-		} catch (e) {
+		} catch (error) {
 			// oxlint-disable-next-line no-alert -- 原模板以 prompt 提示错误，改为自定义 UI 会改变已上线的行为
 			prompt(
 				'AcfunVideo模板执行出现问题，请复制以下内容并在提问求助区处粘贴寻求帮助：',
-				`${navigator.userAgent} : ${String(e)} ${String((e as Error).stack?.split('\n')[1]!.trim())}`,
+				`${navigator.userAgent} : ${String(error)} ${String((error as Error).stack?.split('\n')[1]!.trim())}`,
 			)
 		}
 	},

@@ -252,8 +252,8 @@ void (async () => {
 				},
 			)
 		}
-	} catch (e) {
-		console.debug(e)
+	} catch (error) {
+		console.debug(error)
 	}
 
 	// 修复错误嵌套模板

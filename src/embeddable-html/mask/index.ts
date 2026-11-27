@@ -38,10 +38,12 @@ import type { ResourceLoaderQueue } from '~/@types/rlq'
 						return
 					}
 					$(target).css(propertyName, `url(${url!.replace(/^http:\/\//iu, 'https://')})`)
-				} catch (e) {
+				} catch (error) {
 					$(ele)
 						.show()
-						.text(`Mask模板发生错误：${String(e)} ${(e as Error).stack?.split('\n')[1]!.trim()}`)
+						.text(
+							`Mask模板发生错误：${String(error)} ${(error as Error).stack?.split('\n')[1]!.trim()}`,
+						)
 				}
 			})
 		})

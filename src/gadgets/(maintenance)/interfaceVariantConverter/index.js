@@ -353,11 +353,11 @@ $(async () => {
 								this.actions.setMode('confirm')
 								this.stackLayout.setItem(this.confirmPanel)
 								this.updateSize()
-							} catch (e) {
-								console.error('[VariantConverter] Error:', e)
+							} catch (error) {
+								console.error('[VariantConverter] Error:', error)
 								// FIXME: Expected an error object to be thrown. 我真受不了这屎山了
 								// oxlint-disable-next-line typescript/only-throw-error
-								throw new OO.ui.Error(e)
+								throw new OO.ui.Error(error)
 							}
 						})(),
 					).promise(),
@@ -380,11 +380,11 @@ $(async () => {
 									tag: 'lr-aivc',
 								})
 								setTimeout(() => location.reload(), 730)
-							} catch (e) {
-								console.error('[VariantConverter] Error:', e)
+							} catch (error) {
+								console.error('[VariantConverter] Error:', error)
 								// FIXME: Expected an error object to be thrown. 我真受不了这屎山了
 								// oxlint-disable-next-line typescript/only-throw-error
-								throw new OO.ui.Error(e)
+								throw new OO.ui.Error(error)
 							}
 						})(),
 					).promise(),
