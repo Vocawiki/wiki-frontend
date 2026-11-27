@@ -58,10 +58,10 @@
 		prependText = ''
 		href += `/${anchorText}`
 		const textnode = document.createElement('span')
-		textnode.innerText = ' '
+		textnode.textContent = ' '
 		subpages.append(textnode)
 		const link = document.createElement('a')
-		link.innerText = anchorText
+		link.textContent = anchorText
 		link.href = href
 		subpages.append(link)
 		if (titlePartsLength - index > 1) {

@@ -17,7 +17,7 @@ const clear = () => {
 	)) {
 		const sub = node.querySelector('sub')
 		if (sub) {
-			sub.innerText = `(${moment(
+			sub.textContent = `(${moment(
 				/^\d{12,}$/u.test(node.dataset.time!) ? Number(node.dataset.time!) : node.dataset.time,
 			).format(node.dataset.dateFormat || 'LLL')})`
 		}
@@ -25,7 +25,7 @@ const clear = () => {
 	for (const node of document.querySelectorAll<HTMLElement>(
 		'.bilibiliCount.done[data-time]:not([data-time=""])[data-bilibili-count-onlyTime="true"]',
 	)) {
-		node.innerText = moment(
+		node.textContent = moment(
 			/^\d{12,}$/u.test(node.dataset.time!) ? Number(node.dataset.time!) : node.dataset.time,
 		).format(node.dataset.dateFormat || 'LLL')
 	}
@@ -35,7 +35,7 @@ const clear = () => {
 }
 
 const setErrorMsg = (node: HTMLElement, ...msg: (string | HTMLElement)[]) => {
-	node.innerText = ''
+	node.textContent = ''
 	node.append(...msg)
 	node.style.fontStyle = 'italic'
 }
@@ -346,7 +346,7 @@ interface ViewResponse {
 					link.href = `${dislikeDocLink}`
 					link.target = '_blank'
 					link.classList.add('external', 'free')
-					link.innerText = wgUVS(
+					link.textContent = wgUVS(
 						'dislike（差评）参数已被停用，详情请见模板说明页',
 						'dislike（差評）引數已被停用，詳情請見模板說明頁',
 					)
