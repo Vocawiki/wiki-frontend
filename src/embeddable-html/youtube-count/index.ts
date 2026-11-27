@@ -31,7 +31,6 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 	['moment'],
 	async () => {
 		await $.ready
-		const DEBUGMODE = mw.config.get('wgUserId') === 69859
 		const typelist = new Set([
 			'publishedAt',
 			'title',
@@ -183,20 +182,10 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 								nodes.addClass('done')
 								if (data.status !== 'ok') {
 									nodes.css('text-decoration', 'underline')
-									if (!DEBUGMODE) {
-										nodes.attr(
-											'title',
-											`${wgUVS('无法获取最新数据', '無法獲取最新資料')}：${data.status} - ${data.message}`,
-										)
-									}
-								}
-								if (DEBUGMODE) {
-									nodes
-										.attr(
-											'title',
-											`onlineResult[${id}]:\n${JSON.stringify({ ...data, requestId: d.requestId }, undefined, 4)}`,
-										)
-										.addClass('done')
+									nodes.attr(
+										'title',
+										`${wgUVS('无法获取最新数据', '無法獲取最新資料')}：${data.status} - ${data.message}`,
+									)
 								}
 							}
 						}

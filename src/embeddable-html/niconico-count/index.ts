@@ -30,7 +30,6 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 	['moment', 'ext.gadget.site-lib'],
 	async () => {
-		const DEBUGMODE = mw.config.get('wgUserId') === 69859
 		const typelist = [undefined, 'view_counter', 'comment_num', 'mylist_counter', 'title'] // 首位undefined减少不必要的减法
 		const formats = new Set(['toFixed', 'plain', 'separate'])
 		const map: Record<string, Record<string, NodeCollection>> = {}
@@ -154,20 +153,10 @@ type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 								nodes.addClass('done')
 								if (data.status !== 'ok') {
 									nodes.css('text-decoration', 'underline')
-									if (!DEBUGMODE) {
-										nodes.attr(
-											'title',
-											`${wgUVS('无法获取最新数据', '無法獲取最新資料')}：${data.status} - ${data.message}`,
-										)
-									}
-								}
-								if (DEBUGMODE) {
-									nodes
-										.attr(
-											'title',
-											`onlineResult[${id}]:\n${JSON.stringify({ ...data, requestId: d.requestId }, undefined, 4)}`,
-										)
-										.addClass('done')
+									nodes.attr(
+										'title',
+										`${wgUVS('无法获取最新数据', '無法獲取最新資料')}：${data.status} - ${data.message}`,
+									)
 								}
 							}
 						}

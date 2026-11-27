@@ -159,7 +159,6 @@ interface ViewResponse {
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([
 	['moment', 'ext.gadget.site-lib'],
 	async () => {
-		const DEBUGMODE = mw.config.get('wgUserId') === 69859
 		const typelist: (DataType | undefined)[] = [
 			undefined,
 			'view',
@@ -256,9 +255,6 @@ interface ViewResponse {
 									node,
 									`(${wgUVS('请求数据出错', '請求資料出錯')}${responseData.requestId ? `，requestId ${responseData.requestId}` : ''})`,
 								)
-								if (DEBUGMODE) {
-									node.title = `[${prefix}${id}]:\n${JSON.stringify(data, undefined, 4)}`
-								}
 								continue
 							}
 							const rawValue = data.data[type]
@@ -307,12 +303,7 @@ interface ViewResponse {
 							node.classList.add('done')
 							if (data.status !== 'ok') {
 								node.style.textDecoration = 'underline'
-								if (!DEBUGMODE) {
-									node.title = `${wgUVS('无法获取最新数据', '無法獲取最新資料')}：${data.status} - ${data.message}`
-								}
-							}
-							if (DEBUGMODE) {
-								node.title = `onlineResult[${id}]:\n${JSON.stringify({ ...data, requestId: responseData.requestId }, undefined, 4)}`
+								node.title = `${wgUVS('无法获取最新数据', '無法獲取最新資料')}：${data.status} - ${data.message}`
 							}
 						}
 					}
