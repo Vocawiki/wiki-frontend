@@ -32,6 +32,7 @@ export function WikiImage({
 			: undefined,
 	)
 	return (
+		// oxlint-disable-next-line jsx-a11y/alt-text -- MW本身就没有加alt
 		<img
 			{...imageSrc}
 			loading="lazy"

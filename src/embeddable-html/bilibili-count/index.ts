@@ -190,17 +190,17 @@ interface ViewResponse {
 					code,
 					message,
 					data: { stat },
-				} = await new Promise<ViewResponse>((res, rej) => {
+				} = await new Promise<ViewResponse>((resolve, reject) => {
 					script.addEventListener('error', (e) => {
 						// oxlint-disable-next-line typescript/prefer-promise-reject-errors -- 原样抛出事件对象，保持既有错误信息
-						rej(e)
+						reject(e)
 					})
 					script.addEventListener('abort', (e) => {
 						// oxlint-disable-next-line typescript/prefer-promise-reject-errors -- 原样抛出事件对象，保持既有错误信息
-						rej(e)
+						reject(e)
 					})
 					document.head.append(script)
-					;(window as unknown as Record<string, unknown>)[funcName] = res
+					;(window as unknown as Record<string, unknown>)[funcName] = resolve
 				}).finally(() => {
 					script.remove()
 				})

@@ -19,6 +19,7 @@ export async function WikiImageServerOnly(props: WikiImageProps) {
 
 	const { width, height } = props
 	if (props.originalWidth || (width === undefined && height === undefined)) {
+		// oxlint-disable-next-line jsx-a11y/alt-text -- 通过props原样转发
 		return <WikiImage {...props} />
 	}
 
@@ -30,6 +31,7 @@ export async function WikiImageServerOnly(props: WikiImageProps) {
 	const { src, srcSet, originalWidth, originalHeight } = result
 
 	return (
+		// oxlint-disable-next-line jsx-a11y/alt-text -- 通过props原样转发
 		<WikiImage
 			src={src}
 			srcSet={srcSet}

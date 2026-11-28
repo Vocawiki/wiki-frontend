@@ -8,18 +8,28 @@
 	"singleQuote": true,
 	"sortImports": {
 		"newlinesBetween": false,
+		"customGroups": [
+			{
+				"groupName": "directive_like",
+				"elementNamePattern": ["@/lib/server-only"]
+			}
+		],
 		"groups": [
-			["side_effect"],
+			"directive_like",
 			{ "newlinesBetween": true },
-			["builtin"],
+			"builtin",
 			{ "newlinesBetween": true },
-			["external", "type-external"],
+			"external",
 			{ "newlinesBetween": true },
-			["internal", "type-internal"],
+			"internal",
 			{ "newlinesBetween": true },
-			["parent", "type-parent"],
-			["sibling", "type-sibling"],
-			["index", "type-index"]
+			"parent",
+			"sibling",
+			"index",
+			{ "newlinesBetween": true },
+			"side_effect",
+			"style",
+			"unknown"
 		]
 	},
 	"sortPackageJson": false,

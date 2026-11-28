@@ -1,10 +1,11 @@
 /// <reference types="vite/client" />
-import './.cache/software.css'
-import './index.css'
 
 import { ClientInitializer } from './app/client-initializer'
 import { Preferences } from './app/preferences'
 import { Router } from './app/router'
+
+import './.cache/software.css'
+import './index.css'
 
 export function Root(props: { url: URL }) {
 	return (
@@ -31,6 +32,7 @@ export function Root(props: { url: URL }) {
 								height="32"
 								width="32"
 							/>
+							<span className="visually-hidden">访问首页</span>
 						</a>
 					</div>
 

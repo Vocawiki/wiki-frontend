@@ -6,8 +6,25 @@ type KnownRuleMap = OmitIndexSignature<DummyRuleMap>
 const ERROR = 'error' as const
 const OFF = 'off' as const
 
+const projectSpecificRules = {
+	'import/no-unassigned-import': [ERROR, { allow: ['**/*.css', '@/lib/server-only'] }],
+	'jsx-a11y/anchor-has-content': [ERROR, { components: ['ExternalLink'] }],
+	'jsx-a11y/alt-text': [ERROR, { img: ['WikiImage', 'WikiImageServerOnly'] }],
+	'node/no-process-env': OFF,
+} as const satisfies KnownRuleMap
+
 export default defineConfig({
-	plugins: ['eslint', 'oxc', 'react', 'typescript', 'unicorn'],
+	plugins: [
+		'eslint',
+		'import',
+		'jsx-a11y',
+		'node',
+		'oxc',
+		'promise',
+		'react',
+		'typescript',
+		'unicorn',
+	],
 	// categories: https://oxc.rs/docs/guide/usage/linter/config.html#enable-groups-of-rules-with-categories
 	categories: {
 		correctness: ERROR, // 明显错误或无用的代码
@@ -35,6 +52,8 @@ export default defineConfig({
 	rules: {
 		// deprecated
 		'typescript/ban-types': OFF,
+		'typescript/no-empty-interface': OFF,
+		'typescript/no-var-requires': OFF,
 		'typescript/prefer-ts-expect-error': OFF,
 
 		// 对TypeScript无用：
@@ -50,6 +69,25 @@ export default defineConfig({
 		'no-setter-return': OFF,
 		'no-unsafe-negation': OFF,
 		'no-undef': OFF,
+		'import/default': OFF,
+		'import/named': OFF,
+		'import/namespace': OFF,
+		'import/no-named-as-default-member': OFF,
+		'import/no-webpack-loader-syntax': OFF,
+		'import/unambiguous': OFF,
+		'node/no-new-require': OFF,
+		'promise/valid-params': OFF,
+		'promise/no-new-statics': OFF,
+		'promise/spec-only': OFF,
+
+		// 对ESM无用
+		'node/no-top-level-await': OFF,
+
+		// 由unicorn/prefer-module处理
+		'import/no-amd': OFF,
+		'import/no-commonjs': OFF,
+		'import/no-dynamic-require': OFF,
+		'node/no-exports-assign': OFF,
 
 		// 对React函数组件无用
 		'react/no-set-state': OFF,
@@ -74,19 +112,25 @@ export default defineConfig({
 				varsIgnorePattern: '^_',
 			},
 		],
+		'jsx-a11y/no-redundant-roles': [ERROR, { ul: ['list'], ol: ['list'], li: ['listitem'] }],
 
 		// suspicious
-		'no-shadow': OFF,
 		'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
+		// 虽然typescript/no-import-type-side-effects能为`import {} from 'xx'`报错，但`import Default, {} from 'xx'`不报错
+		'import/no-empty-named-blocks': ERROR,
+		'promise/always-return': [ERROR, { ignoreLastCallback: true }],
+
+		'no-shadow': OFF,
+		'import/no-self-import': OFF, // 由import/no-cycle处理
 		'react/react-in-jsx-scope': OFF,
 		'typescript/consistent-return': OFF, // 由TypeScript `noImplicitReturns`代替
 		'typescript/no-unnecessary-type-arguments': OFF,
+		'typescript/no-unsafe-enum-assignment': OFF, // tsconfig已禁止使用enum；此规则过于耗时
 		'typescript/no-unsafe-type-assertion': OFF,
 		'unicorn/no-array-reverse': OFF, // 浏览器兼容性
 		'unicorn/no-array-sort': OFF, // 浏览器兼容性
 		// import type {} from 'module' 是有用的。其余情况被 typescript/no-import-type-side-effects 涵盖了
 		'unicorn/require-module-specifiers': OFF,
-		'typescript/no-unsafe-enum-assignment': OFF, // tsconfig已禁止使用enum；此规则过于耗时
 
 		// pedantic
 		eqeqeq: [ERROR, 'always', { null: 'ignore' }],
@@ -97,6 +141,7 @@ export default defineConfig({
 			{ ignorePrimitives: { boolean: true, string: true } },
 		],
 		'typescript/switch-exhaustiveness-check': [ERROR, { considerDefaultExhaustiveForUnions: true }],
+
 		'array-callback-return': OFF, // 用TypeScript类型检查来弥补
 		'max-classes-per-file': OFF,
 		'no-inline-comments': OFF,
@@ -120,8 +165,14 @@ export default defineConfig({
 		complexity: [ERROR, { variant: 'modified' }],
 		'no-use-before-define': [ERROR, { classes: false, functions: false }],
 		'typescript/explicit-member-accessibility': [ERROR, { accessibility: 'no-public' }],
+		'import/extensions': [
+			ERROR,
+			'never',
+			{ checkTypeImports: true, pattern: { css: 'always', json: 'always' } },
+		],
 		'react/jsx-filename-extension': [ERROR, { allow: 'as-needed', extensions: ['jsx', 'tsx'] }],
 		'react/only-export-components': [ERROR, { allowExportNames: ['getStaticProps'] }],
+
 		'default-case': OFF, // 由typescript/switch-exhaustiveness-check处理
 		'no-bitwise': OFF,
 		'no-console': OFF,
@@ -131,9 +182,14 @@ export default defineConfig({
 		'no-plusplus': OFF,
 		'no-undefined': OFF,
 		'no-void': OFF,
+		'import/no-default-export': OFF,
+		'import/no-relative-parent-imports': OFF,
+		'import/max-dependencies': OFF,
+		'node/no-path-concat': OFF, // unicorn/prefer-module已禁止`__dirname`、`__filename`
 		'oxc/no-async-await': OFF,
 		'oxc/no-optional-chaining': OFF,
 		'oxc/no-rest-spread-properties': OFF,
+		'promise/catch-or-return': OFF,
 		'react/forbid-component-props': OFF,
 		'react/no-multi-comp': OFF,
 		'react/jsx-no-literals': OFF,
@@ -143,6 +199,7 @@ export default defineConfig({
 		'typescript/explicit-module-boundary-types': OFF,
 		'typescript/no-explicit-any': OFF,
 		'typescript/no-non-null-assertion': OFF,
+		'typescript/no-require-imports': OFF, // 由unicorn/prefer-module处理
 		'typescript/promise-function-async': OFF,
 		'unicorn/no-array-for-each': OFF,
 
@@ -185,6 +242,13 @@ export default defineConfig({
 		'prefer-template': ERROR,
 		'vars-on-top': ERROR,
 		yoda: ERROR,
+		'import/first': ERROR,
+		'node/no-sync': ERROR,
+		'promise/no-return-wrap': ERROR,
+		'promise/param-names': [
+			ERROR,
+			{ resolvePattern: '^_?resolve(?:$|[A-Z0-9])', rejectPattern: '^_?reject(?:$|[A-Z0-9])' },
+		],
 		'react/function-component-definition': ERROR,
 		'react/hook-use-state': ERROR,
 		'react/jsx-boolean-value': ERROR,
@@ -205,7 +269,6 @@ export default defineConfig({
 		'typescript/consistent-type-imports': ERROR,
 		'typescript/dot-notation': ERROR,
 		'typescript/method-signature-style': ERROR,
-		'typescript/no-empty-interface': ERROR,
 		'typescript/no-inferrable-types': [ERROR, { ignoreParameters: true }],
 		'typescript/no-unnecessary-qualifier': ERROR,
 		'typescript/prefer-find': ERROR,
@@ -277,6 +340,8 @@ export default defineConfig({
 		'unicorn/prefer-string-raw': OFF, // 哪怕只有一个反斜杠也报，干扰阅读
 		'unicorn/switch-case-braces': OFF, // TODO: 等single-statement选项实现后再开启
 		'unicorn/throw-new-error': OFF, // 由new-cap处理
+
+		...projectSpecificRules,
 	} satisfies KnownRuleMap,
 	overrides: [
 		{

@@ -139,6 +139,7 @@ function VideoCard({
 					file={coverFile}
 					width={320}
 					className="w-full transition-transform group-hover:scale-110"
+					alt="视频封面"
 				/>
 				<div className="relative space-y-1 bg-(--bg-color) p-2">
 					<div className="line-clamp-2 h-[2lh] text-sm leading-tight font-medium main-sm:text-sm">

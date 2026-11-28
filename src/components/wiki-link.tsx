@@ -45,6 +45,7 @@ export function WikiInternalLink({
 
 export function WikiExternalLink({ className, ...props }: React.ComponentProps<'a'>) {
 	return (
+		// oxlint-disable-next-line jsx-a11y/anchor-has-content -- 通过props原样转发
 		<a
 			target="_blank"
 			rel="noreferrer noopener"

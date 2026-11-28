@@ -15,6 +15,7 @@ export function BackButton({
 }) {
 	if (linkLike) {
 		return (
+			// oxlint-disable-next-line jsx-a11y/anchor-is-valid -- 开发用，不影响
 			<a href="#" onClick={back}>
 				{children}
 			</a>

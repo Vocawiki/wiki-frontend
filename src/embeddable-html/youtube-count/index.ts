@@ -1,7 +1,10 @@
+// oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
 /**
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:YoutubeCount?action=history
  */
-// oxlint-disable max-lines-per-function -- 片段是一次性执行的初始化流程，拆分需把闭包内状态外提，行为风险大于收益
+
+import type { ResourceLoaderQueue } from '~/@types/rlq'
+
 interface VideoRecord {
 	data: Record<string, number | string>
 	time: string
@@ -21,10 +24,8 @@ interface ErrorReport {
 	information: Record<string, unknown>
 	[key: string]: unknown
 }
+
 /** jQuery 集合在运行时借用了 Array.prototype 的 push，但类型声明里没有 */
-
-import type { ResourceLoaderQueue } from '~/@types/rlq'
-
 type NodeCollection = JQuery & { push: (...elements: HTMLElement[]) => number }
 
 ;(window.RLQ ??= [] as unknown as ResourceLoaderQueue).push([

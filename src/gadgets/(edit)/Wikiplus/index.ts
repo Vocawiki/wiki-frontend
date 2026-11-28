@@ -6,7 +6,7 @@ void (async () => {
 	let wikiplusEditTopBtn = document.querySelector('#Wikiplus-Edit-TopBtn')
 	while (!wikiplusEditTopBtn) {
 		// oxlint-disable-next-line no-await-in-loop
-		await new Promise((res) => setTimeout(res, 300))
+		await new Promise((resolve) => setTimeout(resolve, 300))
 		wikiplusEditTopBtn = document.querySelector('#Wikiplus-Edit-TopBtn')
 	}
 	$('.page-tool-link#ca-wikiplus').insertAfter($('.page-tool-link#ca-edit'))

@@ -11,7 +11,7 @@ void (async () => {
 	let $sidebar = $(sidebarSelector)
 	while ($sidebar.length === 0) {
 		// oxlint-disable-next-line no-await-in-loop
-		await new Promise((r) => setTimeout(r, 100))
+		await new Promise((resolve) => setTimeout(resolve, 100))
 		$sidebar = $(sidebarSelector)
 	}
 	console.info('Widget:SideBarPic pre-init-check', $sidebar)
@@ -34,14 +34,14 @@ void (async () => {
 			.toArray()
 			.map(
 				(img) =>
-					new Promise<void>((res) => {
+					new Promise<void>((resolve) => {
 						let retryCount = 0
 						try {
 							const lazyLoad = new Image()
 							const url = new URL(img.dataset.src || img.src, location.origin)
 							lazyLoad.addEventListener('load', () => {
 								img.src = url.toString()
-								res()
+								resolve()
 							})
 							lazyLoad.addEventListener('error', () => {
 								if (retryCount++ < 3) {
@@ -51,14 +51,14 @@ void (async () => {
 								} else {
 									console.info('Widget:SideBarPic img-load-failed\n', img.dataset.src)
 									img.remove()
-									res()
+									resolve()
 								}
 							})
 							lazyLoad.src = url.toString()
 						} catch (error) {
 							console.info('Widget:SideBarPic img-load-failed\n', error)
 							img.remove()
-							res()
+							resolve()
 						}
 					}),
 			),

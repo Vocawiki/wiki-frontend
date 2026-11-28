@@ -7,7 +7,7 @@ import {
 	decodeAction,
 	decodeFormState,
 } from '@vitejs/plugin-rsc/rsc/server'
-import type {} from '@vitejs/plugin-rsc/types'
+import type {} from '@vitejs/plugin-rsc/types' // oxlint-disable-line import/no-empty-named-blocks -- 内部包含`declare global`
 import type { ReactFormState } from 'react-dom/client'
 
 import { Root } from '../root'

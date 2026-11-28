@@ -2,9 +2,9 @@
  * 进入代码仓库前的贡献者见 https://voca.wiki/Widget:TempleSort?action=history
  */
 
-import type { ResourceLoaderQueue } from '~/@types/rlq'
+import { sleep } from 'radashi'
 
-const sleep = (time: number) => new Promise((res) => setTimeout(res, time))
+import type { ResourceLoaderQueue } from '~/@types/rlq'
 
 const sortTemple = async (ele: HTMLElement) => {
 	const type = ele.dataset.type

@@ -17,6 +17,7 @@ import {
 import postcss, { AtRule, type Root, type Plugin } from 'postcss'
 import { mapValues, traverse } from 'radashi'
 
+// oxlint-disable import/extensions
 // 由于vite.config.ts也用到了css-compiler.ts，这里不能使用导入别名，也必须带后缀
 import { IS_PRODUCTION } from '../../../lib/config.ts'
 import { SOURCE_PATH_TAILWIND_THEME } from '../../config.ts'

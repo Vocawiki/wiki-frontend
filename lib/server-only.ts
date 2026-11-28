@@ -3,8 +3,6 @@ if (typeof window !== 'undefined') {
 	throw new Error('禁止在浏览器导入此模块')
 }
 
-import 'react'
-
 declare module 'react' {
 	interface CSSProperties {
 		/**
