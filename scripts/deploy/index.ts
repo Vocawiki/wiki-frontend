@@ -43,7 +43,7 @@ import {
 
 const namespacePrecedence: NamespaceName[] = ['HTML', 'MediaWiki', 'Template']
 const siblingAssetsPathPattern = new RegExp(
-	`${RegExp.escape(`../${ASSETS_DIR_IN_OUTPUT_DIR}`)}(?=/)`,
+	`(?<=['"\`])${RegExp.escape(`../${ASSETS_DIR_IN_OUTPUT_DIR}`)}(?=/)`,
 	'gu',
 )
 

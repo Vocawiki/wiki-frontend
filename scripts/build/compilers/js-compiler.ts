@@ -120,17 +120,10 @@ export async function buildJsEntries(
 					if (!entryInfo) return
 
 					if (entryInfo.format !== 'iife') {
-						if (chunk.name.startsWith(`${PAGES_DIR_IN_OUTPUT_DIR}/`)) {
-							if (chunk.imports.length > 0) {
-								throw new Error(
-									`内联脚本${chunk.name}包含静态导入（将会导致路径错误）：\n${chunk.imports.join('\n')}`,
-								)
-							}
-							if (chunk.exports.length > 0) {
-								throw new Error(
-									`内联脚本${chunk.name}包含静态导出（可能是误写）：\n${chunk.exports.join('\n')}`,
-								)
-							}
+						if (chunk.name.startsWith(`${PAGES_DIR_IN_OUTPUT_DIR}/`) && chunk.exports.length > 0) {
+							throw new Error(
+								`内联脚本${chunk.name}包含静态导出（可能是误写）：\n${chunk.exports.join('\n')}`,
+							)
 						}
 						return
 					}
